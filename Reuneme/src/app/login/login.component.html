@@ -7,8 +7,19 @@
         <h2>Inicio de Sesión</h2>
         <form>
             <div class="textbox">
-                <input type="text" id="username" placeholder="Nombre de usuario" [(ngModel)]="username" name="username" required />
-                <label for="username">Nombre de usuario</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Correo Electrónico" 
+                    [(ngModel)]="username" 
+                    name="username" 
+                    required 
+                    (blur)="validateEmail()"/>
+                <label for="username">Correo Electrónico</label>
+            </div>
+            <!-- Mensaje de error si el email no tiene el formato correcto -->
+            <div *ngIf="emailInvalid" class="error-message">
+                <small>El correo electrónico no tiene un formato válido.</small>
             </div>
 
             <div class="textbox password-box">
@@ -23,18 +34,16 @@
     </div>
 
     <div class="actions">
-        <button class="btn">Acceder</button>
+        <button class="btn" (click)="loginAttempt()">Acceder</button>
         <p class="register-text">
             ¿No tienes cuenta? <a routerLink="/registro" class="register-link">CREAR UNA</a>
         </p>
     </div>
     
-    <!-- Botón de volver -->
     <div class="back-button-container">
-        <button class="back-button">Volver</button>
+        <button (click)="goToLanding()" class="back-button">Volver</button>
     </div>
 
-    <!-- Footer con enlaces -->
     <footer class="footer">
         <div class="footer-content">
             <ul class="footer-links">
@@ -45,7 +54,6 @@
         </div>
     </footer>
 
-    <!-- Elemento de copyright fuera del footer -->
     <div class="footer-info">
         <span>© 2024 ReuneMe, LLC</span>
     </div>
