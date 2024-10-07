@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common'; // Asegura que se importe
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,10 @@ export class LoginComponent {
   password: string = '';
   passwordVisible = false;
   emailInvalid = false;
+  loginFailed = false;  // Nueva variable para el mensaje de error
 
-  constructor(private router: Router) { }
+
+  constructor(private router: Router, private cdr: ChangeDetectorRef) { }
 
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
@@ -31,13 +34,18 @@ export class LoginComponent {
   }
 
   // Intento de inicio de sesión
+  // Actualizar el valor de loginFailed cuando el usuario comienza a escribir en los campos
   loginAttempt(): void {
     this.validateEmail();
+    this.loginFailed = false;  // Resetear el mensaje de error en cada intento
     if (!this.emailInvalid) {
       console.log('Iniciando sesión con: ', this.username, this.password);
-      // Implementa lógica de autenticación aquí
+      // Simulación de fallo de inicio de sesión
+      this.loginFailed = true;
+      this.cdr.detectChanges();  // Asegurarse de que Angular detecte el cambio en loginFailed
     }
   }
+
 
   // Navegar a la página de inicio
   goToLanding(): void {
