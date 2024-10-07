@@ -13,17 +13,17 @@
     display: flex;
     justify-content: center; /* Centra el mensaje horizontalmente */
     align-items: center;     /* Centra el mensaje verticalmente */
-  }
-  
+}
+
   /* Mensaje de error específico para login fallido */
-  .login-failed-message {
+.login-failed-message {
     text-align: center;
     font-size: 14px;
     color: #ff4d4f;
     font-weight: bold;
     margin-top: 5px; /* Se ajusta ligeramente hacia abajo */
-  }
-  
+}
+
 
 
 .header {
@@ -40,10 +40,16 @@
     z-index: 2;
 }
 /* Mensaje de error para el campo de correo */
+.email-error-container {
+    height: 5px; /* Reserva espacio para el mensaje de error del email */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .error-message {
     color: #ff4d4f; /* Color rojo para el texto del error */
     font-size: 14px; /* Tamaño de fuente */
-    margin-top: 0px; /* Espacio adicional encima del mensaje */
+    margin-top: -10px; /* Espacio adicional encima del mensaje */
     text-align: left; /* Alinear a la izquierda dentro del contenedor */
     font-weight: 500; /* Peso de la fuente */
 }

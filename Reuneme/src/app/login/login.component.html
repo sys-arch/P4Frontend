@@ -5,7 +5,7 @@
 <div class="login-container">
     <div class="login-box">
         <h2>Inicio de Sesión</h2>
-        <form>
+        <form (ngSubmit)="loginAttempt()">
             <div class="textbox">
                 <input 
                     type="text" 
@@ -17,9 +17,10 @@
                     (blur)="validateEmail()"/>
                 <label for="username">Correo Electrónico</label>
             </div>
-            <!-- Mensaje de error si el email no tiene el formato correcto -->
-            <div *ngIf="emailInvalid" class="error-message">
-                <small>El correo electrónico no tiene un formato válido.</small>
+            <div class="email-error-container">
+                <div *ngIf="emailInvalid" class="error-message">
+                    <small>El correo electrónico no tiene un formato válido.</small>
+                </div>
             </div>
 
             <div class="textbox password-box">
@@ -39,9 +40,9 @@
     </div>
 
     <div class="actions">
-        <button class="btn" (click)="loginAttempt()">Acceder</button>
+        <button class="btn" type="submit">Acceder</button>
         <p class="register-text">
-            ¿No tienes cuenta? <a routerLink="/registro" class="register-link">CREAR UNA</a>
+            ¿No tienes cuenta? <a routerLink="/registro" class="register-link" (click)="goToRegister()">CREAR UNA</a>
         </p>
     </div>
     
