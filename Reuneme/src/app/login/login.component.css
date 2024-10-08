@@ -1,0 +1,355 @@
+.login-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+}
+/* Contenedor para reservar espacio para el mensaje de error */
+.login-failed-container {
+    height: 10px; /* Reserva un espacio fijo para el mensaje de error */
+    display: flex;
+    justify-content: center; /* Centra el mensaje horizontalmente */
+    align-items: center;     /* Centra el mensaje verticalmente */
+}
+
+  /* Mensaje de error específico para login fallido */
+.login-failed-message {
+    text-align: center;
+    font-size: 14px;
+    color: #ff4d4f;
+    font-weight: bold;
+    margin-top: 5px; /* Se ajusta ligeramente hacia abajo */
+}
+
+
+
+.header {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to right, #175be2, #06c6f3);
+    color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+/* Mensaje de error para el campo de correo */
+.email-error-container {
+    height: 5px; /* Reserva espacio para el mensaje de error del email */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error-message {
+    color: #ff4d4f; /* Color rojo para el texto del error */
+    font-size: 14px; /* Tamaño de fuente */
+    margin-top: -10px; /* Espacio adicional encima del mensaje */
+    text-align: left; /* Alinear a la izquierda dentro del contenedor */
+    font-weight: 500; /* Peso de la fuente */
+}
+
+.error-message small {
+    display: block;
+}
+
+.logo-img {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200px;
+    height: auto;
+    z-index: 2;
+}
+
+.title {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #00ccff, #ffffff);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+
+.login-box {
+    width: 450px;
+    padding: 40px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin: 0 0 20px;
+    padding: 0;
+    color: #ffffff;
+}
+
+.textbox {
+    position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.textbox label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #f5f5f5;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px 10px 10px 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #999;
+    outline: none;
+    color: #f5f5f5;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.textbox input:focus ~ label,
+.textbox input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: #00eeff;
+}
+
+.textbox input:focus {
+    border-bottom: 2px solid #00eeff;
+}
+
+.textbox input::placeholder {
+    color: transparent;
+}
+
+.btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.forgot-password-container {
+    text-align: left;
+    margin-top: -20px;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: #b3b3b3;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: #00eeff;
+    text-decoration: underline;
+}
+
+.register-link {
+    color: #00eeff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.forgot-password:hover,
+.register-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.actions {
+    width: 450px;
+    text-align: center;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+}
+
+.actions .btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.actions .btn:hover {
+    background-color: #0056b3;
+}
+
+.actions .register-text {
+    margin-top: 10px;
+    color: white;
+    font-size: 15px;
+}
+
+.actions .register-text .register-link {
+    color: #6d29ff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.actions .register-text .register-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+
+}
+
+.password-box {
+    display: flex;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #00eeff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.toggle-password:hover {
+    color: #ffffff;
+}
+/* Botón para volver a la página principal */
+.back-btn {
+    position: absolute;
+    top: 15px;  /* Espacio desde la parte superior */
+    left: 15px;  /* Espacio desde el lado izquierdo */
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;  /* Quita la subrayado del enlace */
+    font-weight: bold;
+    z-index: 3;  /* Asegura que esté visible frente a otros elementos */
+}
+.back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+/* Contenedor del footer */
+.footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(28, 28, 28, 0.95);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center; /* Centra los enlaces horizontalmente */
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center; /* Solo centramos los enlaces */
+    align-items: center;
+    width: 100%;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 30px; /* Espacio entre los enlaces */
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    position: relative;
+}
+
+.footer-links li:not(:last-child)::after {
+    content: ""; /* Línea separadora */
+    position: absolute;
+    right: -10px; /* Ajusta la posición de la línea */
+    top: 50%; /* Alinea verticalmente */
+    transform: translateY(-50%);
+    height: 15px; /* Longitud de la línea */
+    width: 1px; /* Ancho de la línea */
+    background-color: #666; /* Color de la línea */
+    opacity: 0.5; /* Suaviza el color */
+}
+
+.footer-links li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Estilo del copyright separado */
+.footer-info {
+    width: 100%; /* Toma todo el ancho para posicionarse mejor */
+    text-align: right; /* Alineación a la derecha */
+    position: fixed;
+    bottom: 10px; /* Espacio desde la parte inferior */
+    right: 20px; /* Espacio desde el lado derecho */
+    font-size: 12px;
+    color: #b3b3b3;
+    z-index: 11; /* Asegurar que esté visible por encima de otros elementos */
+}
+
+.footer-info span {
+    font-weight: bold;
+}

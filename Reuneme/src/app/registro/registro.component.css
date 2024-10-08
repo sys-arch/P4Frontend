@@ -1,6 +1,6 @@
 .register-container {
     position: relative;
-    min-height: 100vh;
+    min-height: 105vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,8 +24,6 @@
     margin-top: 5px; /* Se ajusta ligeramente hacia abajo */
 }
 
-
-
 .header {
     width: 100%;
     height: 60px;
@@ -39,12 +37,18 @@
     top: 0;
     z-index: 2;
 }
+
+.required-info {
+    font-size: 11px;
+    color: #6b6b6b;
+    display: flex;
+}
+
 /* Mensaje de error para el campo de correo */
 .email-error-container {
     height: 5px; /* Reserva espacio para el mensaje de error del email */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
 }
 .error-message {
     color: #ff4d4f; /* Color rojo para el texto del error */
@@ -68,21 +72,11 @@
     z-index: 2;
 }
 
-.title {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-    background: linear-gradient(90deg, #00ccff, #ffffff);
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: none;
-}
-
 .register-box {
-    width: 450px;
+    width: 1000px;
     padding: 25px;
     position: absolute;
-    top: 38%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #23252b;
@@ -97,9 +91,15 @@
     color: #ffffff;
 }
 
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+}
+
 .textbox {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     width: 100%;
 }
 
@@ -189,6 +189,7 @@
     width: 450px;
     text-align: center;
     position: absolute;
+    padding-top: 196px;
     top: 55%;
     left: 50%;
     transform: translate(-50%, 0);
@@ -211,20 +212,20 @@
     background-color: #0056b3;
 }
 
-.actions .register-text {
+.actions .login-text {
     margin-top: 10px;
     color: white;
     font-size: 15px;
 }
 
-.actions .register-text .register-link {
+.actions .login-text .login-link {
     color: #6d29ff;
     font-weight: bold;
     text-decoration: none;
     font-size: 15px;
 }
 
-.actions .register-text .register-link:hover {
+.actions .login-text .login-link:hover {
     color: #ffffff;
     text-decoration: underline;
 
