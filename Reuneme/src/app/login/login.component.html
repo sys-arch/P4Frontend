@@ -14,7 +14,7 @@
                     [(ngModel)]="username" 
                     name="username" 
                     required 
-                    (blur)="validateEmail()"/>
+                    (ngModelChange)="onEmailChange()"/>
                 <label for="username">Correo Electrónico</label>
             </div>
             <div class="email-error-container">

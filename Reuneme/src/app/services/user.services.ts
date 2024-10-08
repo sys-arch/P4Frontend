@@ -12,6 +12,6 @@ export class UserService {
     // Ajuste: Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
-    }
+        return this.client.post<any>(`${httpUrl}login`, user, { headers }); // Ajuste de la URL a `login`
+}
 }
