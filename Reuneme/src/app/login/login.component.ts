@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.services';
 
@@ -21,6 +21,10 @@ export class LoginComponent {
   passwordInvalid = false;
   domainInvalid = false;
   errorMessage: string = '';
+  @ViewChild('loginForm') loginForm!: NgForm;
+  submitForm(): void {
+    this.loginForm
+  }
 
   private readonly emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private readonly injectionPattern: RegExp = /(\r|\n|%0a|%0d|%0A|%0D)/;
@@ -47,12 +51,13 @@ export class LoginComponent {
 
   // Método de inicio de sesión que llama al servicio `UserService`
   loginAttempt(): void {
+    console.log('Email:', this.username);
+    console.log('Password:', this.password);
     this.resetValidationStates(); // Resetear todos los estados de error
     this.onEmailChange(); // Validar el email actual
     this.validatePassword(); // Validar la contraseña
     
-    console.log('Email:', this.username);
-    console.log('Password:', this.password);
+    
   
     // Validar si el correo electrónico y la contraseña son válidos antes de proceder
     if (!this.emailInvalid && !this.passwordInvalid && !this.domainInvalid) {
@@ -82,7 +87,6 @@ export class LoginComponent {
   // Validar que el correo electrónico ingresado tenga un formato válido cada vez que cambie
   onEmailChange(): void {
     this.resetEmailValidationStates(); // Restablecer estados de validación de email al cambiar
-
     if (this.username.trim() === '') {
       this.emailInvalid = false;
       return;
