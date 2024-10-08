@@ -51,8 +51,6 @@ export class LoginComponent {
 
   // Método de inicio de sesión que llama al servicio `UserService`
   loginAttempt(): void {
-    console.log('Email:', this.username);
-    console.log('Password:', this.password);
     this.resetValidationStates(); // Resetear todos los estados de error
     this.onEmailChange(); // Validar el email actual
     this.validatePassword(); // Validar la contraseña
@@ -65,7 +63,7 @@ export class LoginComponent {
       const user = { username: this.username, password: this.password };
   
       // Mostrar los datos que se van a enviar al backend
-      console.log('Datos enviados al backend:', user);
+      console.log('Datos enviados al backend:');
   
       // Llamar al servicio `login` pasando el objeto `user`
       this.userService.login(user).subscribe(
@@ -81,6 +79,7 @@ export class LoginComponent {
           this.cdr.detectChanges(); // Asegurar que Angular detecte el cambio
         }
       );
+    } else{ this.loginFailed = true; // Mostrar el mensaje de error
     }
   }
   
