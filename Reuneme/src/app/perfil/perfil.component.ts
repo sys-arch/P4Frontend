@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-perfil',
+  standalone: true,
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.css']
+  styleUrls: ['./perfil.component.css'],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule] // Importaciones necesarias para el uso de ngModel
 })
+
+
 export class PerfilComponent implements OnInit {
   profileForm: FormGroup;
   submitted = false;

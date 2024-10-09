@@ -2,62 +2,20 @@
     <h2>Admin Profile</h2>
   
     <div class="profile-picture">
+      <!-- Aquí puedes poner una imagen por defecto -->
       <img
-        src="assets/default-profile.png" <!-- Aquí puedes poner una imagen por defecto -->
+        src="assets/default-profile.png"
         alt="Profile Picture"
         class="profile-img"
-      />
+      /> 
       <input type="file" (change)="onFileSelected($event)" class="upload-button" />
+
+      <div class="profile-info">
+        <h3>Nombre de Administrador</h3>
+        <h2>Apellidos de Administrador</h2>
+        <h4>Correo de Administrador</h4>
+        <h5>Centro de Trabajo</h5>
+
+
     </div>
-  
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="firstName">First Name:</label>
-        <input
-          id="firstName"
-          type="text"
-          formControlName="firstName"
-          class="form-control"
-          [ngClass]="{'is-invalid': submitted && profileForm.controls.firstName.invalid}"
-          placeholder="Enter your first name"
-        />
-        <div *ngIf="submitted && profileForm.controls.firstName.errors" class="invalid-feedback">
-          <div *ngIf="profileForm.controls.firstName.errors.required">First name is required</div>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="lastName">Last Name:</label>
-        <input
-          id="lastName"
-          type="text"
-          formControlName="lastName"
-          class="form-control"
-          [ngClass]="{'is-invalid': submitted && profileForm.controls.lastName.invalid}"
-          placeholder="Enter your last name"
-        />
-        <div *ngIf="submitted && profileForm.controls.lastName.errors" class="invalid-feedback">
-          <div *ngIf="profileForm.controls.lastName.errors.required">Last name is required</div>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          class="form-control"
-          [ngClass]="{'is-invalid': submitted && profileForm.controls.email.invalid}"
-          placeholder="Enter your email"
-        />
-        <div *ngIf="submitted && profileForm.controls.email.errors" class="invalid-feedback">
-          <div *ngIf="profileForm.controls.email.errors.required">Email is required</div>
-          <div *ngIf="profileForm.controls.email.errors.email">Enter a valid email address</div>
-        </div>
-      </div>
-  
-      <button type="submit" class="btn btn-primary">Save Profile</button>
-    </form>
-  </div>
-  
+    
