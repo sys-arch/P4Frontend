@@ -244,6 +244,7 @@
     color: #00eeff;
     font-size: 14px;
     font-weight: bold;
+    z-index: 2;
 }
 
 .toggle-password:hover {

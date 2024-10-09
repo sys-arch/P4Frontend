@@ -7,7 +7,7 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private client: HttpClient) {}
+    constructor(private readonly client: HttpClient) {}
 
     // Ajuste: Método login con headers y URL base
     login(user: any): Observable<any> {
@@ -15,8 +15,17 @@ export class UserService {
         return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
     }
 
-    register(user: any): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.post<any>(`${httpUrl}users/register`, user, { headers });
+    register(nombre: string, apellido: string, email: string, centro: string, fechaAlta: string, perfilLaboral: string, password1: string): Observable<any> {
+        let info = {
+        nombre: nombre,
+        apellido: apellido,
+        email: email,
+        centro: centro,
+        fechaAlta: fechaAlta,
+        perfilLaboral: perfilLaboral,
+        password1: password1
+            }
+        
+        return this.client.post("http://localhost:4200/registro", info)
     }
 }

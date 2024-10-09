@@ -14,9 +14,10 @@ import { LoaderComponent } from "../loader/loader.component";
 })
 export class RegistroComponent {
 
+
   nombre: string = '';
   apellido: string = '';
-  username: string = '';
+  email: string = '';
   departamento: string = '';
   centro: string = '';
   fechaAlta: string = '';
@@ -25,10 +26,12 @@ export class RegistroComponent {
   password2: string = '';
   passwordError: string = '';
   confirmPasswordError: string = '';
-  passwordVisible = false;
+  passwordVisible1 = false;
+  passwordVisible2 = false;
   emailInvalid = false;
   fechaInvalid = false;
   isLoading: boolean = false;
+  errorMessage: string = "";
 
   constructor(
     private readonly router: Router,
@@ -38,7 +41,7 @@ export class RegistroComponent {
   // Validación de formato de correo electrónico
   validateEmail(): void {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    this.emailInvalid = !emailPattern.test(this.username);
+    this.emailInvalid = !emailPattern.test(this.email);
   }
 
   // Validación de formato de fecha (dd/mm/aaaa)
@@ -71,15 +74,19 @@ export class RegistroComponent {
     }
   }
 
-  togglePasswordVisibility(): void {
-    this.passwordVisible = !this.passwordVisible;
+  togglePasswordVisibility1(): void{
+    this.passwordVisible1 = !this.passwordVisible1;
     const passwordInput1 = document.getElementById('password1') as HTMLInputElement;
-    const passwordInput2 = document.getElementById('password2') as HTMLInputElement;
-    passwordInput1.type = this.passwordVisible ? 'text' : 'password';
-    passwordInput2.type = this.passwordVisible ? 'text' : 'password';
+    passwordInput1.type = this.passwordVisible1 ? 'text' : 'password';
   }
 
-  // Envío del formulario
+  togglePasswordVisibility2(): void{
+    this.passwordVisible2 = !this.passwordVisible2;
+    const passwordInput2 = document.getElementById('password2') as HTMLInputElement;
+    passwordInput2.type = this.passwordVisible2 ? 'text' : 'password';
+    }
+
+  // Compropbación de campos obligatorios y formato de correo electrónico
   onSubmit(): void {
     if (this.emailInvalid) {
       alert("Correo electrónico inválido");
@@ -91,34 +98,32 @@ export class RegistroComponent {
       return;
     }
 
+    // El primero comprueba el formato de la contraseña y 
+    // el segundo si las contraseñas coinciden
     if (!this.validarPassword() || !this.validarConfirmPassword()) {
       alert("Por favor corrige los errores en el formulario");
       return;
     }
 
-    // Aquí deberías cifrar la contraseña antes de enviarla al backend (esto se hace en el backend normalmente).
-    // Para propósitos de demostración, asumimos que `userService` maneja esto.
-    const hashedPassword = this.password1; // Aquí sería el cifrado real.
+    // Validar si los campos obligatorios están vacíos
+    if (!this.nombre || !this.apellido || !this.email || !this.centro || !this.fechaAlta || !this.password1 || !this.password2) {
+      this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
+      return; // Detener el envío del formulario si hay campos vacíos
+    }
+    // const hashedPassword = this.password1; // Aquí sería el cifrado real.
 
-    // Llamada al servicio de registro
-    this.userService.register({
-      nombre: this.nombre,
-      apellido: this.apellido,
-      username: this.username,
-      departamento: this.departamento,
-      centro: this.centro,
-      fechaAlta: this.fechaAlta,
-      perfilLaboral: this.perfilLaboral,
-      password: hashedPassword
-    }).subscribe({
-      next: response => {
-        this.router.navigate(['/login']);
-      },
-      error: error => {
-        console.error('Error en el registro', error);
-      }
-    });
+    this.userService.register(this.nombre, this.apellido, this.email, this.centro, this.fechaAlta, this.perfilLaboral, this.password1)
+      .subscribe({
+        next: (response) => {
+          console.log('Usuario registrado con éxito:', response);
+        },
+        error: (error) => {
+          console.error('Error al registrar el usuario:', error);
+        }
+      });
   }
+
+  //Botones de redirección
 
   goToLanding(): void {
     this.isLoading = true;
