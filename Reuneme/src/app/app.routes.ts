@@ -3,6 +3,8 @@ import { DoblefactorComponent } from './doblefactor/doblefactor.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoginComponent } from './login/login.component';
 import { RegistroComponent } from './registro/registro.component';
+import { PerfilComponent } from './perfil/perfil.component';
+import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.component';
 
 export const routes: Routes = [
     {path: '', component: LandingPageComponent},

@@ -1,0 +1,50 @@
+<div class="perfil-container">
+    <h2>User Profile</h2>
+  
+    <div class="profile-info">
+      <!-- Imagen de perfil -->
+      <div class="profile-picture">
+        <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
+        <input type="file" (change)="onFileSelected($event)" class="upload-button" />
+      </div>
+  
+      <!-- Contenedor para dos columnas -->
+      <div class="info-fields">
+        <div class="info-field">
+          <label>Nombre:</label>
+          <p>{{ user.nombre }}</p>
+        </div>
+  
+        <div class="info-field">
+          <label>Apellidos:</label>
+          <p>{{ user.apellidos }}</p>
+        </div>
+  
+        <div class="info-field">
+          <label>Correo:</label>
+          <p>{{ user.correo }}</p>
+        </div>
+  
+        <div class="info-field">
+            <label>Departamento:</label>
+            <p>{{ user.depart }}</p>
+          </div>
+
+        <div class="info-field">
+          <label>Centro de Trabajo:</label>
+          <p>{{ user.centroTrabajo }}</p>
+        </div>
+
+        <div class="info-field">
+            <label>Fecha de alta:</label>
+            <p>{{ user.alta }}</p>
+          </div>
+
+          <div class="info-field">
+            <label>Perfil:</label>
+            <p>{{ user.perfil }}</p>
+          </div>
+      </div>
+    </div>
+  </div>
+  

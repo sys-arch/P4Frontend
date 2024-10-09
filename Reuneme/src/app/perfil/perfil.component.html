@@ -1,0 +1,43 @@
+<div class="perfil-container">
+  <h2>Admin Profile</h2>
+
+  <div class="profile-info">
+    <!-- Imagen de perfil -->
+    <div class="profile-picture">
+      <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
+      <input type="file" (change)="onFileSelected($event)" class="upload-button" />
+    </div>
+
+    <!-- Contenedor para dos columnas -->
+    <div class="info-fields">
+      <div class="info-field">
+        <label>Nombre:</label>
+        <p>{{ admin.nombre }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Apellidos:</label>
+        <p>{{ admin.apellidos }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Correo:</label>
+        <p>{{ admin.correo }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Centro de Trabajo:</label>
+        <p>{{ admin.centroTrabajo }}</p>
+      </div>
+
+      <!-- Checkbox para "Interno" -->
+      <div class="info-field">
+        <label>
+          <input type="checkbox" [(ngModel)]="admin.interno" />
+          Interno
+        </label>
+      </div>
+
+    </div>
+  </div>
+</div>
