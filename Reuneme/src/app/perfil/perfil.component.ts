@@ -12,30 +12,36 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 
 export class PerfilComponent implements OnInit {
-  profileForm: FormGroup;
-  submitted = false;
+  
+  admin = {
+    nombre: 'Nombre de Administrador',
+    apellidos: 'Apellidos de Administrador',
+    correo: 'admin@correo.com',
+    centroTrabajo: 'Centro de Trabajo',
+    interno: false
+  };
 
-  constructor(private fb: FormBuilder) {
-    this.profileForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]]
-    });
+  profilePicture: string | ArrayBuffer | null = null;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    // Método llamado al inicializar el componente
+    // Si no tienes lógica específica aquí, lo puedes dejar vacío
   }
 
-  ngOnInit(): void {}
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    // Aquí puedes manejar la carga de archivos (por ejemplo, mostrar la imagen seleccionada)
-    console.log(file);
-  }
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
 
-  onSubmit() {
-    this.submitted = true;
-    if (this.profileForm.valid) {
-      console.log('Profile data:', this.profileForm.value);
-      // Aquí puedes manejar la lógica para guardar el perfil
+      reader.onload = () => {
+        this.profilePicture = reader.result;
+      };
+
+      reader.readAsDataURL(file);
     }
   }
 }

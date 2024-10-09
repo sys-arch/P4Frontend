@@ -12,7 +12,7 @@ export class LandingPageComponent {
   constructor(private router: Router) { }
 
   goToLogin() {
-    this.router.navigate(['/perfil']);
+    this.router.navigate(['/perfilUsuario']);
   }
 
   goToRegistro() {
