@@ -18,6 +18,7 @@ export class LoginComponent {
   passwordVisible = false;
   emailInvalid = false;
   loginFailed = false;
+
   passwordInvalid = false;
   domainInvalid = false;
   errorMessage: string = '';
@@ -42,7 +43,6 @@ export class LoginComponent {
     'tempmailaddress.com'
   ];
   
-
   constructor(
     private router: Router,
     private userService: UserService,
@@ -51,6 +51,7 @@ export class LoginComponent {
 
   // Método de inicio de sesión que llama al servicio `UserService`
   loginAttempt(): void {
+
     this.resetValidationStates(); // Resetear todos los estados de error
     this.onEmailChange(); // Validar el email actual
     this.validatePassword(); // Validar la contraseña
@@ -158,7 +159,6 @@ export class LoginComponent {
     this.domainInvalid = false;
     this.errorMessage = '';
   }
-
   // Navegar a la página principal
   goToLanding(): void {
     this.router.navigate(['/']); 

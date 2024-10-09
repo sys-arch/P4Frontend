@@ -1,3 +1,5 @@
+<app-loader *ngIf="isLoading"></app-loader>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light bg-transparent" id="gtco-main-nav">
     <div class="container">
         <img src="assets/images/reuneme.png" width="200px" height="100%">
@@ -22,7 +24,7 @@
             <div class="col-md-6">
                 <h1>La mejor solución corporativa para la <span>gestión</span> de reuniones laborales.</h1>
                 <p>Aplicación multi-plataforma para gestión actual y moderna de reuniones</p>
-                <a routerLink="/registro">Registrate <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                <a (click)="goToRegistro()"  style="cursor: pointer;">Registrate <i class="fa fa-angle-right" aria-hidden="true"></i></a>
             </div>
             <div class="col-md-6">
                 <div class="card">
