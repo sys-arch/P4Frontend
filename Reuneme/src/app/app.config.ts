@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), // Aquí se pasan las rutas definidas en app.routes.ts
     provideClientHydration(),
     provideHttpClient()
-    provideHttpClient()
+    
   ]
 };
