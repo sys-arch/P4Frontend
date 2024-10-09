@@ -168,4 +168,8 @@ export class LoginComponent {
   goToRegister(): void {
     this.router.navigate(['/registro']); 
   }
+
+  goToDobleFactor(): void {
+    this.router.navigate(['/doblefactor']); 
+  }
 }

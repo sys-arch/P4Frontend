@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página en Construcción</title>
+    <style>
+        body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        }
+
+        /* Estilo del contenedor con la imagen de fondo */
+        .bg-container {
+        background-image: url('/assets/images/under-construction.png'); /* Imagen de página en construcción */
+        height: 70%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Estilo del texto */
+        .construction-text {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 40px;
+        }
+
+        /* Estilo de los botones */
+        .btn-container {
+        display: flex;
+        gap: 20px; /* Espacio entre los botones */
+        }
+
+        .btn {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+        background-color: #0056b3;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="bg-container">
+        <div class="construction-text">Página en Construcción</div>
+        <div class="btn-container">
+        <button class="btn" onclick="location.href='/admin-profile'">Perfil Admin</button>
+        <button class="btn" onclick="location.href='/user-profile'">Perfil Usuario</button>
+        <button class="btn" onclick="location.href='/admin-register'">Registro Admin</button>
+        </div>
+    </div>
+    </body>
+</html>
