@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doblefactor',
@@ -8,5 +9,17 @@ import { Component } from '@angular/core';
   styleUrl: './doblefactor.component.css'
 })
 export class DoblefactorComponent {
+  constructor(
+    private router: Router
+  ) {}
+  gotoPerfil(): void {
+    this.router.navigate(['/perfil']);
+  }
+  gotoPerfilUsuario(): void {
+    this.router.navigate(['/perfil-usuario']);
+  }
+  gotoRegistroAdmin(): void {
+    this.router.navigate(['/registro-admin']);
+  }
 
 }

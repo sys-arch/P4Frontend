@@ -8,7 +8,7 @@
   background: url('/assets/images/login-background2.png') no-repeat center center;
   background-size: cover;
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
   text-align: center;
 }
 
@@ -27,7 +27,7 @@
 
 /* Información del perfil - agrandando el recuadro */
 .profile-info {
-  background-color: rgba(35, 37, 43, 0.8);
+  background-color: rgba(35, 37, 43, 0.95);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
