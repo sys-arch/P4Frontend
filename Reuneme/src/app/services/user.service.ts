@@ -28,4 +28,25 @@ export class UserService {
         
         return this.client.post("http://localhost:4200/registro", info)
     }
-}
+    registerAdmin(
+        nombre: string, 
+        apellido: string, 
+        email: string, 
+        centro: string, 
+        password1: string, 
+        password2: string, 
+        interno: boolean
+    ): Observable<any> {
+        const info = {
+            nombre: nombre,
+            apellido: apellido,
+            email: email,
+            centro: centro,
+            password1: password1,
+            password2: password2,
+            interno: interno
+        };
+    
+        return this.client.post("http://localhost:4200/registro-admin", info);
+    }
+    }

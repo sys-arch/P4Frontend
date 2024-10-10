@@ -1,0 +1,139 @@
+.perfil-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+  }
+  
+  .perfil-container h2 {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(90deg, #00ccff, #ffffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    margin-bottom: 30px;
+  }
+  
+  /* Información del perfil - agrandando el recuadro */
+  .profile-info {
+    background-color: rgba(35, 37, 43, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    max-width: 500px;  /* Aumentando el ancho del contenedor */
+    width: 100%;
+    text-align: center; /* Centrando contenido */
+  }
+  
+  /* Moviendo la imagen dentro del contenedor de información */
+  .profile-picture {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .profile-img {
+    width: 130px; /* Aumentando el tamaño de la imagen */
+    height: 130px; /* Establece la altura de la imagen */
+    border-radius: 50%;
+    border: 3px solid #00eeff;
+    background-image: url('/assets/images/UsuarioSinFoto.png'); /* Imagen predeterminada */
+    background-size: cover; /* Ajusta la imagen al tamaño del div */
+    background-position: center; /* Centra la imagen */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px; /* Espacio entre la imagen y los campos */
+  }
+  
+  .upload-button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .upload-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Campos de información */
+  .info-field {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .info-field label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #f5f5f5;
+    margin-bottom: 5px;
+  }
+  
+  .info-field p {
+    font-size: 16px;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+  }
+  
+  /* Estilos para hover en campos */
+  .info-field p:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Estilos para botones adicionales */
+  .actions {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .actions .btn {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .actions .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Botón de volver */
+  .back-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 3;
+  }
+  
+  .back-btn:hover {
+    background-color: #0056b3;
+  }
+  

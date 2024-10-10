@@ -3,13 +3,14 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.services';
+import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, LoaderComponent],
   providers: [UserService]
 })
 export class LoginComponent {
@@ -18,6 +19,7 @@ export class LoginComponent {
   passwordVisible = false;
   emailInvalid = false;
   loginFailed = false;
+  isLoading = false;
 
   passwordInvalid = false;
   domainInvalid = false;
@@ -166,7 +168,11 @@ export class LoginComponent {
 
   // Navegar a la página de registro
   goToRegister(): void {
-    this.router.navigate(['/registro']); 
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/registro']);
+    }, 1000);
   }
 
   goToDobleFactor(): void {

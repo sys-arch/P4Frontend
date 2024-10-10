@@ -99,15 +99,20 @@
 
 .textbox {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
 }
 
 .textbox label {
     position: absolute;
-    top: 50%;
+    top: 65%;
     left: 10px;
-    transform: translateY(-50%);
+    transform: translateY(-80%);
     font-size: 16px;
     color: #f5f5f5;
     transition: all 0.3s ease;
@@ -116,14 +121,13 @@
 
 .textbox input {
     width: 100%;
-    padding: 10px 10px 10px 10px;
+    padding: 10px;
     background: transparent;
     border: none;
-    border-bottom: 2px solid #999;
     outline: none;
     color: #f5f5f5;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    border-radius: 4px;
 }
 
 .textbox input:focus ~ label,
@@ -135,6 +139,7 @@
 
 .textbox input:focus {
     border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 8px #00eeff;
 }
 
 .textbox input::placeholder {
@@ -236,7 +241,7 @@
 
 .toggle-password {
     position: absolute;
-    right: 10px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
