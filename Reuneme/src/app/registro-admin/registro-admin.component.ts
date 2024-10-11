@@ -114,4 +114,11 @@ export class RegistroAdminComponent {
       this.router.navigate(['/login']);
     }, 1000);
   }
+  goToDoblefactor(): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/../doblefactor']);
+    }, 1000);
+  }
 }

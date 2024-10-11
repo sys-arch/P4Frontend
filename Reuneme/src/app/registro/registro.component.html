@@ -52,7 +52,7 @@
             <div class="form-grid">
                 <!-- Fecha de alta en la compañía -->
                 <div class="textbox">
-                    <input type="text" id="fechaAlta" placeholder="dd/mm/aaaa" [(ngModel)]="fechaAlta" name="fechaAlta" required />
+                    <input type="date" id="fechaAlta" placeholder="dd/mm/aaaa" [(ngModel)]="fechaAlta" name="fechaAlta" required />
                     <label for="fechaAlta">Fecha de alta en la compañía (dd/mm/aaaa)*</label>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                 ¿Ya tienes una cuenta? <a routerLink="/login" class="login-link" (click)="goToLogin()">INICIAR SESIÓN</a>
             </p>
         </div>
-        <app-loader *ngIf="isLoading"></app-loader>
+        
     </div>
 
     <div class="back-button-container">

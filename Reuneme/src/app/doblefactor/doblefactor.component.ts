@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrl: './doblefactor.component.css'
 })
 export class DoblefactorComponent {
+  isLoading: boolean = false;
+
   constructor(
     private router: Router
   ) {}

@@ -53,7 +53,7 @@
 .error-message {
     color: #ff4d4f; /* Color rojo para el texto del error */
     font-size: 14px; /* Tamaño de fuente */
-    margin-top: -10px; /* Espacio adicional encima del mensaje */
+    margin-top: -25px; /* Espacio adicional encima del mensaje */
     text-align: left; /* Alinear a la izquierda dentro del contenedor */
     font-weight: 500; /* Peso de la fuente */
 }
@@ -76,13 +76,14 @@
     width: 1000px;
     padding: 25px;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #23252b;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
     border-radius: 0px;
     text-align: center;
+    z-index: 1;
 }
 
 .register-box h2 {
@@ -101,13 +102,18 @@
     position: relative;
     margin-bottom: 25px;
     width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
 }
 
 .textbox label {
     position: absolute;
-    top: 50%;
+    top: 70%;
     left: 10px;
-    transform: translateY(-50%);
+    transform: translateY(-90%);
     font-size: 16px;
     color: #f5f5f5;
     transition: all 0.3s ease;
@@ -116,14 +122,13 @@
 
 .textbox input {
     width: 100%;
-    padding: 10px 10px 10px 10px;
+    padding: 10px;
     background: transparent;
     border: none;
-    border-bottom: 2px solid #999;
     outline: none;
     color: #f5f5f5;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    border-radius: 4px;
 }
 
 .textbox input:focus ~ label,
@@ -135,7 +140,9 @@
 
 .textbox input:focus {
     border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 10px #00eeff;
 }
+
 
 .textbox input::placeholder {
     color: transparent;
