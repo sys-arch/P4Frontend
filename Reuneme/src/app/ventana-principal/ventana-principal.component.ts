@@ -26,9 +26,10 @@ export class VentanaPrincipalComponent {
       department: '',
       center: 'Centro Norte',
       joiningDate: '',
-      jobTitle: '',
+      jobTitle: 'Administrador',
       isAdmin: true,
-      profilePicture: 'assets/images/profile1.jpg'  // Ruta de la foto de perfil
+      profilePicture: 'assets/images/test-perfil1.jpg',
+      estado: 'Validado'
     },
     {
       firstName: 'Maria',
@@ -39,7 +40,8 @@ export class VentanaPrincipalComponent {
       joiningDate: '15/08/2021',
       jobTitle: 'Desarrolladora',
       isAdmin: false,
-      profilePicture: 'assets/images/profile2.jpg'  // Ruta de la foto de perfil
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'No validado'
     },
     {
       firstName: 'Luis',
@@ -50,9 +52,96 @@ export class VentanaPrincipalComponent {
       joiningDate: '20/01/2022',
       jobTitle: 'Especialista',
       isAdmin: false,
-      profilePicture: 'assets/images/profile3.jpg'  // Ruta de la foto de perfil
+      profilePicture: 'assets/images/test-perfil1.jpg',
+      estado: 'Bloqueado'
+    },
+    {
+      firstName: 'Carlos',
+      lastName: 'Martínez',
+      email: 'carlos.martinez@example.com',
+      department: 'Ventas',
+      center: 'Centro Oeste',
+      joiningDate: '10/05/2020',
+      jobTitle: 'Vendedor',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'Validado'
+    },
+    {
+      firstName: 'Elena',
+      lastName: 'Ruiz',
+      email: 'elena.ruiz@example.com',
+      department: 'Recursos Humanos',
+      center: 'Centro Norte',
+      joiningDate: '25/11/2019',
+      jobTitle: 'Gerente de RRHH',
+      isAdmin: true,
+      profilePicture: 'assets/images/test-perfil1.jpg',
+      estado: 'Bloqueado'
+    },
+    {
+      firstName: 'Pedro',
+      lastName: 'López',
+      email: 'pedro.lopez@example.com',
+      department: 'Tecnología',
+      center: 'Centro Sur',
+      joiningDate: '12/07/2021',
+      jobTitle: 'Soporte Técnico',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'Validado'
+    },
+    {
+      firstName: 'Ana',
+      lastName: 'Hernández',
+      email: 'ana.hernandez@example.com',
+      department: 'Finanzas',
+      center: 'Centro Este',
+      joiningDate: '05/09/2020',
+      jobTitle: 'Contadora',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil1.jpg',
+      estado: 'No validado'
+    },
+    {
+      firstName: 'David',
+      lastName: 'García',
+      email: 'david.garcia@example.com',
+      department: 'Operaciones',
+      center: 'Centro Oeste',
+      joiningDate: '01/01/2022',
+      jobTitle: 'Gerente de Operaciones',
+      isAdmin: true,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'Validado'
+    },
+    {
+      firstName: 'Sofia',
+      lastName: 'Torres',
+      email: 'sofia.torres@example.com',
+      department: 'Ventas',
+      center: 'Centro Norte',
+      joiningDate: '15/03/2021',
+      jobTitle: 'Ejecutiva de Ventas',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil1.jpg',
+      estado: 'Bloqueado'
+    },
+    {
+      firstName: 'Miguel',
+      lastName: 'Ramírez',
+      email: 'miguel.ramirez@example.com',
+      department: 'Tecnología',
+      center: 'Centro Sur',
+      joiningDate: '18/12/2019',
+      jobTitle: 'Desarrollador',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'Validado'
     }
   ];
+  
+  
 
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
   filteredUsers() {

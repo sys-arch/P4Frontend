@@ -1,3 +1,12 @@
+html, body { 
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Evita que haya scroll horizontal */
+    font-family: 'Roboto', sans-serif; /* Fuente moderna */
+    color: #e0e0e0; /* Texto ligeramente gris */
+}
+
 .ventana-principal {
     text-align: center;
     padding: 120px 20px 20px;
@@ -7,86 +16,157 @@
     min-height: 100vh;
 }
 
-/* Ajuste para hacer más estrecha la lista de usuarios */
+/* Contenedor principal para la lista de usuarios */
 .user-list-container {
     width: 60%;
     margin: 20px auto;
     background-color: #1e1e1e;
     color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px; /* Bordes más redondeados */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra suave */
 }
 
-/* Estilo del header */
-.header {
-    width: 100%;
-    height: 60px;
-    background: linear-gradient(to right, #175be2, #06c6f3);
-    color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    z-index: 2;
-}
-
-.logo-img {
-    position: absolute;
-    bottom: -35px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 200px;
-    height: auto;
-    z-index: 2;
-}
-
-/* Estilo para las filas de usuario como barras */
-.user-list-header, .user-list-row {
+/* Encabezado de la lista de usuarios */
+.user-list-header {
     display: grid;
-    grid-template-columns: 50px 150px 150px 1fr 1fr 150px 150px 100px; /* Ajusta el ancho de las columnas */
+    grid-template-columns: 50px 150px 150px 1fr 150px 150px 100px 100px; /* Incluye el campo Estado antes de Acciones */
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #333;
+    font-weight: bold;
+    text-align: left;
+    color: #b3b3b3; /* Color de cabeceras más suave */
+}
+
+/* Contenido con scroll */
+.user-list-content {
+    max-height: 500px; /* Fija la altura para el scroll */
+    overflow-y: auto;  /* Scroll solo dentro del contenido de la lista */
+    scrollbar-width: thin;
+    scrollbar-color: #666 transparent; /* Color de la barra de desplazamiento */
+}
+
+/* Estilo de barra de desplazamiento personalizada */
+.user-list-content::-webkit-scrollbar {
+    width: 8px; /* Anchura del scrollbar */
+}
+
+.user-list-content::-webkit-scrollbar-thumb {
+    background-color: #666; /* Color de la barra de desplazamiento */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Fila de usuario */
+.user-list-row {
+    display: grid;
+    grid-template-columns: 50px 150px 150px 1fr 150px 150px 100px 100px; /* Incluye el campo Estado antes de Acciones */
     padding: 15px;
     border-radius: 12px;
     background-color: #2e2e2e;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Mayor separación entre filas */
     align-items: center;
     text-align: left;
+    position: relative; /* Necesario para mostrar los botones en hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
 }
 
-.user-list-header {
-    background-color: #333;
-    font-weight: bold;
-}
-
-.column-header {
-    padding: 5px;
-    text-align: left;
-}
-
+/* Hover sobre la fila */
 .user-list-row:hover {
-    background-color: #383838;
+    background-color: rgba(56, 56, 56, 0.9); /* Fondo más suave */
 }
 
+/* Estilos para la columna Estado del usuario */
+.user-status {
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    padding: 5px;
+    color: white;
+}
+
+/* Estado: Bloqueado en rojo */
+.status-bloqueado {
+    background-color: #dc3545; /* Rojo más intenso */
+}
+
+/* Estado: Validado en verde */
+.status-validado {
+    background-color: #2dc38c; /* Verde más vibrante */
+}
+
+/* Estado: No validado en gris */
+.status-no-validado {
+    background-color: #6c757d; /* Gris más oscuro */
+}
+
+/* Foto del usuario */
 .user-photo img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #f5f5f5; /* Borde alrededor de la foto */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para destacar las fotos */
 }
 
-.user-name, .user-lastname, .user-email, .user-center, .user-joining-date, .user-job {
+.user-photo small {
+    display: block;
+    text-align: center;
+    color: #ccc;
+    font-size: 10px;
+}
+
+/* Estilos para las columnas de la lista */
+.user-name, .user-lastname, .user-job, .user-department, .user-center {
     padding: 5px;
-    text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+/* Botones de acción: inicialmente ocultos */
+.user-actions {
+    display: none; /* Ocultar los botones de acción por defecto */
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* Mostrar los botones solo al hacer hover sobre la fila */
+.user-list-row:hover .user-actions {
+    display: flex;
+}
+
+/* Estilos de los botones */
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    color: #f5f5f5;
+    transition: transform 0.3s ease-in-out;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+    background-color: rgba(0, 123, 255, 0.2); /* Fondo en hover */
+}
+
+/* Botón de edición */
+.edit-btn {
+    color: #ffc107;
+}
+
+/* Botón de eliminar */
+.delete-btn {
+    color: #dc3545;
+}
+
 /* Estilo del filtro para que se vea similar a la lista */
 .search-filter-container {
-    background-color: #1e1e1e;
+    background-color: rgba(30, 30, 30, 0.9); /* Fondo con transparencia */
     color: white;
     padding: 10px;
     border-radius: 8px;
@@ -99,7 +179,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 30px; /* Mayor separación entre los filtros */
 }
 
 .filter-options select, .filter-options input {
@@ -112,6 +192,35 @@
 
 .filter-options input::placeholder {
     color: #ccc;
+}
+
+/* Ajustes para que el header cubra todo el ancho de la pantalla */
+.header {
+    width: 100vw;
+    height: 60px;
+    background: linear-gradient(to right, #175be2, #06c6f3);
+    color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilos del logo */
+.logo-img {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200px;
+    height: auto;
+    z-index: 2;
 }
 
 /* Contenedor del footer */
@@ -184,4 +293,8 @@
 
 .footer-info span {
     font-weight: bold;
+}
+
+h2 {
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Sombra al título */
 }
