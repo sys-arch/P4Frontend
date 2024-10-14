@@ -30,7 +30,7 @@ html, body {
 /* Encabezado de la lista de usuarios */
 .user-list-header {
     display: grid;
-    grid-template-columns: 50px 150px 150px 1fr 150px 150px 100px 100px; /* Incluye el campo Estado antes de Acciones */
+    grid-template-columns: 50px 200px 1fr 150px 150px 100px 100px; /* Nombre completo en una sola columna */
     padding: 15px;
     border-radius: 12px;
     background-color: #333;
@@ -60,7 +60,7 @@ html, body {
 /* Fila de usuario */
 .user-list-row {
     display: grid;
-    grid-template-columns: 50px 150px 150px 1fr 150px 150px 100px 100px; /* Incluye el campo Estado antes de Acciones */
+    grid-template-columns: 50px 200px 1fr 150px 150px 100px 100px; /* Nombre completo ocupa una sola columna */
     padding: 15px;
     border-radius: 12px;
     background-color: #2e2e2e;
@@ -72,12 +72,31 @@ html, body {
     transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
 }
 
+/* Agrupando nombre y apellidos en un bloque */
+.user-name-lastname {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Alinea verticalmente el nombre y apellido */
+    gap: 5px; /* Espacio reducido entre nombre y apellido */
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    justify-content: flex-start;
+}
+
+/* Estilos individuales para nombre y apellidos */
+.user-name, .user-lastname {
+    font-size: 16px; /* Tamaño similar para ambos */
+    font-weight: 500; /* Peso moderado para el texto */
+}
+
 /* Hover sobre la fila */
 .user-list-row:hover {
     background-color: rgba(56, 56, 56, 0.9); /* Fondo más suave */
 }
 
-/* Estilos para la columna Estado del usuario */
+/* Estado del usuario */
 .user-status {
     font-weight: bold;
     text-align: center;
@@ -86,17 +105,14 @@ html, body {
     color: white;
 }
 
-/* Estado: Bloqueado en rojo */
 .status-bloqueado {
     background-color: #dc3545; /* Rojo más intenso */
 }
 
-/* Estado: Validado en verde */
 .status-validado {
     background-color: #2dc38c; /* Verde más vibrante */
 }
 
-/* Estado: No validado en gris */
 .status-no-validado {
     background-color: #6c757d; /* Gris más oscuro */
 }
@@ -118,17 +134,9 @@ html, body {
     font-size: 10px;
 }
 
-/* Estilos para las columnas de la lista */
-.user-name, .user-lastname, .user-job, .user-department, .user-center {
-    padding: 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 /* Botones de acción: inicialmente ocultos */
 .user-actions {
-    display: none; /* Ocultar los botones de acción por defecto */
+    display: none;
     justify-content: space-around;
     align-items: center;
 }
@@ -151,22 +159,20 @@ html, body {
 
 .action-btn:hover {
     transform: scale(1.2);
-    background-color: rgba(0, 123, 255, 0.2); /* Fondo en hover */
+    background-color: rgba(0, 123, 255, 0.2);
 }
 
-/* Botón de edición */
 .edit-btn {
     color: #ffc107;
 }
 
-/* Botón de eliminar */
 .delete-btn {
     color: #dc3545;
 }
 
 /* Estilo del filtro para que se vea similar a la lista */
 .search-filter-container {
-    background-color: rgba(30, 30, 30, 0.9); /* Fondo con transparencia */
+    background-color: rgba(30, 30, 30, 0.9);
     color: white;
     padding: 10px;
     border-radius: 8px;
@@ -179,7 +185,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px; /* Mayor separación entre los filtros */
+    gap: 30px;
 }
 
 .filter-options select, .filter-options input {
@@ -289,10 +295,6 @@ html, body {
     font-size: 12px;
     color: #b3b3b3;
     z-index: 11;
-}
-
-.footer-info span {
-    font-weight: bold;
 }
 
 h2 {

@@ -31,8 +31,7 @@
             <!-- Encabezado fijo de la lista de usuarios -->
             <div class="user-list-header">
                 <span class="column-header">Foto</span>
-                <span class="column-header">Nombre</span>
-                <span class="column-header">Apellidos</span>
+                <span class="column-header">Nombre Completo</span>
                 <span class="column-header">Perfil Laboral</span>
                 <span class="column-header">Departamento</span>
                 <span class="column-header">Centro</span>
@@ -47,8 +46,13 @@
                         <img [src]="user.profilePicture" alt="Foto de perfil">
                         <small>{{ user.isAdmin ? 'Administrador' : 'Usuario' }}</small>
                     </div>
-                    <div class="user-name">{{ user.firstName }}</div>
-                    <div class="user-lastname">{{ user.lastName }}</div>
+                    
+                    <!-- Nombre y Apellido juntos -->
+                    <div class="user-name-lastname">
+                        <span class="user-name">{{ user.firstName }}</span>
+                        <span class="user-lastname">{{ user.lastName }}</span>
+                    </div>
+
                     <div class="user-job">{{ user.jobTitle }}</div>
                     <div class="user-department">{{ user.department }}</div>
                     <div class="user-center">{{ user.center }}</div>
@@ -62,9 +66,10 @@
                         {{ user.estado }}
                     </div>
 
-                    <!-- Acciones: Info, Editar, Eliminar -->
+                    <!-- Acciones: Editar, Eliminar -->
                     <div class="user-actions">
                         <button class="action-btn edit-btn" title="Editar">✏️</button>
+                        <button class="action-btn edit-btn" title="Bloquear">🚫</button>
                         <button class="action-btn delete-btn" title="Eliminar">🗑️</button>
                     </div>
                 </div>
