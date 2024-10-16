@@ -141,6 +141,13 @@ export class VentanaPrincipalComponent {
     }
   ];
   
+  toggleBlocked(user: any): void {
+    if (user.estado === 'Bloqueado') {
+      user.estado = 'Validado'; // O cualquier estado que represente que está desbloqueado
+    } else {
+      user.estado = 'Bloqueado';
+    }
+  }
   
 
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
