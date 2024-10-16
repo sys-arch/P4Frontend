@@ -147,9 +147,15 @@ export class VentanaPrincipalComponent {
   filteredUsers() {
     return this.users
       .filter(user => {
-        // Filtrado por rol (administrador o usuario)
+        // Filtrado por rol (administrador o empleado)
         if (this.filterBy === 'admin' && !user.isAdmin) return false;
         if (this.filterBy === 'employee' && user.isAdmin) return false;
+  
+        // Filtrado por estado (bloqueado, validado, no validado)
+        if (this.filterBy === 'blocked' && user.estado !== 'Bloqueado') return false;
+        if (this.filterBy === 'validated' && user.estado !== 'Validado') return false;
+        if (this.filterBy === 'notValidated' && user.estado !== 'No validado') return false;
+  
         return true;
       })
       .filter(user => {
@@ -165,6 +171,7 @@ export class VentanaPrincipalComponent {
         return false;
       });
   }
+  
 
   constructor() {}
 

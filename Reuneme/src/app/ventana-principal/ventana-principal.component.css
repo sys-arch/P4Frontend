@@ -2,9 +2,9 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden; /* Evita que haya scroll horizontal */
-    font-family: 'Roboto', sans-serif; /* Fuente moderna */
-    color: #e0e0e0; /* Texto ligeramente gris */
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+    color: #e0e0e0;
 }
 
 .ventana-principal {
@@ -16,68 +16,69 @@ html, body {
     min-height: 100vh;
 }
 
-/* Contenedor principal para la lista de usuarios */
 .user-list-container {
     width: 60%;
     margin: 20px auto;
     background-color: #1e1e1e;
     color: white;
     padding: 20px;
-    border-radius: 12px; /* Bordes más redondeados */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra suave */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Encabezado de la lista de usuarios */
 .user-list-header {
     display: grid;
-    grid-template-columns: 50px 200px 1fr 150px 150px 100px 100px; /* Nombre completo en una sola columna */
+    grid-template-columns: 50px 200px 1fr 110px 110px 160px;
     padding: 15px;
     border-radius: 12px;
     background-color: #333;
     font-weight: bold;
     text-align: left;
-    color: #b3b3b3; /* Color de cabeceras más suave */
+    color: #b3b3b3;
 }
 
-/* Contenido con scroll */
 .user-list-content {
-    max-height: 500px; /* Fija la altura para el scroll */
-    overflow-y: auto;  /* Scroll solo dentro del contenido de la lista */
+    max-height: 500px;
+    overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #666 transparent; /* Color de la barra de desplazamiento */
+    scrollbar-color: #666 transparent;
 }
 
-/* Estilo de barra de desplazamiento personalizada */
 .user-list-content::-webkit-scrollbar {
-    width: 8px; /* Anchura del scrollbar */
+    width: 8px;
 }
 
 .user-list-content::-webkit-scrollbar-thumb {
-    background-color: #666; /* Color de la barra de desplazamiento */
-    border-radius: 10px; /* Bordes redondeados */
+    background-color: #666;
+    border-radius: 10px;
 }
 
-/* Fila de usuario */
 .user-list-row {
     display: grid;
-    grid-template-columns: 50px 200px 1fr 150px 150px 100px 100px; /* Nombre completo ocupa una sola columna */
+    grid-template-columns: 50px 200px 1fr 110px 110px 160px;
     padding: 15px;
     border-radius: 12px;
     background-color: #2e2e2e;
-    margin-bottom: 15px; /* Mayor separación entre filas */
+    margin-bottom: 15px;
     align-items: center;
     text-align: left;
-    position: relative; /* Necesario para mostrar los botones en hover */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-/* Agrupando nombre y apellidos en un bloque */
+.user-list-row:hover {
+    background-color: rgba(56, 56, 56, 0.9);
+}
+.user-list-row:hover .user-actions {
+    display: flex; /* Muestra las acciones al hacer hover */
+}
+
 .user-name-lastname {
     display: flex;
     flex-direction: row;
-    align-items: center; /* Alinea verticalmente el nombre y apellido */
-    gap: 5px; /* Espacio reducido entre nombre y apellido */
+    align-items: center;
+    gap: 5px;
     padding: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -85,46 +86,54 @@ html, body {
     justify-content: flex-start;
 }
 
-/* Estilos individuales para nombre y apellidos */
+.user-email {
+    font-size: 14px;
+    color: #e0e0e0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .user-name, .user-lastname {
-    font-size: 16px; /* Tamaño similar para ambos */
-    font-weight: 500; /* Peso moderado para el texto */
+    font-size: 16px;
+    font-weight: 500;
 }
 
-/* Hover sobre la fila */
-.user-list-row:hover {
-    background-color: rgba(56, 56, 56, 0.9); /* Fondo más suave */
-}
-
-/* Estado del usuario */
-.user-status {
-    font-weight: bold;
-    text-align: center;
+.user-status, .blocked-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
     border-radius: 8px;
-    padding: 5px;
+    font-weight: bold;
     color: white;
+    font-size: 14px;
 }
 
-.status-bloqueado {
-    background-color: #dc3545; /* Rojo más intenso */
+.user-status i, .blocked-status i {
+    margin-right: 8px;
 }
 
 .status-validado {
-    background-color: #2dc38c; /* Verde más vibrante */
+    background-color: #2dc38c;
 }
 
 .status-no-validado {
-    background-color: #6c757d; /* Gris más oscuro */
+    background-color: #6c757d;
 }
 
-/* Foto del usuario */
+.blocked-status {
+    background-color: #dc3545;
+}
+
 .user-photo img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #f5f5f5; /* Borde alrededor de la foto */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para destacar las fotos */
+    border: 2px solid #f5f5f5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .user-photo small {
@@ -133,44 +142,75 @@ html, body {
     color: #ccc;
     font-size: 10px;
 }
-
-/* Botones de acción: inicialmente ocultos */
 .user-actions {
-    display: none;
-    justify-content: space-around;
+    display: none; /* Oculta las acciones por defecto */
+    justify-content: flex-start;
     align-items: center;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* Mostrar los botones solo al hacer hover sobre la fila */
-.user-list-row:hover .user-actions {
-    display: flex;
-}
-
-/* Estilos de los botones */
+/* Estilo base para todos los botones */
 .action-btn {
-    background: none;
+    background: linear-gradient(145deg, #4e4e4e, #2a2a2a);
     border: none;
+    color: #fff;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
     cursor: pointer;
-    font-size: 18px;
-    padding: 5px;
-    color: #f5f5f5;
-    transition: transform 0.3s ease-in-out;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(70, 70, 70, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.action-btn:hover {
-    transform: scale(1.2);
-    background-color: rgba(0, 123, 255, 0.2);
-}
-
+/* Botón de editar más largo */
 .edit-btn {
-    color: #ffc107;
+    background: linear-gradient(145deg, #3a82d8, #275a9b);
+    flex: 2; /* Este botón es el que se estira más */
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
+/* Botón de bloquear más corto */
+.block-btn {
+    background: linear-gradient(145deg, #e57d7d, #b55858);
+    flex: 1; /* Este botón es más pequeño */
+}
+
+/* Botón de eliminar más corto */
 .delete-btn {
-    color: #dc3545;
+    background: linear-gradient(145deg, #d0b24a, #a88936);
+    flex: 1; /* Este botón es más pequeño */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
-/* Estilo del filtro para que se vea similar a la lista */
+/* Efecto de click cuando el botón se presiona */
+.action-btn:active {
+    transform: translateY(2px);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4), -1px -1px 3px rgba(70, 70, 70, 0.2);
+}
+
+/* Iconos dentro de los botones */
+.action-btn i {
+    margin-right: 0;
+    font-size: 18px;
+}
+
+/* Efecto hover */
+.action-btn:hover {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), -5px -5px 10px rgba(70, 70, 70, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Mostrar las acciones solo al hacer hover sobre la fila */
+.user-list-row:hover .user-actions {
+    display: flex; /* Muestra las acciones al hacer hover */
+}
+
+
 .search-filter-container {
     background-color: rgba(30, 30, 30, 0.9);
     color: white;
@@ -200,7 +240,6 @@ html, body {
     color: #ccc;
 }
 
-/* Ajustes para que el header cubra todo el ancho de la pantalla */
 .header {
     width: 100vw;
     height: 60px;
@@ -214,11 +253,8 @@ html, body {
     top: 0;
     left: 0;
     z-index: 2;
-    padding: 0;
-    margin: 0;
 }
 
-/* Estilos del logo */
 .logo-img {
     position: absolute;
     bottom: -35px;
@@ -229,7 +265,6 @@ html, body {
     z-index: 2;
 }
 
-/* Contenedor del footer */
 .footer {
     width: 100%;
     position: fixed;
@@ -298,5 +333,5 @@ html, body {
 }
 
 h2 {
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Sombra al título */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
