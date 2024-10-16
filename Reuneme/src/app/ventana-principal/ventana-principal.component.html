@@ -1,0 +1,114 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="ventana-principal">
+    <!-- Vista para el administrador -->
+    <div *ngIf="isAdmin">
+        <!-- Header de la página de administrador -->
+        <div class="header">
+            <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+        </div>
+        <h2>Panel de Administrador</h2>
+
+        <!-- Barra de búsqueda y filtros (Solo visible para administradores) -->
+        <div class="search-filter-container">
+            <div class="filter-options">
+                <label for="search-by">Buscar por:</label>
+                <select id="search-by" [(ngModel)]="searchBy">
+                    <option value="name">Nombre</option>
+                    <option value="email">Correo Electrónico</option>
+                </select>
+                <input type="text" placeholder="Buscar" [(ngModel)]="searchQuery">
+                <label for="filter-by">Filtrar por:</label>
+                <select id="filter-by" [(ngModel)]="filterBy">
+                    <option value="all">Todos los usuarios</option>
+                    <option value="admin">Administradores</option>
+                    <option value="employee">Empleados</option>
+                    <option value="blocked">Usuarios Bloqueados</option> <!-- Nuevo -->
+                    <option value="validated">Usuarios Validados</option> <!-- Nuevo -->
+                    <option value="notValidated">Usuarios No Validados</option> <!-- Nuevo -->
+                </select>
+
+            </div>
+        </div>
+
+        <!-- Lista de usuarios -->
+        <div class="user-list-container">
+            <!-- Encabezado fijo de la lista de usuarios -->
+            <div class="user-list-header">
+                <span class="column-header">Foto</span>
+                <span class="column-header">Nombre Completo</span>
+                <span class="column-header">Correo Electrónico</span>
+                <span class="column-header">Bloqueado</span>
+                <span class="column-header">Validado</span>
+                <span class="column-header">Acciones</span>
+            </div>
+            
+            <!-- Contenido con scroll -->
+            <div class="user-list-content">
+                <div *ngFor="let user of filteredUsers()" class="user-list-row">
+                    <div class="user-photo">
+                        <img [src]="user.profilePicture" alt="Foto de perfil">
+                        <small>{{ user.isAdmin ? 'Administrador' : 'Usuario' }}</small>
+                    </div>
+            
+                    <!-- Nombre y Apellido juntos -->
+                    <div class="user-name-lastname">
+                        <span class="user-name">{{ user.firstName }}</span>
+                        <span class="user-lastname">{{ user.lastName }}</span>
+                    </div>
+            
+                    <!-- Correo Electrónico -->
+                    <div class="user-email">{{ user.email }}</div>
+            
+                    <!-- Columna de Bloqueado (solo si está bloqueado) -->
+                    <div class="user-blocked">
+                        <span *ngIf="user.estado === 'Bloqueado'" class="blocked-status">
+                            <i class="material-icons">block</i>
+                        </span>
+                    </div>
+                    
+                    <!-- Columna de Validado o No Validado -->
+                    <div class="user-status" [ngClass]="{
+                        'status-validado': user.estado === 'Validado',
+                        'status-no-validado': user.estado === 'No validado'
+                    }">
+                        <i class="material-icons">
+                            {{ user.estado === 'Validado' ? 'check_circle' : 'cancel' }}
+                        </i>
+                    </div>
+            
+                    <!-- Acciones: Editar, Bloquear, Eliminar -->
+                    <div class="user-actions">
+                        <button class="action-btn edit-btn" title="Editar">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button class="action-btn block-btn" title="Bloquear">
+                            <i class="material-icons">block</i>
+                        </button>
+                        <button class="action-btn delete-btn" title="Eliminar">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Footer de la página -->
+        <footer class="footer">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones de Uso</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Consentimiento de Cookies</a></li>
+                </ul>
+            </div>
+        </footer>
+
+        <div class="footer-info">
+            <span>© 2024 ReuneMe, LLC</span>
+        </div>
+    </div>
+</div>
+

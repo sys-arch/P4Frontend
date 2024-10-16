@@ -23,5 +23,8 @@ export class DoblefactorComponent {
   gotoRegistroAdmin(): void {
     this.router.navigate(['/registro-admin']);
   }
+  gotoVentanaPrincipal(): void {
+    this.router.navigate(['/ventana-principal']);
+  }
 
 }
