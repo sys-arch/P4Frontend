@@ -7,6 +7,146 @@ html, body {
     color: #e0e0e0;
 }
 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.modal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-color: #2a2a2a !important; /* Color de fondo ligeramente más claro */
+    padding: 25px !important;
+    border-radius: 15px !important; /* Bordes más redondeados */
+    /* Elimina la propiedad height de aquí */
+    z-index: 2147483647 !important; /* Asegura que esté en el frente */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Sombra sutil para dar profundidad */
+    display: block !important; /* Forzar que esté visible */
+    opacity: 1 !important; /* Asegurar que no esté opaco */
+    text-align: center; /* Centrar el contenido */
+    color: #f1f1f1; /* Color de texto más claro */
+}
+
+/* Estilos para el modal de bloqueo */
+.block-modal {
+    background-color: #2a2a2a; /* Color más neutro */
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px; /* Modal más pequeño */
+    height: 150px; /* Menor altura */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border: 2px solid #444;
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+}
+
+
+
+.modal h3 {
+    color: #f1f1f1;
+    margin-bottom: 15px;
+    font-size: 18px; /* Tamaño de fuente más grande */
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra en el texto para dar más claridad */
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px; /* Añadir espacio entre el texto y los botones */
+}
+
+.confirm-btn, .cancel-btn {
+    background-color: #d9534f;
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px; /* Bordes más redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición suave al hacer hover */
+    font-size: 14px; /* Tamaño de fuente más grande */
+}
+
+.confirm-btn:hover {
+    background-color: #c9302c; /* Color más oscuro al hacer hover */
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268; /* Color más oscuro al hacer hover */
+}
+/* Estilos generales del modal de eliminación */
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #ff4d4d; /* Rojo de advertencia */
+    padding: 50px; /* Aumenta el padding para hacerlo más grande */
+    border-radius: 25px; /* Bordes redondeados más grandes */
+    width: 330px; /* Aumentar el ancho del modal */
+    height: 230px; /* Aumentar la altura del modal */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6); /* Sombra más grande para mayor profundidad */
+    border: 3px solid #ff3b3b; /* Borde más grueso en rojo oscuro */
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff; /* Texto en blanco */
+    position: relative;
+}
+/* Texto de advertencia */
+.warning-text {
+    font-size: 13px; /* Ajustar tamaño de fuente */
+    color: #f1c40f; /* Amarillo brillante para advertencia */
+    margin-top: 5px; /* Asegura que esté cerca del título */
+    margin-bottom: 25px; /* Más espacio antes de los botones */
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Estilos de los botones */
+.confirm-btn {
+    background-color: #c9302c;
+    color: white;
+    padding: 12px 25px; /* Aumentar tamaño del botón */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.confirm-btn:hover {
+    background-color: #ac2925;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 25px; /* Aumentar tamaño del botón */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+
+
+
 .ventana-principal {
     text-align: center;
     padding: 120px 20px 20px;
@@ -15,6 +155,8 @@ html, body {
     background-size: cover;
     min-height: 100vh;
 }
+/* Estilo para el botón deshabilitado */
+
 
 .user-list-container {
     width: 60%;
@@ -142,6 +284,7 @@ html, body {
     color: #ccc;
     font-size: 10px;
 }
+
 .user-actions {
     display: none; /* Oculta las acciones por defecto */
     justify-content: flex-start;
@@ -150,8 +293,61 @@ html, body {
     border-radius: 8px;
     overflow: hidden;
 }
+.block-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9534f; /* Rojo para cuando está bloqueado */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    height: 40px;
+    width: 100px;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
 
-/* Estilo base para todos los botones */
+.block-btn.unblocked {
+    background-color: transparent; /* Fondo transparente para el botón desbloqueado */
+    color: #c4c2c2; /* Color de texto e ícono sutil */
+}
+
+.block-btn.unblocked:hover {
+    background-color: #d9534f; /* Fondo verde cuando se hace hover en el estado desbloqueado */
+}
+
+.block-btn i {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.block-btn .block-btn-text {
+    display: none;
+}
+.block-btn.blocked:hover {
+    background-color: #2dc38c; /* Fondo verde cuando se hace hover en el estado desbloqueado */
+}
+.block-btn.blocked:hover .block-btn-text {
+    display: inline; /* Muestra "Desbloquear" en hover cuando está bloqueado */
+    
+}
+
+.block-btn.blocked:hover i {
+    display: none; /* Oculta el icono en hover cuando está bloqueado */
+}
+
+.block-btn.unblocked:hover .block-btn-text {
+    display: inline; /* Muestra "Bloquear" en hover cuando está desbloqueado */
+}
+
+.block-btn.unblocked:hover i {
+    display: none; /* Oculta el icono en hover cuando está desbloqueado */
+}
+/* Estilo general para botones */
 .action-btn {
     background: linear-gradient(145deg, #4e4e4e, #2a2a2a);
     border: none;
@@ -162,54 +358,47 @@ html, body {
     text-align: center;
     cursor: pointer;
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(70, 70, 70, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-/* Botón de editar más largo */
+/* Cuando el botón está bloqueado, aplicar un estilo gris */
+.blocked-btn {
+    background: #808080; /* Gris claro */
+    cursor: not-allowed; /* Cambia el cursor a no permitido */
+    color: #535353; /* Cambia el texto a un gris más claro */
+    box-shadow: none; /* Elimina la sombra cuando está bloqueado */
+}
+
+/* Cambia el color del ícono cuando el botón está bloqueado */
+.blocked-btn i {
+    color: #ccc; /* Cambia el color del ícono a gris claro */
+}
+
+
+
 .edit-btn {
     background: linear-gradient(145deg, #3a82d8, #275a9b);
-    flex: 2; /* Este botón es el que se estira más */
+    flex: 2;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
 
-/* Botón de bloquear más corto */
-.block-btn {
-    background: linear-gradient(145deg, #e57d7d, #b55858);
-    flex: 1; /* Este botón es más pequeño */
-}
-
-/* Botón de eliminar más corto */
 .delete-btn {
     background: linear-gradient(145deg, #d0b24a, #a88936);
-    flex: 1; /* Este botón es más pequeño */
+    flex: 1;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
 
-/* Efecto de click cuando el botón se presiona */
-.action-btn:active {
-    transform: translateY(2px);
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4), -1px -1px 3px rgba(70, 70, 70, 0.2);
-}
-
-/* Iconos dentro de los botones */
-.action-btn i {
-    margin-right: 0;
-    font-size: 18px;
-}
-
-/* Efecto hover */
 .action-btn:hover {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), -5px -5px 10px rgba(70, 70, 70, 0.3);
     transform: translateY(-1px);
 }
 
-/* Mostrar las acciones solo al hacer hover sobre la fila */
-.user-list-row:hover .user-actions {
-    display: flex; /* Muestra las acciones al hacer hover */
+.action-btn:active {
+    transform: translateY(2px);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4), -1px -1px 3px rgba(70, 70, 70, 0.2);
 }
-
 
 .search-filter-container {
     background-color: rgba(30, 30, 30, 0.9);
@@ -221,24 +410,44 @@ html, body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.search-filter-container .filter-options {
+.filter-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
 }
 
 .filter-options select, .filter-options input {
     padding: 8px;
     border-radius: 5px;
     border: none;
-    background-color: #333;
+    background-color: #525252;
     color: white;
 }
+.filter-options input {
+    background-color: #676363; /* Un gris más claro que #333 */
+    color: white; /* Mantiene el color del texto blanco */
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+}
+
 
 .filter-options input::placeholder {
     color: #ccc;
 }
+.filter-options label[for="search-by"] {
+    margin-right: -150px; /* Ajusta el espacio a lo que prefieras */
+}
+.filter-options select#filter-by {
+    margin-left: 0px; /* Elimina cualquier margen izquierdo que pudiera estar separando el desplegable */
+}
+.filter-options label[for="filter-by"] {
+    margin-right: -150px; /* Reduce el margen derecho para acercar la etiqueta al desplegable */
+}
+
+
+
 
 .header {
     width: 100vw;

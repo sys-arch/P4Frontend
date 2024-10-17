@@ -1,7 +1,40 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <div class="ventana-principal">
     <!-- Vista para el administrador -->
     <div *ngIf="isAdmin">
+        <!-- Modal para confirmar la eliminación -->
+        <div *ngIf="showDeleteModal" class="modal-overlay">
+            <div class="modal delete-modal"> <!-- Cambiado a "delete-modal" para un estilo diferente -->
+                <h3>¿Eliminar a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
+                <!-- Advertencia -->
+                <p class="warning-text">
+                    Una vez eliminado se perderán todos los datos del usuario.
+                </p>
+                <div class="modal-actions">
+                    <button class="confirm-btn" (click)="confirmDelete()" [disabled]="countdown > 0">
+                        Eliminar {{ countdown > 0 ? '(' + countdown + ')' : '' }}
+                    </button>
+                    <button class="cancel-btn" (click)="cancelDelete()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+
+
+        
+        <!-- Modal para confirmar el bloqueo -->
+        <!-- Modal para confirmar el bloqueo -->
+        <div *ngIf="showModal" class="modal-overlay">
+            <div class="modal block-modal"> <!-- Cambiado a block-modal -->
+                <h3>¿Bloquear a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
+                <div class="modal-actions">
+                    <button class="confirm-btn" (click)="confirmBlock()">Aceptar</button>
+                    <button class="cancel-btn" (click)="cancelBlock()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Header de la página de administrador -->
         <div class="header">
             <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
@@ -16,23 +49,21 @@
                     <option value="name">Nombre</option>
                     <option value="email">Correo Electrónico</option>
                 </select>
-                <input type="text" placeholder="Buscar" [(ngModel)]="searchQuery">
+                <input type="text" id="search-input" placeholder="Buscar" [(ngModel)]="searchQuery">
                 <label for="filter-by">Filtrar por:</label>
                 <select id="filter-by" [(ngModel)]="filterBy">
                     <option value="all">Todos los usuarios</option>
                     <option value="admin">Administradores</option>
                     <option value="employee">Empleados</option>
-                    <option value="blocked">Usuarios Bloqueados</option> <!-- Nuevo -->
-                    <option value="validated">Usuarios Validados</option> <!-- Nuevo -->
-                    <option value="notValidated">Usuarios No Validados</option> <!-- Nuevo -->
+                    <option value="blocked">Usuarios Bloqueados</option>
+                    <option value="validated">Usuarios Validados</option>
+                    <option value="notValidated">Usuarios No Validados</option>
                 </select>
-
             </div>
         </div>
 
         <!-- Lista de usuarios -->
         <div class="user-list-container">
-            <!-- Encabezado fijo de la lista de usuarios -->
             <div class="user-list-header">
                 <span class="column-header">Foto</span>
                 <span class="column-header">Nombre Completo</span>
@@ -41,31 +72,37 @@
                 <span class="column-header">Validado</span>
                 <span class="column-header">Acciones</span>
             </div>
-            
-            <!-- Contenido con scroll -->
+
             <div class="user-list-content">
                 <div *ngFor="let user of filteredUsers()" class="user-list-row">
                     <div class="user-photo">
                         <img [src]="user.profilePicture" alt="Foto de perfil">
                         <small>{{ user.isAdmin ? 'Administrador' : 'Usuario' }}</small>
                     </div>
-            
-                    <!-- Nombre y Apellido juntos -->
+
                     <div class="user-name-lastname">
                         <span class="user-name">{{ user.firstName }}</span>
                         <span class="user-lastname">{{ user.lastName }}</span>
                     </div>
-            
-                    <!-- Correo Electrónico -->
+
                     <div class="user-email">{{ user.email }}</div>
-            
-                    <!-- Columna de Bloqueado (solo si está bloqueado) -->
+
+                    <!-- Botón para bloquear o desbloquear -->
                     <div class="user-blocked">
-                        <span *ngIf="user.estado === 'Bloqueado'" class="blocked-status">
-                            <i class="material-icons">block</i>
-                        </span>
+                        <button
+                            class="block-btn"
+                            (click)="toggleBlocked(user)"
+                            [ngClass]="{'blocked': user.estado === 'Bloqueado', 'unblocked': user.estado !== 'Bloqueado'}"
+                            [title]="user.estado === 'Bloqueado' ? 'Desbloquear' : 'Bloquear'">
+                            <i class="material-icons">
+                                {{ user.estado === 'Bloqueado' ? 'block' : 'how_to_reg' }}
+                            </i>
+                            <span class="block-btn-text">
+                                {{ user.estado === 'Bloqueado' ? 'Desbloquear' : 'Bloquear' }}
+                            </span>
+                        </button>
                     </div>
-                    
+
                     <!-- Columna de Validado o No Validado -->
                     <div class="user-status" [ngClass]="{
                         'status-validado': user.estado === 'Validado',
@@ -75,24 +112,27 @@
                             {{ user.estado === 'Validado' ? 'check_circle' : 'cancel' }}
                         </i>
                     </div>
-            
-                    <!-- Acciones: Editar, Bloquear, Eliminar -->
+
+                    <!-- Acciones: Editar, Eliminar -->
                     <div class="user-actions">
-                        <button class="action-btn edit-btn" title="Editar">
+                        <button 
+                            class="action-btn edit-btn" 
+                            title="Editar"
+                            [disabled]="user.estado === 'Bloqueado'"
+                            [ngClass]="{'blocked-btn': user.estado === 'Bloqueado'}">
                             <i class="material-icons">edit</i>
                         </button>
-                        <button class="action-btn block-btn" title="Bloquear">
-                            <i class="material-icons">block</i>
-                        </button>
-                        <button class="action-btn delete-btn" title="Eliminar">
+
+                        <button
+                            class="action-btn delete-btn" 
+                            title="Eliminar"
+                            (click)="toggleDelete(user)">
                             <i class="material-icons">delete</i>
                         </button>
+
                     </div>
-
-
                 </div>
             </div>
-            
         </div>
 
         <!-- Footer de la página -->
@@ -111,4 +151,3 @@
         </div>
     </div>
 </div>
-

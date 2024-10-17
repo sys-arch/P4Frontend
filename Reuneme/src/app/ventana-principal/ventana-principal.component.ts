@@ -17,6 +17,12 @@ export class VentanaPrincipalComponent {
   searchQuery: string = '';   // Consulta de búsqueda
   filterBy: string = 'all';   // Filtro predeterminado (todos los usuarios)
 
+  selectedUser: any = null;  // Usuario seleccionado
+  showModal: boolean = false;  // Mostrar/ocultar modal de confirmación
+  showDeleteModal: boolean = false;  // Controla la visibilidad del modal de eliminación
+  countdown: number = 5;  // Cuenta regresiva de 5 segundos
+  countdownInterval: any;  // Intervalo para el temporizador
+
   // Lista de usuarios de prueba con todos los campos requeridos, incluyendo 'profilePicture'
   users = [
     {
@@ -140,8 +146,69 @@ export class VentanaPrincipalComponent {
       estado: 'Validado'
     }
   ];
-  
-  
+
+  // Método para mostrar el modal de eliminación y empezar la cuenta regresiva
+  toggleDelete(user: any): void {
+    this.selectedUser = user;
+    this.showDeleteModal = true;
+    this.countdown = 5;  // Restablece la cuenta regresiva
+
+    this.startCountdown();
+  }
+
+  // Inicia la cuenta regresiva
+  startCountdown(): void {
+    this.countdownInterval = setInterval(() => {
+      if (this.countdown > 0) {
+        this.countdown--;
+      } else {
+        clearInterval(this.countdownInterval);  // Detener el intervalo cuando llegue a 0
+      }
+    }, 1000);
+  }
+
+  // Confirmar eliminación del usuario
+  confirmDelete(): void {
+    console.log('Usuario eliminado:', this.selectedUser);
+    this.users = this.users.filter(user => user !== this.selectedUser);  // Eliminar el usuario de la lista
+    this.showDeleteModal = false;
+    this.selectedUser = null;
+    clearInterval(this.countdownInterval);  // Limpiar el intervalo si no se ha eliminado
+  }
+
+  // Cancelar la acción de eliminar
+  cancelDelete(): void {
+    console.log('Eliminación cancelada');
+    this.selectedUser = null;
+    this.showDeleteModal = false;
+    clearInterval(this.countdownInterval);  // Limpiar el intervalo
+  }
+
+  toggleBlocked(user: any): void {
+    console.log('Usuario seleccionado para bloquear:', user);
+    if (user.estado === 'Bloqueado') {
+        user.estado = 'Validado'; 
+    } else {
+        this.selectedUser = user;
+        this.showModal = true;
+        console.log('Modal activado, usuario:', this.selectedUser);
+    }
+  }
+  confirmBlock(): void {
+      console.log('Confirmación de bloqueo para:', this.selectedUser);
+      if (this.selectedUser) {
+          this.selectedUser.estado = 'Bloqueado';
+          this.showModal = false;
+          this.selectedUser = null;
+      }
+  }
+
+  cancelBlock(): void {
+      console.log('Bloqueo cancelado');
+      this.selectedUser = null;
+      this.showModal = false;
+  }
+
 
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
   filteredUsers() {
