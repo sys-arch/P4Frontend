@@ -18,7 +18,8 @@ export class VentanaPrincipalComponent {
   filterBy: string = 'all';   // Filtro predeterminado (todos los usuarios)
 
   selectedUser: any = null;  // Usuario seleccionado
-  showModal: boolean = false;  // Mostrar/ocultar modal de confirmación
+  showBlockModal: boolean = false;  // Mostrar/ocultar modal de confirmación
+  showValiModal:boolean =false;
   showDeleteModal: boolean = false;  // Controla la visibilidad del modal de eliminación
   countdown: number = 5;  // Cuenta regresiva de 5 segundos
   countdownInterval: any;  // Intervalo para el temporizador
@@ -187,18 +188,21 @@ export class VentanaPrincipalComponent {
   toggleBlocked(user: any): void {
     console.log('Usuario seleccionado para bloquear:', user);
     if (user.estado === 'Bloqueado') {
-        user.estado = 'Validado'; 
+      // Si el usuario está bloqueado, lo desbloqueas directamente.
+      user.estado = 'Validado'; 
     } else {
-        this.selectedUser = user;
-        this.showModal = true;
-        console.log('Modal activado, usuario:', this.selectedUser);
+      // Si no está bloqueado, muestras el modal para confirmación.
+      this.selectedUser = user;
+      this.showBlockModal = true;
+      console.log('Modal activado, usuario a bloquear:', this.selectedUser);
     }
   }
+  
   confirmBlock(): void {
       console.log('Confirmación de bloqueo para:', this.selectedUser);
       if (this.selectedUser) {
           this.selectedUser.estado = 'Bloqueado';
-          this.showModal = false;
+          this.showBlockModal = false;
           this.selectedUser = null;
       }
   }
@@ -206,13 +210,13 @@ export class VentanaPrincipalComponent {
   cancelBlock(): void {
       console.log('Bloqueo cancelado');
       this.selectedUser = null;
-      this.showModal = false;
+      this.showBlockModal = false;
   }
 
   toggleValidation(user: any): void {
     if (user.estado === 'No validado') {
       this.selectedUser = user;
-      this.showModal = true;  // Muestra el modal de confirmación
+      this.showValiModal = true;  // Muestra el modal de confirmación
     }
   }
 
@@ -220,14 +224,14 @@ export class VentanaPrincipalComponent {
     if (this.selectedUser) {
       this.selectedUser.estado = 'Validado';  // Cambia el estado a 'Validado'
       console.log(`Usuario validado: ${this.selectedUser.firstName} ${this.selectedUser.lastName}`);
-      this.showModal = false;  // Cierra el modal
+      this.showValiModal = false;  // Cierra el modal
       this.selectedUser = null;  // Limpia la selección
     }
   }
 
   cancelValidation(): void {
     this.selectedUser = null;
-    this.showModal = false;
+    this.showValiModal = false;
 }
 
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)

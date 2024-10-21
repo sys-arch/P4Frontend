@@ -18,7 +18,7 @@
     </div>
 
     <!-- Modal para confirmar el bloqueo -->
-    <div *ngIf="showModal && selectedUser?.estado === 'Bloqueado'" class="modal-overlay">
+    <div *ngIf="showBlockModal" class="modal-overlay">
       <div class="modal block-modal">
         <h3>¿Bloquear a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
         <div class="modal-actions">
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Modal para confirmar la validación -->
-    <div *ngIf="showModal && selectedUser?.estado === 'No validado'" class="modal-overlay">
+    <div *ngIf="showValiModal && selectedUser?.estado === 'No validado'" class="modal-overlay">
       <div class="modal validate-modal">
         <h3>¿Validar a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
         <div class="modal-actions">
