@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { Router } from '@angular/router'; // Importa Router para recibir el token
 
 @Component({
   selector: 'app-ventana-principal',
@@ -9,9 +10,10 @@ import { FormsModule } from '@angular/forms'; // Importa FormsModule
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
-export class VentanaPrincipalComponent {
+export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
-  isAdmin: boolean = true;  // Cambia esto en base a tu lógica de autenticación
+  isAdmin: boolean = false;  // Cambia según el prefijo del token
+  token: string = '';  // Variable para almacenar el token recibido
 
   searchBy: string = 'name';  // Campo de búsqueda predeterminado
   searchQuery: string = '';   // Consulta de búsqueda
@@ -146,6 +148,26 @@ export class VentanaPrincipalComponent {
       estado: 'Validado'
     }
   ];
+  
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Acceder al token desde el estado del Router
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras?.state) {
+      this.token = navigation.extras.state['token'];
+      console.log('Token recibido:', this.token);  // Imprimir el token para verificar
+
+      // Verificar el prefijo del token para determinar si es administrador o usuario
+      if (this.token.startsWith('a-')) {
+        this.isAdmin = true;
+        console.log('Vista de Administrador');
+      } else if (this.token.startsWith('e-')) {
+        this.isAdmin = false;
+        console.log('Vista de Usuario');
+      }
+    }
+  }
 
   // Método para mostrar el modal de eliminación y empezar la cuenta regresiva
   toggleDelete(user: any): void {
@@ -209,7 +231,6 @@ export class VentanaPrincipalComponent {
       this.showModal = false;
   }
 
-
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
   filteredUsers() {
     return this.users
@@ -237,12 +258,5 @@ export class VentanaPrincipalComponent {
         }
         return false;
       });
-  }
-  
-
-  constructor() {}
-
-  ngOnInit(): void {
-    // Aquí puedes definir si es administrador o no (puedes usar un servicio)
   }
 }

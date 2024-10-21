@@ -150,4 +150,9 @@
             <span>© 2024 ReuneMe, LLC</span>
         </div>
     </div>
+    <div *ngIf="!isAdmin">
+        <!-- Vista para el usuario -->
+        <h2>Panel de Usuario</h2>
+        <!-- Aquí pones el contenido exclusivo para el usuario -->
+    </div>
 </div>
