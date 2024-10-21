@@ -104,15 +104,15 @@ export class RegistroComponent {
       alert("Por favor corrige los errores en el formulario");
       return;
     }
-
+    
     // Validar si los campos obligatorios están vacíos
     if (!this.nombre || !this.apellido || !this.email || !this.centro || !this.fechaAlta || !this.password1 || !this.password2) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
       return; // Detener el envío del formulario si hay campos vacíos
     }
     // const hashedPassword = this.password1; // Aquí sería el cifrado real.
-
-    this.userService.register(this.nombre, this.apellido, this.email, this.centro, this.fechaAlta, this.perfilLaboral, this.password1)
+    const isVerified=false;
+    this.userService.register(this.nombre, this.apellido, this.email, this.centro, this.fechaAlta, this.perfilLaboral, this.password1,isVerified)
       .subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito:', response);
@@ -122,7 +122,7 @@ export class RegistroComponent {
         }
       });
   }
-
+  
   //Botones de redirección
 
   goToLanding(): void {
