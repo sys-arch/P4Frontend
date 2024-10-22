@@ -12,7 +12,7 @@ import { Router } from '@angular/router'; // Importa Router para recibir el toke
 })
 export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
-  isAdmin: boolean = false;  // Cambia según el prefijo del token
+  isAdmin: boolean = true;  // Cambia según el prefijo del token
   token: string = '';  // Variable para almacenar el token recibido
 
   searchBy: string = 'name';  // Campo de búsqueda predeterminado
