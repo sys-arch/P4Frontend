@@ -50,6 +50,19 @@ html, body {
     text-align: center;
     color: #ffffff;
 }
+.validate-modal {
+    background-color: #2a2a2a; /* Color más neutro */
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px; /* Modal más pequeño */
+    height: 150px; /* Menor altura */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border: 2px solid #444;
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+}
 
 
 

@@ -15,7 +15,7 @@ export class UserService {
         return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
     }
 
-    register(nombre: string, apellido: string, email: string, centro: string, fechaAlta: string, perfilLaboral: string, password1: string): Observable<any> {
+    register(nombre: string, apellido: string, email: string, centro: string, fechaAlta: string, perfilLaboral: string, password1: string,isVerified:boolean): Observable<any> {
         let info = {
         nombre: nombre,
         apellido: apellido,
@@ -23,7 +23,8 @@ export class UserService {
         centro: centro,
         fechaAlta: fechaAlta,
         perfilLaboral: perfilLaboral,
-        password1: password1
+        password1: password1,
+        isVerified: isVerified//recordad que ahora mismo aqui no esta verificado, esta a false
             }
         
         return this.client.post("http://localhost:4200/registro", info)
