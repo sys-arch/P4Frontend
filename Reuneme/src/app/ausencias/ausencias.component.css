@@ -1,0 +1,240 @@
+/* Estilo general para la página de ausencias */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+    color: #e0e0e0;
+    background-color: #1e1e1e;
+}
+
+/* Container principal para la gestión de ausencias */
+.absence-container {
+    width: 80%;
+    margin: 40px auto;
+    background-color: #2a2a2a;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    color: #f1f1f1;
+}
+
+/* Encabezado de la lista de ausencias */
+.absence-header {
+    display: grid;
+    grid-template-columns: 50px 200px 1fr 120px 120px 160px;
+    padding: 15px;
+    background-color: #333;
+    color: #b3b3b3;
+    font-weight: bold;
+    border-radius: 8px;
+    text-align: left;
+}
+
+/* Contenido de la lista de ausencias */
+.absence-list-content {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #666 transparent;
+}
+
+.absence-list-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.absence-list-content::-webkit-scrollbar-thumb {
+    background-color: #666;
+    border-radius: 10px;
+}
+
+/* Fila de cada ausencia */
+.absence-list-row {
+    display: grid;
+    grid-template-columns: 50px 200px 1fr 120px 120px 160px;
+    padding: 15px;
+    background-color: #2e2e2e;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    align-items: center;
+}
+
+.absence-list-row:hover {
+    background-color: rgba(56, 56, 56, 0.9);
+}
+
+/* Nombre y apellidos del usuario */
+.absence-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.absence-user-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.absence-user-email {
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* Estado de la ausencia */
+.absence-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    font-size: 14px;
+}
+
+.status-approved {
+    background-color: #2dc38c;
+}
+
+.status-pending {
+    background-color: #ffbc42;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+}
+
+/* Botones de acciones para ausencias */
+.absence-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.action-btn {
+    background-color: #4e4e4e;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(70, 70, 70, 0.2);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: #5a5a5a;
+    transform: translateY(-2px);
+}
+
+.approve-btn {
+    background-color: #2dc38c;
+}
+
+.reject-btn {
+    background-color: #dc3545;
+}
+
+.view-details-btn {
+    background-color: #175be2;
+}
+
+/* Estilos del modal para confirmar acciones */
+.confirm-modal, .reject-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2a2a2a;
+    padding: 25px;
+    border-radius: 15px;
+    width: 300px;
+    height: auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: #f1f1f1;
+    z-index: 1000;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    background-color: #d9534f;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+}
+
+.modal-btn:hover {
+    background-color: #c9302c;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Estilos para la barra de búsqueda y filtros */
+.search-filter-container {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-options select, .filter-options input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #525252;
+    color: white;
+}
+
+.filter-options input::placeholder {
+    color: #ccc;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    padding: 15px;
+    background-color: #1e1e1e;
+    text-align: center;
+    color: #b3b3b3;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}

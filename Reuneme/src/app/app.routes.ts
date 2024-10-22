@@ -7,6 +7,7 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { RegistroAdminComponent } from './registro-admin/registro-admin.component';
 import { RegistroComponent } from './registro/registro.component';
 import { VentanaPrincipalComponent } from './ventana-principal/ventana-principal.component';
+import { AusenciasComponent } from './ausencias/ausencias.component';
 
 export const routes: Routes = [
     {path: '', component: LandingPageComponent},
@@ -17,6 +18,7 @@ export const routes: Routes = [
     { path: 'perfil-usuario', component: PerfilUsuarioComponent },
     { path: 'registro-admin', component: RegistroAdminComponent },
     { path: 'ventana-principal', component: VentanaPrincipalComponent },
+    { path: 'ausencias', component: AusenciasComponent },
     { path: '**', redirectTo: '' }
     
 ];
