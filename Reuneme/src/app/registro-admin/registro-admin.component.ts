@@ -14,7 +14,8 @@ import { UserService } from '../services/user.service';
 })
 export class RegistroAdminComponent {
   nombre: string = '';
-  apellido: string = '';
+  primerApellido: string = ''; // Primer Apellido
+  segundoApellido: string = ''; // Segundo Apellido
   email: string = '';
   centro: string = '';
   password1: string = '';
@@ -83,12 +84,13 @@ export class RegistroAdminComponent {
       return;
     }
 
-    if (!this.nombre || !this.apellido || !this.email || !this.centro || !this.password1 || !this.password2) {
+    if (!this.nombre || !this.primerApellido || !this.email || !this.centro || !this.password1 || !this.password2) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
       return;
     }
 
-    this.userService.registerAdmin(this.nombre, this.apellido, this.email, this.centro, this.password1, this.password2, this.interno)
+    // Llamada al servicio de registro, pasando ambos apellidos
+    this.userService.registerAdmin(this.nombre, this.primerApellido, this.segundoApellido, this.email, this.centro, this.password1, this.password2, this.interno)
       .subscribe({
         next: (response: any) => {
           console.log('Usuario registrado con éxito:', response);
@@ -99,26 +101,7 @@ export class RegistroAdminComponent {
       });
   }
 
-  goToLanding(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/']);
-    }, 1000);
-  }
-
-  goToLogin(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/login']);
-    }, 1000);
-  }
-  goToDoblefactor(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/../doblefactor']);
-    }, 1000);
+  gotoVentanaPrincipal(): void {
+    this.router.navigate(['/ventana-principal']);
   }
 }

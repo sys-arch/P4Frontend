@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
@@ -10,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './perfil-usuario.component.css'
 })
 export class PerfilUsuarioComponent {
- 
+
   user = {
     nombre: 'Nombre de usuario',
     apellidos: 'Apellidos de usuario',
@@ -22,9 +23,20 @@ export class PerfilUsuarioComponent {
   };
 
   profilePicture: string | ArrayBuffer | null = null;
+  isLoading: boolean = false;
 
-  constructor() {}
-
+  constructor(
+    private readonly router: Router,
+    private readonly userService: UserService
+  ) {}
+  goToVentanaPrincipal(): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/ventana-principal']);
+    }, 1000);
+  }
+  
   ngOnInit(): void {
     // Método llamado al inicializar el componente
     // Si no tienes lógica específica aquí, lo puedes dejar vacío

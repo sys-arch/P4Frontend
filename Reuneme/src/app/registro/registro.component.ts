@@ -99,7 +99,7 @@ export class RegistroComponent {
       alert("Las contraseñas no coinciden");
       return;
     }
-
+    
     // Validar si los campos obligatorios están vacíos
     if (!this.nombre || !this.apellido || !this.apellido2 || !this.email || !this.centro || !this.fechaAlta || !this.password1 || !this.password2) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
@@ -137,7 +137,7 @@ export class RegistroComponent {
         }
       });
   }
-
+  
   //Botones de redirección
 
   goToLanding(): void {
