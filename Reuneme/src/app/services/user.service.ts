@@ -29,6 +29,8 @@ export class UserService {
         
         return this.client.post("http://localhost:4200/registro", info)
     }
+
+    */
     registerAdmin(
         nombre: string, 
         apellido1: string, 

@@ -5,7 +5,7 @@
 <div class="register-container">
     <div class="register-box">
         <h2>Creación de Cuenta</h2>
-        <form (ngSubmit)="onSubmit()">
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
             <div class="form-grid">
                 <!-- Nombre -->
                 <div class="textbox">
@@ -16,6 +16,14 @@
                 <div class="textbox">
                     <input type="text" id="apellido" placeholder="Apellido" [(ngModel)]="apellido" name="apellido" required />
                     <label for="apellido">Apellido*</label>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <!-- Apellido2 -->
+                <div class="textbox">
+                    <input type="text" id="apellido2" placeholder="Apellido2" [(ngModel)]="apellido2" name="apellido2" required />
+                    <label for="apellido2">Segundo Apellido*</label>
                 </div>
             </div>
             <div class="form-grid">
@@ -89,7 +97,7 @@
             <p class="required-info">Los campos(*) son obligatorios.</p>
         </form>
         <div class="actions">
-            <button class="btn" type="submit">Acceder</button>
+            <button class="btn" type="button" (click)="registerForm.ngSubmit.emit()">Acceder</button>
             <p class="login-text">
                 ¿Ya tienes una cuenta? <a routerLink="/login" class="login-link" (click)="goToLogin()">INICIAR SESIÓN</a>
             </p>

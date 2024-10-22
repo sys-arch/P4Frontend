@@ -34,7 +34,6 @@ export class VentanaPrincipalComponent implements OnInit {
     role: 'admin'  // Podría ser 'owner', 'admin', o 'user'
   };
 
-
   // Lista de usuarios de prueba con todos los campos requeridos, incluyendo 'profilePicture'
   users = [
     {
@@ -271,7 +270,7 @@ export class VentanaPrincipalComponent implements OnInit {
     this.selectedUser = null;
     this.showValiModal = false;
 }
-
+  
   // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
   filteredUsers() {
     return this.users

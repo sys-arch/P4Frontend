@@ -189,7 +189,7 @@ html, body {
   .Btn:active {
     transform: translate(2px ,2px);
   }
-  
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -233,6 +233,7 @@ html, body {
     text-align: center;
     color: #ffffff;
 }
+
 .validate-modal {
     background-color: #2a2a2a; /* Color más neutro */
     padding: 20px;
@@ -246,6 +247,7 @@ html, body {
     text-align: center;
     color: #ffffff;
 }
+
 
 
 
