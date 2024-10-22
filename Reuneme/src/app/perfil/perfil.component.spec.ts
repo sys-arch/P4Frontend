@@ -31,29 +31,11 @@ export class PerfilComponent {
   ) {}
 
   // Método para regresar a la página principal
-  goToLanding(): void {
+  goToVentanaPrincipal(): void {
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
       this.router.navigate(['/']);
-    }, 1000);
-  }
-
-  // Método para ir a la página de inicio de sesión
-  goToLogin(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/login']);
-    }, 1000);
-  }
-
-  // Método para ir a la página de doble factor de autenticación
-  goToDoblefactor(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/../doblefactor']);
     }, 1000);
   }
 }

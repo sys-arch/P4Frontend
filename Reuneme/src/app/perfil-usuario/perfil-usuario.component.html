@@ -2,64 +2,66 @@
   <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
 </div>
 <div class="perfil-container">  
-    <div class="profile-info">
-      <h2>Perfil Usuario</h2>
-      <!-- Imagen de perfil -->
-      <div class="profile-picture">
-        <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
+  <div class="profile-info">
+    <h2>Perfil Usuario</h2>
+    <!-- Imagen de perfil -->
+    <div class="profile-picture">
+      <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
+    </div>
+    
+    <!-- Contenedor para dos columnas -->
+    <div class="info-fields">
+      <!-- Columna 1 -->
+      <div class="info-field">
+        <label>Nombre</label>
+        <p>{{ user.nombre }}</p>
       </div>
-  
-      <!-- Contenedor para dos columnas -->
-      <div class="info-fields">
-        <div class="info-field">
-          <label>Nombre</label>
-          <p>{{ user.nombre }}</p>
-        </div>
-  
-        <div class="info-field">
-          <label>Apellidos</label>
-          <p>{{ user.apellidos }}</p>
-        </div>
-  
-        <div class="info-field">
-          <label>Correo</label>
-          <p>{{ user.correo }}</p>
-        </div>
-  
-        <div class="info-field">
-            <label>Departamento</label>
-            <p>{{ user.depart }}</p>
-          </div>
 
-        <div class="info-field">
-          <label>Centro de Trabajo</label>
-          <p>{{ user.centroTrabajo }}</p>
-        </div>
+      <div class="info-field">
+        <label>Apellidos</label>
+        <p>{{ user.apellidos }}</p>
+      </div>
 
-        <div class="info-field">
-            <label>Fecha de alta</label>
-            <p>{{ user.alta }}</p>
-          </div>
+      <div class="info-field">
+        <label>Correo</label>
+        <p>{{ user.correo }}</p>
+      </div>
 
-          <div class="info-field">
-            <label>Perfil</label>
-            <p>{{ user.perfil }}</p>
-          </div>
+      <!-- Columna 2 -->
+      <div class="info-field">
+        <label>Departamento</label>
+        <p>{{ user.depart }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Centro de Trabajo</label>
+        <p>{{ user.centroTrabajo }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Fecha de alta</label>
+        <p>{{ user.alta }}</p>
+      </div>
+
+      <div class="info-field">
+        <label>Perfil</label>
+        <p>{{ user.perfil }}</p>
       </div>
     </div>
-  <!-- Botón para volver -->
-  <div class="back-button-container">
-    <button class="back-button" >Volver</button>
   </div>
 
+  <!-- Botón para volver -->
+  <div class="back-button-container">
+    <button class="back-button" (click)="goToVentanaPrincipal()">Volver</button>
+  </div>
 
   <footer class="footer">
     <div class="footer-content">
-        <ul class="footer-links">
-            <li><a href="#">Condiciones de Uso</a></li>
-            <li><a href="#">Política de Privacidad</a></li>
-            <li><a href="#">Consentimiento de Cookies</a></li>
-        </ul>
+      <ul class="footer-links">
+        <li><a href="#">Condiciones de Uso</a></li>
+        <li><a href="#">Política de Privacidad</a></li>
+        <li><a href="#">Consentimiento de Cookies</a></li>
+      </ul>
     </div>
   </footer>
 
@@ -67,4 +69,3 @@
     <span>© 2024 ReuneMe, LLC</span>
   </div>
 </div>
-  

@@ -31,7 +31,8 @@ export class UserService {
     }
     registerAdmin(
         nombre: string, 
-        apellido: string, 
+        apellido1: string, 
+        apellido2: string,
         email: string, 
         centro: string, 
         password1: string, 
@@ -40,7 +41,8 @@ export class UserService {
     ): Observable<any> {
         const info = {
             nombre: nombre,
-            apellido: apellido,
+            apellido1: apellido1,
+            apellido2: apellido2,
             email: email,
             centro: centro,
             password1: password1,
