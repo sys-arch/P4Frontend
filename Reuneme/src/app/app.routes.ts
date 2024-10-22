@@ -13,7 +13,7 @@ export const routes: Routes = [
     {path: 'login', component: LoginComponent},
     { path: 'registro', component: RegistroComponent },
     { path: 'doblefactor', component: DoblefactorComponent },
-    { path: 'perfil', component: PerfilComponent },
+    { path: 'perfil-admin', component: PerfilComponent },
     { path: 'perfil-usuario', component: PerfilUsuarioComponent },
     { path: 'registro-admin', component: RegistroAdminComponent },
     { path: 'ventana-principal', component: VentanaPrincipalComponent },
