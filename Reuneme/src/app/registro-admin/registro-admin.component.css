@@ -37,6 +37,20 @@
     border-radius: 5px;
     transition: 0.3s;
 }
+/* Contenedor para organizar campos en dos columnas */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; /* Espacio entre columnas */
+}
+
+/* Ajuste responsivo */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Cambiar a una columna en pantallas pequeñas */
+    }
+}
+
 
 .container input:checked + .checkmark {
     background-color: #2dc38c;

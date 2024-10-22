@@ -6,7 +6,190 @@ html, body {
     font-family: 'Roboto', sans-serif;
     color: #e0e0e0;
 }
+.user-profile {
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    background-color: transparent;
+    width: auto;
+    height: 50px;
+}
 
+.profile-picture {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #f5f5f5;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-fullname {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    position: relative; /* Necesario para colocar la barra separadora */
+    padding-right: 15px; /* Espacio para la barra separadora */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Barra separadora */
+.user-fullname::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 130%; /* Ajusta la altura de la barra */
+    width: 2px; /* Grosor de la barra */
+    background-color: #ffffff;
+    transition: background-color 0.3s ease-in-out;
+    opacity: 0.7;
+}
+
+/* Cambiar color en hover */
+.user-profile:hover .user-fullname::after {
+    background-color: #5fc67d; /* Cambia el color de la barra en hover */
+    opacity: 1; /* Aumentar visibilidad */
+}
+
+.user-edit-button {
+    display: none;
+    opacity: 0;
+    background-color: #5fc67d; /* Color más llamativo */
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-left: 10px;
+    transition: all 0.3s ease-in-out;
+    white-space: nowrap;
+    width: auto;
+    /* Efecto 3D */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1) inset;
+    transform: translateY(0);
+}
+
+.user-profile:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-right: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-profile:hover .user-edit-button {
+    display: inline-block;
+    opacity: 1;
+}
+
+.user-profile:hover .profile-picture, .user-profile:hover .user-fullname {
+    transform: translateX(0);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efecto hover sobre el botón "Editar perfil" */
+.user-edit-button:hover {
+    background-color: #45b06a; /* Color más oscuro en hover */
+    transform: translateY(-1px); /* Hace que el botón se levante */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(255, 255, 255, 0.1) inset;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-edit-button:active {
+    transform: translateY(0); /* Vuelve a su lugar al hacer clic */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1) inset;
+}
+
+
+
+/* Contenedor del botón en la parte superior derecha */
+.admin-controls {
+    position: absolute;
+    top:70px;
+    right: 20px;
+    z-index: 10;
+  }
+  
+  /* Estilos del botón */
+  .Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 55px;
+    height: 55px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: rgb(65, 145, 255); /* Cambié el color para diferenciarlo */
+  }
+  
+/* Signo más */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 30px; /* Agranda el símbolo "+" */
+    height: 30px;
+}
+
+.sign svg path {
+    fill: white;
+}
+  
+  /* Texto */
+  .text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    transition-duration: .3s;
+  }
+  
+  /* Efecto hover: expande el botón */
+  .Btn:hover {
+    width: 180px;
+    border-radius: 40px;
+    transition-duration: .3s;
+  }
+  
+  .Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+  }
+  
+  /* Efecto hover en el texto */
+  .Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+  }
+  
+  /* Efecto de click en el botón */
+  .Btn:active {
+    transform: translate(2px ,2px);
+  }
+  
 .modal-overlay {
     position: fixed;
     top: 0;

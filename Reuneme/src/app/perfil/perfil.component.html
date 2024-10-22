@@ -1,32 +1,36 @@
+<div class="header">
+  <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+</div>
+
 <div class="perfil-container">
-  <h2>Admin Profile</h2>
+  
 
   <div class="profile-info">
+    <h2>Perfil Administrador</h2>
     <!-- Imagen de perfil -->
     <div class="profile-picture">
       <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
-      <input type="file" (change)="onFileSelected($event)" class="upload-button" />
     </div>
 
     <!-- Contenedor para dos columnas -->
     <div class="info-fields">
       <div class="info-field">
-        <label>Nombre:</label>
+        <label>Nombre</label>
         <p>{{ admin.nombre }}</p>
       </div>
 
       <div class="info-field">
-        <label>Apellidos:</label>
+        <label>Apellidos</label>
         <p>{{ admin.apellidos }}</p>
       </div>
 
       <div class="info-field">
-        <label>Correo:</label>
+        <label>Correo</label>
         <p>{{ admin.correo }}</p>
       </div>
 
       <div class="info-field">
-        <label>Centro de Trabajo:</label>
+        <label>Centro de Trabajo</label>
         <p>{{ admin.centroTrabajo }}</p>
       </div>
 
@@ -37,7 +41,28 @@
           Interno
         </label>
       </div>
-
     </div>
   </div>
+
+  <!-- Botón para volver -->
+  <div class="back-button-container">
+    <button class="back-button" (click)="goToVentanaPrincipal()">Volver</button>
+  </div>
+
+  
+  <footer class="footer">
+    <div class="footer-content">
+        <ul class="footer-links">
+            <li><a href="#">Condiciones de Uso</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Consentimiento de Cookies</a></li>
+        </ul>
+    </div>
+  </footer>
+
+  <div class="footer-info">
+    <span>© 2024 ReuneMe, LLC</span>
+  </div>
 </div>
+
+

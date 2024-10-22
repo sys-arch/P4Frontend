@@ -12,7 +12,7 @@ import { Router } from '@angular/router'; // Importa Router para recibir el toke
 })
 export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
-  isAdmin: boolean = false;  // Cambia según el prefijo del token
+  isAdmin: boolean = true;  // Cambia según el prefijo del token
   token: string = '';  // Variable para almacenar el token recibido
 
   searchBy: string = 'name';  // Campo de búsqueda predeterminado
@@ -25,6 +25,15 @@ export class VentanaPrincipalComponent implements OnInit {
   showDeleteModal: boolean = false;  // Controla la visibilidad del modal de eliminación
   countdown: number = 5;  // Cuenta regresiva de 5 segundos
   countdownInterval: any;  // Intervalo para el temporizador
+
+  // Usuario logueado (temporal hasta obtener datos de la base de datos)
+  loggedUser: any = {
+    firstName: 'John',
+    lastName: 'Doe',
+    profilePicture: '/assets/images/UsuarioSinFoto.png',
+    role: 'admin'  // Podría ser 'owner', 'admin', o 'user'
+  };
+
 
   // Lista de usuarios de prueba con todos los campos requeridos, incluyendo 'profilePicture'
   users = [
@@ -151,6 +160,12 @@ export class VentanaPrincipalComponent implements OnInit {
   ];
   
   constructor(private router: Router) {}
+  goToPerfilAdmin(){
+    this.router.navigate(['/perfil-admin']);
+  }
+  goToRegistroAdmin(){
+    this.router.navigate(['/registro-admin']);
+  }
 
   ngOnInit(): void {
     // Acceder al token desde el estado del Router

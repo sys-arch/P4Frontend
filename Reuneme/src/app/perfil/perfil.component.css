@@ -13,27 +13,24 @@
 }
 
 .perfil-container h2 {
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 28px;
-  font-weight: bold;
-  color: #ffffff;
-  background: linear-gradient(90deg, #00ccff, #ffffff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: none;
-  margin-bottom: 30px;
+  margin: 0 0 20px;
+    padding: 0;
+    color: #ffffff;
 }
 
 /* Información del perfil - agrandando el recuadro */
 .profile-info {
-  background-color: rgba(35, 37, 43, 0.95);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  max-width: 500px;  /* Aumentando el ancho del contenedor */
-  width: 100%;
-  text-align: center; /* Centrando contenido */
+  width: 500px;
+    padding: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    text-align: center;
+    z-index: 1;
 }
 
 /* Moviendo la imagen dentro del contenedor de información */
@@ -116,23 +113,103 @@
 .actions .btn:hover {
   background-color: #0056b3;
 }
-
-/* Botón de volver */
-.back-btn {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  z-index: 3;
+.back-button-container {
+  position: fixed;
+  bottom: 6%;
+  left: 20px;
 }
 
-.back-btn:hover {
+.back-button {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.back-button:hover {
   background-color: #0056b3;
+}
+.footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(28, 28, 28, 0.95);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  position: relative;
+}
+
+.footer-links li a {
+  color: #b3b3b3;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-links li a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-info {
+  width: 100%;
+  text-align: right;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  font-size: 12px;
+  color: #b3b3b3;
+  z-index: 11;
+}
+
+.footer-info span {
+  font-weight: bold;
+}
+.header {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to right, #175be2, #06c6f3);
+  color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  z-index: 2;
+}
+
+.logo-img {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 200px;
+  height: auto;
+  z-index: 2;
 }
