@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.services';
 import { LoaderComponent } from "../loader/loader.component";
+import { UserService } from '../services/user.services';
 
 @Component({
   selector: 'app-login',
@@ -63,7 +63,10 @@ export class LoginComponent {
     // Validar si el correo electrónico y la contraseña son válidos antes de proceder
     if (!this.emailInvalid && !this.passwordInvalid && !this.domainInvalid) {
       // Crear el objeto `user` con las credenciales del usuario
-      const user = { username: this.username, password: this.password };
+      const user = {
+        email: this.username,
+        contrasena: this.password
+      };
   
       // Mostrar los datos que se van a enviar al backend
       console.log('Datos enviados al backend:');
@@ -73,7 +76,7 @@ export class LoginComponent {
         (response) => {
           console.log('Respuesta del servidor:', response); // Mostrar la respuesta en la consola
           localStorage.setItem('token', response.token); // Guarda el token recibido en localStorage
-          this.router.navigate(['/home']); // Redirige a la página principal
+          this.router.navigate(['/ventana-principal'], { state: { token: response } });
         },
         (error) => {
           console.error('Error en el inicio de sesión:', error);
