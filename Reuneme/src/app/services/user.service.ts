@@ -14,7 +14,7 @@ export class UserService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
     }
-
+/*
     register(nombre: string, apellido: string, email: string, centro: string, fechaAlta: string, perfilLaboral: string, password1: string): Observable<any> {
         let info = {
         nombre: nombre,
@@ -28,6 +28,8 @@ export class UserService {
         
         return this.client.post("http://localhost:4200/registro", info)
     }
+
+    */
     registerAdmin(
         nombre: string, 
         apellido: string, 

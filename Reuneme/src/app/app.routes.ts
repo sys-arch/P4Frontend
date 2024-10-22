@@ -6,6 +6,7 @@ import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.componen
 import { PerfilComponent } from './perfil/perfil.component';
 import { RegistroAdminComponent } from './registro-admin/registro-admin.component';
 import { RegistroComponent } from './registro/registro.component';
+import { VentanaPrincipalComponent } from './ventana-principal/ventana-principal.component';
 
 export const routes: Routes = [
     {path: '', component: LandingPageComponent},
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'perfil', component: PerfilComponent },
     { path: 'perfil-usuario', component: PerfilUsuarioComponent },
     { path: 'registro-admin', component: RegistroAdminComponent },
+    { path: 'ventana-principal', component: VentanaPrincipalComponent },
     { path: '**', redirectTo: '' }
     
 ];

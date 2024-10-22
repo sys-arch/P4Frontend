@@ -1,0 +1,7 @@
+{
+	"mock-server.settings.paths": {
+		"root": "c:\\Users\\adria\\OneDrive\\Documentos\\Práctica4ISO\\Reuneme\\src",
+		"static": "",
+		"snapshots": "./snapshots"
+	}
+}
