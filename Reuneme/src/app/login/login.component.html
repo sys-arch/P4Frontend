@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/styles.css">
+
 <div class="header">
     <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
 </div>
@@ -33,7 +35,7 @@
                 <span class="toggle-password" (click)="togglePasswordVisibility()">{{ passwordVisible ? 'Ocultar' : 'Mostrar' }}</span>
             </div>
             <div class="forgot-password-container">
-                <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
+                <a href="javascript:void(0)" (click)="navigateTo('/contrasena-olvidada')" class="forgot-password">¿Has olvidado tu contraseña?</a>
             </div>
             <div class="login-failed-container">
                 <div *ngIf="loginFailed" class="login-failed-message">
@@ -56,6 +58,7 @@
     <div class="back-button-container">
         <button (click)="navigateTo('/')" class="back-button">Volver</button>
     </div>
+    
 
     <app-loader *ngIf="isLoading"></app-loader>
 

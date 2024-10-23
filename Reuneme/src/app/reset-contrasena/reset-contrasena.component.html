@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+    <!-- Header con logo -->
+    <div class="header">
+        <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="login-container">
+        <!-- Caja del formulario de restablecimiento de contraseña -->
+        <div class="login-box">
+            <h2>Restablecer Contraseña</h2>
+
+            <!-- Texto explicativo -->
+            <p class="recovery-text">
+                Introduce tu nueva contraseña y confírmala para actualizarla.
+            </p>
+
+            <!-- Formulario de restablecimiento -->
+            <form>
+                <!-- Campo de nueva contraseña -->
+                <div class="textbox">
+                    <input type="password" id="new-password" placeholder="Nueva Contraseña" required />
+                    <label for="new-password">Nueva Contraseña</label>
+                </div>
+
+                <!-- Campo de confirmación de contraseña -->
+                <div class="textbox">
+                    <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required />
+                    <label for="confirm-password">Confirmar Contraseña</label>
+                </div>
+
+                <!-- Botón para enviar el restablecimiento de la contraseña -->
+                <button type="submit" class="btn">Restablecer Contraseña</button>
+                
+            </form>
+        </div>
+
+        <!-- Botón para volver a la página principal -->
+        <div class="back-button-container">
+            <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Condiciones de Uso</a></li>
+                <li><a href="#">Política de Privacidad</a></li>
+                <li><a href="#">Consentimiento de Cookies</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Información adicional del footer -->
+    <div class="footer-info">
+        <span>© 2024 ReuneMe, LLC</span>
+    </div>
+
+</body>
+</html>
