@@ -62,10 +62,14 @@
     <div class="bg-container">
         <div class="construction-text">Página en Construcción</div>
         <div class="btn-container">
-        <button class="btn" (click)="gotoPerfil()">Perfil Admin</button>
-        <button class="btn" (click)="gotoPerfilUsuario()">Perfil Usuario</button>
-        <button class="btn" (click)="gotoRegistroAdmin()">Registro Admin</button>
-        <button class="btn" (click)="gotoVentanaPrincipal()">Ventana Principal</button>
+
+        <button class="btn" (click)="navigateTo('/perfil-admin')">Perfil Admin</button>
+
+        <button class="btn" (click)="navigateTo('/perfil-usuario')">Perfil Usuario</button>
+
+        <button class="btn" (click)="navigateTo('/registro-admin')">Registro Admin</button>
+        
+        <button class="btn" (click)="navigateTo('/ventana-principal')">Ventana Principal</button>
         </div>
     </div>
     </body>

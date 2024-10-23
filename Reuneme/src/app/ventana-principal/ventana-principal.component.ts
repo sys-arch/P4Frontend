@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule
-import { Router } from '@angular/router'; // Importa Router para recibir el token
+import { Router } from '@angular/router';
+import { LoaderComponent } from "../loader/loader.component"; // Importa Router para recibir el token
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // Asegúrate de agregar FormsModule aquí
+  imports: [CommonModule, FormsModule, LoaderComponent],  // Asegúrate de agregar FormsModule aquí
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
@@ -14,6 +15,8 @@ export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
   isAdmin: boolean = true;  // Cambia según el prefijo del token
   token: string = '';  // Variable para almacenar el token recibido
+
+  isLoading: boolean = false;  // Controla la visibilidad del spinner de carga
 
   searchBy: string = 'name';  // Campo de búsqueda predeterminado
   searchQuery: string = '';   // Consulta de búsqueda
@@ -159,12 +162,6 @@ export class VentanaPrincipalComponent implements OnInit {
   ];
   
   constructor(private router: Router) {}
-  goToPerfilAdmin(){
-    this.router.navigate(['/perfil-admin']);
-  }
-  goToRegistroAdmin(){
-    this.router.navigate(['/registro-admin']);
-  }
 
   ngOnInit(): void {
     // Acceder al token desde el estado del Router
@@ -299,4 +296,14 @@ export class VentanaPrincipalComponent implements OnInit {
         return false;
       });
   }
+
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate([route]);
+    }, 1000);
+  }
+  
 }

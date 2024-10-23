@@ -163,6 +163,26 @@ html, body {
     font-weight: 600;
     transition-duration: .3s;
   }
+
+  .back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
   
   /* Efecto hover: expande el botón */
   .Btn:hover {

@@ -52,8 +52,10 @@
 
   <!-- Botón para volver -->
   <div class="back-button-container">
-    <button class="back-button" (click)="goToVentanaPrincipal()">Volver</button>
+    <button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
   </div>
+
+  <app-loader *ngIf="isLoading"></app-loader>
 
   <footer class="footer">
     <div class="footer-content">
