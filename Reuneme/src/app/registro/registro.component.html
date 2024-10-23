@@ -99,14 +99,14 @@
         <div class="actions">
             <button class="btn" type="button" (click)="registerForm.ngSubmit.emit()">Acceder</button>
             <p class="login-text">
-                ¿Ya tienes una cuenta? <a routerLink="/login" class="login-link" (click)="goToLogin()">INICIAR SESIÓN</a>
+                ¿Ya tienes una cuenta? <a routerLink="/login" class="login-link" (click)="navigateTo('/login')">INICIAR SESIÓN</a>
             </p>
         </div>
         
     </div>
 
     <div class="back-button-container">
-        <button class="back-button" (click)="goToLanding()">Volver</button>
+        <button class="back-button" (click)="navigateTo('/')">Volver</button>
     </div>
 
     <app-loader *ngIf="isLoading"></app-loader>

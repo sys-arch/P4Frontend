@@ -62,9 +62,12 @@
                     <label for="password2">Repetir Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility2()" (keypress)="togglePasswordVisibility2()">{{ passwordVisible2 ? 'Ocultar' : 'Mostrar' }}</span>
                 </div>
-            </div>
 
-            <p class="required-info">Los campos(*) son obligatorios.</p>
+                <div class="form-grid">
+                    <p class="required-info">Los campos(*) son obligatorios.</p>
+                </div>
+            </div>
+            
         </form>
 
         <div class="actions">
@@ -73,7 +76,7 @@
     </div>
 
     <div class="back-button-container">
-        <button class="back-button" (click)="gotoVentanaPrincipal()">Volver</button>
+        <button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
     </div>
 
     <app-loader *ngIf="isLoading"></app-loader>

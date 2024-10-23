@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.services';
+import { UserService } from '../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from "../loader/loader.component";
@@ -13,7 +13,6 @@ import { LoaderComponent } from "../loader/loader.component";
   imports: [CommonModule, FormsModule, LoaderComponent]
 })
 export class RegistroComponent {
-
 
   nombre: string = '';
   apellido: string = '';
@@ -138,21 +137,14 @@ export class RegistroComponent {
       });
   }
   
-  //Botones de redirección
 
-  goToLanding(): void {
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/']);
+      this.router.navigate([route]);
     }, 1000);
   }
 
-  goToLogin(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/login']);
-    }, 1000);
-  }
 }

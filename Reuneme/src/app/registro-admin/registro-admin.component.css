@@ -76,15 +76,9 @@
     transform: rotate(45deg);
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
-}
-
 .register-container {
     position: relative;
-    min-height: 105vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -135,8 +129,9 @@
 }
 
 .register-box {
-    width: 500px;
-    padding: 25px;
+    width: 600px;
+    min-height: 650px;
+    padding: 20px;
     position: absolute;
     top: 45%;
     left: 50%;
@@ -186,7 +181,7 @@
     top: 50%;
     left: 10px;
     transform: translateY(-50%);
-    font-size: 16px;
+    font-size: 17px;
     color: #d1d1d1;
     transition: all 0.3s ease;
     pointer-events: none;

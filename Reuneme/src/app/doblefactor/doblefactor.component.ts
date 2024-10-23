@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoaderComponent } from "../loader/loader.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-doblefactor',
   standalone: true,
-  imports: [],
   templateUrl: './doblefactor.component.html',
-  styleUrl: './doblefactor.component.css'
+  styleUrl: './doblefactor.component.css',
+  imports: [CommonModule,LoaderComponent]
 })
 export class DoblefactorComponent {
   isLoading: boolean = false;
@@ -14,17 +16,14 @@ export class DoblefactorComponent {
   constructor(
     private router: Router
   ) {}
-  gotoPerfil(): void {
-    this.router.navigate(['/perfil']);
-  }
-  gotoPerfilUsuario(): void {
-    this.router.navigate(['/perfil-usuario']);
-  }
-  gotoRegistroAdmin(): void {
-    this.router.navigate(['/registro-admin']);
-  }
-  gotoVentanaPrincipal(): void {
-    this.router.navigate(['/ventana-principal']);
+
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate([route]);
+    }, 500);
   }
 
 }

@@ -3,12 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { LoaderComponent } from "../loader/loader.component";
 @Component({
   selector: 'app-perfil',
   standalone: true,
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
-  imports: [CommonModule,FormsModule,ReactiveFormsModule] // Importaciones necesarias para el uso de ngModel
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent] // Importaciones necesarias para el uso de ngModel
+ // Importaciones necesarias para el uso de ngModel
 })
 
 
@@ -31,15 +33,6 @@ export class PerfilComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Método llamado al inicializar el componente
-    // Si no tienes lógica específica aquí, lo puedes dejar vacío
-  }
-  goToVentanaPrincipal(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/ventana-principal']);
-    }, 1000);
   }
 
   onFileSelected(event: Event): void {
@@ -55,5 +48,14 @@ export class PerfilComponent implements OnInit {
 
       reader.readAsDataURL(file);
     }
+  }
+
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate([route]);
+    }, 1000);
   }
 }

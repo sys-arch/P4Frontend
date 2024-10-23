@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { LoaderComponent } from "../loader/loader.component";
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule] ,// Importaciones necesarias para el uso de ngModel
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent] ,// Importaciones necesarias para el uso de ngModel
   templateUrl: './perfil-usuario.component.html',
   styleUrl: './perfil-usuario.component.css'
 })
@@ -29,13 +30,6 @@ export class PerfilUsuarioComponent {
     private readonly router: Router,
     private readonly userService: UserService
   ) {}
-  goToVentanaPrincipal(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/ventana-principal']);
-    }, 1000);
-  }
   
   ngOnInit(): void {
     // Método llamado al inicializar el componente
@@ -55,5 +49,14 @@ export class PerfilUsuarioComponent {
 
       reader.readAsDataURL(file);
     }
+  }
+
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate([route]);
+    }, 1000);
   }
 }
