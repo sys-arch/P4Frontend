@@ -73,19 +73,17 @@ export class ContrasenaOlvidadaComponent {
 
   // Simula el intento de restablecimiento de contraseña
   passwordResetAttempt(): void {
-    // Validar el correo electrónico antes de enviar la solicitud
     if (!this.validateEmail()) {
       return;
     }
 
-    this.emailInvalid = false;  // Resetea el estado si el email es válido
-    this.isLoading = true;  // Inicia la animación de carga
-
+    this.emailInvalid = false;  
+    this.isLoading = true;  
     // Simular el envío de instrucciones para restablecer la contraseña
     setTimeout(() => {
-      this.isLoading = false;  // Detener la animación de carga
-      this.emailSent = true;  // Marca que se ha enviado el correo
-    }, 2000);  // Simulación de 2 segundos para el envío
+      this.isLoading = false;
+      this.emailSent = true;
+    }, 2000); 
   }
 
   // Método para redirigir a las diferentes páginas

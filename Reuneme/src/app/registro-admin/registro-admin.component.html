@@ -54,6 +54,7 @@
                     <input type="password" id="password1" placeholder="" name="password1" [(ngModel)]="password1" required />
                     <label for="password1">Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility1()" (keypress)="togglePasswordVisibility1()">{{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}</span>
+                    <div class="error-message" *ngIf="passwordError">{{ passwordError }}</div>
                 </div>
 
                 <!-- Repetir Contraseña -->

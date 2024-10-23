@@ -1,0 +1,224 @@
+/* Contenedor principal */
+.login-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+}
+
+/* Header con logo */
+.header {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to right, #175be2, #06c6f3);
+    color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+
+.logo-img {
+    max-width: 200px;
+    height: auto;
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+/* Caja del formulario */
+.login-box {
+    width: 450px;
+    padding: 40px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin: 0 0 20px;
+    color: #ffffff;
+}
+
+/* Texto explicativo */
+.recovery-text {
+    color: #cccccc;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 25px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Campo de texto */
+.textbox {
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.textbox label {
+    position: absolute;
+    top: 65%;
+    left: 10px;
+    transform: translateY(-80%);
+    font-size: 16px;
+    color: #f5f5f5;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f5f5f5;
+    font-size: 16px;
+}
+
+.textbox input:focus ~ label,
+.textbox input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: #00eeff;
+}
+
+.textbox input:focus {
+    border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 8px #00eeff;
+}
+
+.textbox input::placeholder {
+    color: transparent;
+}
+
+/* Botón */
+.btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Botón para volver */
+.back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(28, 28, 28, 0.95);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    position: relative;
+}
+
+.footer-links li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 15px;
+    width: 1px;
+    background-color: #666;
+    opacity: 0.5;
+}
+
+.footer-links li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Información del footer */
+.footer-info {
+    width: 100%;
+    text-align: right;
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    font-size: 12px;
+    color: #b3b3b3;
+    z-index: 11;
+}
+
+.footer-info span {
+    font-weight: bold;
+}

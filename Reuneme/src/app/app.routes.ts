@@ -7,6 +7,7 @@ import { PerfilUsuarioComponent } from './perfil-usuario/perfil-usuario.componen
 import { PerfilComponent } from './perfil/perfil.component';
 import { RegistroAdminComponent } from './registro-admin/registro-admin.component';
 import { RegistroComponent } from './registro/registro.component';
+import { ResetContrasenaComponent } from './reset-contrasena/reset-contrasena.component';
 import { VentanaPrincipalComponent } from './ventana-principal/ventana-principal.component';
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'registro-admin', component: RegistroAdminComponent },
     { path: 'ventana-principal', component: VentanaPrincipalComponent },
     { path: 'contrasena-olvidada', component: ContrasenaOlvidadaComponent },
+    { path: 'reset-contrasena', component: ResetContrasenaComponent },
     { path: '**', redirectTo: '' }
     
 ];
