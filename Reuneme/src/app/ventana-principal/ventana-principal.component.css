@@ -163,6 +163,26 @@ html, body {
     font-weight: 600;
     transition-duration: .3s;
   }
+
+  .back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
   
   /* Efecto hover: expande el botón */
   .Btn:hover {
@@ -189,7 +209,7 @@ html, body {
   .Btn:active {
     transform: translate(2px ,2px);
   }
-  
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -233,6 +253,7 @@ html, body {
     text-align: center;
     color: #ffffff;
 }
+
 .validate-modal {
     background-color: #2a2a2a; /* Color más neutro */
     padding: 20px;
@@ -246,6 +267,7 @@ html, body {
     text-align: center;
     color: #ffffff;
 }
+
 
 
 

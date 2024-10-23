@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
-import { UserService } from '../services/user.services';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -164,21 +164,13 @@ export class LoginComponent {
     this.domainInvalid = false;
     this.errorMessage = '';
   }
-  // Navegar a la página principal
-  goToLanding(): void {
-    this.router.navigate(['/']); 
-  }
 
-  // Navegar a la página de registro
-  goToRegister(): void {
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/registro']);
+      this.router.navigate([route]);
     }, 1000);
-  }
-
-  goToDobleFactor(): void {
-    this.router.navigate(['/doblefactor']); 
   }
 }

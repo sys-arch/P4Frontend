@@ -47,14 +47,14 @@
 
         <button class="btn" type="button" (click)="loginForm.ngSubmit.emit()">Acceder</button>
         <p class="register-text">
-            ¿No tienes cuenta? <a routerLink="/registro" class="register-link" (click)="goToRegister()">CREAR UNA</a>
+            ¿No tienes cuenta? <a routerLink="/registro" class="register-link" (click)="navigateTo('/registro')">CREAR UNA</a>
         </p>
-        <button class="btn" (click)="goToDobleFactor()">Siguiente Ventana</button>
+        <button class="btn" (click)="navigateTo('/doblefactor')">Siguiente Ventana</button>
 
     </div>
     
     <div class="back-button-container">
-        <button (click)="goToLanding()" class="back-button">Volver</button>
+        <button (click)="navigateTo('/')" class="back-button">Volver</button>
     </div>
 
     <app-loader *ngIf="isLoading"></app-loader>

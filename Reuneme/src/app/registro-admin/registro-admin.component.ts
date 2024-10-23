@@ -79,11 +79,17 @@ export class RegistroAdminComponent {
       return;
     }
 
-    if (!this.validarPassword() || !this.validarConfirmPassword()) {
-      alert("Por favor corrige los errores en el formulario");
+    // El primero comprueba el formato de la contraseña y 
+    // el segundo si las contraseñas coinciden
+    if (!this.validarPassword()) {
+      alert("Contraseña inválida");
+      return;
+    } else if(!this.validarConfirmPassword()) {
+      alert("Las contraseñas no coinciden");
       return;
     }
 
+    // Comprueba si todos los campos obligatorios han sido completados
     if (!this.nombre || !this.primerApellido || !this.email || !this.centro || !this.password1 || !this.password2) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
       return;
@@ -101,7 +107,12 @@ export class RegistroAdminComponent {
       });
   }
 
-  gotoVentanaPrincipal(): void {
-    this.router.navigate(['/ventana-principal']);
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate([route]);
+    }, 1000);
   }
 }

@@ -16,21 +16,12 @@ export class LandingPageComponent {
 
   constructor(private router: Router) { }
 
-  // Método para simular carga y navegar a la página de login
-  goToLogin() {
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
-      this.router.navigate(['/login']);
       this.isLoading = false;
-    }, 1500);
-  }
-
-  // Método para simular carga y navegar a la página de registro
-  goToRegistro() {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.router.navigate(['/registro']);
-      this.isLoading = false;
-    }, 1500);
+      this.router.navigate([route]);
+    }, 1000);
   }
 }

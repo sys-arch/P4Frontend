@@ -1,41 +1,24 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoaderComponent } from '../loader/loader.component';
-import { UserService } from '../services/user.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'app-perfil',
-  standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],
-  templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.css']
-})
-export class PerfilComponent {
-  admin = {
-    nombre: '',
-    apellidos: '',
-    correo: '',
-    centroTrabajo: '',
-    interno: false
-  };
+import { PerfilComponent } from './perfil.component';
 
-  profilePicture: string = '';
-  isLoading: boolean = false;
-  emailInvalid = false;
+describe('PerfilComponent', () => {
 
-  constructor(
-    private readonly router: Router,
-    private readonly userService: UserService
-  ) {}
+  let component: PerfilComponent;
+  let fixture: ComponentFixture<PerfilComponent>;
 
-  // Método para regresar a la página principal
-  goToVentanaPrincipal(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/']);
-    }, 1000);
-  }
-}
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PerfilComponent]
+    })
+
+    .compileComponents();
+    fixture = TestBed.createComponent(PerfilComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+  
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

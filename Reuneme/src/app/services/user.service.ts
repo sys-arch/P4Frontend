@@ -15,20 +15,30 @@ export class UserService {
         return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
     }
 
-    register(nombre: string, apellido: string, email: string, centro: string, fechaAlta: string, perfilLaboral: string, password1: string,isVerified:boolean): Observable<any> {
+    register(email: string, password1: string, password2: string,
+        nombre: string, apellido: string, apellido2: string, 
+        centro: string, departamento: string, perfilLaboral: string,
+        fechaAlta: string, bloqueado: boolean, verificado: boolean 
+        ): Observable<any> {
         let info = {
-        nombre: nombre,
-        apellido: apellido,
-        email: email,
-        centro: centro,
-        fechaAlta: fechaAlta,
-        perfilLaboral: perfilLaboral,
-        password1: password1,
-        isVerified: isVerified//recordad que ahora mismo aqui no esta verificado, esta a false
+            email: email,
+            pwd1: password1,
+            pwd2: password2,
+            nombre: nombre,
+            apellido1: apellido,
+            apellido2: apellido2,
+            centro: centro,
+            departamento: departamento,
+            perfil: perfilLaboral,
+            fechaalta: fechaAlta,
+            bloqueado: bloqueado,
+            verificado: verificado
             }
-        
-        return this.client.post("http://localhost:4200/registro", info)
+    
+        return this.client.post("http://localhost:8000/users/register", info)
     }
+
+
     registerAdmin(
         nombre: string, 
         apellido1: string, 
@@ -45,11 +55,11 @@ export class UserService {
             apellido2: apellido2,
             email: email,
             centro: centro,
-            password1: password1,
-            password2: password2,
+            pwd1: password1,
+            pwd2: password2,
             interno: interno
         };
     
-        return this.client.post("http://localhost:4200/registro-admin", info);
+        return this.client.post("http://localhost:8000/registro-admin", info);
     }
-    }
+}

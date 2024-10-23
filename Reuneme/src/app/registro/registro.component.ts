@@ -14,9 +14,9 @@ import { LoaderComponent } from "../loader/loader.component";
 })
 export class RegistroComponent {
 
-
   nombre: string = '';
   apellido: string = '';
+  apellido2: string = '';
   email: string = '';
   departamento: string = '';
   centro: string = '';
@@ -32,6 +32,9 @@ export class RegistroComponent {
   fechaInvalid = false;
   isLoading: boolean = false;
   errorMessage: string = "";
+  bloqueado = true;
+  verificado = false;
+  formattedDate: string = '';
 
   constructor(
     private readonly router: Router,
@@ -44,16 +47,10 @@ export class RegistroComponent {
     this.emailInvalid = !emailPattern.test(this.email);
   }
 
-  // Validación de formato de fecha (dd/mm/aaaa)
-  validateFechaAlta(): boolean {
-    const fechaPattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-    this.fechaInvalid = !fechaPattern.test(this.fechaAlta);
-    return !this.fechaInvalid;
-  }
-
+  
   // Validación de la contraseña
   validarPassword(): boolean {
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
     if (RegExp(passwordRegEx).exec(this.password1)) {
       this.passwordError = '';
@@ -74,45 +71,62 @@ export class RegistroComponent {
     }
   }
 
-  togglePasswordVisibility1(): void{
+  togglePasswordVisibility1(): void{ // Cambiar visibilidad de la contraseña
     this.passwordVisible1 = !this.passwordVisible1;
     const passwordInput1 = document.getElementById('password1') as HTMLInputElement;
     passwordInput1.type = this.passwordVisible1 ? 'text' : 'password';
   }
 
-  togglePasswordVisibility2(): void{
+  togglePasswordVisibility2(): void{ // Cambiar visibilidad de la contraseña2
     this.passwordVisible2 = !this.passwordVisible2;
     const passwordInput2 = document.getElementById('password2') as HTMLInputElement;
     passwordInput2.type = this.passwordVisible2 ? 'text' : 'password';
     }
 
-  // Compropbación de campos obligatorios y formato de correo electrónico
+  // Compropbación de campos obligatorios y formato de correo electrónico y fecha alta
   onSubmit(): void {
     if (this.emailInvalid) {
       alert("Correo electrónico inválido");
       return;
-    }
-
-    if (!this.validateFechaAlta()) {
-      alert("La fecha de alta no tiene un formato válido (dd/mm/aaaa)");
-      return;
-    }
-
+    } 
     // El primero comprueba el formato de la contraseña y 
     // el segundo si las contraseñas coinciden
-    if (!this.validarPassword() || !this.validarConfirmPassword()) {
-      alert("Por favor corrige los errores en el formulario");
+    if (!this.validarPassword()) {
+      alert("Contraseña inválida");
+      return;
+    } else if(!this.validarConfirmPassword()) {
+      alert("Las contraseñas no coinciden");
       return;
     }
     
     // Validar si los campos obligatorios están vacíos
-    if (!this.nombre || !this.apellido || !this.email || !this.centro || !this.fechaAlta || !this.password1 || !this.password2) {
+    if (!this.nombre || !this.apellido || !this.apellido2 || !this.email || !this.centro || !this.fechaAlta || !this.password1 || !this.password2) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
-      return; // Detener el envío del formulario si hay campos vacíos
+      return; 
     }
     // const hashedPassword = this.password1; // Aquí sería el cifrado real.
-    const isVerified=false;
-    this.userService.register(this.nombre, this.apellido, this.email, this.centro, this.fechaAlta, this.perfilLaboral, this.password1,isVerified)
+
+    let formattedDate = this.fechaAlta ? this.fechaAlta.toString().split('T')[0] : '';
+
+    console.log({
+    email: this.email,
+    pwd1: this.password1,
+    pwd2: this.password2,
+    nombre: this.nombre,
+    apellido1: this.apellido,
+    apellido2: this.apellido2,
+    centro: this.centro,
+    departamento: this.departamento,
+    perfil: this.perfilLaboral,
+    fechaalta: formattedDate,
+    bloqueado: this.bloqueado,
+    verificado: this.verificado
+});
+
+    this.userService.register(this.email, this.password1,this.password2, this.nombre,
+              this.apellido, this.apellido2, this.centro,
+              this.departamento, this.perfilLaboral, formattedDate,
+              this.bloqueado, this.verificado)
       .subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito:', response);
@@ -123,21 +137,14 @@ export class RegistroComponent {
       });
   }
   
-  //Botones de redirección
 
-  goToLanding(): void {
+  // Método para redirigir a las diferentes páginas
+  navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/']);
+      this.router.navigate([route]);
     }, 1000);
   }
 
-  goToLogin(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/login']);
-    }, 1000);
-  }
 }
