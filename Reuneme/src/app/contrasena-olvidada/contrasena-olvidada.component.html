@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/styles.css">
+
+<!-- Header con logo -->
+<div class="header">
+    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+</div>
+
+<!-- Contenedor principal -->
+<div class="login-container">
+    <!-- Caja del formulario de recuperación de contraseña -->
+    <div class="login-box">
+        <h2>Recuperar Contraseña</h2>
+
+        <!-- Texto explicativo mejorado -->
+        <p class="recovery-text">
+            Se enviará un correo para reiniciar tu contraseña a tu dirección de email.        </p>
+
+        <!-- Formulario de recuperación -->
+        <form>
+            <!-- Campo de correo electrónico -->
+            <div class="textbox">
+                <input type="text" id="email" placeholder="Correo Electrónico" required />
+                <label for="email">Correo Electrónico</label>
+            </div>
+
+    
+
+            <!-- Botón para enviar la solicitud de recuperación -->
+            <button type="submit" class="btn">Enviar Instrucciones</button>
+        </form>
+    </div>
+
+    <!-- Botón para volver a la página principal -->
+    <div class="back-button-container">
+        <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#">Condiciones de Uso</a></li>
+                <li><a href="#">Política de Privacidad</a></li>
+                <li><a href="#">Consentimiento de Cookies</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Información adicional del footer -->
+    <div class="footer-info">
+        <span>© 2024 ReuneMe, LLC</span>
+    </div>
+</div>

@@ -36,7 +36,7 @@
 
                 <!-- Correo Electrónico -->
                 <div class="textbox">
-                    <input type="text" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
+                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
                     <label for="email">Correo Electrónico*</label>
                 </div>
 
@@ -71,7 +71,7 @@
         </form>
 
         <div class="actions">
-            <button class="btn" type="submit">Registrar como Administrador</button>
+            <button class="btn" (click)="onSubmit()">Registrar como Administrador</button>
         </div>
     </div>
 

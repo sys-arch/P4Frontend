@@ -13,6 +13,7 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./registro-admin.component.css']
 })
 export class RegistroAdminComponent {
+  
   nombre: string = '';
   primerApellido: string = ''; // Primer Apellido
   segundoApellido: string = ''; // Segundo Apellido
@@ -91,7 +92,7 @@ export class RegistroAdminComponent {
 
     // Comprueba si todos los campos obligatorios han sido completados
     if (!this.nombre || !this.primerApellido || !this.email || !this.centro || !this.password1 || !this.password2) {
-      this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
+      alert('Todos los campos obligatorios deben estar llenos.');
       return;
     }
 
