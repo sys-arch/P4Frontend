@@ -39,6 +39,7 @@
         </div>
       </div>
     </div>
+
     <div class="admin-controls">
       <button class="Btn" (click)="navigateTo('/registro-admin')">
         <div class="sign">
@@ -47,7 +48,9 @@
         <div class="text">Añadir Administrador</div>
       </button>
     </div>
+
     <app-loader *ngIf="isLoading"></app-loader>
+
     <div class="user-profile">
       <img [src]="loggedUser.profilePicture" alt="Foto de perfil" class="profile-picture">
       <span class="user-fullname">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</span>
@@ -55,8 +58,6 @@
     </div>
 
     <app-loader *ngIf="isLoading"></app-loader>
-    
-    
 
     <!-- Header de la página de administrador -->
     <div class="header">
@@ -136,14 +137,14 @@
           <!-- Acciones: Editar, Eliminar -->
           <div class="user-actions">
             <button class="action-btn edit-btn" title="Editar" [disabled]="user.estado === 'Bloqueado'"
-              [ngClass]="{'blocked-btn': user.estado === 'Bloqueado'}">
+              [ngClass]="{'blocked-btn': user.estado === 'Bloqueado'}"
+              (click)="editUser(user.email)">
               <i class="material-icons">edit</i>
             </button>
 
             <button class="action-btn delete-btn" title="Eliminar" (click)="toggleDelete(user)">
               <i class="material-icons">delete</i>
             </button>
-
           </div>
         </div>
       </div>
@@ -151,9 +152,9 @@
 
     <div class="back-button-container">
       <button class="back-button" (click)="navigateTo('/doblefactor')">Volver</button>
-  </div>
+    </div>
 
-  <app-loader *ngIf="isLoading"></app-loader>
+    <app-loader *ngIf="isLoading"></app-loader>
 
     <!-- Footer de la página -->
     <footer class="footer">
@@ -171,9 +172,9 @@
     </div>
   </div>
 
-    <div *ngIf="!isAdmin">
-        <!-- Vista para el usuario -->
-        <h2>Panel de Usuario</h2>
-        <!-- Aquí pones el contenido exclusivo para el usuario -->
-    </div>
+  <div *ngIf="!isAdmin">
+    <!-- Vista para el usuario -->
+    <h2>Panel de Usuario</h2>
+    <!-- Aquí pones el contenido exclusivo para el usuario -->
+  </div>
 </div>
