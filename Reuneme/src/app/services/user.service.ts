@@ -82,9 +82,8 @@ export class UserService {
     }
     validateToken(token: string): Observable<any> {
         return this.client.get(`${httpUrl}password/reset?token=${token}`, {
-            responseType: 'text',
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
     }
-  
     
 }

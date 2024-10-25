@@ -15,39 +15,48 @@
 
     <!-- Contenedor principal -->
     <div class="login-container">
-        <!-- Caja del formulario de restablecimiento de contraseña -->
-        <div class="login-box">
-            <h2>Restablecer Contraseña</h2>
+        <!-- Si el token es válido, mostramos el formulario -->
+        <div *ngIf="isValidToken; else invalidToken">
+            <div class="login-box">
+                <h2>Restablecer Contraseña</h2>
 
-            <!-- Texto explicativo -->
-            <p class="recovery-text">
-                Introduce tu nueva contraseña y confírmala para actualizarla.
-            </p>
+                <!-- Texto explicativo -->
+                <p class="recovery-text">
+                    Introduce tu nueva contraseña y confírmala para actualizarla.
+                </p>
 
-            <!-- Formulario de restablecimiento -->
-            <form>
-                <!-- Campo de nueva contraseña -->
-                <div class="textbox">
-                    <input type="password" id="new-password" placeholder="Nueva Contraseña" required />
-                    <label for="new-password">Nueva Contraseña</label>
-                </div>
+                <!-- Formulario de restablecimiento -->
+                <form >
+                    <!-- Campo de nueva contraseña -->
+                    <div class="textbox">
+                        <input type="password" id="new-password" placeholder="Nueva Contraseña" required [(ngModel)]="newPassword" name="newPassword" />
+                        <label for="new-password">Nueva Contraseña</label>
+                    </div>
 
-                <!-- Campo de confirmación de contraseña -->
-                <div class="textbox">
-                    <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required />
-                    <label for="confirm-password">Confirmar Contraseña</label>
-                </div>
+                    <!-- Campo de confirmación de contraseña -->
+                    <div class="textbox">
+                        <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required [(ngModel)]="confirmPassword" name="confirmPassword" />
+                        <label for="confirm-password">Confirmar Contraseña</label>
+                    </div>
 
-                <!-- Botón para enviar el restablecimiento de la contraseña -->
-                <button type="submit" class="btn">Restablecer Contraseña</button>
-                
-            </form>
+                    <!-- Botón para enviar el restablecimiento de la contraseña -->
+                    <button type="submit" class="btn">Restablecer Contraseña</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Botón para volver a la página principal -->
-        <div class="back-button-container">
-            <button class="back-button" (click)="navigateTo('/login')">Volver</button>
-        </div>
+        <!-- Mostrar un mensaje de error si el token es inválido o ha caducado -->
+        <ng-template #invalidToken>
+            <div class="error-box">
+                <h2>Ups, URL no válida</h2>
+                <p>El enlace para restablecer la contraseña es inválido o ha caducado. Por favor, solicita un nuevo enlace.</p>
+
+                <!-- Botón para volver a la página principal -->
+                <div class="back-button-container">
+                    <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+                </div>
+            </div>
+        </ng-template>
     </div>
 
     <!-- Footer -->

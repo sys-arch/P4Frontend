@@ -21,6 +21,7 @@ export class ResetContrasenaComponent implements OnInit {
   isLoading: boolean = false;  // Controla el estado de carga
   token: string = '';  // Token obtenido de la URL
   isValidToken: boolean = false;  // Indica si el token es válido
+  email: string = '';  // Email del usuario
   errorMessage: string = '';  // Mensaje de error
 
   constructor(
@@ -31,18 +32,22 @@ export class ResetContrasenaComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtener el token de la URL
+    // Ejemplo URL:                                              http://localhost:4200/reset-contrasena?token=40322b3d-d89e-4c53-a375-8fd167847482
     this.token = this.route.snapshot.queryParams['token'];
     
     // Si no hay token en la URL
     if (!this.token) {
       this.errorMessage = 'No se ha proporcionado un token válido.';
+      console.error('No se ha proporcionado un token válido.');
       return;
     }
 
-    // Validar el token
+    // Validar el token y obtener el email asociado
     this.userService.validateToken(this.token).subscribe({
-      next: () => {
+      next: (response) => {
         this.isValidToken = true;  // Token válido
+        this.email = response.email;  // Obtener el email del usuario
+        console.log('Token válido. Email:', this.email);
       },
       error: () => {
         this.errorMessage = 'El token es inválido o ha caducado.';
