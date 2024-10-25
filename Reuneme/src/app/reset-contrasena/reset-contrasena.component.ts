@@ -116,7 +116,7 @@ export class ResetContrasenaComponent implements OnInit {
   
       // Enviar la nueva contraseña al backend
       this.isLoading = true;
-      this.userService.resetPassword(this.token, this.newPassword).subscribe({
+      this.userService.resetPassword(this.token, this.newPassword, this.confirmPassword).subscribe({
         next: () => {
           this.isLoading = false;
           alert('¡Contraseña restablecida con éxito!');
