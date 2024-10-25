@@ -13,19 +13,19 @@ import { UserService } from '../services/user.service'; // Importa el
   styleUrls: ['./reset-contrasena.component.css']
 })
 export class ResetContrasenaComponent implements OnInit {
-  newPassword: string = '';  // Nueva contraseña
-  confirmPassword: string = '';  // Confirmar contraseña
-  passwordError: string = '';  // Error en la validación de la contraseña
-  confirmPasswordError: string = '';  // Error en la confirmación de la contraseña
-  passwordVisible1: boolean = false;  // Controla la visibilidad de la nueva contraseña
-  passwordVisible2: boolean = false;  // Controla la visibilidad de la confirmación
-  isLoading: boolean = false;  // Controla el estado de carga
-  token: string = '';  // Token obtenido de la URL
-  isValidToken: boolean = false;  // Indica si el token es válido
-  email: string = '';  // Email del usuario
-  errorMessage: string = '';  // Mensaje de error
-  password1: string = '';  // Nueva contraseña
-  password2: string = '';  // Confirmar contraseña
+  newPassword: string = '';
+  confirmPassword: string = '';
+  passwordError: string = '';
+  confirmPasswordError: string = '';
+  passwordVisible1: boolean = false;
+  passwordVisible2: boolean = false;
+  isLoading: boolean = false;
+  token: string = '';
+  isValidToken: boolean = false;
+  email: string = '';
+  errorMessage: string = '';
+  password1: string = '';
+  password2: string = '';
 
   constructor(
     private router: Router,
@@ -39,7 +39,6 @@ export class ResetContrasenaComponent implements OnInit {
       this.token = this.route.snapshot.queryParams['token'];
   
       if (!this.token) {
-        this.errorMessage = 'No se ha proporcionado un token válido.';
         console.error('No se ha proporcionado un token válido.');
         return;
       }
@@ -51,7 +50,7 @@ export class ResetContrasenaComponent implements OnInit {
           console.log('Token válido. Email:', this.email);
         },
         error: () => {
-          this.errorMessage = 'El token es inválido o ha caducado.';
+          console.error('El token es inválido o ha caducado.');
         }
       });
     }
@@ -65,7 +64,8 @@ export class ResetContrasenaComponent implements OnInit {
       this.passwordError = '';
       return true;
     } else {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.';
+      alert('Contraseña inválida, debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.');
+
       return false;
     }
   }
@@ -76,7 +76,7 @@ export class ResetContrasenaComponent implements OnInit {
       this.confirmPasswordError = '';
       return true;
     } else {
-      this.confirmPasswordError = 'Las contraseñas no coinciden.';
+      alert('Las contraseñas no coinciden');
       return false;
     }
   }
@@ -101,18 +101,16 @@ export class ResetContrasenaComponent implements OnInit {
   
       // Verifica si las contraseñas están completas y son válidas antes de enviar
       if (!this.newPassword || !this.confirmPassword) {
-          this.errorMessage = 'Por favor, completa ambos campos de contraseña.';
+          alert('Por favor, completa todos los campos.');
           return;
       }
   
       // Validar contraseñas
       if (!this.validarPassword()) {
-          alert('Contraseña inválida, debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.');
           return;
       }
       
       if (!this.validarConfirmPassword()) {
-          alert('Las contraseñas no coinciden');
           return;
       }
   

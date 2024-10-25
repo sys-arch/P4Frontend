@@ -222,6 +222,17 @@
 .footer-info span {
     font-weight: bold;
 }
+.error-message {
+    color: #ff4d4f; /* Color rojo para el texto del error */
+    font-size: 14px; /* Tamaño de fuente */
+    margin-top: -25px; /* Espacio adicional encima del mensaje */
+    text-align: left; /* Alinear a la izquierda dentro del contenedor */
+    font-weight: 500; /* Peso de la fuente */
+}
+
+.error-message small {
+    display: block;
+}
 .error-box {
     background-color: #f8d7da;
     color: #721c24;
