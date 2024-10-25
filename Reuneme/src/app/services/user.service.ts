@@ -85,11 +85,12 @@ export class UserService {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
     }
-    resetPassword(token: string, newPassword: string): Observable<any> {
+    resetPassword(token: string, newPassword: string, confirmPassword: string): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const body = {
             token: token,
-            newPassword: newPassword
+            newPassword: newPassword,
+            confirmPassword: confirmPassword
         };
         return this.client.post(`${httpUrl}password/reset`, body, { headers, responseType: 'text' });
     }
