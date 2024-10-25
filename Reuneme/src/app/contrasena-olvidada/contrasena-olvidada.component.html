@@ -13,26 +13,21 @@
 
         <!-- Texto explicativo mejorado -->
         <p class="recovery-text">
-            Se enviará un correo para reiniciar tu contraseña a tu dirección de email.        </p>
+            Se enviará un correo para reiniciar tu contraseña a tu dirección de email.
+        </p>
 
+        <!-- Formulario de recuperación -->
         <!-- Formulario de recuperación -->
         <form>
             <!-- Campo de correo electrónico -->
             <div class="textbox">
-                <input type="text" id="email" placeholder="Correo Electrónico" required />
+                <input type="text" id="email" [(ngModel)]="email" name="email" placeholder="Correo Electrónico" required />
                 <label for="email">Correo Electrónico</label>
             </div>
 
-    
-
             <!-- Botón para enviar la solicitud de recuperación -->
-            <button type="submit" class="btn">Enviar Instrucciones</button>
+            <button type="submit" (click)="passwordResetAttempt($event)" class="btn">Enviar Instrucciones</button>
         </form>
-    </div>
-
-    <!-- Botón para volver a la página principal -->
-    <div class="back-button-container">
-        <button class="back-button" (click)="navigateTo('/login')">Volver</button>
     </div>
 
     <!-- Footer -->

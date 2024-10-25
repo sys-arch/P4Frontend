@@ -74,4 +74,17 @@ export class UserService {
     
         return this.client.post(`${httpUrl}admins/register`, info, { headers, responseType: 'text' });
     }
+    forgotPassword(email: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        const body = new URLSearchParams();
+        body.set('email', email);
+        return this.client.post(`${httpUrl}password/forgot`, body.toString(), { headers, responseType: 'text' });
+    }
+    validateToken(token: string): Observable<any> {
+        return this.client.get(`${httpUrl}password/reset?token=${token}`, {
+            responseType: 'text',
+        });
+    }
+  
+    
 }
