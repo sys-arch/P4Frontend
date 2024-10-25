@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../services/user.service'; // Importa el UserService
+import { UserService } from '../services/user.service'; // Importa el 
+
 
 @Component({
   selector: 'app-reset-contrasena',
@@ -12,42 +13,47 @@ import { UserService } from '../services/user.service'; // Importa el UserServic
   styleUrls: ['./reset-contrasena.component.css']
 })
 export class ResetContrasenaComponent implements OnInit {
-  newPassword: string = '';  // Nueva contraseña
-  confirmPassword: string = '';  // Confirmar contraseña
-  passwordError: string = '';  // Error en la validación de la contraseña
-  confirmPasswordError: string = '';  // Error en la confirmación de la contraseña
-  passwordVisible1: boolean = false;  // Controla la visibilidad de la nueva contraseña
-  passwordVisible2: boolean = false;  // Controla la visibilidad de la confirmación
-  isLoading: boolean = false;  // Controla el estado de carga
-  token: string = '';  // Token obtenido de la URL
-  isValidToken: boolean = false;  // Indica si el token es válido
-  errorMessage: string = '';  // Mensaje de error
+  newPassword: string = '';
+  confirmPassword: string = '';
+  passwordError: string = '';
+  confirmPasswordError: string = '';
+  passwordVisible1: boolean = false;
+  passwordVisible2: boolean = false;
+  isLoading: boolean = false;
+  token: string = '';
+  isValidToken: boolean = false;
+  email: string = '';
+  errorMessage: string = '';
+  password1: string = '';
+  password2: string = '';
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,  // Para obtener el token de la URL
-    private userService: UserService  // Para llamar a los métodos del servicio
+    private route: ActivatedRoute,
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId: Object  // Inyecta el identificador de la plataforma
   ) {}
-
+  
   ngOnInit(): void {
-    // Obtener el token de la URL
-    this.token = this.route.snapshot.queryParams['token'];
-    
-    // Si no hay token en la URL
-    if (!this.token) {
-      this.errorMessage = 'No se ha proporcionado un token válido.';
-      return;
-    }
-
-    // Validar el token
-    this.userService.validateToken(this.token).subscribe({
-      next: () => {
-        this.isValidToken = true;  // Token válido
-      },
-      error: () => {
-        this.errorMessage = 'El token es inválido o ha caducado.';
+    if (isPlatformBrowser(this.platformId)) {  // Asegúrate de que esto se ejecute solo en el navegador
+      this.token = this.route.snapshot.queryParams['token'];
+  
+      if (!this.token) {
+        console.error('No se ha proporcionado un token válido.');
+        return;
       }
-    });
+  
+      this.userService.validateToken(this.token).subscribe({
+        next: (response) => {
+          this.isValidToken = true;
+          this.email = response.email;
+          console.log('Token válido. Email:', this.email);
+        },
+        error: () => {
+          console.error('El token es inválido o ha caducado.');
+        }
+      });
+    }
   }
 
   // Requisitos de la contraseña
@@ -58,7 +64,8 @@ export class ResetContrasenaComponent implements OnInit {
       this.passwordError = '';
       return true;
     } else {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.';
+      alert('Contraseña inválida, debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.');
+
       return false;
     }
   }
@@ -69,53 +76,60 @@ export class ResetContrasenaComponent implements OnInit {
       this.confirmPasswordError = '';
       return true;
     } else {
-      this.confirmPasswordError = 'Las contraseñas no coinciden.';
+      alert('Las contraseñas no coinciden');
       return false;
     }
   }
 
-  // Alternar visibilidad de la nueva contraseña
-  togglePasswordVisibility1(): void {
+  // Método para mostrar u ocultar la contraseña
+  
+  togglePasswordVisibility1(): void{ // Cambiar visibilidad de la contraseña
     this.passwordVisible1 = !this.passwordVisible1;
-    const passwordInput1 = document.getElementById('new-password') as HTMLInputElement;
+    const passwordInput1 = document.getElementById('password1') as HTMLInputElement;
     passwordInput1.type = this.passwordVisible1 ? 'text' : 'password';
   }
 
-  // Alternar visibilidad de la confirmación de contraseña
-  togglePasswordVisibility2(): void {
+  togglePasswordVisibility2(): void{ // Cambiar visibilidad de la contraseña2
     this.passwordVisible2 = !this.passwordVisible2;
-    const passwordInput2 = document.getElementById('confirm-password') as HTMLInputElement;
+    const passwordInput2 = document.getElementById('password2') as HTMLInputElement;
     passwordInput2.type = this.passwordVisible2 ? 'text' : 'password';
-  }
-
-  // Enviar el formulario de restablecimiento de contraseña
-  /*
-  onSubmit(): void {
-    // Validar contraseñas
-    if (!this.validarPassword()) {
-      alert('Contraseña inválida');
-      return;
     }
-    
-    if (!this.validarConfirmPassword()) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-
-    // Enviar la nueva contraseña al backend
-    this.isLoading = true;
-    this.userService.resetPassword(this.token, this.newPassword).subscribe({
-      next: () => {
-        this.isLoading = false;
-        alert('¡Contraseña restablecida con éxito!');
-        this.router.navigate(['/login']);
-      },
-      error: () => {
-        this.isLoading = false;
-        alert('Error al restablecer la contraseña. Inténtalo de nuevo.');
+  onSubmit(event: Event): void {
+      // Evitar el comportamiento por defecto del formulario
+      event.preventDefault(); 
+      console.log('Enviando formulario...');
+  
+      // Verifica si las contraseñas están completas y son válidas antes de enviar
+      if (!this.newPassword || !this.confirmPassword) {
+          alert('Por favor, completa todos los campos.');
+          return;
       }
-    });
-  }*/
+  
+      // Validar contraseñas
+      if (!this.validarPassword()) {
+          return;
+      }
+      
+      if (!this.validarConfirmPassword()) {
+          return;
+      }
+  
+      // Enviar la nueva contraseña al backend
+      this.isLoading = true;
+      this.userService.resetPassword(this.token, this.newPassword).subscribe({
+        next: () => {
+          this.isLoading = false;
+          alert('¡Contraseña restablecida con éxito!');
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          this.isLoading = false;
+          alert('Error al restablecer la contraseña. Inténtalo de nuevo.');
+        }
+      });
+  }
+  
+
 
   navigateTo(route: string): void {
     this.isLoading = true;
