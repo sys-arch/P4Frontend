@@ -762,3 +762,86 @@ html, body {
 h2 {
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
+
+
+/* Contenedor de las pestañas */
+.tabs-container {
+    position: absolute;
+    top: 260px; /* Ajusta la posición vertical según sea necesario */
+    left: calc(50% - 800px); /* Ajusta la posición horizontal para alinearla con el cuadro negro */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1000;
+  }
+  
+  /* Estilo de los botones de las pestañas */
+  .tabs-container button {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: left;
+    width: 150px; 
+  }
+  
+  /* Pestaña activa */
+  .tabs-container button.active {
+    background-color: #5fc67d;
+  }
+  
+/*Rectangulo negro pestaña Ausencias / Turnos horarios*/
+.calend-ausen-container {
+    width: 60%;
+    margin: 100px auto;
+    background-color: #1e1e1e;
+    color: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    gap: 10px; /* Espacio entre las dos columnas */
+}
+
+
+/*Contenedores donde se encuentran ausencias y turnos de horario calendario, pestaña Ausencias/Turnos horarios*/
+  .ausencias-contain {
+    flex: 1; 
+    margin-right: 10px; 
+    background-color: #2e2e2e; 
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word; 
+  }
+  
+  .calendar-contain {
+    flex: 1; 
+    margin-left: 10px; 
+    background-color: #2e2e2e;
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden; 
+    white-space: normal; 
+    word-wrap: break-word; 
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
