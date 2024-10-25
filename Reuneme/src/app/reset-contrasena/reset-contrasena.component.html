@@ -1,79 +1,94 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restablecer Contraseña</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
+<!-- Header con logo -->
+<div class="header">
+    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+</div>
 
-    <!-- Header con logo -->
-    <div class="header">
-        <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-    </div>
+<!-- Contenedor principal -->
+<div class="login-container">
+    <!-- Si el token es válido, mostramos el formulario -->
+    <div *ngIf="isValidToken; else invalidToken">
+        <div class="login-box">
+            <h2>Restablecer Contraseña</h2>
 
-    <!-- Contenedor principal -->
-    <div class="login-container">
-        <!-- Si el token es válido, mostramos el formulario -->
-        <div *ngIf="isValidToken; else invalidToken">
-            <div class="login-box">
-                <h2>Restablecer Contraseña</h2>
+            <!-- Texto explicativo -->
+            <p class="recovery-text">
+                Introduce tu nueva contraseña y confírmala para actualizarla.
+            </p>
 
-                <!-- Texto explicativo -->
-                <p class="recovery-text">
-                    Introduce tu nueva contraseña y confírmala para actualizarla.
-                </p>
-
-                <!-- Formulario de restablecimiento -->
-                <form >
-                    <!-- Campo de nueva contraseña -->
-                    <div class="textbox">
-                        <input type="password" id="new-password" placeholder="Nueva Contraseña" required [(ngModel)]="newPassword" name="newPassword" />
-                        <label for="new-password">Nueva Contraseña</label>
-                    </div>
-
-                    <!-- Campo de confirmación de contraseña -->
-                    <div class="textbox">
-                        <input type="password" id="confirm-password" placeholder="Confirmar Contraseña" required [(ngModel)]="confirmPassword" name="confirmPassword" />
-                        <label for="confirm-password">Confirmar Contraseña</label>
-                    </div>
-
-                    <!-- Botón para enviar el restablecimiento de la contraseña -->
-                    <button type="submit" class="btn">Restablecer Contraseña</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Mostrar un mensaje de error si el token es inválido o ha caducado -->
-        <ng-template #invalidToken>
-            <div class="error-box">
-                <h2>Ups, URL no válida</h2>
-                <p>El enlace para restablecer la contraseña es inválido o ha caducado. Por favor, solicita un nuevo enlace.</p>
-
-                <!-- Botón para volver a la página principal -->
-                <div class="back-button-container">
-                    <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+            <form #registerForm="ngForm" novalidate>
+                <!-- Campo de nueva contraseña -->
+                <div class="textbox password-box">
+                    <input 
+                        type="password" 
+                        id="password1" 
+                        placeholder="Contraseña" 
+                        name="password1" 
+                        [(ngModel)]="newPassword" 
+                        required 
+                    />
+                    <label for="password1">Contraseña*</label>
+                    <span 
+                        class="toggle-password" 
+                        (click)="togglePasswordVisibility1()" 
+                        (keypress)="togglePasswordVisibility1()"
+                    >
+                        {{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}
+                    </span>
+                    <div class="error-message" *ngIf="passwordError">{{ passwordError }}</div>
                 </div>
-            </div>
-        </ng-template>
-    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <ul class="footer-links">
-                <li><a href="#">Condiciones de Uso</a></li>
-                <li><a href="#">Política de Privacidad</a></li>
-                <li><a href="#">Consentimiento de Cookies</a></li>
-            </ul>
+                <!-- Campo de confirmación de contraseña -->
+                <div class="textbox password-box">
+                    <input 
+                        type="password" 
+                        id="password2" 
+                        placeholder="Repetir Contraseña" 
+                        name="password2" 
+                        [(ngModel)]="confirmPassword" 
+                        required 
+                    />
+                    <label for="password2">Repetir Contraseña*</label>
+                    <span 
+                        class="toggle-password" 
+                        (click)="togglePasswordVisibility2()" 
+                        (keypress)="togglePasswordVisibility2()"
+                    >
+                        {{ passwordVisible2 ? 'Ocultar' : 'Mostrar' }}
+                    </span>
+                    <div class="error-message" *ngIf="confirmPasswordError">{{ confirmPasswordError }}</div>
+                </div>
+
+                <!-- Botón para enviar el formulario de forma manual -->
+                <button class="btn" type="button" (click)="onSubmit($event)">Restablecer Contraseña</button>
+            </form>
         </div>
-    </footer>
-
-    <!-- Información adicional del footer -->
-    <div class="footer-info">
-        <span>© 2024 ReuneMe, LLC</span>
     </div>
 
-</body>
-</html>
+    <!-- Mostrar un mensaje de error si el token es inválido o ha caducado -->
+    <ng-template #invalidToken>
+        <div class="error-box">
+            <h2>Ups, URL no válida</h2>
+            <p>El enlace para restablecer la contraseña es inválido o ha caducado. Por favor, solicita un nuevo enlace.</p>
+        </div>
+    </ng-template>
+</div>
+
+<div class="back-button-container">
+    <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <ul class="footer-links">
+            <li><a href="#">Condiciones de Uso</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Consentimiento de Cookies</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- Información adicional del footer -->
+<div class="footer-info">
+    <span>© 2024 ReuneMe, LLC</span>
+</div>

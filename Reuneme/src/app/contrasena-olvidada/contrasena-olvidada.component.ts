@@ -92,6 +92,7 @@ export class ContrasenaOlvidadaComponent {
         this.isLoading = false;
         this.emailSent = true;  // Mostrar que el email se ha enviado
         console.log('Respuesta recibida: ', response);
+        
       },
       error: (error) => {
         this.isLoading = false;

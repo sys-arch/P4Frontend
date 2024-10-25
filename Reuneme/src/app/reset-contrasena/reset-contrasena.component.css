@@ -258,3 +258,20 @@
 .back-button:hover {
     background-color: #a71d2a;
 }
+.password-box {
+    display: flex;
+}
+.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #00eeff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.toggle-password:hover {
+    color: #ffffff;
+}
