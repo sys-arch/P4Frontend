@@ -12,7 +12,7 @@ export class UserService {
     // Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.post(`${httpUrl}users/login`, user, { headers, responseType: 'text' });        
+        return this.client.put(`${httpUrl}users/login`, user, { headers, responseType: 'text' });        
     }
 
     // Método register con headers

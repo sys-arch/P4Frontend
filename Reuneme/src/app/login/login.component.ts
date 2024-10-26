@@ -65,7 +65,7 @@ export class LoginComponent {
       // Crear el objeto `user` con las credenciales del usuario
       const user = {
         email: this.username,
-        contrasena: this.password
+        pwd: this.password
       };
   
       // Mostrar los datos que se van a enviar al backend
