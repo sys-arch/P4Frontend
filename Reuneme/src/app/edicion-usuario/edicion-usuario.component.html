@@ -1,0 +1,73 @@
+<div class="edit-container">
+  <div class="header">
+    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+  </div>
+
+  <div class="register-box">
+    <h2 *ngIf="isAdmin">Editar Cuenta de Usuario</h2>
+    <h2 *ngIf="!isAdmin">Cambiar Contraseña</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="isAdmin">
+        <!-- Solo visible para el administrador -->
+        <div class="form-grid">
+          <!-- Nombre -->
+          <div class="textbox">
+            <input type="text" id="nombre" placeholder="Nombre" formControlName="nombre" required />
+            <label for="nombre">Nombre*</label>
+          </div>
+          <!-- Apellido -->
+          <div class="textbox">
+            <input type="text" id="apellidos" placeholder="Apellido" formControlName="apellidos" required />
+            <label for="apellidos">Apellido*</label>
+          </div>
+        </div>
+        <div class="form-grid">
+          <!-- Correo Electrónico -->
+          <div class="textbox">
+            <input type="email" id="correo" placeholder="Correo Electrónico" formControlName="correo" required />
+            <label for="correo">Correo Electrónico*</label>
+          </div>
+        </div>
+        <div class="form-grid">
+          <!-- Departamento -->
+          <div class="textbox">
+            <input type="text" id="departamento" placeholder="Departamento" formControlName="departamento" />
+            <label for="departamento">Departamento</label>
+          </div>
+          <!-- Centro -->
+          <div class="textbox">
+            <input type="text" id="centroTrabajo" placeholder="Centro" formControlName="centroTrabajo" required />
+            <label for="centroTrabajo">Centro*</label>
+          </div>
+        </div>
+        <div class="form-grid">
+          <!-- Fecha de alta -->
+          <div class="textbox">
+            <input type="date" id="alta" formControlName="alta" required />
+            <label for="alta">Fecha de alta en la compañía*</label>
+          </div>
+        </div>
+        <div class="form-grid">
+          <!-- Perfil laboral -->
+          <div class="textbox">
+            <input type="text" id="perfil" placeholder="Perfil Laboral (posición)" formControlName="perfil" />
+            <label for="perfil">Perfil Laboral</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <!-- Contraseña (Visible para ambos) -->
+        <div class="textbox password-box">
+          <input type="password" id="password" placeholder="Nueva Contraseña" formControlName="password" />
+          <label for="password">Nueva Contraseña</label>
+        </div>
+      </div>
+      <p class="required-info">Los campos(*) son obligatorios.</p>
+      <button class="btn" type="submit">Guardar Cambios</button>
+    </form>
+
+    <div class="back-button-container">
+      <button class="back-button" (click)="navigateToUserList()">Volver</button>
+    </div>
+  </div>
+</div>
