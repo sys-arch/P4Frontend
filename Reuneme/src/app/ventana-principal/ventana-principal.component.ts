@@ -1,55 +1,58 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../loader/loader.component"; // Importa Router para recibir el token
+import { LoaderComponent } from "../loader/loader.component";
+
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],  // Asegúrate de agregar FormsModule aquí
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
+
+
 export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
-  isAdmin: boolean = true;  // Cambia según el prefijo del token
-  token: string = '';  // Variable para almacenar el token recibido
+  isAdmin: boolean = true;
+  token: string = '';
+  isLoading: boolean = false;
+  searchBy: string = 'name';
+  searchQuery: string = '';
+  filterBy: string = 'all';
+  selectedUser: any = null;
+  showBlockModal: boolean = false;
+  showValiModal: boolean = false;
+  showDeleteModal: boolean = false;
+  countdown: number = 5;
+  countdownInterval: any;
+  activeTab: string = 'tab1'; // Por defecto, la pestaña 1 está activa
 
-  isLoading: boolean = false;  // Controla la visibilidad del spinner de carga
-
-  searchBy: string = 'name';  // Campo de búsqueda predeterminado
-  searchQuery: string = '';   // Consulta de búsqueda
-  filterBy: string = 'all';   // Filtro predeterminado (todos los usuarios)
-
-  selectedUser: any = null;  // Usuario seleccionado
-  showBlockModal: boolean = false;  // Mostrar/ocultar modal de confirmación
-  showValiModal:boolean =false;
-  showDeleteModal: boolean = false;  // Controla la visibilidad del modal de eliminación
-  countdown: number = 5;  // Cuenta regresiva de 5 segundos
-  countdownInterval: any;  // Intervalo para el temporizador
-
-  // Usuario logueado (temporal hasta obtener datos de la base de datos)
   loggedUser: any = {
     firstName: 'John',
     lastName: 'Doe',
     profilePicture: '/assets/images/UsuarioSinFoto.png',
-    role: 'admin'  // Podría ser 'owner', 'admin', o 'user'
+    role: 'admin'
   };
 
-  // Lista de usuarios de prueba con todos los campos requeridos, incluyendo 'profilePicture'
   users = [
     {
       firstName: 'Aaron',
       lastName: 'Smith',
       email: 'aaron.smith@example.com',
-      department: '',
-      center: 'Centro Norte',
-      joiningDate: '',
-      jobTitle: 'Administrador',
       isAdmin: true,
       profilePicture: 'assets/images/test-perfil1.jpg',
       estado: 'Validado'
+    },
+    {
+      firstName: 'Maria',
+      lastName: 'González',
+      email: 'maria.gonzalez@example.com',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'No validado'
     },
     {
       firstName: 'Maria',
@@ -164,140 +167,114 @@ export class VentanaPrincipalComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Acceder al token desde el estado del Router
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state) {
       this.token = navigation.extras.state['token'];
-      console.log('Token recibido:', this.token);  // Imprimir el token para verificar
-
-      // Verificar el prefijo del token para determinar si es administrador o usuario
       if (this.token.startsWith('a-')) {
         this.isAdmin = true;
-        console.log('Vista de Administrador');
       } else if (this.token.startsWith('e-')) {
         this.isAdmin = false;
-        console.log('Vista de Usuario');
       }
     }
   }
 
-  // Método para mostrar el modal de eliminación y empezar la cuenta regresiva
+  selectTab(tab: string) {
+    this.activeTab = tab;
+  }
+
   toggleDelete(user: any): void {
     this.selectedUser = user;
     this.showDeleteModal = true;
-    this.countdown = 5;  // Restablece la cuenta regresiva
-
+    this.countdown = 5;
     this.startCountdown();
   }
 
-  // Inicia la cuenta regresiva
   startCountdown(): void {
     this.countdownInterval = setInterval(() => {
       if (this.countdown > 0) {
         this.countdown--;
       } else {
-        clearInterval(this.countdownInterval);  // Detener el intervalo cuando llegue a 0
+        clearInterval(this.countdownInterval);
       }
     }, 1000);
   }
 
-  // Confirmar eliminación del usuario
   confirmDelete(): void {
-    console.log('Usuario eliminado:', this.selectedUser);
-    this.users = this.users.filter(user => user !== this.selectedUser);  // Eliminar el usuario de la lista
+    this.users = this.users.filter(user => user !== this.selectedUser);
     this.showDeleteModal = false;
     this.selectedUser = null;
-    clearInterval(this.countdownInterval);  // Limpiar el intervalo si no se ha eliminado
+    clearInterval(this.countdownInterval);
   }
 
-  // Cancelar la acción de eliminar
   cancelDelete(): void {
-    console.log('Eliminación cancelada');
     this.selectedUser = null;
     this.showDeleteModal = false;
-    clearInterval(this.countdownInterval);  // Limpiar el intervalo
+    clearInterval(this.countdownInterval);
   }
 
   toggleBlocked(user: any): void {
-    console.log('Usuario seleccionado para bloquear:', user);
     if (user.estado === 'Bloqueado') {
-      // Si el usuario está bloqueado, lo desbloqueas directamente.
       user.estado = 'Validado'; 
     } else {
-      // Si no está bloqueado, muestras el modal para confirmación.
       this.selectedUser = user;
       this.showBlockModal = true;
-      console.log('Modal activado, usuario a bloquear:', this.selectedUser);
     }
   }
-  
+
   confirmBlock(): void {
-      console.log('Confirmación de bloqueo para:', this.selectedUser);
-      if (this.selectedUser) {
-          this.selectedUser.estado = 'Bloqueado';
-          this.showBlockModal = false;
-          this.selectedUser = null;
-      }
+    if (this.selectedUser) {
+      this.selectedUser.estado = 'Bloqueado';
+      this.showBlockModal = false;
+      this.selectedUser = null;
+    }
   }
 
   cancelBlock(): void {
-      console.log('Bloqueo cancelado');
-      this.selectedUser = null;
-      this.showBlockModal = false;
+    this.selectedUser = null;
+    this.showBlockModal = false;
   }
-
 
   toggleValidation(user: any): void {
     if (user.estado === 'No validado') {
       this.selectedUser = user;
-      this.showValiModal = true;  // Muestra el modal de confirmación
+      this.showValiModal = true;
     }
   }
 
   confirmValidation(): void {
     if (this.selectedUser) {
-      this.selectedUser.estado = 'Validado';  // Cambia el estado a 'Validado'
-      console.log(`Usuario validado: ${this.selectedUser.firstName} ${this.selectedUser.lastName}`);
-      this.showValiModal = false;  // Cierra el modal
-      this.selectedUser = null;  // Limpia la selección
+      this.selectedUser.estado = 'Validado';
+      this.showValiModal = false;
+      this.selectedUser = null;
     }
   }
 
   cancelValidation(): void {
     this.selectedUser = null;
     this.showValiModal = false;
-}
-  
-  // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
+  }
+
   filteredUsers() {
     return this.users
       .filter(user => {
-        // Filtrado por rol (administrador o empleado)
         if (this.filterBy === 'admin' && !user.isAdmin) return false;
         if (this.filterBy === 'employee' && user.isAdmin) return false;
-  
-        // Filtrado por estado (bloqueado, validado, no validado)
         if (this.filterBy === 'blocked' && user.estado !== 'Bloqueado') return false;
         if (this.filterBy === 'validated' && user.estado !== 'Validado') return false;
         if (this.filterBy === 'notValidated' && user.estado !== 'No validado') return false;
-  
         return true;
       })
       .filter(user => {
-        // Filtrado por campo de búsqueda
         const searchQueryLower = this.searchQuery.toLowerCase();
         if (this.searchBy === 'name') {
           return user.firstName.toLowerCase().includes(searchQueryLower);
         } else if (this.searchBy === 'email') {
           return user.email.toLowerCase().includes(searchQueryLower);
-        } else if (this.searchBy === 'department') {
-          return user.department.toLowerCase().includes(searchQueryLower);
         }
         return false;
       });
   }
 
-  // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
@@ -305,5 +282,98 @@ export class VentanaPrincipalComponent implements OnInit {
       this.router.navigate([route]);
     }, 1000);
   }
-  
+  /*<!-- AÑADIDO NUEVO BORRAR LUEGO-->*/
+  turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
+    {
+      inicio: this.convertirAHorasEnMinutos("07", "00"),
+      fin: this.convertirAHorasEnMinutos("15", "00"),
+      texto: "Turno horario: 07:00 - 15:00"
+    },
+    {
+      inicio: this.convertirAHorasEnMinutos("15", "00"),
+      fin: this.convertirAHorasEnMinutos("23", "00"),
+      texto: "Turno horario: 15:00 - 23:00"
+    }
+  ];
+
+  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')); 
+  minutos: string[] = ['00', '15', '30', '45'];
+
+  horaInicioHora: string | null = null;
+  horaInicioMinuto: string | null = null;
+  horaFinHora: string | null = null;
+  horaFinMinuto: string | null = null;
+
+  showDeleteModalTurn: boolean = false;
+  turnoAEliminar: number | null = null;  // Añade esta propiedad aquí
+
+
+  addTurnoHorario() {
+    if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
+      alert("Por favor, selecciona tanto la hora de inicio como la de fin.");
+      return;
+    }
+
+    const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
+    const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
+
+    if (this.haySuperposicion(inicio, fin)) {
+      alert("El turno se superpone con otro existente. Por favor, elige otro intervalo.");
+      return;
+    }
+
+    // Agregar el turno si no hay superposición
+    const textoTurno = `Turno horario: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`;
+    this.turnosHorarios.push({ inicio, fin, texto: textoTurno });
+
+    // Reiniciar las selecciones
+    this.horaInicioHora = null;
+    this.horaInicioMinuto = null;
+    this.horaFinHora = null;
+    this.horaFinMinuto = null;
+  }
+
+  // Función para convertir horas y minutos en minutos desde el inicio del día
+  convertirAHorasEnMinutos(hora: string, minuto: string): number {
+    return parseInt(hora, 10) * 60 + parseInt(minuto, 10);
+  }
+
+  // Función para verificar superposición de turnos
+  haySuperposicion(inicio: number, fin: number): boolean {
+    return this.turnosHorarios.some(turno => 
+      (inicio < turno.fin && fin > turno.inicio)
+    );
+  }
+
+
+  removeTurnoHorario(index: number) {
+    if (confirm(`¿Estás seguro de que quieres eliminar el turno: ${this.turnosHorarios[index].texto}?`)) {
+      this.turnosHorarios.splice(index, 1);
+    }
+  }
+
+
+
+  // Método para abrir el modal de confirmación
+  openDeleteModal(index: number) {
+    this.showDeleteModalTurn = true;
+    this.turnoAEliminar = index;
+  }
+
+
+  // Confirmar eliminación del turno
+  confirmDeleteTurn() {
+    if (this.turnoAEliminar !== null) {
+      this.turnosHorarios.splice(this.turnoAEliminar, 1);
+      this.turnoAEliminar = null;
+    }
+    this.showDeleteModalTurn = false;
+  }
+
+  // Cancelar eliminación
+  cancelDeleteTurn() {
+    this.turnoAEliminar = null;
+    this.showDeleteModalTurn = false;
+  }
+
 }
