@@ -1,6 +1,19 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<div class="ventana-principal">
+
+
+<!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
+<div class="tabs-container">
+  <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
+  <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias / turnos horarios</button>
+</div>
+
+<!-- Contenido de las pestañas -->
+<div class="tab-content">
+
+  <!-- Contenido pestaña Usuarios-->
+  <div *ngIf="activeTab === 'tab1'">
+    <div class="ventana-principal">
 
   <!-- Vista para el administrador -->
   <div *ngIf="isAdmin">
@@ -171,10 +184,142 @@
       <span>© 2024 ReuneMe, LLC</span>
     </div>
   </div>
+    <div *ngIf="!isAdmin">
+        <!-- Vista para el usuario -->
+        <h2>Panel de Usuario</h2>
+        <!-- Aquí pones el contenido exclusivo para el usuario -->
+    </div>
+    </div>
+  </div>
 
-  <div *ngIf="!isAdmin">
-    <!-- Vista para el usuario -->
-    <h2>Panel de Usuario</h2>
-    <!-- Aquí pones el contenido exclusivo para el usuario -->
+  <!-- Contenido pestaña Ausencias / Turnos horarios-->
+  <div *ngIf="activeTab === 'tab2'">
+    <div class="ventana-principal">
+  
+  <!-- Vista para el administrador -->
+  <div *ngIf="isAdmin">
+  
+    <div class="admin-controls">
+      <button class="Btn" (click)="navigateTo('/registro-admin')">
+        <div class="sign">
+          <svg viewBox="0 0 512 512"><path d="M256 112c17.7 0 32 14.3 32 32v80h80c17.7 0 32 14.3 32 32s-14.3 32-32 32h-80v80c0 17.7-14.3 32-32 32s-32-14.3-32-32v-80h-80c-17.7 0-32-14.3-32-32s14.3-32 32-32h80v-80c0-17.7 14.3-32 32-32z"></path></svg>
+        </div>
+        <div class="text">Añadir Administrador</div>
+      </button>
+    </div>
+    <app-loader *ngIf="isLoading"></app-loader>
+    <div class="user-profile">
+      <img [src]="loggedUser.profilePicture" alt="Foto de perfil" class="profile-picture">
+      <span class="user-fullname">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</span>
+      <span class="user-edit-button" (click)="navigateTo('/perfil-admin')" (keydown)="navigateTo('/perfil-admin')">Visitar perfil</span>
+    </div>
+
+    <app-loader *ngIf="isLoading"></app-loader>
+    
+    
+
+    <!-- Header de la página de administrador -->
+    <div class="header">
+      <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
+    </div>
+    <h2>Panel de Administrador</h2>
+
+    <div class="calend-ausen-container">
+      <div class="ausencias-contain">
+        <h3>Consulta de ausencias</h3>
+
+        <span class="column-header">Logica de las ausencias</span>
+      </div>
+    
+      <div class="calendar-contain">
+        <h2>Turnos horarios</h2>
+       <!-- AÑADIDO NUEVO BORRAR LUEGO-->
+  <div class="turnos-horarios-container">
+  <h3>Lista de Turnos Horarios</h3>
+  <ul>
+    <li *ngFor="let turno of turnosHorarios; let i = index" class="turno-item">
+      <span>{{ turno.texto }}</span>
+      <button (click)="openDeleteModal(i)" class="eliminar-btn">Eliminar turno</button>
+    </li>
+  </ul>
+
+
+
+
+  <!-- Modal de confirmación personalizado -->
+  <div class="modal-overlay" *ngIf="showDeleteModalTurn">
+    <div class="modalT">
+      <p>¿Estás seguro de que deseas eliminar este turno?</p>
+      <div class="modal-actionsT">
+        <button (click)="confirmDeleteTurn()" class="EliminarTurno-btn">Eliminar</button>
+        <button (click)="cancelDeleteTurn()" class="cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="selectores-horas">
+    <label for="horaInicio">Hora de inicio:</label>
+    <select id="horaInicioHora" [(ngModel)]="horaInicioHora">
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
+    :
+    <select id="horaInicioMinuto" [(ngModel)]="horaInicioMinuto">
+      <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+    </select>
+
+    <label for="horaFin">Hora de fin:</label>
+    <select id="horaFinHora" [(ngModel)]="horaFinHora">
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
+    :
+    <select id="horaFinMinuto" [(ngModel)]="horaFinMinuto">
+      <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+    </select>
+  </div>
+
+  <button (click)="addTurnoHorario()">Añadir turno horario</button>
+</div>
+      </div>
+    </div>
+    
+
+    <div class="back-button-container">
+      <button class="back-button" (click)="navigateTo('/doblefactor')">Volver</button>
+  </div>
+
+  <app-loader *ngIf="isLoading"></app-loader>
+
+    <!-- Footer de la página -->
+    <footer class="footer">
+      <div class="footer-content">
+        <ul class="footer-links">
+          <li><a href="#">Condiciones de Uso</a></li>
+          <li><a href="#">Política de Privacidad</a></li>
+          <li><a href="#">Consentimiento de Cookies</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <div class="footer-info">
+      <span>© 2024 ReuneMe, LLC</span>
+    </div>
+  </div>
+
+    <div *ngIf="!isAdmin">
+        <!-- Vista para el usuario -->
+        <h2>Panel de Usuario</h2>
+        <!-- Aquí pones el contenido exclusivo para el usuario -->
+    </div>
+    </div>
   </div>
 </div>
+
+
+
+
+
+
+
