@@ -835,13 +835,138 @@ h2 {
 
 
 
+  /* Esto es lo que meto ahora */
+
+  /* Contenedor principal de la lista de turnos horarios */
+.turnos-horarios-container {
+    background-color: #2e2e2e;
+    padding: 20px;
+    border-radius: 8px;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    margin-top: 20px;
+}
+
+/* Estilo de la lista de turnos horarios */
+.turnos-horarios-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.turnos-horarios-container li {
+    padding: 8px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #444;
+}
+
+/* Estilo del botón "Añadir turno horario" */
+.turnos-horarios-container button {
+    background-color: #5fc67d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.turnos-horarios-container button:hover {
+    background-color: #45b06a;
+}
+
+/* Estilo de los botones de cada turno horario */
+.turnos-horarios-container ul li button {
+    background: none;
+    color: #ffffff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.turnos-horarios-container ul li button:hover {
+    color: #ff4d4d; /* Cambia de color en hover para indicar que se puede eliminar */
+}
+/* Estilo de los selectores de horas */
+ 
+.selectores-horas {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.selectores-horas label {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.selectores-horas select {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #525252;
+    color: white;
+    font-size: 14px;
+}
+.turno-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
 
 
+  .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 
+.modalT {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #ffffff;
+  width: 280px;
+}
 
+.modal p {
+  margin-bottom: 20px;
+}
 
+.modal-actionsT {
+  display: flex;
+  justify-content: space-around;
+}
 
+.EliminarTurno-btn {
+  /* Estilos personalizados para el botón EliminarTurno */
+  background-color: #d9534f;
+  color: rgb(238, 9, 9);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-
-
+.EliminarTurno:hover {
+  background-color: #c9302c;
+}
 

@@ -229,14 +229,59 @@
         <h3>Consulta de ausencias</h3>
 
         <span class="column-header">Logica de las ausencias</span>
-
-        <!-- Aqui mete todo lo de las ausencias -->
       </div>
     
       <div class="calendar-contain">
         <h2>Turnos horarios</h2>
+       <!-- AÑADIDO NUEVO BORRAR LUEGO-->
+  <div class="turnos-horarios-container">
+  <h3>Lista de Turnos Horarios</h3>
+  <ul>
+    <li *ngFor="let turno of turnosHorarios; let i = index" class="turno-item">
+      <span>{{ turno.texto }}</span>
+      <button (click)="openDeleteModal(i)" class="eliminar-btn">Eliminar turno</button>
+    </li>
+  </ul>
 
-        <span class="column-header">Logica de los turnos horarios el calendario</span>
+
+
+
+  <!-- Modal de confirmación personalizado -->
+  <div class="modal-overlay" *ngIf="showDeleteModalTurn">
+    <div class="modalT">
+      <p>¿Estás seguro de que deseas eliminar este turno?</p>
+      <div class="modal-actionsT">
+        <button (click)="confirmDeleteTurn()" class="EliminarTurno-btn">Eliminar</button>
+        <button (click)="cancelDeleteTurn()" class="cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="selectores-horas">
+    <label for="horaInicio">Hora de inicio:</label>
+    <select id="horaInicioHora" [(ngModel)]="horaInicioHora">
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
+    :
+    <select id="horaInicioMinuto" [(ngModel)]="horaInicioMinuto">
+      <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+    </select>
+
+    <label for="horaFin">Hora de fin:</label>
+    <select id="horaFinHora" [(ngModel)]="horaFinHora">
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
+    :
+    <select id="horaFinMinuto" [(ngModel)]="horaFinMinuto">
+      <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+    </select>
+  </div>
+
+  <button (click)="addTurnoHorario()">Añadir turno horario</button>
+</div>
       </div>
     </div>
     
