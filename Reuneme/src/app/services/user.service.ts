@@ -7,28 +7,28 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private client: HttpClient) {}
+    constructor(private client: HttpClient) { }
 
     // Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.post(`${httpUrl}users/login`, user, { headers, responseType: 'text' });        
+        return this.client.post(`${httpUrl}users/login`, user, { headers, responseType: 'text' });
     }
 
     // Método register con headers
     register(
-        email: string, 
-        password1: string, 
+        email: string,
+        password1: string,
         password2: string,
-        nombre: string, 
-        apellido: string, 
-        apellido2: string, 
-        centro: string, 
-        departamento: string, 
+        nombre: string,
+        apellido: string,
+        apellido2: string,
+        centro: string,
+        departamento: string,
         perfilLaboral: string,
-        fechaAlta: string, 
-        bloqueado: boolean, 
-        verificado: boolean 
+        fechaAlta: string,
+        bloqueado: boolean,
+        verificado: boolean
     ): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const info = {
@@ -45,19 +45,19 @@ export class UserService {
             bloqueado: bloqueado,
             verificado: verificado
         };
-        
+
         return this.client.post(`${httpUrl}users/register`, info, { headers });
     }
-    
+
     // Método registerAdmin con headers
     registerAdmin(
-        nombre: string, 
-        apellido1: string, 
+        nombre: string,
+        apellido1: string,
         apellido2: string,
-        email: string, 
-        centro: string, 
-        password1: string, 
-        password2: string, 
+        email: string,
+        centro: string,
+        password1: string,
+        password2: string,
         interno: boolean
     ): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -71,7 +71,7 @@ export class UserService {
             pwd2: password2,
             interno: interno
         };
-    
+
         return this.client.post(`${httpUrl}admins/register`, info, { headers, responseType: 'text' });
     }
     forgotPassword(email: string): Observable<any> {
@@ -94,5 +94,18 @@ export class UserService {
         };
         return this.client.post(`${httpUrl}password/reset`, body, { headers, responseType: 'text' });
     }
-    
+
+    // Método para actualizar un usuario existente basado en el email
+    updateUserByEmail(email: string, userData: any): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
+      }
+
+    // Método para obtener un usuario específico basado en el email
+    getUserByEmail(email: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.client.get(`${httpUrl}users/${email}`, { headers });
+      }
+
+
 }

@@ -1,0 +1,184 @@
+/* Contenedor principal de la edición */
+.edit-container {
+    position: relative;
+    min-height: 105vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+}
+
+/* Encabezado de la página */
+.header {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to right, #175be2, #06c6f3);
+    color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+
+/* Caja de registro/edición */
+.register-box {
+    width: 1000px;
+    padding: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    text-align: center;
+    z-index: 1;
+}
+
+.register-box h2 {
+    margin: 0 0 20px;
+    padding: 0;
+    color: #ffffff;
+}
+
+/* Estilos para el formulario */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+}
+
+.textbox {
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.textbox label {
+    position: absolute;
+    top: 70%;
+    left: 10px;
+    transform: translateY(-90%);
+    font-size: 16px;
+    color: #f5f5f5;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f5f5f5;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.textbox input:focus ~ label,
+.textbox input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: #00eeff;
+}
+
+.textbox input:focus {
+    border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 10px #00eeff;
+}
+
+.textbox input::placeholder {
+    color: transparent;
+}
+
+/* Botón de envío */
+.btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Botón para volver */
+.back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Mensaje para campos obligatorios */
+.required-info {
+    font-size: 12px;
+    color: #d9534f;
+}
+
+/* Diferentes estilos para el Administrador y el Usuario */
+.form-grid.admin-view .textbox input {
+    border: 1px solid #2dc38c; /* Borde verde para el administrador */
+}
+
+.form-grid.user-view .textbox input {
+    border: 1px solid #f5f5f5; /* Borde blanco para el usuario estándar */
+}
+
+/* Ajustes para campos deshabilitados (solo para administrador) */
+.textbox input:disabled {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #b3b3b3;
+    cursor: not-allowed;
+}
+
+/* Estilos adicionales para la vista de perfil de usuario */
+.user-password-container {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-password-container label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #f5f5f5;
+}

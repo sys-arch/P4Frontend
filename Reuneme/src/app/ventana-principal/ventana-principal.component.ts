@@ -39,6 +39,7 @@ export class VentanaPrincipalComponent implements OnInit {
 
   users = [
     {
+      id: '1',
       firstName: 'Aaron',
       lastName: 'Smith',
       email: 'aaron.smith@example.com',
@@ -282,6 +283,16 @@ export class VentanaPrincipalComponent implements OnInit {
       this.router.navigate([route]);
     }, 1000);
   }
+
+  // Método para navegar a la vista de edición de usuario
+  editUser(userEmail: string): void {
+    if (userEmail) {
+      this.router.navigate(['/edicion-usuario', userEmail]);
+    } else {
+      console.error('El correo electrónico del usuario no está definido');
+    }
+  }
+  
   /*<!-- AÑADIDO NUEVO BORRAR LUEGO-->*/
   turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
     {
@@ -377,3 +388,4 @@ export class VentanaPrincipalComponent implements OnInit {
   }
 
 }
+
