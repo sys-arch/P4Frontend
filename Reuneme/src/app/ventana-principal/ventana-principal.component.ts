@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { FooterComponent } from '../shared/footer/footer.component';
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })

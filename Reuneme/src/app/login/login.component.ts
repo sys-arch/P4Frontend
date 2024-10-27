@@ -4,13 +4,15 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, LoaderComponent, FooterComponent],
   providers: [UserService]
 })
 export class LoginComponent {
