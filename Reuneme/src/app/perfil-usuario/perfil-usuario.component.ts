@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
@@ -8,15 +8,14 @@ import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 
-
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent, ContrasenaOlvidadaComponent] ,// Importaciones necesarias para el uso de ngModel
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent, ContrasenaOlvidadaComponent],
   templateUrl: './perfil-usuario.component.html',
-  styleUrl: './perfil-usuario.component.css'
+  styleUrls: ['./perfil-usuario.component.css']
 })
-export class PerfilUsuarioComponent {
+export class PerfilUsuarioComponent implements OnInit {
 
   user = {
     nombre: 'Nombre de usuario',
@@ -37,8 +36,33 @@ export class PerfilUsuarioComponent {
   ) {}
   
   ngOnInit(): void {
-    // Método llamado al inicializar el componente
-    // Si no tienes lógica específica aquí, lo puedes dejar vacío
+    const token = localStorage.getItem('token') || '';
+    const email = localStorage.getItem('email') || '';
+
+    // Llamada al servicio para obtener la información del usuario
+    if (token && email) {
+      this.getUserInfo(email, token);
+    }
+  }
+
+  getUserInfo(email: string, token: string): void {
+    this.isLoading = true;
+    this.userService.getUserInfo(email, token).subscribe(
+      (userInfo: any) => {
+        this.user.nombre = userInfo.nombre;
+        this.user.apellidos = `${userInfo.apellido1} ${userInfo.apellido2}`;
+        this.user.correo = userInfo.email;
+        this.user.depart = userInfo.departamento || 'N/A';
+        this.user.centroTrabajo = userInfo.centro || 'N/A';
+        this.user.alta = userInfo.fechaalta || 'N/A';
+        this.user.perfil = userInfo.perfil || 'N/A';
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error al obtener la información del usuario:', error);
+        this.isLoading = false;
+      }
+    );
   }
 
   onFileSelected(event: Event): void {

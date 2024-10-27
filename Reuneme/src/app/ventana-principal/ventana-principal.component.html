@@ -3,7 +3,7 @@
 
 <app-header></app-header>
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
-<div class="tabs-container">
+<div *ngIf="isAdmin" class="tabs-container">
   <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
   <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias / turnos horarios</button>
 </div>
@@ -173,7 +173,7 @@
     <div class="user-profile">
       <img [src]="loggedUser.profilePicture" alt="Foto de perfil" class="profile-picture">
       <span class="user-fullname">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</span>
-      <span class="user-edit-button" (click)="navigateTo('/perfil-admin')" (keydown)="navigateTo('/perfil-admin')">Visitar perfil</span>
+      <span class="user-edit-button" (click)="navigateTo('/perfil-usuario')" (keydown)="navigateTo('/perfil-usuario')">Visitar perfil</span>
     </div>
       <!-- Vista para el usuario -->
       <h2>Panel de Usuario</h2>
@@ -207,12 +207,6 @@
 
     <app-loader *ngIf="isLoading"></app-loader>
     
-    
-
-    <!-- Header de la página de administrador -->
-    <div class="header">
-      <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-    </div>
     <h2>Panel de Administrador</h2>
 
     <div class="calend-ausen-container">
