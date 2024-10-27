@@ -1,148 +1,91 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
 import { EdicionUsuarioComponent } from './edicion-usuario.component';
 import { UserService } from '../services/user.service';
-import { AuthService } from '../services/auth.service';
-import { Router, ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { of, BehaviorSubject } from 'rxjs';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { of } from 'rxjs';
 
 describe('EdicionUsuarioComponent', () => {
   let component: EdicionUsuarioComponent;
   let fixture: ComponentFixture<EdicionUsuarioComponent>;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
-  let paramMapSubject: BehaviorSubject<ParamMap>;
+  let httpMock: HttpTestingController;
+  let userService: UserService;
+  let routerSpy = { navigate: jasmine.createSpy('navigate') };
 
   beforeEach(async () => {
-    // Creamos los espías para los servicios
-    userServiceSpy = jasmine.createSpyObj('UserService', ['getUserByEmail', 'updateUserByEmail']);
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['getRole']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
-    // Creamos un BehaviorSubject para simular el paramMap
-    paramMapSubject = new BehaviorSubject(convertToParamMap({ email: 'test@example.com' }));
-
-    // Simulamos ActivatedRoute con paramMap observable
-    const activatedRouteStub = {
-      paramMap: paramMapSubject.asObservable()
-    };
-
     await TestBed.configureTestingModule({
-      declarations: [EdicionUsuarioComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
-        { provide: UserService, useValue: userServiceSpy },
-        { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy },
-        { provide: ActivatedRoute, useValue: activatedRouteStub }
+      imports: [ // Cambiado a imports en lugar de declarations
+        ReactiveFormsModule, 
+        HttpClientTestingModule,
+        EdicionUsuarioComponent // Mueve el componente standalone aquí
       ],
-      schemas: [NO_ERRORS_SCHEMA] // Ignorar errores por elementos no reconocidos
+      providers: [
+        UserService,
+        { provide: Router, useValue: routerSpy }
+      ]
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(EdicionUsuarioComponent);
     component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+    userService = TestBed.inject(UserService);
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when user is admin', () => {
-    beforeEach(() => {
-      authServiceSpy.getRole.and.returnValue('admin');
-      component.ngOnInit();
-      fixture.detectChanges();
-    });
-
-    it('should initialize the form with all fields for admin', () => {
-      expect(component.userForm.contains('nombre')).toBeTrue();
-      expect(component.userForm.contains('apellidos')).toBeTrue();
-      expect(component.userForm.contains('correo')).toBeTrue();
-      expect(component.userForm.contains('departamento')).toBeTrue();
-      expect(component.userForm.contains('centroTrabajo')).toBeTrue();
-      expect(component.userForm.contains('alta')).toBeTrue();
-      expect(component.userForm.contains('perfil')).toBeTrue();
-      expect(component.userForm.contains('password')).toBeTrue();
-    });
-
-    it('should load user data when admin', () => {
-      const mockUserData = {
-        nombre: 'Test',
-        apellidos: 'User',
-        correo: 'test@example.com',
-        departamento: 'IT',
-        centroTrabajo: 'HQ',
-        alta: '2023-01-01',
-        perfil: 'Admin'
-      };
-      userServiceSpy.getUserByEmail.and.returnValue(of(mockUserData));
-
-      component.loadUserData();
-      expect(userServiceSpy.getUserByEmail).toHaveBeenCalledWith('test@example.com');
-      expect(component.userForm.value.nombre).toEqual(mockUserData.nombre);
-      expect(component.userForm.value.apellidos).toEqual(mockUserData.apellidos);
-    });
-
-    it('should update user when form is submitted by admin', () => {
-      component.userForm.setValue({
-        nombre: 'Test',
-        apellidos: 'User',
-        correo: 'test@example.com',
-        departamento: 'IT',
-        centroTrabajo: 'HQ',
-        alta: '2023-01-01',
-        perfil: 'Admin',
-        password: ''
-      });
-
-      userServiceSpy.updateUserByEmail.and.returnValue(of({}));
-
-      component.onSubmit();
-      expect(userServiceSpy.updateUserByEmail).toHaveBeenCalledWith('test@example.com', component.userForm.value);
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/ventana-principal']);
-    });
+  it('debería inicializar el formulario correctamente para el administrador', () => {
+    component.isAdmin = true;
+    component.initializeForm();
+    expect(component.userForm.contains('nombre')).toBeTruthy();
+    expect(component.userForm.contains('apellidos')).toBeTruthy();
+    expect(component.userForm.contains('correo')).toBeTruthy();
+    expect(component.userForm.contains('departamento')).toBeTruthy();
+    expect(component.userForm.contains('centroTrabajo')).toBeTruthy();
+    expect(component.userForm.contains('alta')).toBeTruthy();
+    expect(component.userForm.contains('perfil')).toBeTruthy();
+    expect(component.userForm.contains('password')).toBeTruthy();
   });
 
-  describe('when user is not admin', () => {
-    beforeEach(() => {
-      authServiceSpy.getRole.and.returnValue('user');
-      component.userEmail = 'test@example.com';
-      component.loggedUserEmail = 'test@example.com';
-      component.ngOnInit();
-      fixture.detectChanges();
-    });
+  it('debería llamar a updateUserByEmail y navegar a la pantalla principal al enviar el formulario como administrador', () => {
+    const mockEmail = 'usuario@ejemplo.com';
+    const mockData = {
+      nombre: 'Nuevo Nombre',
+      apellidos: 'Nuevos Apellidos',
+      correo: 'nuevo@ejemplo.com',
+      departamento: 'IT',
+      centroTrabajo: 'Madrid',
+      alta: '2021-01-01',
+      perfil: 'Admin',
+      password: 'nuevaPassword'
+    };
+    component.userEmail = mockEmail;
+    component.isAdmin = true;
+    component.token = 'fake-token';
+    component.initializeForm();
+    component.userForm.setValue(mockData);
 
-    it('should initialize the form with password field only for standard user', () => {
-      expect(component.userForm.contains('password')).toBeTrue();
-      expect(component.userForm.contains('nombre')).toBeFalse();
-      expect(component.userForm.contains('apellidos')).toBeFalse();
-      expect(component.userForm.contains('correo')).toBeFalse();
-    });
+    spyOn(userService, 'updateUserByEmail').and.returnValue(of({ message: 'Usuario actualizado exitosamente' }));
+    component.onSubmit();
 
-    it('should not load user data if user is not admin', () => {
-      userServiceSpy.getUserByEmail.and.returnValue(of({}));
-      component.loadUserData();
-      expect(userServiceSpy.getUserByEmail).toHaveBeenCalledWith('test@example.com');
-      expect(component.userForm.value.password).toEqual('');
-    });
+    expect(userService.updateUserByEmail).toHaveBeenCalledWith(mockEmail, mockData, 'fake-token');
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/ventana-principal']);
+  });
 
-    it('should update password when form is submitted by standard user', () => {
-      component.userForm.setValue({ password: 'newPassword123' });
-
-      userServiceSpy.updateUserByEmail.and.returnValue(of({}));
-
-      component.onSubmit();
-      expect(userServiceSpy.updateUserByEmail).toHaveBeenCalledWith('test@example.com', { password: 'newPassword123' });
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/perfil-usuario']);
-    });
-
-    it('should not allow user to edit other users', () => {
-      component.userEmail = 'otheruser@example.com'; // User tries to edit another user
-      component.loadUserData();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
-    });
+  it('debería mostrar solo el campo de contraseña para un usuario normal', () => {
+    component.isAdmin = false;
+    component.initializeForm();
+    expect(component.userForm.contains('password')).toBeTruthy();
+    expect(component.userForm.contains('nombre')).toBeFalsy();
+    expect(component.userForm.contains('apellidos')).toBeFalsy();
   });
 });

@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { HeaderComponent } from '../shared/header/header.component';
+import { FooterComponent } from '../shared/footer/footer.component'; // Importa FooterComponent
 
 @Component({
   selector: 'app-edicion-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent], // Agrega FooterComponent aquí
   templateUrl: './edicion-usuario.component.html',
   styleUrls: ['./edicion-usuario.component.css'],
 })
@@ -17,6 +19,8 @@ export class EdicionUsuarioComponent implements OnInit {
   isAdmin: boolean = false;
   loggedUserEmail: string = '';
   token: string = ''; // Token para autenticación
+  passwordFieldType: string = 'password'; // Inicialmente, la contraseña está oculta
+  profilePicture: string | ArrayBuffer | null = null; // Nueva propiedad para la imagen de perfil
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,6 +40,11 @@ export class EdicionUsuarioComponent implements OnInit {
 
     this.initializeForm();
     this.loadUserData();
+  }
+
+  // Método para alternar la visibilidad de la contraseña
+  togglePasswordVisibility(): void {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
 
   initializeForm(): void {
@@ -63,6 +72,7 @@ export class EdicionUsuarioComponent implements OnInit {
         (data) => {
           if (this.isAdmin) {
             this.userForm.patchValue(data);
+            this.profilePicture = data.profilePicture || 'assets/UsuarioSinFoto.png';
           }
         },
         (error) => {
@@ -105,10 +115,10 @@ export class EdicionUsuarioComponent implements OnInit {
     } else {
         console.error('Formulario no válido');
     }
-}
-
+  }
 
   navigateToUserList(): void {
     this.router.navigate(['/ventana-principal']);
   }
 }
+
