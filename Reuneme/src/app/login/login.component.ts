@@ -4,13 +4,16 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, LoaderComponent, FooterComponent, HeaderComponent],
   providers: [UserService]
 })
 export class LoginComponent {
@@ -65,7 +68,7 @@ export class LoginComponent {
       // Crear el objeto `user` con las credenciales del usuario
       const user = {
         email: this.username,
-        contrasena: this.password
+        pwd: this.password
       };
   
       // Mostrar los datos que se van a enviar al backend
@@ -74,9 +77,11 @@ export class LoginComponent {
       // Llamar al servicio `login` pasando el objeto `user`
       this.userService.login(user).subscribe(
         (response) => {
-          console.log('Respuesta del servidor:', response); // Mostrar la respuesta en la consola
-          localStorage.setItem('token', response.token); // Guarda el token recibido en localStorage
-          this.router.navigate(['/ventana-principal'], { state: { token: response } });
+          console.log('Respuesta del servidor:', response);
+          // Guarda el token y el email en localStorage
+          localStorage.setItem('token', response);
+          localStorage.setItem('email', user.email);
+          this.router.navigate(['/ventana-principal']);
         },
         (error) => {
           console.error('Error en el inicio de sesión:', error);

@@ -2,13 +2,17 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../services/user.service'; // Importa el 
+import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
 
 
 @Component({
   selector: 'app-reset-contrasena',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, FooterComponent, HeaderComponent],
   templateUrl: './reset-contrasena.component.html',
   styleUrls: ['./reset-contrasena.component.css']
 })

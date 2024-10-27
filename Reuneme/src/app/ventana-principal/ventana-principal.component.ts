@@ -3,12 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
@@ -18,6 +23,7 @@ export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
   isAdmin: boolean = true;
   token: string = '';
+  myemail: string = '';
   isLoading: boolean = false;
   searchBy: string = 'name';
   searchQuery: string = '';
@@ -67,117 +73,41 @@ export class VentanaPrincipalComponent implements OnInit {
       profilePicture: 'assets/images/test-perfil2.jpg',
       estado: 'No validado'
     },
-    {
-      firstName: 'Luis',
-      lastName: 'Fernández',
-      email: 'luis.fernandez@example.com',
-      department: 'Marketing',
-      center: 'Centro Este',
-      joiningDate: '20/01/2022',
-      jobTitle: 'Especialista',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Carlos',
-      lastName: 'Martínez',
-      email: 'carlos.martinez@example.com',
-      department: 'Ventas',
-      center: 'Centro Oeste',
-      joiningDate: '10/05/2020',
-      jobTitle: 'Vendedor',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Elena',
-      lastName: 'Ruiz',
-      email: 'elena.ruiz@example.com',
-      department: 'Recursos Humanos',
-      center: 'Centro Norte',
-      joiningDate: '25/11/2019',
-      jobTitle: 'Gerente de RRHH',
-      isAdmin: true,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Pedro',
-      lastName: 'López',
-      email: 'pedro.lopez@example.com',
-      department: 'Tecnología',
-      center: 'Centro Sur',
-      joiningDate: '12/07/2021',
-      jobTitle: 'Soporte Técnico',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Ana',
-      lastName: 'Hernández',
-      email: 'ana.hernandez@example.com',
-      department: 'Finanzas',
-      center: 'Centro Este',
-      joiningDate: '05/09/2020',
-      jobTitle: 'Contadora',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'No validado'
-    },
-    {
-      firstName: 'David',
-      lastName: 'García',
-      email: 'david.garcia@example.com',
-      department: 'Operaciones',
-      center: 'Centro Oeste',
-      joiningDate: '01/01/2022',
-      jobTitle: 'Gerente de Operaciones',
-      isAdmin: true,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Sofia',
-      lastName: 'Torres',
-      email: 'sofia.torres@example.com',
-      department: 'Ventas',
-      center: 'Centro Norte',
-      joiningDate: '15/03/2021',
-      jobTitle: 'Ejecutiva de Ventas',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Miguel',
-      lastName: 'Ramírez',
-      email: 'miguel.ramirez@example.com',
-      department: 'Tecnología',
-      center: 'Centro Sur',
-      joiningDate: '18/12/2019',
-      jobTitle: 'Desarrollador',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    }
+  
   ];
   
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService // Inyecta el servicio UserService
+  ) {}
 
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.token = navigation.extras.state['token'];
-      if (this.token.startsWith('a-')) {
-        this.isAdmin = true;
-      } else if (this.token.startsWith('e-')) {
-        this.isAdmin = false;
-      }
+    this.token = localStorage.getItem('token') || '';
+    this.myemail = localStorage.getItem('email') || '';
+
+    // Determina si el usuario es administrador o empleado basado en el prefijo del token
+    if (this.token.startsWith('a-')) {
+      this.isAdmin = true;
+      this.loggedUser.role = 'admin';
+      this.loadAllUsers(); // Cargar todos los usuarios si es administrador
+    } else if (this.token.startsWith('e-')) {
+      this.isAdmin = false;
+      this.loggedUser.role = 'employee';
     }
+
+    // Obtener la información del usuario logueado
+    this.userService.getUserInfo(this.myemail, this.token).subscribe(
+      (userInfo: any) => {
+        this.loggedUser.firstName = userInfo.nombre;
+        this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+      },
+      (error) => {
+        console.error('Error al obtener la información del usuario:', error);
+      }
+    );
   }
+
+  
 
   selectTab(tab: string) {
     this.activeTab = tab;
@@ -254,6 +184,41 @@ export class VentanaPrincipalComponent implements OnInit {
     this.selectedUser = null;
     this.showValiModal = false;
   }
+  loadAllUsers(): void {
+    this.isLoading = true;
+    this.userService.getAllEmails(this.token).subscribe(
+      (emails: string[]) => {
+        emails.forEach((email) => {
+          this.userService.getUserInfo(email, this.token).subscribe(
+            (userInfo: any) => {
+              // Determinación de si el usuario es administrador
+              const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
+              const user = {
+                firstName: userInfo.nombre,
+                lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
+                email: userInfo.email,
+                isAdmin: isAdmin,
+                profilePicture: userInfo.profilePicture || '/assets/images/UsuarioSinFoto.png',
+                // Asigna "Validado" automáticamente si es administrador, o usa "verificado" para usuarios
+                estado: isAdmin ? 'Validado' : (userInfo.verificado ? 'Validado' : 'No validado'),
+              };
+              this.users.push(user); // Añadir usuario a la lista
+            },
+            (error) => {
+              console.error(`Error al obtener la información del usuario con email ${email}:`, error);
+            }
+          );
+        });
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error al obtener la lista de emails:', error);
+        this.isLoading = false;
+      }
+    );
+  }
+  
+  
 
   filteredUsers() {
     return this.users

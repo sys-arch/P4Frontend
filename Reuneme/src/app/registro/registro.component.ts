@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css'],
-  imports: [CommonModule, FormsModule, LoaderComponent]
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent]
 })
 export class RegistroComponent {
 
