@@ -100,13 +100,27 @@ export class UserService {
     updateUserByEmail(email: string, userData: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
-      }
+    }
 
     // Método para obtener un usuario específico basado en el email
     getUserByEmail(email: string): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.get(`${httpUrl}users/${email}`, { headers });
-      }
+        return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
+    }
+    getUserInfo(email: string, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
+    }
 
-
+    // Método para obtener todos los emails (solo para administradores) (GET /users/emails)
+    getAllEmails(token: string): Observable<string[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.get<string[]>(`${httpUrl}users/emails`, { headers });
+    }
 }

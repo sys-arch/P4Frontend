@@ -3,8 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+
 
 
 
@@ -169,22 +171,34 @@ export class VentanaPrincipalComponent implements OnInit {
     }
   ];
   
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService // Inyecta el servicio UserService
+  ) {}
 
-  // VentanaPrincipalComponent
   ngOnInit(): void {
     this.token = localStorage.getItem('token') || '';
     this.myemail = localStorage.getItem('email') || '';
 
-    console.log('Token:', this.token);
-    console.log('Email:', this.myemail);
-
     // Determina si el usuario es administrador o empleado basado en el prefijo del token
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
+      this.loggedUser.role = 'admin';
     } else if (this.token.startsWith('e-')) {
       this.isAdmin = false;
+      this.loggedUser.role = 'employee';
     }
+
+    // Obtener la información del usuario
+    this.userService.getUserInfo(this.myemail, this.token).subscribe(
+      (userInfo: any) => {
+        this.loggedUser.firstName = userInfo.nombre;
+        this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+      },
+      (error: any) => {  // Especifica 'error' como 'any'
+        console.error('Error al obtener la información del usuario:', error);
+      }
+    );
   }
 
   
