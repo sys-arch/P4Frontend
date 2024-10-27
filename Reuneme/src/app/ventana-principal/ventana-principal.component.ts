@@ -352,7 +352,9 @@ export class VentanaPrincipalComponent implements OnInit {
   // Función para verificar superposición de turnos
   haySuperposicion(inicio: number, fin: number): boolean {
     return this.turnosHorarios.some(turno => 
-      (inicio < turno.fin && fin > turno.inicio)
+      (inicio >= turno.inicio && inicio < turno.fin) || // comprobar empezar turno existente
+      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existenes
+      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existenes
     );
   }
 
