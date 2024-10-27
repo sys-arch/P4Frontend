@@ -74,9 +74,11 @@ export class LoginComponent {
       // Llamar al servicio `login` pasando el objeto `user`
       this.userService.login(user).subscribe(
         (response) => {
-          console.log('Respuesta del servidor:', response); // Mostrar la respuesta en la consola
-          localStorage.setItem('token', response.token); // Guarda el token recibido en localStorage
-          this.router.navigate(['/ventana-principal'], { state: { token: response } });
+          console.log('Respuesta del servidor:', response);
+          // Guarda el token y el email en localStorage
+          localStorage.setItem('token', response);
+          localStorage.setItem('email', user.email);
+          this.router.navigate(['/ventana-principal']);
         },
         (error) => {
           console.error('Error en el inicio de sesión:', error);

@@ -18,6 +18,7 @@ export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
   isAdmin: boolean = true;
   token: string = '';
+  myemail: string = '';
   isLoading: boolean = false;
   searchBy: string = 'name';
   searchQuery: string = '';
@@ -167,17 +168,23 @@ export class VentanaPrincipalComponent implements OnInit {
   
   constructor(private router: Router) {}
 
+  // VentanaPrincipalComponent
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.token = navigation.extras.state['token'];
-      if (this.token.startsWith('a-')) {
-        this.isAdmin = true;
-      } else if (this.token.startsWith('e-')) {
-        this.isAdmin = false;
-      }
+    this.token = localStorage.getItem('token') || '';
+    this.myemail = localStorage.getItem('email') || '';
+
+    console.log('Token:', this.token);
+    console.log('Email:', this.myemail);
+
+    // Determina si el usuario es administrador o empleado basado en el prefijo del token
+    if (this.token.startsWith('a-')) {
+      this.isAdmin = true;
+    } else if (this.token.startsWith('e-')) {
+      this.isAdmin = false;
     }
   }
+
+  
 
   selectTab(tab: string) {
     this.activeTab = tab;
