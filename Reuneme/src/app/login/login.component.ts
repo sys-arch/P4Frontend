@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { FooterComponent } from '../shared/footer/footer.component';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule, LoaderComponent, FooterComponent],
+  imports: [FormsModule, CommonModule, LoaderComponent, FooterComponent, HeaderComponent],
   providers: [UserService]
 })
 export class LoginComponent {

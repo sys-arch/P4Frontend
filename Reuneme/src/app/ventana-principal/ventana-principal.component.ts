@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })

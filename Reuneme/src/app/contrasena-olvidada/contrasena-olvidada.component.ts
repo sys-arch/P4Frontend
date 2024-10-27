@@ -3,11 +3,15 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service'; // Servicio ficticio para manejar el envío
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
 
 @Component({
   selector: 'app-contrasena-olvidada',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // Importa CommonModule para usar directivas como *ngIf
+  imports: [CommonModule, FormsModule, FooterComponent, HeaderComponent],  // Importa CommonModule para usar directivas como *ngIf
   templateUrl: './contrasena-olvidada.component.html',
   styleUrls: ['./contrasena-olvidada.component.css']
 })

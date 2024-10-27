@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
-
+<app-header></app-header>
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
 <div class="tabs-container">
   <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
@@ -72,10 +72,6 @@
 
     <app-loader *ngIf="isLoading"></app-loader>
 
-    <!-- Header de la página de administrador -->
-    <div class="header">
-      <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-    </div>
     <h2>Panel de Administrador</h2>
 
     <!-- Barra de búsqueda y filtros (Solo visible para administradores) -->
@@ -174,9 +170,14 @@
     
   </div>
   <div *ngIf="!isAdmin">
-        <!-- Vista para el usuario -->
-        <h2>Panel de Usuario</h2>
-        <!-- Aquí pones el contenido exclusivo para el usuario -->
+    <div class="user-profile">
+      <img [src]="loggedUser.profilePicture" alt="Foto de perfil" class="profile-picture">
+      <span class="user-fullname">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</span>
+      <span class="user-edit-button" (click)="navigateTo('/perfil-admin')" (keydown)="navigateTo('/perfil-admin')">Visitar perfil</span>
+    </div>
+      <!-- Vista para el usuario -->
+      <h2>Panel de Usuario</h2>
+      <!-- Aquí pones el contenido exclusivo para el usuario -->
     </div>
     </div>
   </div>

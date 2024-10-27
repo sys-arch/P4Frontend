@@ -2,12 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
 import { LoaderComponent } from "../loader/loader.component";
+import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent] ,// Importaciones necesarias para el uso de ngModel
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent, ContrasenaOlvidadaComponent] ,// Importaciones necesarias para el uso de ngModel
   templateUrl: './perfil-usuario.component.html',
   styleUrl: './perfil-usuario.component.css'
 })
