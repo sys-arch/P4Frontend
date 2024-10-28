@@ -122,4 +122,34 @@ export class UserService {
         });
         return this.client.get<string[]>(`${httpUrl}users/emails`, { headers });
     }
+    deleteUserByEmail(email: string, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = { email: email }; // Pasamos el email en el cuerpo de la solicitud
+        return this.client.delete(`${httpUrl}users/delete`, { headers, body });
+    }
+    blockUserByEmail(email: string, bloquear: boolean, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = {
+            email: email,
+            bloquear: bloquear // true para bloquear, false para desbloquear
+        };
+        return this.client.put(`${httpUrl}users/block`, body, { headers });
+    }
+    verifyUserByEmail(email: string, verificado: boolean, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = {
+            email: email,
+            verificado: verificado
+        };
+        return this.client.put(`${httpUrl}users/verify`, body, { headers });
+    }
 }

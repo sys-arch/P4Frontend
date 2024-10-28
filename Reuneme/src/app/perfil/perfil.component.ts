@@ -3,9 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+
 
 @Component({
   selector: 'app-perfil',
@@ -29,7 +31,8 @@ export class PerfilComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private gravatarService: GravatarService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +57,7 @@ export class PerfilComponent implements OnInit {
         this.admin.correo = userInfo.email;
         this.admin.centroTrabajo = userInfo.centro;
         this.admin.interno = userInfo.interno || false;
+        this.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
         this.isLoading = false;
       },
       (error) => {
