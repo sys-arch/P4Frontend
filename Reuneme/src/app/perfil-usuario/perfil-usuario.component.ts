@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
 import { LoaderComponent } from "../loader/loader.component";
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
@@ -11,7 +10,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent, ContrasenaOlvidadaComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './perfil-usuario.component.html',
   styleUrls: ['./perfil-usuario.component.css']
 })
@@ -84,6 +83,13 @@ export class PerfilUsuarioComponent implements OnInit {
   // Método para redirigir a cambiar la contraseña
   navigateToChangePassword(): void {
     this.router.navigate(['/edicion-usuario'], { state: { token: this.token } });
+  }
+  editUser(userEmail: string): void {
+    if (userEmail) {
+      this.router.navigate(['/edicion-usuario', userEmail]);
+    } else {
+      console.error('El correo electrónico del usuario no está definido');
+    }
   }
 
 

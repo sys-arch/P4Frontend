@@ -132,11 +132,67 @@ export class VentanaPrincipalComponent implements OnInit {
   }
 
   confirmDelete(): void {
-    this.users = this.users.filter(user => user !== this.selectedUser);
-    this.showDeleteModal = false;
-    this.selectedUser = null;
-    clearInterval(this.countdownInterval);
-  }
+    if (this.selectedUser) {
+        this.userService.deleteUserByEmail(this.selectedUser.email, this.token).subscribe(
+            () => {
+                this.showDeleteModal = false; 
+                this.selectedUser = null; 
+                clearInterval(this.countdownInterval); 
+                this.loadAllUsers(); // Recarga la lista completa
+            },
+            (error) => {
+                console.error('Error al eliminar el usuario:', error);
+            }
+        );
+    }
+}
+
+loadAllUsers(): void {
+  this.isLoading = true;
+  this.users = []; // Limpia la lista antes de recargar
+  this.userService.getAllEmails(this.token).subscribe(
+      (emails: string[]) => {
+          const userObservables = emails.map((email) =>
+              this.userService.getUserInfo(email, this.token)
+          );
+
+          // Suscribe a cada observable y añade los usuarios a la lista
+          userObservables.forEach((userObs, index) => {
+              userObs.subscribe(
+                  (userInfo: any) => {
+                      const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
+                      const isBlocked = !isAdmin && userInfo.bloqueado === true; // Verifica bloqueo solo para usuarios
+                      
+                      const user = {
+                          firstName: userInfo.nombre,
+                          lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
+                          email: userInfo.email,
+                          isAdmin: isAdmin,
+                          profilePicture: userInfo.profilePicture || '/assets/images/UsuarioSinFoto.png',
+                          // Solo los usuarios pueden estar bloqueados
+                          estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
+                      };
+                      this.users.push(user);
+                  },
+                  (error) => {
+                      console.error(`Error al obtener la información del usuario con email ${emails[index]}:`, error);
+                  }
+              );
+          });
+
+          this.isLoading = false;
+      },
+      (error) => {
+          console.error('Error al obtener la lista de emails:', error);
+          this.isLoading = false;
+      }
+  );
+}
+
+
+
+
+
 
   cancelDelete(): void {
     this.selectedUser = null;
@@ -145,26 +201,55 @@ export class VentanaPrincipalComponent implements OnInit {
   }
 
   toggleBlocked(user: any): void {
+    if (user.isAdmin) {
+        alert("No se permite bloquear a un administrador.");
+        return;
+    }
+
     if (user.estado === 'Bloqueado') {
-      user.estado = 'Validado'; 
+        // Desbloquea directamente si el usuario ya está bloqueado
+        this.userService.blockUserByEmail(user.email, false, this.token).subscribe(
+            () => {
+                user.estado = 'No validado'; // Actualiza el estado a "No validado" al desbloquear
+                this.loadAllUsers(); // Recarga la lista de usuarios
+            },
+            (error) => {
+                console.error('Error al desbloquear el usuario:', error);
+            }
+        );
     } else {
-      this.selectedUser = user;
-      this.showBlockModal = true;
+        // Si está desbloqueado, mostrar el modal de confirmación de bloqueo
+        this.selectedUser = user;
+        this.showBlockModal = true;
     }
   }
 
   confirmBlock(): void {
-    if (this.selectedUser) {
-      this.selectedUser.estado = 'Bloqueado';
-      this.showBlockModal = false;
-      this.selectedUser = null;
-    }
+      if (this.selectedUser) {
+          // Determinar si se va a bloquear o desbloquear basado en el estado actual
+          const bloquear = this.selectedUser.estado !== 'Bloqueado';
+          
+          // Llamar al servicio para bloquear o desbloquear al usuario
+          this.userService.blockUserByEmail(this.selectedUser.email, bloquear, this.token).subscribe(
+              () => {
+                  // Actualizar el estado del usuario en la lista según el resultado
+                  this.selectedUser.estado = bloquear ? 'Bloqueado' : 'No validado';
+                  this.showBlockModal = false; // Cerrar el modal
+                  this.selectedUser = null; // Restablecer usuario seleccionado
+                  this.loadAllUsers(); // Recargar la lista de usuarios
+              },
+              (error) => {
+                  console.error('Error al cambiar el estado de bloqueo del usuario:', error);
+              }
+          );
+      }
   }
 
   cancelBlock(): void {
-    this.selectedUser = null;
-    this.showBlockModal = false;
+      this.selectedUser = null;
+      this.showBlockModal = false;
   }
+
 
   toggleValidation(user: any): void {
     if (user.estado === 'No validado') {
@@ -175,9 +260,17 @@ export class VentanaPrincipalComponent implements OnInit {
 
   confirmValidation(): void {
     if (this.selectedUser) {
-      this.selectedUser.estado = 'Validado';
-      this.showValiModal = false;
-      this.selectedUser = null;
+      this.userService.verifyUserByEmail(this.selectedUser.email, true, this.token).subscribe(
+        () => {
+          this.selectedUser.estado = 'Validado';
+          this.showValiModal = false;
+          this.selectedUser = null;
+          this.loadAllUsers();
+        },
+        (error) => {
+          console.error('Error al verificar el usuario:', error);
+        }
+      );
     }
   }
 
@@ -185,40 +278,7 @@ export class VentanaPrincipalComponent implements OnInit {
     this.selectedUser = null;
     this.showValiModal = false;
   }
-  loadAllUsers(): void {
-    this.isLoading = true;
-    this.userService.getAllEmails(this.token).subscribe(
-      (emails: string[]) => {
-        emails.forEach((email) => {
-          this.userService.getUserInfo(email, this.token).subscribe(
-            (userInfo: any) => {
-              // Determinación de si el usuario es administrador
-              const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
-              const user = {
-                firstName: userInfo.nombre,
-                lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
-                email: userInfo.email,
-                isAdmin: isAdmin,
-                profilePicture: userInfo.profilePicture || '/assets/images/UsuarioSinFoto.png',
-                // Asigna "Validado" automáticamente si es administrador, o usa "verificado" para usuarios
-                estado: isAdmin ? 'Validado' : (userInfo.verificado ? 'Validado' : 'No validado'),
-              };
-              this.users.push(user); // Añadir usuario a la lista
-            },
-            (error) => {
-              console.error(`Error al obtener la información del usuario con email ${email}:`, error);
-            }
-          );
-        });
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error al obtener la lista de emails:', error);
-        this.isLoading = false;
-      }
-    );
-  }
-  
+
   
 
   filteredUsers() {

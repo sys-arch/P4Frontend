@@ -1,11 +1,13 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
 <app-header></app-header>
+
+
+
+
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
 <div *ngIf="isAdmin" class="tabs-container">
   <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
-  <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias / turnos horarios</button>
+  <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias / Turnos horarios</button>
 </div>
 
 <!-- Contenido de las pestañas -->
@@ -105,6 +107,7 @@
         <span class="column-header">Validado</span>
         <span class="column-header">Acciones</span>
       </div>
+      
 
       <div class="user-list-content">
         <div *ngFor="let user of filteredUsers()" class="user-list-row">
@@ -277,22 +280,6 @@
 
   <app-loader *ngIf="isLoading"></app-loader>
 
-    <!-- Footer de la página -->
-    <footer class="footer">
-      <div class="footer-content">
-        <ul class="footer-links">
-          <li><a href="#">Condiciones de Uso</a></li>
-          <li><a href="#">Política de Privacidad</a></li>
-          <li><a href="#">Consentimiento de Cookies</a></li>
-        </ul>
-      </div>
-    </footer>
-
-    <div class="footer-info">
-      <span>© 2024 ReuneMe, LLC</span>
-    </div>
-  </div>
-
     <div *ngIf="!isAdmin">
         <!-- Vista para el usuario -->
         <h2>Panel de Usuario</h2>
@@ -300,8 +287,9 @@
     </div>
     </div>
   </div>
-  <app-footer></app-footer>
+ 
 </div>
+<app-footer></app-footer>
 
 
 

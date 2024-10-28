@@ -44,6 +44,7 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+    console.log('Token:', this.token);
 
     this.userEmail = this.route.snapshot.paramMap.get('email') || '';
 

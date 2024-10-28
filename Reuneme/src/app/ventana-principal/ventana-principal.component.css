@@ -1,3 +1,4 @@
+/* Estilos globales */
 html, body { 
     margin: 0;
     padding: 0;
@@ -5,21 +6,23 @@ html, body {
     overflow-x: hidden;
     font-family: 'Roboto', sans-serif;
     color: #e0e0e0;
+    background-color: #1e1e1e;
 }
+
+/* Contenedor de la información del usuario en la esquina superior izquierda */
 .user-profile {
     position: absolute;
     top: 5px;
-    left: 0px;
+    left: 0;
     display: flex;
     align-items: center;
     padding: 8px 12px;
     border-radius: 8px;
-    z-index: 9999;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
     background-color: transparent;
-    width: auto;
     height: 50px;
+    z-index: 9999;
+    transition: all 0.3s ease-in-out;
 }
 
 .profile-picture {
@@ -35,35 +38,31 @@ html, body {
     color: #ffffff;
     font-size: 20px;
     font-weight: 600;
-    position: relative; /* Necesario para colocar la barra separadora */
-    padding-right: 15px; /* Espacio para la barra separadora */
-    transition: all 0.3s ease-in-out;
+    padding-right: 15px;
+    position: relative;
 }
 
-/* Barra separadora */
 .user-fullname::after {
     content: "";
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 130%; /* Ajusta la altura de la barra */
-    width: 2px; /* Grosor de la barra */
+    height: 130%;
+    width: 2px;
     background-color: #ffffff;
-    transition: background-color 0.3s ease-in-out;
     opacity: 0.7;
+    transition: background-color 0.3s ease-in-out;
 }
 
-/* Cambiar color en hover */
 .user-profile:hover .user-fullname::after {
-    background-color: #5fc67d; /* Cambia el color de la barra en hover */
-    opacity: 1; /* Aumentar visibilidad */
+    background-color: #5fc67d;
+    opacity: 1;
 }
 
 .user-edit-button {
     display: none;
-    opacity: 0;
-    background-color: #5fc67d; /* Color más llamativo */
+    background-color: #5fc67d;
     color: white;
     font-size: 16px;
     font-weight: 600;
@@ -71,11 +70,6 @@ html, body {
     border-radius: 8px;
     margin-left: 10px;
     transition: all 0.3s ease-in-out;
-    white-space: nowrap;
-    width: auto;
-    /* Efecto 3D */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.1) inset;
-    transform: translateY(0);
 }
 
 .user-profile:hover {
@@ -86,7 +80,6 @@ html, body {
 
 .user-profile:hover .user-edit-button {
     display: inline-block;
-    opacity: 1;
 }
 
 .user-profile:hover .profile-picture, .user-profile:hover .user-fullname {
@@ -115,8 +108,9 @@ html, body {
     top:70px;
     right: 20px;
     z-index: 10;
-  }
-  
+}
+
+
   /* Estilos del botón */
   .Btn {
     display: flex;
@@ -164,6 +158,52 @@ html, body {
     transition-duration: .3s;
   }
 
+  
+/* Contenedor del botón en la parte superior derecha */
+.admin-controls2 {
+    position: absolute;
+    top:20px;
+    right: 20px;
+    z-index: 10;
+}
+
+  /* Estilos del botón */
+  .Btn2 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 55px;
+    height: 55px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: rgb(0, 255, 38); /* Cambié el color para diferenciarlo */
+  }
+  
+/* Signo más */
+.sign2 {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign2 svg {
+    width: 30px; /* Agranda el símbolo "+" */
+    height: 30px;
+}
+
+.sign2 svg path {
+    fill: white;
+}
+  
+
+
   .back-button-container {
     position: fixed;
     bottom: 6%;
@@ -209,6 +249,33 @@ html, body {
   .Btn:active {
     transform: translate(2px ,2px);
   }
+  /*-----------------------------------*/
+   /* Efecto hover: expande el botón */
+   .Btn2:hover {
+    width: 180px;
+    border-radius: 40px;
+    transition-duration: .3s;
+  }
+  
+  .Btn2:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+  }
+  
+  /* Efecto hover en el texto */
+  .Btn2:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+  }
+  
+  /* Efecto de click en el botón */
+  .Btn2:active {
+    transform: translate(2px ,2px);
+  }
+
 
 .modal-overlay {
     position: fixed;
@@ -372,12 +439,20 @@ html, body {
     background: url('/assets/images/admin-background.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
+    
 }
 /* Estilo para el botón deshabilitado */
 
-
+.user-list-container,
+.calend-ausen-container {
+    width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+}
 .user-list-container {
     width: 60%;
+    max-width: 1130px; /* Ajusta el ancho en pantallas grandes */
+
     margin: 20px auto;
     background-color: #1e1e1e;
     color: white;
@@ -396,6 +471,31 @@ html, body {
     text-align: left;
     color: #b3b3b3;
 }
+/* Estructura de la lista de usuarios en pantallas grandes */
+.user-list-header,
+.user-list-row {
+    display: grid;
+    grid-template-columns: 50px 200px 1fr 110px 110px 160px; /* Configuración en pantallas grandes */
+    gap: 10px;
+}
+
+/* Ajuste para pantallas más pequeñas */
+@media (max-width: 768px) {
+    /* Muestra solo las primeras dos columnas y la última columna de "Acciones" */
+    .user-list-header,
+    .user-list-row {
+        grid-template-columns: 50px 1fr 160px; /* Muestra solo la foto, nombre y acciones */
+    }
+
+    /* Oculta las columnas no esenciales en pantallas pequeñas */
+    .user-email,
+    .user-status,
+    .blocked-status {
+        display: none; /* Oculta la columna de correo electrónico, estado y validación */
+    }
+}
+
+
 
 .user-list-content {
     max-height: 500px;
@@ -623,9 +723,26 @@ html, body {
     color: white;
     padding: 10px;
     border-radius: 8px;
-    margin: 20px auto;
     width: 60%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1130px; /* Ajusta el ancho en pantallas grandes */
+    margin: 10px auto;
+}
+
+@media (max-width: 1068px) {
+    .filter-options {
+        flex-direction: column; /* Pone los elementos en una columna */
+        align-items: stretch;
+    }
+
+    .filter-options label, .filter-options select, .filter-options input {
+        width: 100%;
+        margin-bottom: 5px; /* Espaciado entre elementos */
+    }
 }
 
 .filter-options {
@@ -675,6 +792,7 @@ h2 {
     top: 260px; /* Ajusta la posición vertical según sea necesario */
     left: calc(50% - 800px); /* Ajusta la posición horizontal para alinearla con el cuadro negro */
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     gap: 10px;
     background-color: #333;
@@ -694,6 +812,7 @@ h2 {
     transition: background-color 0.3s;
     text-align: left;
     width: 150px; 
+    flex: 1 1 45%;
   }
   
   /* Pestaña activa */
@@ -874,4 +993,3 @@ h2 {
 .EliminarTurno:hover {
   background-color: #c9302c;
 }
-
