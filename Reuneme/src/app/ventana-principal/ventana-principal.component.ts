@@ -10,6 +10,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 
 
 
+
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,

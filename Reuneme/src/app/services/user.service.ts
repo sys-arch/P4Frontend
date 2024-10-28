@@ -107,6 +107,7 @@ export class UserService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
     }
+    
     getUserInfo(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
