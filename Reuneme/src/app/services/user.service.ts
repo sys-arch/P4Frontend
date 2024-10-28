@@ -97,16 +97,15 @@ export class UserService {
     }
 
     // Método para actualizar un usuario existente basado en el email
-    updateUserByEmail(email: string, userData: any): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    updateUserByEmail(email: string, userData: any, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
         return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
     }
 
-    // Método para obtener un usuario específico basado en el email
-    getUserByEmail(email: string): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
-    }
+
     getUserInfo(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',

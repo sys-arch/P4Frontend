@@ -29,6 +29,7 @@ export class PerfilUsuarioComponent implements OnInit {
 
   profilePicture: string | ArrayBuffer | null = null;
   isLoading: boolean = false;
+  token: string = '';
 
   constructor(
     private readonly router: Router,
@@ -79,6 +80,12 @@ export class PerfilUsuarioComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
+
+  // Método para redirigir a cambiar la contraseña
+  navigateToChangePassword(): void {
+    this.router.navigate(['/edicion-usuario'], { state: { token: this.token } });
+  }
+
 
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
