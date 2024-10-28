@@ -1,80 +1,88 @@
 /* Contenedor principal de la edición */
-.edit-container {
+.perfil-container {
     position: relative;
-    min-height: 105vh;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: url('/assets/images/login-background2.png') no-repeat center center;
     background-size: cover;
-}
-
-/* Encabezado de la página */
-.header {
-    width: 100%;
-    height: 60px;
-    background: linear-gradient(to right, #175be2, #06c6f3);
-    color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    position: absolute;
-    top: 0;
-    z-index: 2;
-}
-
-/* Caja de registro/edición */
-.register-box {
-    width: 1000px;
-    padding: 25px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #23252b;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
-    border-radius: 0px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
     text-align: center;
-    z-index: 1;
 }
 
-.register-box h2 {
+.perfil-container h2 {
     margin: 0 0 20px;
     padding: 0;
     color: #ffffff;
+    font-size: 1.8rem;
 }
 
-/* Estilos para el formulario */
-.form-grid {
+/* Información del perfil - manteniendo el recuadro similar */
+.profile-info {
+    width: 600px;
+    padding: 25px;
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1;
+    margin-top: 80px;
+}
+
+/* Moviendo la imagen dentro del contenedor de información */
+.profile-picture {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px solid #00eeff;
+    background-image: url('/assets/images/UsuarioSinFoto.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+/* Contenedor de los campos de formulario en dos columnas */
+.info-fields {
     display: grid;
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: left;
+    margin: 0 auto;
+    max-width: 600px;
 }
 
+/* Estilo para cada campo de entrada de información */
 .textbox {
     position: relative;
-    margin-bottom: 25px;
-    width: 100%;
+    margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.1);
-    padding: 2px;
+    padding: 5px;
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    z-index: 2;
 }
 
 .textbox label {
     position: absolute;
-    top: 70%;
+    top: 50%;
     left: 10px;
-    transform: translateY(-90%);
-    font-size: 16px;
+    transform: translateY(-50%);
+    font-size: 14px;
     color: #f5f5f5;
     transition: all 0.3s ease;
     pointer-events: none;
 }
 
-.textbox input {
+.textbox input,
+.textbox select {
     width: 100%;
     padding: 10px;
     background: transparent;
@@ -99,6 +107,19 @@
 
 .textbox input::placeholder {
     color: transparent;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.toggle-password {
+    background: none;
+    border: none;
+    color: #00eeff;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* Botón de envío */
@@ -152,33 +173,35 @@
     color: #d9534f;
 }
 
-/* Diferentes estilos para el Administrador y el Usuario */
-.form-grid.admin-view .textbox input {
-    border: 1px solid #2dc38c; /* Borde verde para el administrador */
+/* Estilos para hover en campos de perfil */
+.info-field p:hover {
+    background: rgba(0, 0, 0, 0.2);
 }
 
-.form-grid.user-view .textbox input {
-    border: 1px solid #f5f5f5; /* Borde blanco para el usuario estándar */
-}
-
-/* Ajustes para campos deshabilitados (solo para administrador) */
-.textbox input:disabled {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #b3b3b3;
-    cursor: not-allowed;
-}
-
-/* Estilos adicionales para la vista de perfil de usuario */
-.user-password-container {
+/* Estilos para secciones adicionales */
+.actions {
     margin-top: 20px;
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
-.user-password-container label {
-    font-weight: bold;
-    font-size: 14px;
-    color: #f5f5f5;
+.actions .btn {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.actions .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes responsivos para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .info-fields {
+        grid-template-columns: 1fr;
+    }
 }
