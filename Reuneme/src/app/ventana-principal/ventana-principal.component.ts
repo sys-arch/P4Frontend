@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
@@ -79,7 +80,8 @@ export class VentanaPrincipalComponent implements OnInit {
   
   constructor(
     private router: Router,
-    private userService: UserService // Inyecta el servicio UserService
+    private userService: UserService,
+    private gravatarService: GravatarService
   ) {}
 
   ngOnInit(): void {
@@ -101,12 +103,14 @@ export class VentanaPrincipalComponent implements OnInit {
       (userInfo: any) => {
         this.loggedUser.firstName = userInfo.nombre;
         this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+        this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
       },
       (error) => {
         console.error('Error al obtener la información del usuario:', error);
       }
     );
   }
+  
 
   
 
@@ -168,7 +172,7 @@ loadAllUsers(): void {
                           lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
                           email: userInfo.email,
                           isAdmin: isAdmin,
-                          profilePicture: userInfo.profilePicture || '/assets/images/UsuarioSinFoto.png',
+                          profilePicture: this.gravatarService.getGravatarUrl(userInfo.email),
                           // Solo los usuarios pueden estar bloqueados
                           estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
                       };
