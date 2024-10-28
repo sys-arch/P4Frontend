@@ -1,9 +1,19 @@
 <app-header></app-header>
-<div class="perfil-container">
-  <div class="header">
-    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-  </div>
 
+<div *ngIf="showNewPWModal" class="modal-overlay">
+  <div class="modal delete-modal">
+    <h3>¿Reestablecer contraseña?</h3>
+    <p class="warning-text">Al pulsar confirmar, se mandará un correo al email del usuario con un link para reestablecer la contraseña</p>
+    <div class="modal-actions">
+      <button class="confirm-btn" (click)="confirmNewP()">
+        Confirmar
+      </button>
+      <button class="cancel-btn" (click)="cancel()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="perfil-container">
   <div class="profile-info">
     <h2>{{ isAdmin ? 'Editar Cuenta de Usuario' : 'Cambiar Contraseña' }}</h2>
 
@@ -12,77 +22,54 @@
     </div>
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <!-- Campos editables para el administrador -->
       <div class="info-fields" *ngIf="isAdmin">
-        <!-- Nombre -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="text" id="nombre" formControlName="nombre" required placeholder=" ">
           <label for="nombre">Nombre*</label>
-          <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre" required />
         </div>
 
-        <!-- Apellidos -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="text" id="apellidos" formControlName="apellidos" required placeholder=" ">
           <label for="apellidos">Apellidos*</label>
-          <input type="text" id="apellidos" formControlName="apellidos" placeholder="Apellidos" required />
         </div>
 
-        <!-- Correo -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="email" id="correo" formControlName="correo" required placeholder=" ">
           <label for="correo">Correo*</label>
-          <input type="email" id="correo" formControlName="correo" placeholder="Correo Electrónico" required />
         </div>
 
-        <!-- Departamento -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
           <label for="departamento">Departamento</label>
-          <input type="text" id="departamento" formControlName="departamento" placeholder="Departamento" />
         </div>
 
-        <!-- Centro de Trabajo -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
-          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" placeholder="Centro de Trabajo" required />
         </div>
 
-        <!-- Fecha de alta -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="date" id="alta" formControlName="alta" required placeholder=" ">
           <label for="alta">Fecha de Alta*</label>
-          <input type="date" id="alta" formControlName="alta" required />
         </div>
 
-        <!-- Perfil -->
-        <div class="info-field">
+        <div class="textbox">
+          <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
           <label for="perfil">Perfil</label>
-          <input type="text" id="perfil" formControlName="perfil" placeholder="Perfil" />
         </div>
+        <button class="btnred" (click)="showNewModal()">Reestablecer Contraseña</button>
       </div>
 
-      <!-- Campo de contraseña, visible para todos los usuarios -->
-      <div class="info-field password-box">
-        <label for="password">Nueva Contraseña</label>
-        <input
-          [type]="passwordFieldType"
-          id="password"
-          formControlName="password"
-          placeholder="Nueva Contraseña"
-          [required]="!isAdmin"
-        />
-        <!-- Botón para mostrar u ocultar la contraseña -->
-        <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
-          {{ passwordFieldType === 'password' ? 'Mostrar' : 'Ocultar' }}
-        </button>
-      </div>
+      
+      
 
-      <!-- Indicador de campos obligatorios y botón de guardar -->
       <p class="required-info">Los campos(*) son obligatorios.</p>
       <button class="btn" type="submit">Guardar Cambios</button>
     </form>
 
-    <!-- Botón de volver -->
     <div class="back-button-container">
       <button class="back-button" (click)="navigateToUserList()">Volver</button>
     </div>
   </div>
-
   <app-footer></app-footer>
 </div>

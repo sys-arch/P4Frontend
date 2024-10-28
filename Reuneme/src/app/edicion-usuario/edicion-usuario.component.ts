@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component'; // Importa FooterComponent
 
 @Component({
   selector: 'app-edicion-usuario',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent], // Agrega FooterComponent aquí
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent],
   templateUrl: './edicion-usuario.component.html',
   styleUrls: ['./edicion-usuario.component.css'],
 })
@@ -18,9 +18,11 @@ export class EdicionUsuarioComponent implements OnInit {
   userEmail: string = '';
   isAdmin: boolean = false;
   loggedUserEmail: string = '';
-  token: string = ''; // Token para autenticación
-  passwordFieldType: string = 'password'; // Inicialmente, la contraseña está oculta
-  profilePicture: string | ArrayBuffer | null = null; // Nueva propiedad para la imagen de perfil
+  token: string = ''; 
+  passwordFieldType: string = 'password';
+  profilePicture: string | ArrayBuffer | null = null;
+  isLoading: boolean = false;
+  showNewPWModal: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,19 +32,31 @@ export class EdicionUsuarioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.token = localStorage.getItem('token') || '';
+    this.loggedUserEmail = localStorage.getItem('email') || '';
+
+    if (this.token.startsWith('a-')) {
+      this.isAdmin = true;
+    } else if (this.token.startsWith('e-')) {
+      this.isAdmin = false;
+    } else {
+      console.error('Token no válido');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.userEmail = this.route.snapshot.paramMap.get('email') || '';
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.token = navigation.extras.state['token'];
-      this.isAdmin = this.token.startsWith('a-');
-      this.loggedUserEmail = this.token.substring(2);
+
+    if (!this.isAdmin && this.userEmail !== this.loggedUserEmail) {
+      console.error('No tiene permiso para editar este usuario');
+      this.router.navigate(['/ventana-principal']);
+      return;
     }
 
     this.initializeForm();
     this.loadUserData();
   }
 
-  // Método para alternar la visibilidad de la contraseña
   togglePasswordVisibility(): void {
     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
@@ -67,16 +81,33 @@ export class EdicionUsuarioComponent implements OnInit {
   }
 
   loadUserData(): void {
+    this.isLoading = true;
+
     if (this.isAdmin || this.userEmail === this.loggedUserEmail) {
       this.userService.getUserInfo(this.userEmail, this.token).subscribe(
         (data) => {
-          if (this.isAdmin) {
-            this.userForm.patchValue(data);
-            this.profilePicture = data.profilePicture || 'assets/UsuarioSinFoto.png';
+          this.isLoading = false;
+
+          if (data) {
+            this.userForm.patchValue({
+              nombre: data.nombre,
+              apellidos: `${data.apellido1} ${data.apellido2}`,
+              correo: data.email,
+              departamento: data.departamento,
+              centroTrabajo: data.centro,
+              alta: data.fechaalta,
+              perfil: data.perfil,
+            });
+
+            this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
+          } else {
+            console.error('Datos del usuario no encontrados');
+            this.router.navigate(['/ventana-principal']);
           }
         },
         (error) => {
           console.error('Error al cargar los datos del usuario:', error);
+          this.isLoading = false;
           this.router.navigate(['/ventana-principal']);
         }
       );
@@ -88,37 +119,58 @@ export class EdicionUsuarioComponent implements OnInit {
 
   onSubmit(): void {
     if (this.userForm.valid) {
-        if (this.isAdmin) {
-            // Administrador actualiza todos los datos del usuario
-            this.userService.updateUserByEmail(this.userEmail, this.userForm.value, this.token).subscribe(
-                (response) => {
-                    console.log('Usuario actualizado:', response);
-                    this.router.navigate(['/ventana-principal']); // Redirigir después de actualizar
-                },
-                (error) => {
-                    console.error('Error al actualizar el usuario:', error);
-                }
-            );
-        } else {
-            // Usuario estándar solo actualiza la contraseña
-            const passwordUpdate = { password: this.userForm.get('password')?.value };
-            this.userService.updateUserByEmail(this.userEmail, passwordUpdate, this.token).subscribe(
-                (response) => {
-                    console.log('Contraseña actualizada:', response);
-                    this.router.navigate(['/perfil-usuario']); // Redirigir a la página de perfil del usuario
-                },
-                (error) => {
-                    console.error('Error al actualizar la contraseña:', error);
-                }
-            );
+      this.isLoading = true; // Muestra el indicador de carga
+  
+      // Define los datos que se enviarán según el rol del usuario
+      const updateData = this.isAdmin ? this.userForm.value : { password: this.userForm.get('password')?.value };
+  
+      // Llama al servicio para actualizar los datos del usuario en el backend
+      this.userService.updateUserByEmail(this.userEmail, updateData, this.token).subscribe(
+        (response) => {
+          console.log('Usuario actualizado:', response);
+          this.isLoading = false; // Oculta el indicador de carga
+  
+          // Redirige después de guardar según el rol
+          if (this.isAdmin) {
+            this.router.navigate(['/ventana-principal']);
+          } else {
+            this.router.navigate(['/perfil-usuario']);
+          }
+        },
+        (error) => {
+          console.error('Error al actualizar el usuario:', error);
+          this.isLoading = false;
         }
+      );
     } else {
-        console.error('Formulario no válido');
-    }
+      console.error('Formulario no válido');
+    }
   }
 
   navigateToUserList(): void {
     this.router.navigate(['/ventana-principal']);
   }
-}
+  cancel(): void {
+    this.showNewPWModal = false;
+  }
+  showNewModal(): void {
+    this.showNewPWModal = true;
+  }
+  confirmNewP(): void {
 
+    this.showNewPWModal = false;
+    this.userService.forgotPassword(this.userEmail).subscribe({
+      next: (response: string) => {
+        this.isLoading = false;
+      
+        console.log('Respuesta recibida: ', response);
+        
+      },
+      error: (error) => {
+        this.isLoading = false;
+
+        console.error('Error generando el token: ', error);
+      }
+    });
+  }
+}
