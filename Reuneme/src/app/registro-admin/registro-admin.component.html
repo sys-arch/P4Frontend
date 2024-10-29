@@ -30,7 +30,7 @@
                 </div>
                 <div class="error-container">
                     <div *ngIf="emailInvalid" class="error-message">
-                        <small>El correo electrónico no tiene un formato válido.</small>
+                        <small>Este correo electrónico no tiene un formato válido.</small>
                     </div>
                 </div>
                 <!-- Centro -->
@@ -83,8 +83,9 @@
     </div>
     <div class="back-button-container">
         <button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
-        <app-loader *ngIf="isLoading"></app-loader>
     </div>
-    
+
+    <app-loader *ngIf="isLoading"></app-loader>
+
     <app-footer></app-footer>
 </div>
