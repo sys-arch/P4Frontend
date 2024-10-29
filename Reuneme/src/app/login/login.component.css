@@ -2,11 +2,33 @@
     position: relative;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: url('/assets/images/login-background2.png') no-repeat center center;
     background-size: cover;
+    padding: 20px;
+    overflow-y: auto; /* Permite el desplazamiento vertical en pantallas pequeñas */
 }
+@media (max-width: 450px), (max-height: 700px) {
+    .login-container {
+        min-width: 450px; /* Mantiene el ancho mínimo aunque la pantalla sea menor */
+        min-height: 700px; /* Mantiene la altura mínima */
+        overflow: auto; /* Habilita desplazamiento */
+    }
+
+    /* Opcionalmente puedes ajustar el tamaño de fuente para mejorar la legibilidad */
+    .login-box, .actions, .footer {
+        font-size: 14px; /* Ajuste de tamaño de fuente */
+    }
+    
+}
+@media (max-width: 450px), (max-height: 555px) {
+    .back-button-container{
+        display: none;
+    }
+}
+
 /* Contenedor para reservar espacio para el mensaje de error */
 .login-failed-container {
     height: 10px; /* Reserva un espacio fijo para el mensaje de error */
@@ -54,7 +76,10 @@
 }
 
 .login-box {
-    width: 450px;
+    width: 90%;
+
+    max-width: 450px;
+    min-width: 450px;
     padding: 40px;
     position: absolute;
     top: 40%;
@@ -64,6 +89,7 @@
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
     border-radius: 0px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .login-box h2 {
@@ -131,6 +157,7 @@
     font-size: 16px;
     cursor: pointer;
     margin-top: 10px;
+    padding: 10px;
 }
 
 .btn:hover {
@@ -140,6 +167,7 @@
 .forgot-password-container {
     text-align: left;
     margin-top: -20px;
+    
 }
 
 .forgot-password {
@@ -167,12 +195,14 @@
 
 .actions {
     width: 450px;
+    min-width: 300px;
     text-align: center;
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 1;
+    margin-top: 20px
 }
 
 .actions .btn {
@@ -247,7 +277,9 @@
     position: fixed;
     bottom: 6%;
     left: 20px;
+    z-index: 100;
 }
+
 .back-button {
     background-color: #007bff;
     border: none;
