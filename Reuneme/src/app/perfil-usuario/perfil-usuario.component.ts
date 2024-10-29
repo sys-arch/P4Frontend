@@ -28,7 +28,7 @@ export class PerfilUsuarioComponent implements OnInit {
     perfil: 'Perfil'
   };
 
-  profilePicture: string | ArrayBuffer | null = null;
+  profilePicture: string | ArrayBuffer | null = 'assets/UsuarioSinFoto.png';
   isLoading: boolean = false;
   token: string = '';
 
