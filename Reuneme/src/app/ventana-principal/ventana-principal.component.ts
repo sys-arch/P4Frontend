@@ -418,6 +418,22 @@ loadAllUsers(): void {
     this.turnoAEliminar = null;
     this.showDeleteModalTurn = false;
   }
-
+ // Metodos de ausencias 
+ 
+ ausencias = [
+  {
+    fechaInicio: '01/01/2024',
+    fechaFin: '01/02/2024',
+    motivo: 'Vacaciones',
+    usuario: 'Aaron Smith',
+    
+  },
+  {
+    fechaInicio: '01/03/2022',
+    fechaFin: '01/04/2022',
+    motivo: 'Enfermedad',
+    usuario: 'Maria González',
+  },
+];
 }
 
