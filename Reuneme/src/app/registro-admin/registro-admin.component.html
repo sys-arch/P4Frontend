@@ -17,33 +17,36 @@
                         <input type="text" id="primerApellido" placeholder="" [(ngModel)]="primerApellido" name="primerApellido" required />
                         <label for="primerApellido">Primer Apellido*</label>
                     </div>
-
                     <!-- Segundo Apellido -->
                     <div class="textbox">
                         <input type="text" id="segundoApellido" placeholder="" [(ngModel)]="segundoApellido" name="segundoApellido" />
                         <label for="segundoApellido">Segundo Apellido</label>
                     </div>
                 </div>
-
+                <!-- Correo Electrónico -->
+                <div class="textbox">
+                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
+                    <label for="email">Correo Electrónico*</label>
+                </div>
+                <div class="error-container">
+                    <div *ngIf="emailInvalid" class="error-message">
+                        <small>El correo electrónico no tiene un formato válido.</small>
+                    </div>
+                </div>
                 <!-- Centro -->
                 <div class="textbox">
                     <input type="text" id="centro" placeholder="" [(ngModel)]="centro" name="centro" required />
                     <label for="centro">Centro*</label>
                 </div>
 
-                <!-- Correo Electrónico -->
-                <div class="textbox">
-                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
-                    <label for="email">Correo Electrónico*</label>
-                </div>
-
                 <!-- Checkbox para Interno -->
                 <div class="checkbox-container">
                     <span class="checkbox-text-left">Marcar usuario como administrador interno</span>
-                    <label class="container">
-                        <input type="checkbox" id="interno" [(ngModel)]="interno" name="interno" />
+                    <label class="container" for="interno">
+                        <input type="checkbox" id="interno" [(ngModel)]="interno" name="interno" aria-labelledby="interno-label" />
                         <div class="checkmark"></div>
                     </label>
+                    <span id="interno-label" class="sr-only">Marcar usuario como administrador interno</span>
                 </div>
 
                 <!-- Contraseña -->
@@ -51,34 +54,37 @@
                     <input type="password" id="password1" placeholder="" name="password1" [(ngModel)]="password1" required />
                     <label for="password1">Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility1()" (keypress)="togglePasswordVisibility1()">{{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}</span>
-                    
                 </div>
-
+                <div *ngIf="passwordError" class="error-container">
+                    <div class="error-message" >
+                        <small>La contraseña no tiene un formato valido</small>
+                    </div>
+                </div>
                 <!-- Repetir Contraseña -->
                 <div class="textbox password-box">
                     <input type="password" id="password2" placeholder="" name="password2" [(ngModel)]="password2" required />
                     <label for="password2">Repetir Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility2()" (keypress)="togglePasswordVisibility2()">{{ passwordVisible2 ? 'Ocultar' : 'Mostrar' }}</span>
                 </div>
-
+                <div class="error-container">
+                    <div *ngIf="confirmPasswordError" class="error-message" >
+                        <small>Las contraseñas no coinciden.</small>
+                    </div>
+                </div>
                 <div class="form-grid">
                     <p class="required-info">Los campos(*) son obligatorios.</p>
                 </div>
             </div>
             
         </form>
-
         <div class="actions">
             <button class="btn" (click)="onSubmit()">Registrar como Administrador</button>
         </div>
     </div>
-
     <div class="back-button-container">
         <button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
+        <app-loader *ngIf="isLoading"></app-loader>
     </div>
-
-    <app-loader *ngIf="isLoading"></app-loader>
-
     
     <app-footer></app-footer>
 </div>

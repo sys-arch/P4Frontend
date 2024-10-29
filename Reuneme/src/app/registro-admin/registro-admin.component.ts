@@ -46,7 +46,7 @@ export class RegistroAdminComponent {
   }
 
   validarPassword(): boolean {
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+\-_ç<>])[A-Za-z\d@$!%*?&#+\-_ç<>]{8,}$/;
 
     if (RegExp(passwordRegEx).exec(this.password1)) {
       this.passwordError = '';

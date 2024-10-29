@@ -9,10 +9,10 @@
 }
 /* Contenedor para reservar espacio para el mensaje de error */
 .login-failed-container {
-    height: 10px; /* Reserva un espacio fijo para el mensaje de error */
+    height: 10px;
     display: flex;
-    justify-content: center; /* Centra el mensaje horizontalmente */
-    align-items: center;     /* Centra el mensaje verticalmente */
+    justify-content: center;
+    align-items: center;
 }
 
   /* Mensaje de error específico para login fallido */
@@ -31,17 +31,17 @@
 }
 
 /* Mensaje de error para el campo de correo */
-.email-error-container {
-    height: 5px; /* Reserva espacio para el mensaje de error del email */
+.error-container {
+    height: 5px;
     display: flex;
     justify-content: left;
 }
 .error-message {
-    color: #ff4d4f; /* Color rojo para el texto del error */
-    font-size: 14px; /* Tamaño de fuente */
-    margin-top: -25px; /* Espacio adicional encima del mensaje */
-    text-align: left; /* Alinear a la izquierda dentro del contenedor */
-    font-weight: 500; /* Peso de la fuente */
+    color: #ff4d4f; 
+    font-size: 15px;
+    margin-top: -25px;
+    text-align: left;
+    font-weight: 500;
 }
 
 .error-message small {
@@ -50,6 +50,7 @@
 
 .register-box {
     width: 1000px;
+    height: 640px;
     padding: 25px;
     position: absolute;
     top: 45%;
@@ -119,7 +120,6 @@
     box-shadow: 0 0 10px #00eeff;
 }
 
-
 .textbox input::placeholder {
     color: transparent;
 }
@@ -128,12 +128,10 @@
     width: 100%;
     background-color: #007bff;
     border: none;
-    padding: 10px;
     border-radius: 5px;
     color: white;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 15px;
 }
 
 .btn:hover {
@@ -172,8 +170,8 @@
     width: 450px;
     text-align: center;
     position: absolute;
-    padding-top: 196px;
-    top: 55%;
+    padding-top: 150px;
+    top: 58%;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 1;
