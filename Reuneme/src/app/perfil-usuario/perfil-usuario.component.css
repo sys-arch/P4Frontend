@@ -49,16 +49,15 @@
   border-radius: 50%;
   border: 3px solid #00eeff;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
-  object-fit: cover; /* Ajusta la imagen para que siempre llene el espacio */
+  object-fit: cover;
   z-index: 99;
 }
-
 
 /* Contenedor de información en dos columnas */
 .info-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px; /* Reduce el espacio entre las columnas */
+  gap: 15px;
   text-align: left;
   margin: 0 auto;
   max-width: 500px;
@@ -66,38 +65,38 @@
 
 /* Campo de información */
 .info-field {
-  margin-bottom: 10px; /* Reduce el espacio entre los campos */
+  margin-bottom: 10px;
 }
 
 .info-field label {
-  font-size: 14px; /* Reduce el tamaño de la etiqueta */
+  font-size: 14px;
   font-weight: bold;
   color: #f5f5f5;
-  margin-bottom: 2px; /* Reduce el espacio debajo de la etiqueta */
+  margin-bottom: 2px;
   display: block;
 }
 
 .info-field p {
-  font-size: 14px; /* Reduce el tamaño del texto */
+  font-size: 14px;
   color: #ffffff;
   background: rgba(0, 0, 0, 0.1);
-  padding: 4px 6px; /* Reduce el padding interno */
+  padding: 4px 6px;
   border-radius: 5px;
 }
 
 /* Ajustes en la sección de acciones para el botón */
 .actions {
-  margin-top: 10px; /* Reduce el espacio encima del botón */
+  margin-top: 10px;
   text-align: center;
 }
 
 .actions .btn {
   background-color: #007bff;
   border: none;
-  padding: 8px 16px; /* Reduce el tamaño del botón */
+  padding: 8px 16px;
   border-radius: 5px;
   color: white;
-  font-size: 14px; /* Reduce el tamaño de la fuente */
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -126,9 +125,56 @@
   background-color: #0056b3;
 }
 
-/* Ajustes responsivos para pantallas más pequeñas */
+/* Ajustes responsivos para pantallas medianas */
 @media (max-width: 768px) {
+  .profile-info {
+    width: 90%;
+    padding: 20px;
+  }
+
   .info-fields {
     grid-template-columns: 1fr;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .actions .btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .back-button-container{
+    display: none;
+  }
+}
+
+/* Ajustes responsivos para pantallas pequeñas */
+@media (max-width: 450px), (max-height: 700px) {
+  .perfil-container {
+    min-width: 450px;
+    min-height: 700px;
+    overflow: auto;
+  }
+
+  .profile-info {
+    width: 85%;
+    padding: 15px;
+    max-height: 500px;
+  }
+
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .info-field label, .info-field p {
+    font-size: 12px;
+  }
+
+  .actions .btn {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 }

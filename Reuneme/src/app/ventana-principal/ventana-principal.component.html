@@ -110,7 +110,7 @@
       
 
       <div class="user-list-content">
-        <div *ngFor="let user of filteredUsers()" class="user-list-row">
+        <div *ngFor="let user of filteredUsers()" class="user-list-row" (click)="visitProfile(user)">
           <div class="user-photo">
             <img [src]="user.profilePicture" alt="Foto de perfil">
             <small>{{ user.isAdmin ? 'Administrador' : 'Usuario' }}</small>

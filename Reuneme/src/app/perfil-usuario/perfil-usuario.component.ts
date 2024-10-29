@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
@@ -35,16 +35,25 @@ export class PerfilUsuarioComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly userService: UserService,
-    private gravatarService: GravatarService
+    private gravatarService: GravatarService,
+    private readonly route: ActivatedRoute
   ) {}
   
   ngOnInit(): void {
     const token = localStorage.getItem('token') || '';
-    const email = localStorage.getItem('email') || '';
+    const localEmail = localStorage.getItem('email') || '';
 
-    // Llamada al servicio para obtener la información del usuario
-    if (token && email) {
-      this.getUserInfo(email, token);
+    // Obtener el parámetro 'email' de la URL
+    const routeEmail = this.route.snapshot.paramMap.get('email');
+
+    // Determinar el email a usar
+    const emailToUse = routeEmail || localEmail;
+
+    if (token && emailToUse) {
+      console.log('Cargando perfil para el email:', emailToUse);
+      this.getUserInfo(emailToUse, token);
+    } else {
+      console.error('No se encontró un email válido para cargar el perfil');
     }
   }
 
