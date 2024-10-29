@@ -10,145 +10,101 @@
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
   text-align: center;
+  padding-top: 80px;
 }
 
 .perfil-container h2 {
   margin: 0 0 20px;
-    padding: 0;
-    color: #ffffff;
+  padding: 0;
+  color: #ffffff;
 }
 
-/* Información del perfil - agrandando el recuadro */
+/* Contenedor de información del perfil */
 .profile-info {
   width: 500px;
-    padding: 25px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #23252b;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
-    border-radius: 0px;
-    text-align: center;
-    z-index: 1;
+  padding: 25px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #23252b;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  text-align: center;
+  z-index: 1;
+  max-height: 700px;
+  overflow-y: auto;
 }
 
-/* Moviendo la imagen dentro del contenedor de información */
+/* Imagen de perfil */
 .profile-picture {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  z-index: 100;
 }
 
 .profile-img {
-  width: 130px; /* Aumentando el tamaño de la imagen */
-  height: 130px; /* Establece la altura de la imagen */
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   border: 3px solid #00eeff;
-  background-image: url('/assets/images/UsuarioSinFoto.png'); /* Imagen predeterminada */
-  background-size: cover; /* Ajusta la imagen al tamaño del div */
-  background-position: center; /* Centra la imagen */
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px; /* Espacio entre la imagen y los campos */
+  object-fit: cover;
+  z-index: 99;
 }
-/* Contenedor para las dos columnas */
+
+/* Contenedor de información en dos columnas */
 .info-fields {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-  gap: 20px; /* Espacio entre las columnas */
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
   text-align: left;
-  margin: 0 auto; /* Centrar el contenido */
-  max-width: 800px; /* Establece un máximo de ancho */
+  margin: 0 auto;
+  max-width: 500px;
 }
 
-/* Ajustar cada campo de información */
+/* Campo de información */
 .info-field {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .info-field label {
-  font-size: 16px;
-  font-weight: bold;
-  color: #f5f5f5;
-  margin-bottom: 5px;
-}
-
-.info-field p {
-  font-size: 16px;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  border-radius: 5px;
-}
-
-/* Ajustes responsivos para pantallas más pequeñas */
-@media (max-width: 768px) {
-  .info-fields {
-    grid-template-columns: 1fr; /* Cambiar a una columna en pantallas pequeñas */
-  }
-}
-
-.upload-button {
-  margin-top: 10px;
-  background-color: #007bff;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
   font-size: 14px;
-}
-
-.upload-button:hover {
-  background-color: #0056b3;
-}
-
-/* Campos de información */
-.info-field {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.info-field label {
-  display: block;
-  font-size: 16px;
   font-weight: bold;
   color: #f5f5f5;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
+  display: block;
 }
 
 .info-field p {
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff;
   background: rgba(0, 0, 0, 0.1);
-  padding: 8px;
+  padding: 4px 6px;
   border-radius: 5px;
 }
 
-/* Estilos para hover en campos */
-.info-field p:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-/* Estilos para botones adicionales */
+/* Ajustes en la sección de acciones para el botón */
 .actions {
-  margin-top: 20px;
+  margin-top: 10px;
   text-align: center;
 }
 
 .actions .btn {
   background-color: #007bff;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 5px;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 .actions .btn:hover {
   background-color: #0056b3;
 }
+
+/* Botón de volver */
 .back-button-container {
   position: fixed;
   bottom: 6%;
@@ -169,3 +125,56 @@
   background-color: #0056b3;
 }
 
+/* Ajustes responsivos para pantallas medianas */
+@media (max-width: 768px) {
+  .profile-info {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .info-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .actions .btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .back-button-container{
+    display: none;
+  }
+}
+
+/* Ajustes responsivos para pantallas pequeñas */
+@media (max-width: 450px), (max-height: 700px) {
+  .perfil-container {
+    min-width: 450px;
+    min-height: 700px;
+    overflow: auto;
+  }
+
+  .profile-info {
+    width: 85%;
+    padding: 15px;
+    max-height: 500px;
+  }
+
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .info-field label, .info-field p {
+    font-size: 12px;
+  }
+
+  .actions .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
 import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
@@ -81,12 +81,17 @@ export class VentanaPrincipalComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private gravatarService: GravatarService
+    private gravatarService: GravatarService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token') || '';
-    this.myemail = localStorage.getItem('email') || '';
+    const localEmail = localStorage.getItem('email') || '';
+
+    // Obtener el parámetro 'email' de la URL o usar el email de localStorage
+    const routeEmail = this.route.snapshot.paramMap.get('email');
+    this.myemail = routeEmail || localEmail;
 
     // Determina si el usuario es administrador o empleado basado en el prefijo del token
     if (this.token.startsWith('a-')) {
@@ -99,16 +104,26 @@ export class VentanaPrincipalComponent implements OnInit {
     }
 
     // Obtener la información del usuario logueado
-    this.userService.getUserInfo(this.myemail, this.token).subscribe(
-      (userInfo: any) => {
-        this.loggedUser.firstName = userInfo.nombre;
-        this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
-        this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
-      },
-      (error) => {
-        console.error('Error al obtener la información del usuario:', error);
-      }
-    );
+    if (this.myemail && this.token) {
+      this.userService.getUserInfo(this.myemail, this.token).subscribe(
+        (userInfo: any) => {
+          this.loggedUser.firstName = userInfo.nombre;
+          this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+          this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
+        },
+        (error) => {
+          console.error('Error al obtener la información del usuario:', error);
+        }
+      );
+    }
+  }
+  visitProfile(selectedUser: any): void {
+    if (selectedUser) {
+      const route = selectedUser.isAdmin ? '/perfil-admin' : '/perfil-usuario';
+      this.router.navigate([route, { email: selectedUser.email }]);
+    } else {
+      console.error('El usuario seleccionado no está definido');
+    }
   }
   
 
