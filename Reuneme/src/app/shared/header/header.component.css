@@ -1,22 +1,23 @@
 .header {
     width: 100%;
-    height: 60px;
+    height: 6.58vh; /* Equivalente a 60px */
     background: linear-gradient(to right, #175be2, #06c6f3);
     color: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0.22vh 0.55vh rgba(0, 0, 0, 0.5); /* Equivalente a 2px y 5px */
     position: absolute;
     top: 0;
     z-index: 2;
 }
+
 .logo-img {
     position: absolute;
-    bottom: -35px;
+    bottom: -3.84vh; /* Equivalente a -35px */
     left: 50%;
     transform: translateX(-50%);
-    max-width: 200px;
+    max-width: 21.96vh; /* Equivalente a 200px */
     height: auto;
     z-index: 2;
 }

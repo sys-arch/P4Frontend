@@ -110,18 +110,18 @@
       
 
       <div class="user-list-content">
-        <div *ngFor="let user of filteredUsers()" class="user-list-row" (click)="visitProfile(user)">
-          <div class="user-photo">
+        <div *ngFor="let user of filteredUsers()" class="user-list-row" >
+          <div class="user-photo" (click)="visitProfile(user)">
             <img [src]="user.profilePicture" alt="Foto de perfil">
             <small>{{ user.isAdmin ? 'Administrador' : 'Usuario' }}</small>
           </div>
 
-          <div class="user-name-lastname">
+          <div class="user-name-lastname" (click)="visitProfile(user)">
             <span class="user-name">{{ user.firstName }}</span>
             <span class="user-lastname">{{ user.lastName }}</span>
           </div>
 
-          <div class="user-email">{{ user.email }}</div>
+          <div class="user-email" (click)="visitProfile(user)">{{ user.email }}</div>
 
           <!-- Botón para bloquear o desbloquear -->
           <div class="user-blocked">
@@ -237,7 +237,7 @@
   <!-- Modal de confirmación personalizado -->
   <div class="modal-overlay" *ngIf="showDeleteModalTurn">
     <div class="modalT">
-      <p>¿Estás seguro de que deseas eliminar este turno?</p>
+      <h4>¿Estás seguro de que deseas eliminar este turno?</h4>
       <div class="modal-actionsT">
         <button (click)="confirmDeleteTurn()" class="EliminarTurno-btn">Eliminar</button>
         <button (click)="cancelDeleteTurn()" class="cancel-btn">Cancelar</button>
