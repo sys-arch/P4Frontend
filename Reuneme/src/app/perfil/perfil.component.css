@@ -1,3 +1,7 @@
+html { 
+  font-size: 16px; /* 1 rem = 16px para una base consistente */
+}
+
 .perfil-container {
   position: relative;
   min-height: 100vh;
@@ -7,48 +11,48 @@
   align-items: center;
   background: url('/assets/images/login-background2.png') no-repeat center center;
   background-size: cover;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  padding: 1.25rem;
+  box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.9);
   text-align: center;
-  padding-top: 80px;
+  padding-top: 5rem;
 }
 
 .perfil-container h2 {
-  margin: 0 0 20px;
+  margin: 0 0 0.125rem;
   padding: 0;
   color: #ffffff;
 }
 
 /* Contenedor de información del perfil */
 .profile-info {
-  width: 500px;
-  padding: 25px;
+  width: 31.25rem;
+  padding: 1.5625rem;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #23252b;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
+  box-shadow: 0 0.9375rem 1.5625rem rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
   text-align: center;
   z-index: 1;
-  max-height: 700px;
+  max-height: 43.75rem;
   overflow-y: auto;
 }
 
 /* Imagen de perfil */
 .profile-picture {
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 0.9375rem;
   z-index: 100;
 }
 
 .profile-img {
-  width: 130px;
-  height: 130px;
+  width: 8.125rem;
+  height: 8.125rem;
   border-radius: 50%;
-  border: 3px solid #00eeff;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+  border: 0.15vw solid #00eeff;
+  box-shadow: 0 0.625rem 0.625rem rgba(0, 0, 0, 0.5);
   object-fit: cover;
   z-index: 99;
 }
@@ -57,67 +61,67 @@
 .info-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  gap: 0.9375rem;
   text-align: left;
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 31.25rem;
 }
 
 /* Campo de información */
 .info-field {
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 }
 
 .info-field label {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: #f5f5f5;
-  margin-bottom: 2px;
+  margin-bottom: 0.125rem;
   display: block;
 }
 
 .info-field p {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #ffffff;
   background: rgba(0, 0, 0, 0.1);
-  padding: 4px 6px;
-  border-radius: 5px;
+  padding: 0.25rem 0.375rem;
+  border-radius: 0.3125rem;
 }
 
 /* Ajustes en la sección de acciones para el botón */
 .actions {
-  margin-top: 10px;
+  margin-top: 0.625rem;
   text-align: center;
 }
 
 .actions .btn {
   background-color: #007bff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.3125rem;
   color: white;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
 .actions .btn:hover {
-  background-color: #0056b3;
+  background-color: hsl(211, 100%, 35%);
 }
 
 /* Botón de volver */
 .back-button-container {
   position: fixed;
   bottom: 6%;
-  left: 20px;
+  left: 1.25rem;
 }
 
 .back-button {
   background-color: #007bff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.3125rem;
   color: white;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -129,7 +133,7 @@
 @media (max-width: 768px) {
   .profile-info {
     width: 90%;
-    padding: 20px;
+    padding: 1.25rem;
   }
 
   .info-fields {
@@ -137,13 +141,13 @@
   }
 
   .profile-img {
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
   }
 
   .actions .btn {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
   }
   .back-button-container{
     display: none;
@@ -153,28 +157,28 @@
 /* Ajustes responsivos para pantallas pequeñas */
 @media (max-width: 450px), (max-height: 700px) {
   .perfil-container {
-    min-width: 450px;
-    min-height: 700px;
+    min-width: 28.125rem;
+    min-height: 43.75rem;
     overflow: auto;
   }
 
   .profile-info {
     width: 85%;
-    padding: 15px;
-    max-height: 500px;
+    padding: 0.9375rem;
+    max-height: 31.25rem;
   }
 
   .profile-img {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
   }
 
   .info-field label, .info-field p {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .actions .btn {
-    padding: 6px 10px;
-    font-size: 12px;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
   }
 }
