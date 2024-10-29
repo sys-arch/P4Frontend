@@ -215,10 +215,19 @@
     <div class="calend-ausen-container">
       <div class="ausencias-contain">
         <h3>Consulta de ausencias</h3>
-
-        <span class="column-header">Logica de las ausencias</span>
-      </div>
-    
+        <div class="ausencias-container">
+          <h4>Lista de ausencias</h4>
+          <ul>
+            <div *ngFor="let ausencia of ausencias" class="ausencia-item">
+              <li>
+                <p><strong>Usuario:</strong> {{ ausencia.usuario }}</p>
+                <p><strong>Motivo:</strong> {{ ausencia.motivo }}</p>
+                <p><strong>Desde:</strong> {{ ausencia.fechaInicio }} <strong>Hasta:</strong> {{ ausencia.fechaFin }}</p>
+              </li>
+            </div>
+          </ul>
+        </div>
+    </div>
       <div class="calendar-contain">
         <h2>Turnos horarios</h2>
        <!-- AÑADIDO NUEVO BORRAR LUEGO-->
