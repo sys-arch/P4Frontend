@@ -1,0 +1,312 @@
+/* Contenedor principal de la edición */
+.perfil-container {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+    text-align: center;
+}
+
+.perfil-container h2 {
+    margin: 0 0 20px;
+    padding: 0;
+    color: #ffffff;
+    font-size: 1.8rem;
+}
+
+/* Información del perfil - manteniendo el recuadro similar */
+.profile-info {
+    width: 600px;
+    padding: 25px;
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1;
+    margin-top: 80px;
+}
+
+/* Moviendo la imagen dentro del contenedor de información */
+.profile-picture {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px solid #00eeff;
+    background-image: url('/assets/images/UsuarioSinFoto.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+/* Contenedor de los campos de formulario en dos columnas */
+.info-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    text-align: left;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+/* Estilo para cada campo de entrada de información */
+.textbox {
+    position: relative;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.textbox label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-90%);
+    font-size: 14px;
+    color: #f5f5f5;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.textbox input,
+.textbox select {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f5f5f5;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.textbox input:focus ~ label,
+.textbox input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: #00eeff;
+}
+
+.textbox input:focus {
+    border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 10px #00eeff;
+}
+
+.textbox input::placeholder {
+    color: transparent;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.toggle-password {
+    background: none;
+    border: none;
+    color: #00eeff;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Botón de envío */
+.btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btnred {
+    width: 100%;
+    background-color: #b64e3e;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease-in-out, transform 0.3s;
+
+    position: relative;
+    margin-bottom: 20px;
+   
+    padding: 1px;
+
+    
+}
+
+.btnred:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btnred:active {
+    transform: translateY(1px);
+}
+
+/* Botón para volver */
+.back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Mensaje para campos obligatorios */
+.required-info {
+    font-size: 12px;
+    color: #d9534f;
+}
+
+/* Estilos para hover en campos de perfil */
+.info-field p:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para secciones adicionales */
+.actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.actions .btn {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.actions .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Ajustes responsivos para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .info-fields {
+        grid-template-columns: 1fr;
+    }
+}
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #2a2a2a; /* Rojo de advertencia */
+    padding: 50px; /* Aumenta el padding para hacerlo más grande */
+    border-radius: 25px; /* Bordes redondeados más grandes */
+    width: 330px; /* Aumentar el ancho del modal */
+    height: 280px; /* Aumentar la altura del modal */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6); /* Sombra más grande para mayor profundidad */
+    border: 3px solid #ff3b3b; /* Borde más grueso en rojo oscuro */
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff; /* Texto en blanco */
+    position: relative;
+}
+
+.modal h3 {
+    color: #f1f1f1;
+    
+    
+    font-size: 28px; /* Tamaño de fuente más grande */
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra en el texto para dar más claridad */
+}
+/* Texto de advertencia */
+.warning-text {
+    font-size: 13px; /* Ajustar tamaño de fuente */
+    color: #f1c40f; /* Amarillo brillante para advertencia */
+    margin-top: 5px; /* Asegura que esté cerca del título */
+    margin-bottom: 25px; /* Más espacio antes de los botones */
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Estilos de los botones */
+.confirm-btn {
+    background-color: #c9302c;
+    color: white;
+    padding: 12px 25px; /* Aumentar tamaño del botón */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.confirm-btn:hover {
+    background-color: #ac2925;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 25px; /* Aumentar tamaño del botón */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}

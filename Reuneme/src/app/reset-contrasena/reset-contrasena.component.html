@@ -1,0 +1,75 @@
+<app-header></app-header>
+
+<!-- Contenedor principal -->
+<div class="login-container">
+    <!-- Si el token es válido, mostramos el formulario -->
+    <div *ngIf="isValidToken; else invalidToken">
+        <div class="login-box">
+            <h2>Restablecer Contraseña</h2>
+
+            <!-- Texto explicativo -->
+            <p class="recovery-text">
+                Introduce tu nueva contraseña y confírmala para actualizarla.
+            </p>
+
+            <form #registerForm="ngForm" novalidate>
+                <!-- Campo de nueva contraseña -->
+                <div class="textbox password-box">
+                    <input 
+                        type="password" 
+                        id="password1" 
+                        placeholder="Contraseña" 
+                        name="password1" 
+                        [(ngModel)]="newPassword" 
+                        required 
+                    />
+                    <label for="password1">Contraseña*</label>
+                    <span 
+                        class="toggle-password" 
+                        (click)="togglePasswordVisibility1()" 
+                        (keypress)="togglePasswordVisibility1()"
+                    >
+                        {{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}
+                    </span>
+                </div>
+
+                <!-- Campo de confirmación de contraseña -->
+                <div class="textbox password-box">
+                    <input 
+                        type="password" 
+                        id="password2" 
+                        placeholder="Repetir Contraseña" 
+                        name="password2" 
+                        [(ngModel)]="confirmPassword" 
+                        required 
+                    />
+                    <label for="password2">Repetir Contraseña*</label>
+                    <span 
+                        class="toggle-password" 
+                        (click)="togglePasswordVisibility2()" 
+                        (keypress)="togglePasswordVisibility2()"
+                    >
+                        {{ passwordVisible2 ? 'Ocultar' : 'Mostrar' }}
+                    </span>
+                </div>
+
+                <!-- Botón para enviar el formulario de forma manual -->
+                <button class="btn" type="button" (click)="onSubmit($event)">Restablecer Contraseña</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mostrar un mensaje de error si el token es inválido o ha caducado -->
+    <ng-template #invalidToken>
+        <div class="error-box">
+            <h2>Ups, URL no válida</h2>
+            <p>El enlace para restablecer la contraseña es inválido o ha caducado. Por favor, solicita un nuevo enlace.</p>
+        </div>
+    </ng-template>
+</div>
+
+<div class="back-button-container">
+    <button class="back-button" (click)="navigateTo('/login')">Volver</button>
+</div>
+
+<app-footer></app-footer>

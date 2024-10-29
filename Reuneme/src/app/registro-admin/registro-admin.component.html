@@ -1,7 +1,4 @@
-<div class="header">
-    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-</div>
-
+<app-header></app-header>
 <div class="register-container">
     <div class="register-box">
         <h2>Creación de Cuenta Administrador</h2>
@@ -36,7 +33,7 @@
 
                 <!-- Correo Electrónico -->
                 <div class="textbox">
-                    <input type="text" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
+                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
                     <label for="email">Correo Electrónico*</label>
                 </div>
 
@@ -54,6 +51,7 @@
                     <input type="password" id="password1" placeholder="" name="password1" [(ngModel)]="password1" required />
                     <label for="password1">Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility1()" (keypress)="togglePasswordVisibility1()">{{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}</span>
+                    
                 </div>
 
                 <!-- Repetir Contraseña -->
@@ -71,7 +69,7 @@
         </form>
 
         <div class="actions">
-            <button class="btn" type="submit">Registrar como Administrador</button>
+            <button class="btn" (click)="onSubmit()">Registrar como Administrador</button>
         </div>
     </div>
 
@@ -81,17 +79,6 @@
 
     <app-loader *ngIf="isLoading"></app-loader>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <ul class="footer-links">
-                <li><a href="#">Condiciones de Uso</a></li>
-                <li><a href="#">Política de Privacidad</a></li>
-                <li><a href="#">Consentimiento de Cookies</a></li>
-            </ul>
-        </div>
-    </footer>
-
-    <div class="footer-info">
-        <span>© 2024 ReuneMe, LLC</span>
-    </div>
+    
+    <app-footer></app-footer>
 </div>

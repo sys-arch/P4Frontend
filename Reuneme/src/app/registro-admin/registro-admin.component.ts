@@ -2,17 +2,23 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
 import { LoaderComponent } from '../loader/loader.component';
 import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
 
 @Component({
   selector: 'app-registro-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, ContrasenaOlvidadaComponent, HeaderComponent],
   templateUrl: './registro-admin.component.html',
   styleUrls: ['./registro-admin.component.css']
 })
 export class RegistroAdminComponent {
+  
   nombre: string = '';
   primerApellido: string = ''; // Primer Apellido
   segundoApellido: string = ''; // Segundo Apellido
@@ -91,7 +97,7 @@ export class RegistroAdminComponent {
 
     // Comprueba si todos los campos obligatorios han sido completados
     if (!this.nombre || !this.primerApellido || !this.email || !this.centro || !this.password1 || !this.password2) {
-      this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
+      alert('Todos los campos obligatorios deben estar llenos.');
       return;
     }
 

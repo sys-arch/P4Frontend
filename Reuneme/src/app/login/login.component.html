@@ -1,6 +1,6 @@
-<div class="header">
-    <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-</div>
+<link rel="stylesheet" href="/styles.css">
+
+<app-header></app-header>
 
 <div class="login-container">
     <div class="login-box">
@@ -33,7 +33,7 @@
                 <span class="toggle-password" (click)="togglePasswordVisibility()">{{ passwordVisible ? 'Ocultar' : 'Mostrar' }}</span>
             </div>
             <div class="forgot-password-container">
-                <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
+                <a href="javascript:void(0)" (click)="navigateTo('/contrasena-olvidada')" class="forgot-password">¿Has olvidado tu contraseña?</a>
             </div>
             <div class="login-failed-container">
                 <div *ngIf="loginFailed" class="login-failed-message">
@@ -56,20 +56,9 @@
     <div class="back-button-container">
         <button (click)="navigateTo('/')" class="back-button">Volver</button>
     </div>
+    
 
     <app-loader *ngIf="isLoading"></app-loader>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <ul class="footer-links">
-                <li><a href="#">Condiciones de Uso</a></li>
-                <li><a href="#">Política de Privacidad</a></li>
-                <li><a href="#">Consentimiento de Cookies</a></li>
-            </ul>
-        </div>
-    </footer>
-
-    <div class="footer-info">
-        <span>© 2024 ReuneMe, LLC</span>
-    </div>
+    <app-footer></app-footer>
 </div>

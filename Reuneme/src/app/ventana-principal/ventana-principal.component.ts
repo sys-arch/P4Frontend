@@ -1,55 +1,67 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../loader/loader.component"; // Importa Router para recibir el token
+import { LoaderComponent } from "../loader/loader.component";
+import { GravatarService } from '../services/gravatar.service';
+import { UserService } from '../services/user.service';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
+
+
+
+
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent],  // Asegúrate de agregar FormsModule aquí
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
+
+
 export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
-  isAdmin: boolean = true;  // Cambia según el prefijo del token
-  token: string = '';  // Variable para almacenar el token recibido
+  isAdmin: boolean = true;
+  token: string = '';
+  myemail: string = '';
+  isLoading: boolean = false;
+  searchBy: string = 'name';
+  searchQuery: string = '';
+  filterBy: string = 'all';
+  selectedUser: any = null;
+  showBlockModal: boolean = false;
+  showValiModal: boolean = false;
+  showDeleteModal: boolean = false;
+  countdown: number = 5;
+  countdownInterval: any;
+  activeTab: string = 'tab1'; // Por defecto, la pestaña 1 está activa
 
-  isLoading: boolean = false;  // Controla la visibilidad del spinner de carga
-
-  searchBy: string = 'name';  // Campo de búsqueda predeterminado
-  searchQuery: string = '';   // Consulta de búsqueda
-  filterBy: string = 'all';   // Filtro predeterminado (todos los usuarios)
-
-  selectedUser: any = null;  // Usuario seleccionado
-  showBlockModal: boolean = false;  // Mostrar/ocultar modal de confirmación
-  showValiModal:boolean =false;
-  showDeleteModal: boolean = false;  // Controla la visibilidad del modal de eliminación
-  countdown: number = 5;  // Cuenta regresiva de 5 segundos
-  countdownInterval: any;  // Intervalo para el temporizador
-
-  // Usuario logueado (temporal hasta obtener datos de la base de datos)
   loggedUser: any = {
     firstName: 'John',
     lastName: 'Doe',
     profilePicture: '/assets/images/UsuarioSinFoto.png',
-    role: 'admin'  // Podría ser 'owner', 'admin', o 'user'
+    role: 'admin'
   };
 
-  // Lista de usuarios de prueba con todos los campos requeridos, incluyendo 'profilePicture'
   users = [
     {
+      id: '1',
       firstName: 'Aaron',
       lastName: 'Smith',
       email: 'aaron.smith@example.com',
-      department: '',
-      center: 'Centro Norte',
-      joiningDate: '',
-      jobTitle: 'Administrador',
       isAdmin: true,
       profilePicture: 'assets/images/test-perfil1.jpg',
       estado: 'Validado'
+    },
+    {
+      firstName: 'Maria',
+      lastName: 'González',
+      email: 'maria.gonzalez@example.com',
+      isAdmin: false,
+      profilePicture: 'assets/images/test-perfil2.jpg',
+      estado: 'No validado'
     },
     {
       firstName: 'Maria',
@@ -63,185 +75,181 @@ export class VentanaPrincipalComponent implements OnInit {
       profilePicture: 'assets/images/test-perfil2.jpg',
       estado: 'No validado'
     },
-    {
-      firstName: 'Luis',
-      lastName: 'Fernández',
-      email: 'luis.fernandez@example.com',
-      department: 'Marketing',
-      center: 'Centro Este',
-      joiningDate: '20/01/2022',
-      jobTitle: 'Especialista',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Carlos',
-      lastName: 'Martínez',
-      email: 'carlos.martinez@example.com',
-      department: 'Ventas',
-      center: 'Centro Oeste',
-      joiningDate: '10/05/2020',
-      jobTitle: 'Vendedor',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Elena',
-      lastName: 'Ruiz',
-      email: 'elena.ruiz@example.com',
-      department: 'Recursos Humanos',
-      center: 'Centro Norte',
-      joiningDate: '25/11/2019',
-      jobTitle: 'Gerente de RRHH',
-      isAdmin: true,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Pedro',
-      lastName: 'López',
-      email: 'pedro.lopez@example.com',
-      department: 'Tecnología',
-      center: 'Centro Sur',
-      joiningDate: '12/07/2021',
-      jobTitle: 'Soporte Técnico',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Ana',
-      lastName: 'Hernández',
-      email: 'ana.hernandez@example.com',
-      department: 'Finanzas',
-      center: 'Centro Este',
-      joiningDate: '05/09/2020',
-      jobTitle: 'Contadora',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'No validado'
-    },
-    {
-      firstName: 'David',
-      lastName: 'García',
-      email: 'david.garcia@example.com',
-      department: 'Operaciones',
-      center: 'Centro Oeste',
-      joiningDate: '01/01/2022',
-      jobTitle: 'Gerente de Operaciones',
-      isAdmin: true,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    },
-    {
-      firstName: 'Sofia',
-      lastName: 'Torres',
-      email: 'sofia.torres@example.com',
-      department: 'Ventas',
-      center: 'Centro Norte',
-      joiningDate: '15/03/2021',
-      jobTitle: 'Ejecutiva de Ventas',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil1.jpg',
-      estado: 'Bloqueado'
-    },
-    {
-      firstName: 'Miguel',
-      lastName: 'Ramírez',
-      email: 'miguel.ramirez@example.com',
-      department: 'Tecnología',
-      center: 'Centro Sur',
-      joiningDate: '18/12/2019',
-      jobTitle: 'Desarrollador',
-      isAdmin: false,
-      profilePicture: 'assets/images/test-perfil2.jpg',
-      estado: 'Validado'
-    }
+  
   ];
   
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private gravatarService: GravatarService
+  ) {}
 
   ngOnInit(): void {
-    // Acceder al token desde el estado del Router
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.token = navigation.extras.state['token'];
-      console.log('Token recibido:', this.token);  // Imprimir el token para verificar
+    this.token = localStorage.getItem('token') || '';
+    this.myemail = localStorage.getItem('email') || '';
 
-      // Verificar el prefijo del token para determinar si es administrador o usuario
-      if (this.token.startsWith('a-')) {
-        this.isAdmin = true;
-        console.log('Vista de Administrador');
-      } else if (this.token.startsWith('e-')) {
-        this.isAdmin = false;
-        console.log('Vista de Usuario');
-      }
+    // Determina si el usuario es administrador o empleado basado en el prefijo del token
+    if (this.token.startsWith('a-')) {
+      this.isAdmin = true;
+      this.loggedUser.role = 'admin';
+      this.loadAllUsers(); // Cargar todos los usuarios si es administrador
+    } else if (this.token.startsWith('e-')) {
+      this.isAdmin = false;
+      this.loggedUser.role = 'employee';
     }
+
+    // Obtener la información del usuario logueado
+    this.userService.getUserInfo(this.myemail, this.token).subscribe(
+      (userInfo: any) => {
+        this.loggedUser.firstName = userInfo.nombre;
+        this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+        this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
+      },
+      (error) => {
+        console.error('Error al obtener la información del usuario:', error);
+      }
+    );
+  }
+  
+
+  
+
+  selectTab(tab: string) {
+    this.activeTab = tab;
   }
 
-  // Método para mostrar el modal de eliminación y empezar la cuenta regresiva
   toggleDelete(user: any): void {
     this.selectedUser = user;
     this.showDeleteModal = true;
-    this.countdown = 5;  // Restablece la cuenta regresiva
-
+    this.countdown = 5;
     this.startCountdown();
   }
 
-  // Inicia la cuenta regresiva
   startCountdown(): void {
     this.countdownInterval = setInterval(() => {
       if (this.countdown > 0) {
         this.countdown--;
       } else {
-        clearInterval(this.countdownInterval);  // Detener el intervalo cuando llegue a 0
+        clearInterval(this.countdownInterval);
       }
     }, 1000);
   }
 
-  // Confirmar eliminación del usuario
   confirmDelete(): void {
-    console.log('Usuario eliminado:', this.selectedUser);
-    this.users = this.users.filter(user => user !== this.selectedUser);  // Eliminar el usuario de la lista
-    this.showDeleteModal = false;
-    this.selectedUser = null;
-    clearInterval(this.countdownInterval);  // Limpiar el intervalo si no se ha eliminado
-  }
+    if (this.selectedUser) {
+        this.userService.deleteUserByEmail(this.selectedUser.email, this.token).subscribe(
+            () => {
+                this.showDeleteModal = false; 
+                this.selectedUser = null; 
+                clearInterval(this.countdownInterval); 
+                this.loadAllUsers(); // Recarga la lista completa
+            },
+            (error) => {
+                console.error('Error al eliminar el usuario:', error);
+            }
+        );
+    }
+}
 
-  // Cancelar la acción de eliminar
+loadAllUsers(): void {
+  this.isLoading = true;
+  this.users = []; // Limpia la lista antes de recargar
+  this.userService.getAllEmails(this.token).subscribe(
+      (emails: string[]) => {
+          const userObservables = emails.map((email) =>
+              this.userService.getUserInfo(email, this.token)
+          );
+
+          // Suscribe a cada observable y añade los usuarios a la lista
+          userObservables.forEach((userObs, index) => {
+              userObs.subscribe(
+                  (userInfo: any) => {
+                      const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
+                      const isBlocked = !isAdmin && userInfo.bloqueado === true; // Verifica bloqueo solo para usuarios
+                      
+                      const user = {
+                          firstName: userInfo.nombre,
+                          lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
+                          email: userInfo.email,
+                          isAdmin: isAdmin,
+                          profilePicture: this.gravatarService.getGravatarUrl(userInfo.email),
+                          // Solo los usuarios pueden estar bloqueados
+                          estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
+                      };
+                      this.users.push(user);
+                  },
+                  (error) => {
+                      console.error(`Error al obtener la información del usuario con email ${emails[index]}:`, error);
+                  }
+              );
+          });
+
+          this.isLoading = false;
+      },
+      (error) => {
+          console.error('Error al obtener la lista de emails:', error);
+          this.isLoading = false;
+      }
+  );
+}
+
+
+
+
+
+
   cancelDelete(): void {
-    console.log('Eliminación cancelada');
     this.selectedUser = null;
     this.showDeleteModal = false;
-    clearInterval(this.countdownInterval);  // Limpiar el intervalo
+    clearInterval(this.countdownInterval);
   }
 
   toggleBlocked(user: any): void {
-    console.log('Usuario seleccionado para bloquear:', user);
+    if (user.isAdmin) {
+        alert("No se permite bloquear a un administrador.");
+        return;
+    }
+
     if (user.estado === 'Bloqueado') {
-      // Si el usuario está bloqueado, lo desbloqueas directamente.
-      user.estado = 'Validado'; 
+        // Desbloquea directamente si el usuario ya está bloqueado
+        this.userService.blockUserByEmail(user.email, false, this.token).subscribe(
+            () => {
+                user.estado = 'No validado'; // Actualiza el estado a "No validado" al desbloquear
+                this.loadAllUsers(); // Recarga la lista de usuarios
+            },
+            (error) => {
+                console.error('Error al desbloquear el usuario:', error);
+            }
+        );
     } else {
-      // Si no está bloqueado, muestras el modal para confirmación.
-      this.selectedUser = user;
-      this.showBlockModal = true;
-      console.log('Modal activado, usuario a bloquear:', this.selectedUser);
+        // Si está desbloqueado, mostrar el modal de confirmación de bloqueo
+        this.selectedUser = user;
+        this.showBlockModal = true;
     }
   }
-  
+
   confirmBlock(): void {
-      console.log('Confirmación de bloqueo para:', this.selectedUser);
       if (this.selectedUser) {
-          this.selectedUser.estado = 'Bloqueado';
-          this.showBlockModal = false;
-          this.selectedUser = null;
+          // Determinar si se va a bloquear o desbloquear basado en el estado actual
+          const bloquear = this.selectedUser.estado !== 'Bloqueado';
+          
+          // Llamar al servicio para bloquear o desbloquear al usuario
+          this.userService.blockUserByEmail(this.selectedUser.email, bloquear, this.token).subscribe(
+              () => {
+                  // Actualizar el estado del usuario en la lista según el resultado
+                  this.selectedUser.estado = bloquear ? 'Bloqueado' : 'No validado';
+                  this.showBlockModal = false; // Cerrar el modal
+                  this.selectedUser = null; // Restablecer usuario seleccionado
+                  this.loadAllUsers(); // Recargar la lista de usuarios
+              },
+              (error) => {
+                  console.error('Error al cambiar el estado de bloqueo del usuario:', error);
+              }
+          );
       }
   }
 
   cancelBlock(): void {
-      console.log('Bloqueo cancelado');
       this.selectedUser = null;
       this.showBlockModal = false;
   }
@@ -250,54 +258,54 @@ export class VentanaPrincipalComponent implements OnInit {
   toggleValidation(user: any): void {
     if (user.estado === 'No validado') {
       this.selectedUser = user;
-      this.showValiModal = true;  // Muestra el modal de confirmación
+      this.showValiModal = true;
     }
   }
 
   confirmValidation(): void {
     if (this.selectedUser) {
-      this.selectedUser.estado = 'Validado';  // Cambia el estado a 'Validado'
-      console.log(`Usuario validado: ${this.selectedUser.firstName} ${this.selectedUser.lastName}`);
-      this.showValiModal = false;  // Cierra el modal
-      this.selectedUser = null;  // Limpia la selección
+      this.userService.verifyUserByEmail(this.selectedUser.email, true, this.token).subscribe(
+        () => {
+          this.selectedUser.estado = 'Validado';
+          this.showValiModal = false;
+          this.selectedUser = null;
+          this.loadAllUsers();
+        },
+        (error) => {
+          console.error('Error al verificar el usuario:', error);
+        }
+      );
     }
   }
 
   cancelValidation(): void {
     this.selectedUser = null;
     this.showValiModal = false;
-}
+  }
+
   
-  // Método para filtrar usuarios según la búsqueda y el tipo (admin o usuario)
+
   filteredUsers() {
     return this.users
       .filter(user => {
-        // Filtrado por rol (administrador o empleado)
         if (this.filterBy === 'admin' && !user.isAdmin) return false;
         if (this.filterBy === 'employee' && user.isAdmin) return false;
-  
-        // Filtrado por estado (bloqueado, validado, no validado)
         if (this.filterBy === 'blocked' && user.estado !== 'Bloqueado') return false;
         if (this.filterBy === 'validated' && user.estado !== 'Validado') return false;
         if (this.filterBy === 'notValidated' && user.estado !== 'No validado') return false;
-  
         return true;
       })
       .filter(user => {
-        // Filtrado por campo de búsqueda
         const searchQueryLower = this.searchQuery.toLowerCase();
         if (this.searchBy === 'name') {
           return user.firstName.toLowerCase().includes(searchQueryLower);
         } else if (this.searchBy === 'email') {
           return user.email.toLowerCase().includes(searchQueryLower);
-        } else if (this.searchBy === 'department') {
-          return user.department.toLowerCase().includes(searchQueryLower);
         }
         return false;
       });
   }
 
-  // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
@@ -305,5 +313,111 @@ export class VentanaPrincipalComponent implements OnInit {
       this.router.navigate([route]);
     }, 1000);
   }
+
+  // Método para navegar a la vista de edición de usuario
+  editUser(userEmail: string): void {
+    if (userEmail) {
+      this.router.navigate(['/edicion-usuario', userEmail]);
+    } else {
+      console.error('El correo electrónico del usuario no está definido');
+    }
+  }
   
+  /*<!-- AÑADIDO NUEVO BORRAR LUEGO-->*/
+  turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
+    {
+      inicio: this.convertirAHorasEnMinutos("07", "00"),
+      fin: this.convertirAHorasEnMinutos("15", "00"),
+      texto: "Turno horario: 07:00 - 15:00"
+    },
+    {
+      inicio: this.convertirAHorasEnMinutos("15", "00"),
+      fin: this.convertirAHorasEnMinutos("23", "00"),
+      texto: "Turno horario: 15:00 - 23:00"
+    }
+  ];
+
+  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')); 
+  minutos: string[] = ['00', '15', '30', '45'];
+
+  horaInicioHora: string | null = null;
+  horaInicioMinuto: string | null = null;
+  horaFinHora: string | null = null;
+  horaFinMinuto: string | null = null;
+
+  showDeleteModalTurn: boolean = false;
+  turnoAEliminar: number | null = null;  // Añade esta propiedad aquí
+
+
+  addTurnoHorario() {
+    if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
+      alert("Por favor, selecciona tanto la hora de inicio como la de fin.");
+      return;
+    }
+
+    const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
+    const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
+
+    if (this.haySuperposicion(inicio, fin)) {
+      alert("El turno se superpone con otro existente. Por favor, elige otro intervalo.");
+      return;
+    }
+
+    // Agregar el turno si no hay superposición
+    const textoTurno = `Turno horario: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`;
+    this.turnosHorarios.push({ inicio, fin, texto: textoTurno });
+
+    // Reiniciar las selecciones
+    this.horaInicioHora = null;
+    this.horaInicioMinuto = null;
+    this.horaFinHora = null;
+    this.horaFinMinuto = null;
+  }
+
+  // Función para convertir horas y minutos en minutos desde el inicio del día
+  convertirAHorasEnMinutos(hora: string, minuto: string): number {
+    return parseInt(hora, 10) * 60 + parseInt(minuto, 10);
+  }
+
+  // Función para verificar superposición de turnos
+  haySuperposicion(inicio: number, fin: number): boolean {
+    return this.turnosHorarios.some(turno => 
+      (inicio >= turno.inicio && inicio < turno.fin) || // comprobar empezar turno existente
+      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existenes
+      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existenes
+    );
+  }
+
+
+  removeTurnoHorario(index: number) {
+    if (confirm(`¿Estás seguro de que quieres eliminar el turno: ${this.turnosHorarios[index].texto}?`)) {
+      this.turnosHorarios.splice(index, 1);
+    }
+  }
+
+
+
+  // Método para abrir el modal de confirmación
+  openDeleteModal(index: number) {
+    this.showDeleteModalTurn = true;
+    this.turnoAEliminar = index;
+  }
+
+
+  // Confirmar eliminación del turno
+  confirmDeleteTurn() {
+    if (this.turnoAEliminar !== null) {
+      this.turnosHorarios.splice(this.turnoAEliminar, 1);
+      this.turnoAEliminar = null;
+    }
+    this.showDeleteModalTurn = false;
+  }
+
+  // Cancelar eliminación
+  cancelDeleteTurn() {
+    this.turnoAEliminar = null;
+    this.showDeleteModalTurn = false;
+  }
+
 }
+

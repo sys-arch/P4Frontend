@@ -1,9 +1,8 @@
-<div class="header">
-  <img src="assets/images/reuneme.png" class="logo-img" alt="ReuneMe Logo">
-</div>
+<app-header></app-header>
 <div class="perfil-container">  
   <div class="profile-info">
     <h2>Perfil Usuario</h2>
+    
     <!-- Imagen de perfil -->
     <div class="profile-picture">
       <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
@@ -48,6 +47,11 @@
         <p>{{ user.perfil }}</p>
       </div>
     </div>
+
+    <!-- Botón para cambiar contraseña, disponible para todos los usuarios -->
+    <div class="actions">
+      <button class="btn" (click)="editUser(this.user.correo)">Editar Perfil</button>
+    </div>
   </div>
 
   <!-- Botón para volver -->
@@ -56,18 +60,5 @@
   </div>
 
   <app-loader *ngIf="isLoading"></app-loader>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <ul class="footer-links">
-        <li><a href="#">Condiciones de Uso</a></li>
-        <li><a href="#">Política de Privacidad</a></li>
-        <li><a href="#">Consentimiento de Cookies</a></li>
-      </ul>
-    </div>
-  </footer>
-
-  <div class="footer-info">
-    <span>© 2024 ReuneMe, LLC</span>
-  </div>
+  <app-footer></app-footer>
 </div>

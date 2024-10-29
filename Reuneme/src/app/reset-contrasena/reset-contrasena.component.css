@@ -1,0 +1,192 @@
+/* Contenedor principal */
+.login-container {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/assets/images/login-background2.png') no-repeat center center;
+    background-size: cover;
+}
+
+/* Caja del formulario */
+.login-box {
+    width: 450px;
+    padding: 40px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #23252b;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.login-box h2 {
+    margin: 0 0 20px;
+    color: #ffffff;
+}
+
+/* Texto explicativo */
+.recovery-text {
+    color: #cccccc;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 25px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Campo de texto */
+.textbox {
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.textbox label {
+    position: absolute;
+    top: 65%;
+    left: 10px;
+    transform: translateY(-80%);
+    font-size: 16px;
+    color: #f5f5f5;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f5f5f5;
+    font-size: 16px;
+}
+
+.textbox input:focus ~ label,
+.textbox input:not(:placeholder-shown) ~ label {
+    top: 0;
+    font-size: 12px;
+    color: #00eeff;
+}
+
+.textbox input:focus {
+    border-bottom: 2px solid #00eeff;
+    box-shadow: 0 0 8px #00eeff;
+}
+
+.textbox input::placeholder {
+    color: transparent;
+}
+
+/* Botón */
+.btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Botón para volver */
+.back-button-container {
+    position: fixed;
+    bottom: 6%;
+    left: 20px;
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+
+.error-message {
+    color: #ff4d4f; /* Color rojo para el texto del error */
+    font-size: 14px; /* Tamaño de fuente */
+    margin-top: -25px; /* Espacio adicional encima del mensaje */
+    text-align: left; /* Alinear a la izquierda dentro del contenedor */
+    font-weight: 500; /* Peso de la fuente */
+}
+
+.error-message small {
+    display: block;
+}
+.error-box {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.error-box h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.error-box p {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.back-button-container {
+    margin-top: 20px;
+}
+
+.back-button {
+    background-color: #721c24;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #a71d2a;
+}
+.password-box {
+    display: flex;
+}
+.toggle-password {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #00eeff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.toggle-password:hover {
+    color: #ffffff;
+}

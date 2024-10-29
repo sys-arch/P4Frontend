@@ -7,20 +7,32 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private readonly client: HttpClient) {}
+    constructor(private client: HttpClient) { }
 
-    // Ajuste: Método login con headers y URL base
+    // Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.post<any>(`${httpUrl}users/login`, user, { headers });
+
+        return this.client.put(`${httpUrl}users/login`, user, { headers, responseType: 'text' });
     }
 
-    register(email: string, password1: string, password2: string,
-        nombre: string, apellido: string, apellido2: string, 
-        centro: string, departamento: string, perfilLaboral: string,
-        fechaAlta: string, bloqueado: boolean, verificado: boolean 
-        ): Observable<any> {
-        let info = {
+    // Método register con headers
+    register(
+        email: string,
+        password1: string,
+        password2: string,
+        nombre: string,
+        apellido: string,
+        apellido2: string,
+        centro: string,
+        departamento: string,
+        perfilLaboral: string,
+        fechaAlta: string,
+        bloqueado: boolean,
+        verificado: boolean
+    ): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const info = {
             email: email,
             pwd1: password1,
             pwd2: password2,
@@ -33,22 +45,23 @@ export class UserService {
             fechaalta: fechaAlta,
             bloqueado: bloqueado,
             verificado: verificado
-            }
-    
-        return this.client.post("http://localhost:8000/users/register", info)
+        };
+
+        return this.client.post(`${httpUrl}users/register`, info, { headers });
     }
 
-
+    // Método registerAdmin con headers
     registerAdmin(
-        nombre: string, 
-        apellido1: string, 
+        nombre: string,
+        apellido1: string,
         apellido2: string,
-        email: string, 
-        centro: string, 
-        password1: string, 
-        password2: string, 
+        email: string,
+        centro: string,
+        password1: string,
+        password2: string,
         interno: boolean
     ): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const info = {
             nombre: nombre,
             apellido1: apellido1,
@@ -59,7 +72,84 @@ export class UserService {
             pwd2: password2,
             interno: interno
         };
-    
-        return this.client.post("http://localhost:8000/registro-admin", info);
+
+        return this.client.post(`${httpUrl}admins/register`, info, { headers, responseType: 'text' });
+    }
+    forgotPassword(email: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        const body = new URLSearchParams();
+        body.set('email', email);
+        return this.client.post(`${httpUrl}password/forgot`, body.toString(), { headers, responseType: 'text' });
+    }
+    validateToken(token: string): Observable<any> {
+        return this.client.get(`${httpUrl}password/reset?token=${token}`, {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        });
+    }
+    resetPassword(token: string, newPassword: string, confirmPassword: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const body = {
+            token: token,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword
+        };
+        return this.client.post(`${httpUrl}password/reset`, body, { headers, responseType: 'text' });
+    }
+
+    // Método para actualizar un usuario existente basado en el email
+    updateUserByEmail(email: string, userData: any, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
+    }
+
+
+    getUserInfo(email: string, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
+    }
+
+    // Método para obtener todos los emails (solo para administradores) (GET /users/emails)
+    getAllEmails(token: string): Observable<string[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.get<string[]>(`${httpUrl}users/emails`, { headers });
+    }
+    deleteUserByEmail(email: string, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = { email: email }; // Pasamos el email en el cuerpo de la solicitud
+        return this.client.delete(`${httpUrl}users/delete`, { headers, body });
+    }
+    blockUserByEmail(email: string, bloquear: boolean, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = {
+            email: email,
+            bloquear: bloquear // true para bloquear, false para desbloquear
+        };
+        return this.client.put(`${httpUrl}users/block`, body, { headers });
+    }
+    verifyUserByEmail(email: string, verificado: boolean, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        const body = {
+            email: email,
+            verificado: verificado
+        };
+        return this.client.put(`${httpUrl}users/verify`, body, { headers });
     }
 }
