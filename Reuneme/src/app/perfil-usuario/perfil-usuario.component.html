@@ -5,7 +5,7 @@
     
     <!-- Imagen de perfil -->
     <div class="profile-picture">
-      <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="" class="profile-img" />
+      <img [src]="profilePicture ? profilePicture : 'assets/UsuarioSinFoto.png'" alt="Foto de perfil" class="profile-img" />
     </div>
     
     <!-- Contenedor para dos columnas -->

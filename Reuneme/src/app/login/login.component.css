@@ -1,51 +1,66 @@
+html { 
+    font-size: 16px; /* 1 rem = 16px para una base consistente */
+}
+
 .login-container {
     position: relative;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: url('/assets/images/login-background2.png') no-repeat center center;
     background-size: cover;
+    padding: 1.25rem;
+    overflow-y: auto;
 }
-/* Contenedor para reservar espacio para el mensaje de error */
+
+/* Ajustes específicos para pantallas pequeñas */
+@media (max-width: 450px), (max-height: 43.75rem) {
+    .login-container {
+        min-width: 28.125rem; /* 450px en rem */
+        min-height: 43.75rem; /* 700px en rem */
+    }
+
+    /* Ajusta la fuente para mejorar legibilidad en pantallas pequeñas */
+    .login-box, .actions, .footer {
+        font-size: 0.875rem; /* 14px */
+    }
+}
+
 .login-failed-container {
-    height: 10px;
+    height: 0.625rem; /* 10px */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-  /* Mensaje de error específico para login fallido */
 .login-failed-message {
     text-align: center;
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #ff4d4f;
     font-weight: bold;
-    margin-top: 5px; /* Se ajusta ligeramente hacia abajo */
+    margin-top: 0.3125rem;
 }
 
-/* Mensaje de error para el campo de correo */
 .email-error-container {
-    height: 5px;
+    height: 0.3125rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .error-message {
     color: #ff4d4f;
-    font-size: 14px; 
-    margin-top: -10px;
+    font-size: 0.875rem;
+    margin-top: -0.625rem;
     text-align: left;
-    font-weight: 500; 
-}
-
-.error-message small {
-    display: block;
+    font-weight: 500;
 }
 
 .title {
     font-family: 'Segoe UI', sans-serif;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
     background: linear-gradient(90deg, #00ccff, #ffffff);
     -webkit-background-clip: text;
@@ -54,41 +69,43 @@
 }
 
 .login-box {
-    width: 450px;
-    padding: 40px;
+    width: 90%;
+    max-width: 28.125rem; /* 450px */
+    min-width: 28.125rem;
+    padding: 2.5rem; /* 40px */
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #23252b;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
-    border-radius: 0px;
+    box-shadow: 0 0.9375rem 1.5625rem rgba(0, 0, 0, 0.5);
     text-align: center;
+    margin-bottom: 1.25rem;
 }
 
 .login-box h2 {
-    margin: 0 0 20px;
+    margin: 0 0 1.25rem;
     padding: 0;
     color: #ffffff;
 }
 
 .textbox {
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 1.5625rem;
     width: 100%;
     background: rgba(255, 255, 255, 0.1);
-    padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 0.3125rem;
+    border-radius: 0.2rem;
+    box-shadow: 0 0 0.3125rem rgba(0, 0, 0, 0.2);
     z-index: 2;
 }
 
 .textbox label {
     position: absolute;
     top: 65%;
-    left: 10px;
+    left: 0.625rem;
     transform: translateY(-80%);
-    font-size: 16px;
+    font-size: 1rem;
     color: #f5f5f5;
     transition: all 0.3s ease;
     pointer-events: none;
@@ -96,25 +113,25 @@
 
 .textbox input {
     width: 100%;
-    padding: 10px;
+    padding: 0.625rem;
     background: transparent;
     border: none;
     outline: none;
     color: #f5f5f5;
-    font-size: 16px;
-    border-radius: 4px;
+    font-size: 1rem;
+    border-radius: 0.25rem;
 }
 
 .textbox input:focus ~ label,
 .textbox input:not(:placeholder-shown) ~ label {
     top: 0;
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #00eeff;
 }
 
 .textbox input:focus {
-    border-bottom: 2px solid #00eeff;
-    box-shadow: 0 0 8px #00eeff;
+    border-bottom: 0.125rem solid #00eeff;
+    box-shadow: 0 0 0.5rem #00eeff;
 }
 
 .textbox input::placeholder {
@@ -125,12 +142,12 @@
     width: 100%;
     background-color: #007bff;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.625rem;
+    border-radius: 0.3125rem;
     color: white;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 0.625rem;
 }
 
 .btn:hover {
@@ -139,11 +156,11 @@
 
 .forgot-password-container {
     text-align: left;
-    margin-top: -20px;
+    margin-top: -1.25rem;
 }
 
 .forgot-password {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #b3b3b3;
     text-decoration: none;
 }
@@ -166,25 +183,28 @@
 }
 
 .actions {
-    width: 450px;
+    width: 28.125rem;
+    min-width: 18.75rem;
     text-align: center;
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 1;
+    margin-top: 1.25rem;
 }
 
 .actions .btn {
     width: 100%;
     background-color: #007bff;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.625rem;
+    border-radius: 0.3125rem;
     color: white;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 30px;
+    margin-top: 1.875rem;
+    height: 3.5rem;
 }
 
 .actions .btn:hover {
@@ -192,22 +212,21 @@
 }
 
 .actions .register-text {
-    margin-top: 10px;
+    margin-top: 0.625rem;
     color: white;
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 .actions .register-text .register-link {
     color: #6d29ff;
     font-weight: bold;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 .actions .register-text .register-link:hover {
     color: #ffffff;
     text-decoration: underline;
-
 }
 
 .password-box {
@@ -216,45 +235,48 @@
 
 .toggle-password {
     position: absolute;
-    right: 20px;
+    right: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #00eeff;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: bold;
 }
 
 .toggle-password:hover {
     color: #ffffff;
 }
-/* Botón para volver a la página principal */
+
 .back-btn {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 14px;
+    display: flex;
+    top: 0.9375rem;
+    left: 0.9375rem;
+    font-size: 0.875rem;
     background-color: #007bff;
     color: white;
-    padding: 10px 15px;
+    padding: 0.625rem 0.9375rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     text-decoration: none;
     font-weight: bold;
     z-index: 3;
 }
+
 .back-button-container {
     position: fixed;
-    bottom: 6%;
-    left: 20px;
+    bottom: 6vh;
+    left: 1vw;
+    z-index: 100;
 }
+
 .back-button {
     background-color: #007bff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.3125rem;
     color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
     cursor: pointer;
 }
 
