@@ -19,11 +19,7 @@
                     (ngModelChange)="onEmailChange()"/>
                 <label for="username">Correo Electrónico</label>
             </div>
-            <div class="email-error-container">
-                <div *ngIf="emailInvalid" class="error-message">
-                    <small>El correo electrónico no tiene un formato válido.</small>
-                </div>
-            </div>
+            
 
             <div class="textbox password-box">
                 <input type="password" id="password" placeholder="Contraseña" [(ngModel)]="password" name="password" required />
