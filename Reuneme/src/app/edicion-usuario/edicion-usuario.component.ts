@@ -83,12 +83,17 @@ export class EdicionUsuarioComponent implements OnInit {
 
   loadUserData(): void {
     this.isLoading = true;
-
+  
+    // Verificar si el usuario es administrador o si está viendo su propio perfil
     if (this.isAdmin || this.userEmail === this.loggedUserEmail) {
-      this.userService.getUserInfo(this.userEmail, this.token).subscribe(
-        (data) => {
+      const userInfoObservable = this.isAdmin
+        ? this.userService.verDatosAdmin(this.userEmail)  // Llama a verDatosAdmin si es administrador
+        : this.userService.verDatosEmpleado(this.userEmail); // Llama a verDatosEmpleado si es empleado
+  
+      userInfoObservable.subscribe(
+        (data: any) => {
           this.isLoading = false;
-
+  
           if (data) {
             this.userForm.patchValue({
               nombre: data.nombre,
@@ -99,14 +104,14 @@ export class EdicionUsuarioComponent implements OnInit {
               alta: data.fechaalta,
               perfil: data.perfil,
             });
-
+  
             this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
           } else {
             console.error('Datos del usuario no encontrados');
             this.router.navigate(['/ventana-principal']);
           }
         },
-        (error) => {
+        (error: any) => {
           console.error('Error al cargar los datos del usuario:', error);
           this.isLoading = false;
           this.router.navigate(['/ventana-principal']);
@@ -117,7 +122,7 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/ventana-principal']);
     }
   }
-
+  
   onSubmit(): void {
     if (this.userForm.valid) {
       this.isLoading = true; // Muestra el indicador de carga
