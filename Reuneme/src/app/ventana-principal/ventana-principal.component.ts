@@ -210,12 +210,6 @@ loadAllUsers(): void {
   );
 }
 
-
-
-
-
-
-
   cancelDelete(): void {
     this.selectedUser = null;
     this.showDeleteModal = false;
@@ -327,6 +321,7 @@ loadAllUsers(): void {
       });
   }
 
+  // Método para navegar a una ruta específica
   navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {
