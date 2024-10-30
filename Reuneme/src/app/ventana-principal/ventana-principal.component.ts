@@ -84,6 +84,7 @@ export class VentanaPrincipalComponent implements OnInit {
     private gravatarService: GravatarService,
     private route: ActivatedRoute
   ) {}
+  
   ngOnInit(): void {
     this.token = localStorage.getItem('token') || '';
     const localEmail = localStorage.getItem('email') || '';

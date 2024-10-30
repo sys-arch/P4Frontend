@@ -3,11 +3,14 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 100vh;
     overflow-x: hidden;
+    overflow: hidden;
     font-family: 'Roboto', sans-serif;
     color: #e0e0e0;
     background-color: #1e1e1e;
 }
+
 
 /* Contenedor de la información del usuario en la esquina superior izquierda */
 .user-profile {
@@ -23,6 +26,9 @@ html, body {
     height: 5.49vh; /* Equivalente a 50px */
     z-index: 9999;
     transition: all 0.3s ease-in-out;
+    
+    
+    
 }
 .profile-picture {
     width: 6.04vh; /* Equivalente a 55px */
@@ -172,6 +178,7 @@ html, body {
     width: 70%; /* Equivalente a 70% del ancho total */
     transition-duration: .3s;
     padding-right: 1.1vh; /* Equivalente a 10px */
+    font-size: 0.9em;
 }
 
 /* Efecto de click en el botón */
@@ -181,7 +188,7 @@ html, body {
 
 .admin-controls2 {
     position: absolute;
-    top: 0.3%; /* Equivalente a 70px */
+    top: 15%; /* Equivalente a 70px */
     right: 2.2vh; /* Equivalente a 100px */
     z-index: 10;
 }
@@ -391,6 +398,22 @@ html, body {
     background: url('/assets/images/admin-background.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #666 transparent;
+}
+
+.ventana-principal .user-list-content::-webkit-scrollbar {
+    width: 0.41vw; /* 8px */
+}
+
+.ventana-principal .user-list-content::-webkit-scrollbar-thumb {
+    background-color: #666;
+    border-radius: 0.51vw; /* 10px */
+}
+
+.ventana-principal .user-list-content::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 
@@ -409,6 +432,8 @@ html, body {
     padding: 2.2vh; /* Equivalente a 20px */
     border-radius: 1.32vh; /* Equivalente a 12px */
     box-shadow: 0 0.66vh 1.32vh rgba(0, 0, 0, 0.15); /* Equivalente a 6px y 12px */
+    max-height: 60vh; /* Ajusta esta altura según necesites para que no exceda la pantalla */
+    overflow-y: auto;
 }
 
 /* Encabezado de la lista de usuarios */
@@ -672,18 +697,6 @@ html, body {
 
 }
 
-@media (max-width: 54.4vw) { /* 1068px en relación con 1963px */
-    .filter-options {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .filter-options label, .filter-options select, .filter-options input {
-        width: 100%;
-        margin-bottom: 0.55vh; /* 5px basado en 911px */
-    }
-}
-
 .filter-options {
     font-size: 0.85em;
     display: flex;
@@ -755,7 +768,28 @@ html, body {
 .tabs-container button.active {
     background-color: #5fc67d;
 }
+@media (max-width: 1360px) {
+    .tabs-container {
+        display: none;
+    }
+    .user-list-container,
+    .search-filter-container {
+        min-width: 50.125rem; /* Mantiene el ancho mínimo de 450px */
+        max-width: 50.125rem; /* Evita que se encoja más allá de este ancho */
+        margin: 0; /* Elimina margen */
+        padding: 0; /* Elimina padding */
+        overflow-x: auto; /* Permite desplazamiento si es necesario */
+    }
+    .user-list-header{
+        display: none; /* Oculta el encabezado en pantallas más pequeñas */
+    }
 
+    .user-list-header,
+    .user-list-row {
+        min-width: 50.125rem; /* Ancho mínimo */
+        max-width: 50.125rem; /* Ancho máximo para mantener diseño */
+        height: auto; /* Altura constante */
+    }
 /* Rectángulo negro de la pestaña Ausencias / Turnos horarios */
 .calend-ausen-container {
     width: 70%;
@@ -998,4 +1032,4 @@ html, body {
   .EliminarTurno-btn:hover {
     background-color: #c9302c;
   }
-  
+}
