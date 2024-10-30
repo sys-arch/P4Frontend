@@ -126,7 +126,7 @@ export class UserService {
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        return this.client.get<any[]>(`${httpUrl}users/all`, { headers });
+        return this.client.get<any[]>(`${httpUrl}admins/all`, { headers });
     }
     deleteUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
