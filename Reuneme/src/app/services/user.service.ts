@@ -46,6 +46,7 @@ export class UserService {
             bloqueado: bloqueado,
             verificado: verificado
         };
+        console.log(info);
 
         return this.client.post(`${httpUrl}users/register`, info, { headers });
     }
@@ -79,10 +80,10 @@ export class UserService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
         const body = new URLSearchParams();
         body.set('email', email);
-        return this.client.post(`${httpUrl}password/forgot`, body.toString(), { headers, responseType: 'text' });
+        return this.client.post(`${httpUrl}pwd/forgot`, body.toString(), { headers, responseType: 'text' });
     }
     validateToken(token: string): Observable<any> {
-        return this.client.get(`${httpUrl}password/reset?token=${token}`, {
+        return this.client.get(`${httpUrl}pwd/reset?token=${token}`, {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' })
         });
     }
@@ -93,7 +94,7 @@ export class UserService {
             newPassword: newPassword,
             confirmPassword: confirmPassword
         };
-        return this.client.post(`${httpUrl}password/reset`, body, { headers, responseType: 'text' });
+        return this.client.post(`${httpUrl}pwd/reset`, body, { headers, responseType: 'text' });
     }
 
     // Método para actualizar un usuario existente basado en el email
