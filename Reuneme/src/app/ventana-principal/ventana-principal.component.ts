@@ -336,9 +336,10 @@ loadAllUsers(): void {
   }
 
   // Método para navegar a la vista de edición de usuario
-  editUser(userEmail: string): void {
-    if (userEmail) {
-      this.router.navigate(['/edicion-usuario', userEmail]);
+  editUser(user: any): void {
+    if (user) {
+      this.router.navigate(['/edicion-usuario'], { state: { user } });
+
     } else {
       console.error('El correo electrónico del usuario no está definido');
     }

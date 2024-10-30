@@ -150,7 +150,7 @@
           <div class="user-actions">
             <button class="action-btn edit-btn" title="Editar" [disabled]="user.estado === 'Bloqueado'"
               [ngClass]="{'blocked-btn': user.estado === 'Bloqueado'}"
-              (click)="editUser(user.email)">
+              (click)="editUser(user)">
               <i class="material-icons">edit</i>
             </button>
 

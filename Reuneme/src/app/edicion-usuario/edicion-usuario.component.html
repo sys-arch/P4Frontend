@@ -3,11 +3,10 @@
 <div *ngIf="showNewPWModal" class="modal-overlay">
   <div class="modal delete-modal">
     <h3>¿Reestablecer contraseña?</h3>
-    <p class="warning-text">Al pulsar confirmar, se mandará un correo al email del usuario con un link para reestablecer la contraseña</p>
+    <p class="warning-text">Al pulsar confirmar, se mandará un correo al email del usuario con un link para reestablecer
+      la contraseña</p>
     <div class="modal-actions">
-      <button class="confirm-btn" (click)="confirmNewP()">
-        Confirmar
-      </button>
+      <button class="confirm-btn" (click)="confirmNewP()">Confirmar</button>
       <button class="cancel-btn" (click)="cancel()">Cancelar</button>
     </div>
   </div>
@@ -22,7 +21,7 @@
     </div>
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <div class="info-fields" *ngIf="isAdmin">
+      <div class="info-fields">
         <div class="textbox">
           <input type="text" id="nombre" formControlName="nombre" required placeholder=" ">
           <label for="nombre">Nombre*</label>
@@ -34,34 +33,47 @@
         </div>
 
         <div class="textbox">
-          <input type="email" id="correo" formControlName="correo" required placeholder=" ">
+          <input type="email" id="correo" formControlName="correo" required placeholder=" " [disabled]="true">
           <label for="correo">Correo*</label>
         </div>
 
-        <div class="textbox">
-          <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
-          <label for="departamento">Departamento</label>
-        </div>
-
-        <div class="textbox">
+        <!-- Campos específicos para el administrador -->
+        <div class="textbox" *ngIf="isAdmin">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox">
-          <input type="date" id="alta" formControlName="alta" required placeholder=" ">
+        <div class="textbox" *ngIf="isAdmin">
+          <input type="checkbox" id="interno" formControlName="interno">
+          <label for="interno">Interno</label>
+        </div>
+
+        <!-- Campos específicos para el usuario regular -->
+        <div class="textbox" *ngIf="!isAdmin">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
+          <label for="centroTrabajo">Centro de Trabajo*</label>
+        </div>
+
+        <div class="textbox" *ngIf="!isAdmin">
+          <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
+          <label for="departamento">Departamento</label>
+        </div>
+
+        <div class="textbox" *ngIf="!isAdmin">
+          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" ">
           <label for="alta">Fecha de Alta*</label>
         </div>
 
-        <div class="textbox">
+        <div class="textbox" *ngIf="!isAdmin">
           <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
           <label for="perfil">Perfil</label>
         </div>
-        <button class="btnred" (click)="showNewModal()">Reestablecer Contraseña</button>
-      </div>
 
-      
-      
+        <!-- Botón para reestablecer contraseña visible solo si el perfil en edición es el propio -->
+        <button *ngIf="user.email === loggedUserEmail" class="btnred" (click)="showNewModal()">Reestablecer
+          Contraseña</button>
+
+      </div>
 
       <p class="required-info">Los campos(*) son obligatorios.</p>
       <button class="btn" type="submit">Guardar Cambios</button>

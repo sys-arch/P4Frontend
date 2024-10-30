@@ -100,7 +100,7 @@ export class UserService {
     updateUserByEmail(email: string, userData: any, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}` // Formateo correcto del token
         });
         return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
     }
