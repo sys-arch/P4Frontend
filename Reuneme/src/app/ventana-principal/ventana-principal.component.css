@@ -790,6 +790,7 @@ html, body {
         max-width: 50.125rem; /* Ancho máximo para mantener diseño */
         height: auto; /* Altura constante */
     }
+}
 /* Rectángulo negro de la pestaña Ausencias / Turnos horarios */
 .calend-ausen-container {
     width: 70%;

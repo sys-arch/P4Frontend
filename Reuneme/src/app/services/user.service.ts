@@ -111,7 +111,7 @@ export class UserService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     
         // Pasar el email como parámetro en la URL
-        return this.client.get(`${httpUrl}empleados/get?email=${email}`, { headers });
+        return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
     }
     
     verDatosAdmin(email: string): Observable<any> {
