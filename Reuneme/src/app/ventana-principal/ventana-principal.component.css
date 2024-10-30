@@ -150,31 +150,11 @@ html, body {
     width: 0%;
     opacity: 0;
     color: white;
-    font-size: 1em;
+    font-size: 0.65em;
     font-weight: 600;
     transition-duration: .3s;
   }
 
-
-.back-button-container {
-    position: fixed;
-    bottom: 6%;
-    left: 2.2vh; /* Equivalente a 20px */
-}
-
-.back-button {
-    background-color: #007bff;
-    border: none;
-    padding: 1.1vh 2.2vh; /* Equivalente a 10px 20px */
-    border-radius: 0.55vh; /* Equivalente a 5px */
-    color: white;
-    font-size: 1.54vh; /* Equivalente a 14px */
-    cursor: pointer;
-}
-
-.back-button:hover {
-    background-color: #0056b3;
-}
 .Btn:hover {
     width: 19.76vh; /* Equivalente a 180px */
     border-radius: 4.39vh; /* Equivalente a 40px */
@@ -184,7 +164,7 @@ html, body {
 .Btn:hover .sign {
     width: 30%;
     transition-duration: .3s;
-    padding-left: 2.2vh;
+    padding-left: 0;
 }
   
   /* Efecto hover en el texto */
@@ -198,6 +178,26 @@ html, body {
 /* Efecto de click en el botón */
 .Btn:active {
     transform: translate(0.22vh, 0.22vh); /* Equivalente a 2px */
+}
+
+.back-button-container {
+    position: fixed;
+    bottom: 8%;
+    left: 2.2vh; /* Equivalente a 20px */
+}
+
+.back-button {
+    background-color: #007bff;
+    border: none;
+    padding: 1.1vh 2.2vh; /* Equivalente a 10px 20px */
+    border-radius: 0.55vh; /* Equivalente a 5px */
+    color: white;
+    font-size: 0.8em; /* Equivalente a 14px */
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
 }
 
 .modal-overlay {
@@ -257,12 +257,15 @@ html, body {
 }
 
 
+.calend-ausen-container h2 {
+    text-shadow: 0.051vw 0.051vw 0.26vw rgba(0, 0, 0, 0.5); /* 1px, 1px, 5px */
+    font-size: 1.7em;
+}
 
-
-.modal h3 {
-    color: #f1f1f1;
-    margin-bottom: 1.65vh; /* Equivalente a 15px */
-    font-size: 1.98vh; /* Equivalente a 18px */
+.calend-ausen-container h3 {
+    color: #f1f1f1; /* Equivalente a 15px */
+    align-content: center;
+    font-size: 1.4em;
     font-weight: 500;
     text-shadow: 0.11vh 0.11vh 0.33vh rgba(0, 0, 0, 0.5); /* Sombra proporcional */
 }
@@ -345,14 +348,12 @@ html, body {
 .user-list-container,
 .calend-ausen-container {
     width: 100%;
-    margin: 2.2vh auto; /* Equivalente a 20px */
-    padding: 1.65vh; /* Equivalente a 15px */
+    margin: 2.2vh auto;
+    padding: 1.65vh;
 }
 /* Lista de usuarios */
 .user-list-container {
-    width: 60%;
-    max-width: 124.2vw; /* Equivalente a 1130px */
-    margin: 2.2vh auto;
+    width: 70%;
     background-color: #1e1e1e;
     color: white;
     padding: 2.2vh; /* Equivalente a 20px */
@@ -365,6 +366,7 @@ html, body {
     display: grid;
     grid-template-columns: 5.5vw 22vw 1fr 12vw 12vw 17.6vw; /* Adaptación de ancho para columnas */
     padding: 1.65vh; /* Equivalente a 15px */
+    margin-bottom: 2%;
     border-radius: 1.32vh; /* Equivalente a 12px */
     background-color: #333;
     font-weight: bold;
@@ -613,9 +615,9 @@ html, body {
     color: white;
     padding: 1.1vh; /* 10px basado en 911px de altura */
     border-radius: 0.41vw; /* 8px basado en 1963px de ancho */
-    width: 60%;
+    width: 70%;
     box-shadow: 0 0.21vw 0.41vw rgba(0, 0, 0, 0.1); /* 4px y 8px adaptados */
-    margin: 1.1vh auto; /* 10px basado en altura */
+    margin: 2vh auto; /* 10px basado en altura */
     display: flex;
     flex-direction: column;
 
@@ -634,15 +636,16 @@ html, body {
 }
 
 .filter-options {
+    font-size: 0.85em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.52vw; /* 10px adaptado a 1963px */
 }
 
 .filter-options select, .filter-options input {
-    padding: 0.88vh; /* 8px en base a la altura */
+    padding: 0.5vh; /* 8px en base a la altura */
     border-radius: 0.26vw; /* 5px en ancho */
+    gap: 0.4vw; /* 5px en ancho */
     border: none;
     background-color: #525252;
     color: white;
@@ -673,36 +676,30 @@ html, body {
     margin-right: -7.64vw; /* Aproximado a -150px en 1963px */
 }
 
-h2 {
-    text-shadow: 0.051vw 0.051vw 0.26vw rgba(0, 0, 0, 0.5); /* 1px, 1px, 5px */
-}
-
-
 .tabs-container {
     position: absolute;
-    top: 28.54vh; /* 260px en relación con 911px de altura */
-    left: calc(50% - 40.75vw); /* 800px basado en 1963px de ancho */
+    top: 30vh; /* 260px en relación con 911px de altura */
+    margin-left: 0.5%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     gap: 0.52vw; /* 10px basado en el ancho */
     background-color: #333;
     padding: 1.1vh; /* 10px basado en altura */
-    border-radius: 0.41vw; /* 8px basado en el ancho */
-    z-index: 1000;
+    border-radius: 8px;
 }
 /* Estilo de los botones de las pestañas */
 .tabs-container button {
     background-color: #444;
     color: #fff;
     border: none;
+    font-size: 0.9em;
     padding: 1.1vh; /* 10px en base a la altura */
     border-radius: 0.21vw; /* 4px en ancho */
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: left;
-    width: 7.64vw; /* 150px basado en 1963px */
-    flex: 1 1 45%;
+    width: 100%; 
 }
 
 /* Pestaña activa */
@@ -712,8 +709,8 @@ h2 {
 
 /* Rectángulo negro de la pestaña Ausencias / Turnos horarios */
 .calend-ausen-container {
-    width: 58vw; /* Aproximadamente el 60% del ancho base de 1963px */
-    margin: 10.98vh auto; /* 100px en base a la altura */
+    width: 70%;
+    margin: 10.98vh auto;
     background-color: #1e1e1e;
     color: white;
     padding: 1.1vh; /* 10px en base a la altura */
@@ -743,23 +740,6 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: left;
     margin-top: 20px;
-}
-
-/* Estilo de la lista de ausencias */
-.ausencias-container ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.ausencias-container li {
-    padding: 10px 0; /* Aumentar el padding */
-    font-size: 18px; /* Aumentar el tamaño de letra */
-    border-bottom: 1px solid #444; /* Línea de separación entre ausencias */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #ffffff; /* Asegurarse de que el texto sea blanco */
 }
 
 /* Estilo de los selectores de fecha y motivo para la ausencia */
@@ -860,6 +840,7 @@ h2 {
     font-size: 1.54vh; /* 14px en relación con 911px */
     font-weight: bold;
     margin-top: 1.1vh; /* 10px en relación con 911px */
+    margin-left: 30%;
     transition: background-color 0.3s ease;
 }
 

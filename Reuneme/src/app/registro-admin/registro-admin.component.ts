@@ -105,10 +105,11 @@ export class RegistroAdminComponent {
     this.userService.registerAdmin(this.nombre, this.primerApellido, this.segundoApellido, this.email, this.centro, this.password1, this.password2, this.interno)
       .subscribe({
         next: (response: any) => {
-          console.log('Usuario registrado con éxito:', response);
+          console.log('Administrador registrado con éxito:', response);
+          this.navigateTo('/ventana-principal');
         },
         error: (error: any) => {
-          console.error('Error al registrar el usuario:', error);
+          console.error('Error al registrar el administrador:', error);
         }
       });
   }
