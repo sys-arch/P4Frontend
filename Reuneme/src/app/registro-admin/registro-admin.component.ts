@@ -122,4 +122,11 @@ export class RegistroAdminComponent {
       this.router.navigate([route]);
     }, 1000);
   }
+
+  focusNext(nextFieldIf: string){
+    const nextElement = document.getElementById(nextFieldIf);
+    if (nextElement){
+      nextElement.focus();
+    }
+  }
 }
