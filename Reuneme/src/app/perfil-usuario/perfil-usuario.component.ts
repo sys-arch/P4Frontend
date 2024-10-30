@@ -59,7 +59,7 @@ export class PerfilUsuarioComponent implements OnInit {
 
   getUserInfo(email: string, token: string): void {
     this.isLoading = true;
-    this.userService.getUserInfo(email, token).subscribe(
+    this.userService.verDatosEmpleado(email).subscribe(
       (userInfo: any) => {
         this.user.nombre = userInfo.nombre;
         this.user.apellidos = `${userInfo.apellido1} ${userInfo.apellido2}`;
