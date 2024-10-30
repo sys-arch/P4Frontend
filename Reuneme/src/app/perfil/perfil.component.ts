@@ -57,7 +57,7 @@ export class PerfilComponent implements OnInit {
 
   getUserInfo(email: string, token: string): void {
     this.isLoading = true;
-    this.userService.getUserInfo(email, token).subscribe(
+    this.userService.verDatosAdmin(email).subscribe(
       (userInfo: any) => {
         this.admin.nombre = userInfo.nombre;
         this.admin.apellidos = `${userInfo.apellido1} ${userInfo.apellido2}`;
@@ -68,7 +68,7 @@ export class PerfilComponent implements OnInit {
         this.isLoading = false;
       },
       (error) => {
-        console.error('Error al obtener la información del usuario:', error);
+        console.error('Error al obtener la información del administrador:', error);
         this.isLoading = false;
       }
     );

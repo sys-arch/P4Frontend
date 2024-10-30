@@ -106,50 +106,53 @@ export class UserService {
     }
 
 
-    getUserInfo(email: string, token: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': token
-        });
-        return this.client.get(`${httpUrl}users/info?email=${email}`, { headers });
+    verDatosEmpleado(email: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
+        // Pasar el email como parámetro en la URL
+        return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
     }
+    
+    verDatosAdmin(email: string): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
+        return this.client.get(`${httpUrl}admins/verDatos?email=${email}`, { headers });
+    }
+    
 
     // Método para obtener todos los emails (solo para administradores) (GET /users/emails)
-    getAllEmails(token: string): Observable<string[]> {
+    getAllUsers(token: string): Observable<any[]> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        return this.client.get<string[]>(`${httpUrl}users/emails`, { headers });
+        return this.client.get<any[]>(`${httpUrl}admins/all`, { headers });
     }
     deleteUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        const body = { email: email }; // Pasamos el email en el cuerpo de la solicitud
-        return this.client.delete(`${httpUrl}users/delete`, { headers, body });
+        const body = { email: email }; // Email en el cuerpo de la solicitud en formato JSON
+        return this.client.delete(`${httpUrl}admins/borrarEmpleado`, { headers, body });
     }
+    
     blockUserByEmail(email: string, bloquear: boolean, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        const body = {
-            email: email,
-            bloquear: bloquear // true para bloquear, false para desbloquear
-        };
-        return this.client.put(`${httpUrl}users/block`, body, { headers });
+        
+        // Agregamos los parámetros email y bloquear directamente en la URL
+        return this.client.put(`${httpUrl}admins/cambiarEstadoBloqueo?email=${email}&bloquear=${bloquear}`, null, { headers });
     }
-    verifyUserByEmail(email: string, verificado: boolean, token: string): Observable<any> {
+    verifyUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        const body = {
-            email: email,
-            verificado: verificado
-        };
-        return this.client.put(`${httpUrl}users/verify`, body, { headers });
+        const body = { email: email }; // JSON con el email
+    
+        return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
 }

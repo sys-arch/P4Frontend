@@ -84,15 +84,14 @@ export class VentanaPrincipalComponent implements OnInit {
     private gravatarService: GravatarService,
     private route: ActivatedRoute
   ) {}
-
   ngOnInit(): void {
     this.token = localStorage.getItem('token') || '';
     const localEmail = localStorage.getItem('email') || '';
-
+  
     // Obtener el parámetro 'email' de la URL o usar el email de localStorage
     const routeEmail = this.route.snapshot.paramMap.get('email');
     this.myemail = routeEmail || localEmail;
-
+  
     // Determina si el usuario es administrador o empleado basado en el prefijo del token
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
@@ -102,21 +101,37 @@ export class VentanaPrincipalComponent implements OnInit {
       this.isAdmin = false;
       this.loggedUser.role = 'employee';
     }
-
-    // Obtener la información del usuario logueado
+  
+    // Obtener la información del usuario logueado según el rol
     if (this.myemail && this.token) {
-      this.userService.getUserInfo(this.myemail, this.token).subscribe(
-        (userInfo: any) => {
-          this.loggedUser.firstName = userInfo.nombre;
-          this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
-          this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
-        },
-        (error) => {
-          console.error('Error al obtener la información del usuario:', error);
-        }
-      );
+      if (this.isAdmin) {
+        // Llama a verDatosAdmin si es administrador
+        this.userService.verDatosAdmin(this.myemail).subscribe(
+          (userInfo: any) => {
+            this.loggedUser.firstName = userInfo.nombre;
+            this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+            this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
+          },
+          (error) => {
+            console.error('Error al obtener la información del administrador:', error);
+          }
+        );
+      } else {
+        // Llama a verDatosEmpleado si es empleado
+        this.userService.verDatosEmpleado(this.myemail).subscribe(
+          (userInfo: any) => {
+            this.loggedUser.firstName = userInfo.nombre;
+            this.loggedUser.lastName = `${userInfo.apellido1} ${userInfo.apellido2}`;
+            this.loggedUser.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
+          },
+          (error) => {
+            console.error('Error al obtener la información del empleado:', error);
+          }
+        );
+      }
     }
   }
+  
   visitProfile(selectedUser: any): void {
     if (selectedUser) {
       const route = selectedUser.isAdmin ? '/perfil-admin' : '/perfil-usuario';
@@ -169,42 +184,29 @@ export class VentanaPrincipalComponent implements OnInit {
 loadAllUsers(): void {
   this.isLoading = true;
   this.users = []; // Limpia la lista antes de recargar
-  this.userService.getAllEmails(this.token).subscribe(
-      (emails: string[]) => {
-          const userObservables = emails.map((email) =>
-              this.userService.getUserInfo(email, this.token)
-          );
 
-          // Suscribe a cada observable y añade los usuarios a la lista
-          userObservables.forEach((userObs, index) => {
-              userObs.subscribe(
-                  (userInfo: any) => {
-                      const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
-                      const isBlocked = !isAdmin && userInfo.bloqueado === true; // Verifica bloqueo solo para usuarios
-                      
-                      const user = {
-                          firstName: userInfo.nombre,
-                          lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
-                          email: userInfo.email,
-                          isAdmin: isAdmin,
-                          profilePicture: this.gravatarService.getGravatarUrl(userInfo.email),
-                          // Solo los usuarios pueden estar bloqueados
-                          estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
-                      };
-                      this.users.push(user);
-                  },
-                  (error) => {
-                      console.error(`Error al obtener la información del usuario con email ${emails[index]}:`, error);
-                  }
-              );
-          });
-
-          this.isLoading = false;
-      },
-      (error) => {
-          console.error('Error al obtener la lista de emails:', error);
-          this.isLoading = false;
-      }
+  this.userService.getAllUsers(this.token).subscribe(
+    (userList: any[]) => {
+      console.log('Lista de usuarios:', userList);
+      this.users = userList.map(userInfo => {
+        const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
+        const isBlocked = !isAdmin && userInfo.bloqueado === true;
+        
+        return {
+          firstName: userInfo.nombre,
+          lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
+          email: userInfo.email,
+          isAdmin: isAdmin,
+          profilePicture: this.gravatarService.getGravatarUrl(userInfo.email),
+          estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
+        };
+      });
+      this.isLoading = false;
+    },
+    (error) => {
+      console.error('Error al obtener la lista de usuarios:', error);
+      this.isLoading = false;
+    }
   );
 }
 
@@ -274,12 +276,13 @@ loadAllUsers(): void {
 
   confirmValidation(): void {
     if (this.selectedUser) {
-      this.userService.verifyUserByEmail(this.selectedUser.email, true, this.token).subscribe(
+    
+      this.userService.verifyUserByEmail(this.selectedUser.email, this.token).subscribe(
         () => {
           this.selectedUser.estado = 'Validado';
           this.showValiModal = false;
           this.selectedUser = null;
-          this.loadAllUsers();
+          this.loadAllUsers(); // Recarga la lista completa de usuarios
         },
         (error) => {
           console.error('Error al verificar el usuario:', error);
@@ -287,6 +290,8 @@ loadAllUsers(): void {
       );
     }
   }
+  
+  
 
   cancelValidation(): void {
     this.selectedUser = null;
