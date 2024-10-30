@@ -15,7 +15,8 @@ import { HeaderComponent } from '../shared/header/header.component';
 })
 export class EdicionUsuarioComponent implements OnInit {
   userForm!: FormGroup;
-  isAdmin: boolean = false;
+  loggedUserRole: string = ''; // Rol del usuario logueado (admin o empleado)
+  editUserRole: string = '';   // Rol del usuario a editar (admin o empleado)
   loggedUserEmail: string = '';
   token: string = ''; 
   passwordFieldType: string = 'password';
@@ -35,19 +36,22 @@ export class EdicionUsuarioComponent implements OnInit {
     this.user = history.state['user'];
     this.token = localStorage.getItem('token') || '';
 
-    // Determinar si el usuario es administrador
+    // Determinar si el usuario logueado es administrador o empleado
     if (this.token.startsWith('a-')) {
-      this.isAdmin = true;
+      this.loggedUserRole = 'admin';
     } else if (this.token.startsWith('e-')) {
-      this.isAdmin = false;
+      this.loggedUserRole = 'empleado';
     } else {
       console.error('Token no válido');
       this.router.navigate(['/login']);
       return;
     }
 
+    // Determinar el rol del usuario que se desea editar
+    this.editUserRole = this.user.rol || 'empleado'; // Asumimos que el rol de `user` viene como `admin` o `empleado`
+
     // Verificar permisos de edición
-    if (this.isAdmin && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
+    if (this.loggedUserRole === 'admin' && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
       console.error('No tiene permiso para editar este usuario');
       this.router.navigate(['/ventana-principal']);
       return;
@@ -67,7 +71,7 @@ export class EdicionUsuarioComponent implements OnInit {
       apellidos: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
       centroTrabajo: ['', Validators.required],
-      ...(this.isAdmin ? { 
+      ...(this.editUserRole === 'admin' ? { 
           interno: [null], // Campo específico de administrador 
           password: this.user.email === this.loggedUserEmail ? [''] : [] 
       } : {
@@ -82,7 +86,8 @@ export class EdicionUsuarioComponent implements OnInit {
   loadUserData(): void {
     this.isLoading = true;
 
-    const getUserData = this.isAdmin  
+    // Decidir el método a llamar en función del rol del usuario a editar
+    const getUserData = this.editUserRole === 'admin'  
         ? this.userService.verDatosAdmin(this.user.email) 
         : this.userService.verDatosEmpleado(this.user.email);
     
@@ -91,19 +96,21 @@ export class EdicionUsuarioComponent implements OnInit {
         this.isLoading = false;
 
         if (data) {
-          if (this.isAdmin) {
+          if (this.editUserRole === 'admin') {
+            // Mapear los datos del administrador
             this.userForm.patchValue({
               nombre: data.nombre,
               apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
+              correo: data.email,
               centroTrabajo: data.centro,
               interno: data.interno
             });
           } else {
+            // Mapear los datos del empleado
             this.userForm.patchValue({
               nombre: data.nombre,
               apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
+              correo: data.email,
               centroTrabajo: data.centro,
               departamento: data.departamento,
               fechaAlta: data.fechaalta,
@@ -128,9 +135,9 @@ export class EdicionUsuarioComponent implements OnInit {
     if (this.userForm.valid) {
       this.isLoading = true;
 
-      const updateData = this.isAdmin && this.user.email !== this.loggedUserEmail 
+      const updateData = this.loggedUserRole === 'admin' && this.user.email !== this.loggedUserEmail 
                          ? { ...this.userForm.value, password: undefined } 
-                         : this.isAdmin 
+                         : this.loggedUserRole === 'admin' 
                          ? this.userForm.value 
                          : { password: this.userForm.get('password')?.value };
 
@@ -139,7 +146,7 @@ export class EdicionUsuarioComponent implements OnInit {
           console.log('Usuario actualizado:', response);
           this.isLoading = false;
 
-          if (this.isAdmin) {
+          if (this.loggedUserRole === 'admin') {
             this.router.navigate(['/ventana-principal']);
           } else {
             this.router.navigate(['/perfil-usuario']);
