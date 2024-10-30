@@ -106,7 +106,7 @@
 
 .register-container {
     position: relative;
-    min-height: 110vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,7 +157,7 @@
     top: 50%;
     left: 2%;
     transform: translateY(-50%);
-    font-size: 0.7em;
+    font-size: 0.8em;
     color: #d1d1d1;
     transition: all 0.3s ease;
     pointer-events: none;
@@ -177,7 +177,7 @@
 }
 
 .textbox input:focus {
-    box-shadow: 0 0 8px #00eeff;
+    box-shadow: 0 0 9px #00eeff;
     border: none;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .required-info {
-    font-size: 0.55em;
+    font-size: 0.75em;
     color: #6b6b6b;
     display: flex;
     margin-top: -5%;
@@ -217,7 +217,7 @@
     font-size: 0.9em;
     font-weight: bold;
     cursor: pointer;
-    margin-top: -10%;
+    margin-top: 3%;
 }
 
 .actions .btn:hover {

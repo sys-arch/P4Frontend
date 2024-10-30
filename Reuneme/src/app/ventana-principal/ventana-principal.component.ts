@@ -84,6 +84,7 @@ export class VentanaPrincipalComponent implements OnInit {
     private gravatarService: GravatarService,
     private route: ActivatedRoute
   ) {}
+  
   ngOnInit(): void {
     this.token = localStorage.getItem('token') || '';
     const localEmail = localStorage.getItem('email') || '';
@@ -210,12 +211,6 @@ loadAllUsers(): void {
   );
 }
 
-
-
-
-
-
-
   cancelDelete(): void {
     this.selectedUser = null;
     this.showDeleteModal = false;
@@ -327,6 +322,7 @@ loadAllUsers(): void {
       });
   }
 
+  // Método para navegar a una ruta específica
   navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {

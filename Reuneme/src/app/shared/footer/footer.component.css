@@ -30,14 +30,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    gap: 3.3vh; /* Equivalente a 30px de espacio entre enlaces */
+    gap: 3.3vh; 
 }
 
 .footer-links {
     list-style: none;
     display: flex;
-    gap: 2.2vh; /* Equivalente a 20px de espacio entre enlaces */
+    gap: 2.2vh;
     padding: 0;
     margin: 0;
 }
