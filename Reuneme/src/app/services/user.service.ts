@@ -101,7 +101,7 @@ export class UserService {
     updateUserByEmail(email: string, userData: any, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}` // Formateo correcto del token
         });
         return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
     }
@@ -111,7 +111,7 @@ export class UserService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     
         // Pasar el email como parámetro en la URL
-        return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
+        return this.client.get(`${httpUrl}empleados/get?email=${email}`, { headers });
     }
     
     verDatosAdmin(email: string): Observable<any> {

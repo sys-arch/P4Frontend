@@ -15,40 +15,43 @@ import { HeaderComponent } from '../shared/header/header.component';
 })
 export class EdicionUsuarioComponent implements OnInit {
   userForm!: FormGroup;
-  userEmail: string = '';
-  isAdmin: boolean = false;
+  loggedUserRole: string = ''; // Rol del usuario logueado (admin o empleado)
+  editUserRole: string = '';   // Rol del usuario a editar (admin o empleado)
   loggedUserEmail: string = '';
   token: string = ''; 
   passwordFieldType: string = 'password';
   profilePicture: string | ArrayBuffer | null = null;
   isLoading: boolean = false;
   showNewPWModal: boolean = false;
+  user: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.user = history.state['user'];
     this.token = localStorage.getItem('token') || '';
-    this.loggedUserEmail = localStorage.getItem('email') || '';
 
+    // Determinar si el usuario logueado es administrador o empleado
     if (this.token.startsWith('a-')) {
-      this.isAdmin = true;
+      this.loggedUserRole = 'admin';
     } else if (this.token.startsWith('e-')) {
-      this.isAdmin = false;
+      this.loggedUserRole = 'empleado';
     } else {
       console.error('Token no válido');
       this.router.navigate(['/login']);
       return;
     }
-    console.log('Token:', this.token);
 
-    this.userEmail = this.route.snapshot.paramMap.get('email') || '';
+    // Determinar el rol del usuario que se desea editar
+    this.editUserRole = this.user.rol || 'empleado'; // Asumimos que el rol de `user` viene como `admin` o `empleado`
 
-    if (!this.isAdmin && this.userEmail !== this.loggedUserEmail) {
+    // Verificar permisos de edición
+    if (this.loggedUserRole === 'admin' && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
       console.error('No tiene permiso para editar este usuario');
       this.router.navigate(['/ventana-principal']);
       return;
@@ -63,81 +66,87 @@ export class EdicionUsuarioComponent implements OnInit {
   }
 
   initializeForm(): void {
-    if (this.isAdmin) {
-      this.userForm = this.formBuilder.group({
-        nombre: ['', Validators.required],
-        apellidos: ['', Validators.required],
-        correo: ['', [Validators.required, Validators.email]],
-        departamento: ['', Validators.required],
-        centroTrabajo: ['', Validators.required],
-        alta: ['', Validators.required],
-        perfil: ['', Validators.required],
-        password: [''],
-      });
-    } else {
-      this.userForm = this.formBuilder.group({
-        password: ['', [Validators.required, Validators.minLength(8)]],
-      });
-    }
+    this.userForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      apellidos: ['', Validators.required],
+      correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
+      centroTrabajo: ['', Validators.required],
+      ...(this.editUserRole === 'admin' ? { 
+          interno: [null], // Campo específico de administrador 
+          password: this.user.email === this.loggedUserEmail ? [''] : [] 
+      } : {
+          departamento: ['', Validators.required],
+          fechaAlta: ['', Validators.required],
+          perfil: ['', Validators.required],
+          password: ['', [Validators.required, Validators.minLength(8)]]
+      })
+    });
   }
 
   loadUserData(): void {
     this.isLoading = true;
-  
-    // Verificar si el usuario es administrador o si está viendo su propio perfil
-    if (this.isAdmin || this.userEmail === this.loggedUserEmail) {
-      const userInfoObservable = this.isAdmin
-        ? this.userService.verDatosAdmin(this.userEmail)  // Llama a verDatosAdmin si es administrador
-        : this.userService.verDatosEmpleado(this.userEmail); // Llama a verDatosEmpleado si es empleado
-  
-      userInfoObservable.subscribe(
-        (data: any) => {
-          this.isLoading = false;
-  
-          if (data) {
+
+    // Decidir el método a llamar en función del rol del usuario a editar
+    const getUserData = this.editUserRole === 'admin'  
+        ? this.userService.verDatosAdmin(this.user.email) 
+        : this.userService.verDatosEmpleado(this.user.email);
+    
+    getUserData.subscribe(
+      (data) => {
+        this.isLoading = false;
+
+        if (data) {
+          if (this.editUserRole === 'admin') {
+            // Mapear los datos del administrador
             this.userForm.patchValue({
               nombre: data.nombre,
               apellidos: `${data.apellido1} ${data.apellido2}`,
               correo: data.email,
-              departamento: data.departamento,
               centroTrabajo: data.centro,
-              alta: data.fechaalta,
-              perfil: data.perfil,
+              interno: data.interno
             });
-  
-            this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
           } else {
-            console.error('Datos del usuario no encontrados');
-            this.router.navigate(['/ventana-principal']);
+            // Mapear los datos del empleado
+            this.userForm.patchValue({
+              nombre: data.nombre,
+              apellidos: `${data.apellido1} ${data.apellido2}`,
+              correo: data.email,
+              centroTrabajo: data.centro,
+              departamento: data.departamento,
+              fechaAlta: data.fechaalta,
+              perfil: data.perfil
+            });
           }
-        },
-        (error: any) => {
-          console.error('Error al cargar los datos del usuario:', error);
-          this.isLoading = false;
+          this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
+        } else {
+          console.error('Datos del usuario no encontrados');
           this.router.navigate(['/ventana-principal']);
         }
-      );
-    } else {
-      console.error('No tiene permiso para editar este usuario');
-      this.router.navigate(['/ventana-principal']);
-    }
+      },
+      (error) => {
+        console.error('Error al cargar los datos del usuario:', error);
+        this.isLoading = false;
+        this.router.navigate(['/ventana-principal']);
+      }
+    );
   }
-  
+
   onSubmit(): void {
     if (this.userForm.valid) {
-      this.isLoading = true; // Muestra el indicador de carga
-  
-      // Define los datos que se enviarán según el rol del usuario
-      const updateData = this.isAdmin ? this.userForm.value : { password: this.userForm.get('password')?.value };
-  
-      // Llama al servicio para actualizar los datos del usuario en el backend
-      this.userService.updateUserByEmail(this.userEmail, updateData, this.token).subscribe(
+      this.isLoading = true;
+
+      const updateData = this.loggedUserRole === 'admin' && this.user.email !== this.loggedUserEmail 
+                         ? { ...this.userForm.value, password: undefined } 
+                         : this.loggedUserRole === 'admin' 
+                         ? this.userForm.value 
+                         : { password: this.userForm.get('password')?.value };
+
+      this.userService.updateUserByEmail(this.user.email, updateData, `Bearer ${this.token}`).subscribe(
         (response) => {
           console.log('Usuario actualizado:', response);
-          this.isLoading = false; // Oculta el indicador de carga
-  
-          // Redirige después de guardar según el rol
-          if (this.isAdmin) {
+          this.isLoading = false;
+
+          if (this.loggedUserRole === 'admin') {
             this.router.navigate(['/ventana-principal']);
           } else {
             this.router.navigate(['/perfil-usuario']);
@@ -149,34 +158,35 @@ export class EdicionUsuarioComponent implements OnInit {
         }
       );
     } else {
-      console.error('Formulario no válido');
-    }
+      console.error('Formulario no válido');
+    }
   }
 
   navigateToUserList(): void {
     this.router.navigate(['/ventana-principal']);
   }
+
   cancel(): void {
     this.showNewPWModal = false;
   }
+
   showNewModal(): void {
     this.showNewPWModal = true;
   }
+
   confirmNewP(): void {
-
     this.showNewPWModal = false;
-    this.userService.forgotPassword(this.userEmail).subscribe({
-      next: (response: string) => {
-        this.isLoading = false;
-      
-        console.log('Respuesta recibida: ', response);
-        
-      },
-      error: (error) => {
-        this.isLoading = false;
-
-        console.error('Error generando el token: ', error);
+    this.userService.forgotPassword(this.user.email).subscribe(
+      {
+        next: (response: string) => {
+          this.isLoading = false;
+          console.log('Respuesta recibida: ', response);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Error generando el token: ', error);
+        }
       }
-    });
-  }
+    );
+  }  
 }
