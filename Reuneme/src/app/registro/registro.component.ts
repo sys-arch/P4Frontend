@@ -157,7 +157,6 @@ export class RegistroComponent {
       });
   }
   
-
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;
@@ -167,4 +166,10 @@ export class RegistroComponent {
     }, 1000);
   }
 
+  focusNext(nextFieldIf: string){
+    const nextElement = document.getElementById(nextFieldIf);
+    if (nextElement){
+      nextElement.focus();
+    }
+  }
 }

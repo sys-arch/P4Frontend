@@ -262,37 +262,47 @@ html, body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    max-width: 120vw;
+    height: auto;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
 }
+.modal-overlay h3 {
+    color: #f1f1f1;
+    font-size: 1.2em;
+    font-weight: 500;
+    text-shadow: 0.11vh 0.11vh 0.33vh rgba(0, 0, 0, 0.5);
+    word-wrap: breaak-word;
+    white-space: pre-wrap;
+}
+
 .modal {
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    background-color: #2a2a2a !important; /* Fondo ligeramente más claro */
-    padding: 2.75vh !important; /* Equivalente a 25px */
-    border-radius: 1.65vh !important; /* Equivalente a 15px */
-    z-index: 2147483647 !important; /* Asegura que esté en el frente */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    display: block !important; /* Forzar que esté visible */
-    opacity: 1 !important; /* Asegura que no esté opaco */
-    text-align: center; /* Centrar contenido */
-    color: #f1f1f1; /* Texto más claro */
+    background-color: #2a2a2a !important;
+    padding: 2.75vh !important;
+    border-radius: 1.65vh !important;
+    z-index: 2147483647 !important;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4);
+    display: block !important;
+    opacity: 1 !important;
+    text-align: center; 
+    color: #f1f1f1;
 }
 /* Estilos para el modal de bloqueo */
 .block-modal {
-    background-color: #2a2a2a; /* Color más neutro */
-    padding: 2.2vh; /* Equivalente a 20px */
-    border-radius: 1.65vh; /* Equivalente a 15px */
-    width: 13.9vw; /* Equivalente a 300px en proporción de ancho */
-    height: 16.5vh; /* Equivalente a 150px en proporción de altura */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    border: 0.22vh solid #444; /* Equivalente a 2px */
+    background-color: #2a2a2a;
+    padding: 2.2vh;
+    border-radius: 1.65vh;
+    width: 20%;
+    height: 22%;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4);
+    border: 0.22vh solid #444;
     display: block;
     opacity: 1;
     text-align: center;
@@ -300,19 +310,43 @@ html, body {
 }
 
 .validate-modal {
-    background-color: #2a2a2a; /* Color más neutro */
-    padding: 2.2vh; /* Equivalente a 20px */
-    border-radius: 1.65vh; /* Equivalente a 15px */
-    width: 15.9vw; /* Equivalente a 300px en proporción de ancho */
-    height: 16.5vh; /* Equivalente a 150px en proporción de altura */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    border: 0.22vh solid #444; /* Equivalente a 2px */
+    background-color: #2a2a2a;
+    padding: 2.2vh;
+    border-radius: 1.65vh;
+    width: 20%;
+    height: 22%;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); 
+    border: 0.22vh solid #444;
     display: block;
     opacity: 1;
     text-align: center;
     color: #ffffff;
 }
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #ff4d4d;
+    padding: 5.5vh; /* Equivalente a 50px */
+    border-radius: 2.75vh; /* Equivalente a 25px */
+    width: 22%; /* Equivalente a 330px, basado en ancho estándar */
+    height: 26%; /* Equivalente a 230px */
+    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
+    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+}
 
+/* Texto de advertencia */
+.warning-text {
+    font-size: 1.43vh; /* Equivalente a 13px */
+    color: #f1c40f;
+    margin-top: 0.55vh; /* Equivalente a 5px */
+    margin-bottom: 2.75vh; /* Equivalente a 25px */
+    text-align: center;
+    font-weight: bold;
+}
 
 .calend-ausen-container h2 {
     text-shadow: 0.051vw 0.051vw 0.26vw rgba(0, 0, 0, 0.5); /* 1px, 1px, 5px */
@@ -363,33 +397,6 @@ html, body {
 .cancel-btn:hover {
     background-color: #5a6268; /* Color más oscuro al hacer hover */
 }
-
-/* Estilos generales del modal de eliminación */
-.delete-modal {
-    background-color: #ff4d4d;
-    padding: 5.5vh; /* Equivalente a 50px */
-    border-radius: 2.75vh; /* Equivalente a 25px */
-    width: 16.2vw; /* Equivalente a 330px, basado en ancho estándar */
-    height: 21.2vh; /* Equivalente a 230px */
-    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
-    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
-    display: block;
-    opacity: 1;
-    text-align: center;
-    color: #ffffff;
-    position: relative;
-}
-
-/* Texto de advertencia */
-.warning-text {
-    font-size: 1.43vh; /* Equivalente a 13px */
-    color: #f1c40f;
-    margin-top: 0.55vh; /* Equivalente a 5px */
-    margin-bottom: 2.75vh; /* Equivalente a 25px */
-    text-align: center;
-    font-weight: bold;
-}
-
 
 .ventana-principal {
     text-align: center;
@@ -790,6 +797,7 @@ html, body {
         max-width: 50.125rem; /* Ancho máximo para mantener diseño */
         height: auto; /* Altura constante */
     }
+}
 /* Rectángulo negro de la pestaña Ausencias / Turnos horarios */
 .calend-ausen-container {
     width: 70%;
@@ -813,7 +821,7 @@ html, body {
     overflow: hidden;
     white-space: normal;
     word-wrap: break-word; 
-  }
+}
  /* Contenedor principal para la lista de ausencias */
 .ausencias-container {
     background-color: #2e2e2e;
@@ -1032,4 +1040,3 @@ html, body {
   .EliminarTurno-btn:hover {
     background-color: #c9302c;
   }
-}
