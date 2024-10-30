@@ -149,6 +149,7 @@ export class RegistroComponent {
       .subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito:', response);
+          this.navigateTo('/login');
         },
         error: (error) => {
           console.error('Error al registrar el usuario:', error);
