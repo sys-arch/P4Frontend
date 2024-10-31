@@ -224,9 +224,6 @@
             <div class="calend-ausen-container">
               <div class="ausencias-contain">
                 <h3>Consulta de Ausencias</h3>
-                <button (click)="toggleAddAusenciaForm()">
-                  {{ showAddAusenciaForm ? 'Cancelar' : 'Añadir Ausencia' }}
-                </button>
             
                 <!-- Lista de ausencias -->
                 <div class="ausencias-container">
@@ -241,30 +238,35 @@
                       </li>
                     </div>
                   </ul>
-                <!-- Formulario para añadir una nueva ausencia -->
-                <div *ngIf="showAddAusenciaForm" class="form-ausencia">
-                  <h4>Añadir Nueva Ausencia</h4>
-                  <form (ngSubmit)="addAusencia()">
-                    <label>
-                      Nombre de Usuario:
-                      <input [(ngModel)]="nuevaAusencia.usuario" name="usuario" required>
-                    </label>
-                    <label>
-                      Motivo:
-                      <input [(ngModel)]="nuevaAusencia.motivo" name="motivo" required>
-                    </label>
-                    <label>
-                      Fecha de Inicio:
-                      <input type="date" [(ngModel)]="nuevaAusencia.fechaInicio" name="fechaInicio" required>
-                    </label>
-                    <label>
-                      Fecha de Fin:
-                      <input type="date" [(ngModel)]="nuevaAusencia.fechaFin" name="fechaFin" required>
-                    </label>
-                    <button type="submit">Añadir Ausencia</button>
-                  </form>
-                </div>
             
+                  <!-- Botón "Añadir Ausencia" movido aquí -->
+                  <button (click)="toggleAddAusenciaForm()" class="add-button add-ausencia-btn">
+                    {{ showAddAusenciaForm ? 'Cancelar' : 'Añadir Ausencia' }}
+                  </button>
+            
+                  <!-- Formulario para añadir una nueva ausencia -->
+                  <div *ngIf="showAddAusenciaForm" class="form-ausencia">
+                    <h4>Añadir Nueva Ausencia</h4>
+                    <form (ngSubmit)="addAusencia()">
+                      <label>
+                        Nombre de Usuario:
+                        <input [(ngModel)]="nuevaAusencia.usuario" name="usuario" required>
+                      </label>
+                      <label>
+                        Motivo:
+                        <input [(ngModel)]="nuevaAusencia.motivo" name="motivo" required>
+                      </label>
+                      <label>
+                        Fecha de Inicio:
+                        <input type="date" [(ngModel)]="nuevaAusencia.fechaInicio" name="fechaInicio" required>
+                      </label>
+                      <label>
+                        Fecha de Fin:
+                        <input type="date" [(ngModel)]="nuevaAusencia.fechaFin" name="fechaFin" required>
+                      </label>
+                      <button type="submit" class="add-button">Añadir Ausencia</button>
+                    </form>
+                  </div>
             
                   <!-- Modal de confirmación para eliminar una ausencia -->
                   <div class="modal-overlay" *ngIf="showDeleteModalAusencia">
@@ -276,7 +278,6 @@
                   </div>
                 </div>
               </div>
-            
             
               <div class="calendar-contain">
                 <h2>Turnos horarios</h2>
