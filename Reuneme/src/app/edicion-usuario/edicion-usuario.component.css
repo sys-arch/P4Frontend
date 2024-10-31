@@ -1,7 +1,7 @@
 /* Contenedor principal de la edición */
 .perfil-container {
     position: relative;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,7 +22,7 @@
 
 /* Información del perfil - manteniendo el recuadro similar */
 .profile-info {
-    width: 600px;
+    width: 35%;
     padding: 25px;
     background-color: #23252b;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
@@ -36,6 +36,8 @@
 .profile-picture {
     position: relative;
     margin-bottom: 20px;
+    width: auto;
+    height: auto;
 }
 
 .profile-img {
@@ -63,50 +65,65 @@
 /* Estilo para cada campo de entrada de información */
 .textbox {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 3%;
+    width: 100%;
     background: rgba(255, 255, 255, 0.1);
     padding: 1px;
     border-radius: 8px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    text-align: left;
 }
 
-.textbox label {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-90%);
-    font-size: 14px;
-    color: #f5f5f5;
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-
-.textbox input,
-.textbox select {
+.textbox input {
     width: 100%;
-    padding: 10px;
     background: transparent;
     border: none;
+    margin-left: 20%;
     outline: none;
     color: #f5f5f5;
-    font-size: 16px;
+    font-size: 0.7em;
     border-radius: 4px;
+    box-shadow: none;
+    transition: box-shadow 0.3s ease;
+}
+.textbox input:focus {
+    box-shadow: 0 0 8px #00eeff;
+    border: none;
 }
 
 .textbox input:focus ~ label,
 .textbox input:not(:placeholder-shown) ~ label {
-    top: 0;
-    font-size: 12px;
+    top: -15%;
+    font-size: 0.55em;
     color: #00eeff;
-}
-
-.textbox input:focus {
-    border-bottom: 2px solid #00eeff;
-    box-shadow: 0 0 10px #00eeff;
 }
 
 .textbox input::placeholder {
     color: transparent;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2%; /* Espaciado entre checkbox y texto */
+    margin: 2% 0;
+    width: auto;
+}
+
+.checkbox-text-left {
+    color: #ffffff;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #ccc;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 
 /* Botón para mostrar/ocultar contraseña */
@@ -198,8 +215,9 @@
 
 /* Mensaje para campos obligatorios */
 .required-info {
-    font-size: 12px;
-    color: #d9534f;
+    font-size: 0.5em;
+    text-align: left;
+    color: #aaa5a5;
 }
 
 /* Estilos para hover en campos de perfil */
@@ -309,4 +327,48 @@
     justify-content: center;
     align-items: center;
     z-index: 9999;
+}
+
+
+.container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2em;
+    user-select: none;
+    padding-left: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+
+
+.container input:checked + .checkmark {
+    background-color: #2dc38c;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked + .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 7px;
+    top: 4px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
 }

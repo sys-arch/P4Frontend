@@ -35,16 +35,25 @@ export class EdicionUsuarioComponent implements OnInit {
     this.token = localStorage.getItem('token') || '';
     this.loggedUserEmail = localStorage.getItem('email') || '';
 
+<<<<<<< Updated upstream
     if (this.token.startsWith('a-')) {
+=======
+    // Determinar si el usuario es administrador
+    if (this.token === 'a-token-de-prueba-admin' || this.token.startsWith('a-')) {
+>>>>>>> Stashed changes
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
       this.isAdmin = false;
     } else {
       console.error('Token no válido');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/edicion-usuario']);
       return;
     }
+<<<<<<< Updated upstream
     console.log('Token:', this.token);
+=======
+      
+>>>>>>> Stashed changes
 
     this.userEmail = this.route.snapshot.paramMap.get('email') || '';
 
@@ -52,7 +61,7 @@ export class EdicionUsuarioComponent implements OnInit {
       console.error('No tiene permiso para editar este usuario');
       this.router.navigate(['/ventana-principal']);
       return;
-    }
+    } 
 
     this.initializeForm();
     this.loadUserData();

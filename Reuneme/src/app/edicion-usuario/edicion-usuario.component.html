@@ -22,7 +22,11 @@
     </div>
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<<<<<<< Updated upstream
       <div class="info-fields" *ngIf="isAdmin">
+=======
+      
+>>>>>>> Stashed changes
         <div class="textbox">
           <input type="text" id="nombre" formControlName="nombre" required placeholder=" ">
           <label for="nombre">Nombre*</label>
@@ -38,7 +42,32 @@
           <label for="correo">Correo*</label>
         </div>
 
+<<<<<<< Updated upstream
         <div class="textbox">
+=======
+        <!-- Campos específicos para el administrador -->
+        <div class="textbox" *ngIf="isAdmin">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
+          <label for="centroTrabajo">Centro de Trabajo*</label>
+        </div>
+
+        <div class="checkbox-container" *ngIf="isAdmin">
+          <span class="checkbox-text-left">Marcar usuario como administrador interno</span>
+          <label class="container" for="interno">
+              <input type="checkbox" id="interno" name="interno" aria-labelledby="interno-label" />
+              <div class="checkmark"></div>
+          </label>
+          <span id="interno-label" class="sr-only">Marcar usuario como administrador interno</span>
+      </div>
+
+        <!-- Campos específicos para el usuario regular -->
+        <div class="textbox" *ngIf="!isAdmin">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
+          <label for="centroTrabajo">Centro de Trabajo*</label>
+        </div>
+
+        <div class="textbox" *ngIf="!isAdmin">
+>>>>>>> Stashed changes
           <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
           <label for="departamento">Departamento</label>
         </div>
@@ -57,8 +86,16 @@
           <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
           <label for="perfil">Perfil</label>
         </div>
+<<<<<<< Updated upstream
         <button class="btnred" (click)="showNewModal()">Reestablecer Contraseña</button>
       </div>
+=======
+
+        <!-- Botón para reestablecer contraseña visible solo si el perfil en edición es el propio -->
+        <button *ngIf="user.email === loggedUserEmail" class="btnred" (click)="showNewModal()">Reestablecer
+          Contraseña</button>
+      
+>>>>>>> Stashed changes
 
       
       
