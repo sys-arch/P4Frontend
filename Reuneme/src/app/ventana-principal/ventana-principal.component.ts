@@ -57,7 +57,7 @@ export class VentanaPrincipalComponent implements OnInit {
     },
     {
       firstName: 'Maria',
-      lastName: 'González',
+      lastName: 'González Diaz del Campo Blanco de Castilla',
       email: 'maria.gonzalez@example.com',
       isAdmin: false,
       profilePicture: 'assets/images/test-perfil2.jpg',
