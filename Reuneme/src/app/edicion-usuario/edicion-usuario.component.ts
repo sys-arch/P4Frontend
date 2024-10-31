@@ -17,7 +17,7 @@ export class EdicionUsuarioComponent implements OnInit {
   userForm!: FormGroup;
   isAdmin: boolean = false;
   loggedUserEmail: string = '';
-  token: string = ''; 
+  token: string = '';
   passwordFieldType: string = 'password';
   profilePicture: string | ArrayBuffer | null = null;
   isLoading: boolean = false;
@@ -29,7 +29,7 @@ export class EdicionUsuarioComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.user = history.state['user'];
@@ -47,7 +47,7 @@ export class EdicionUsuarioComponent implements OnInit {
     }
 
     // Verificar permisos de edición
-    if (this.isAdmin && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
+    if (!this.isAdmin && this.user.email !== this.loggedUserEmail) {
       console.error('No tiene permiso para editar este usuario');
       this.router.navigate(['/ventana-principal']);
       return;
@@ -67,14 +67,14 @@ export class EdicionUsuarioComponent implements OnInit {
       apellidos: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
       centroTrabajo: ['', Validators.required],
-      ...(this.isAdmin ? { 
-          interno: [null], // Campo específico de administrador 
-          password: this.user.email === this.loggedUserEmail ? [''] : [] 
+      ...(this.isAdmin ? {
+        interno: [null], // Campo específico de administrador 
+        password: this.user.email === this.loggedUserEmail ? [''] : []
       } : {
-          departamento: ['', Validators.required],
-          fechaAlta: ['', Validators.required],
-          perfil: ['', Validators.required],
-          password: ['', [Validators.required, Validators.minLength(8)]]
+        departamento: ['', Validators.required],
+        fechaAlta: ['', Validators.required],
+        perfil: ['', Validators.required],
+        password: ['', [Validators.required, Validators.minLength(8)]]
       })
     });
   }
@@ -82,10 +82,10 @@ export class EdicionUsuarioComponent implements OnInit {
   loadUserData(): void {
     this.isLoading = true;
 
-    const getUserData = this.isAdmin  
-        ? this.userService.verDatosAdmin(this.user.email) 
-        : this.userService.verDatosEmpleado(this.user.email);
-    
+    const getUserData = this.user.isAdmin
+      ? this.userService.verDatosAdmin(this.user.email)
+      : this.userService.verDatosEmpleado(this.user.email);
+
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
@@ -126,34 +126,34 @@ export class EdicionUsuarioComponent implements OnInit {
 
   onSubmit(): void {
     if (this.userForm.valid) {
-        this.isLoading = true;
+      this.isLoading = true;
 
-        const updateData = {
-            ...this.userForm.value,
-            email: this.user.email,  // Incluye el email en el payload
-            password: this.userForm.get('password')?.value || undefined
-        };
+      const updateData = {
+        ...this.userForm.value,
+        email: this.user.email,  // Incluye el email en el payload
+        password: this.userForm.get('password')?.value || undefined
+      };
 
-        const updateUser = this.isAdmin
-            ? this.userService.updateAdmin(updateData, this.token)
-            : this.userService.updateEmpleado(updateData, this.token);
+      const updateUser = this.isAdmin
+        ? this.userService.updateAdmin(updateData, this.token)
+        : this.userService.updateEmpleado(updateData, this.token);
 
-        updateUser.subscribe({
-          next: (response: any) => {
-              this.isLoading = false;
-              console.log('Usuario actualizado:', response);
-              this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
-          },
-          error: (error: any) => {
-              this.isLoading = false;
-              console.error('Error al actualizar el usuario:', error);
-          }
+      updateUser.subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          console.log('Usuario actualizado:', response);
+          this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+        },
+        error: (error: any) => {
+          this.isLoading = false;
+          console.error('Error al actualizar el usuario:', error);
+        }
       });
-      
+
     } else {
-        console.error('Formulario no válido');
+      console.error('Formulario no válido');
     }
-}
+  }
 
 
   navigateToUserList(): void {
@@ -171,15 +171,15 @@ export class EdicionUsuarioComponent implements OnInit {
   confirmNewP(): void {
     this.showNewPWModal = false;
     this.userService.forgotPassword(this.user?.email || '').subscribe({
-        next: (response: string) => {
-            this.isLoading = false;
-            console.log('Respuesta recibida: ', response);
-        },
-        error: (error) => {
-            this.isLoading = false;
-            console.error('Error generando el token: ', error);
-        }
+      next: (response: string) => {
+        this.isLoading = false;
+        console.log('Respuesta recibida: ', response);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error generando el token: ', error);
+      }
     });
-}
+  }
 
 }
