@@ -217,6 +217,19 @@
                   {{ showAddAusenciaForm ? 'Cancelar' : 'Añadir Ausencia' }}
                 </button>
             
+                <!-- Lista de ausencias -->
+                <div class="ausencias-container">
+                  <h4>Lista de Ausencias</h4>
+                  <ul>
+                    <div *ngFor="let ausencia of ausencias; let i = index" class="ausencia-item">
+                      <li>
+                        <p><strong>Usuario:</strong> {{ ausencia.usuario }}</p>
+                        <p><strong>Motivo:</strong> {{ ausencia.motivo }}</p>
+                        <p><strong>Desde:</strong> {{ ausencia.fechaInicio | date:'dd/MM/yyyy' }} <strong>Hasta:</strong> {{ ausencia.fechaFin | date:'dd/MM/yyyy' }}</p>
+                        <button (click)="openDeleteModalAusencia(i)" class="eliminar-btn">Eliminar ausencia</button>
+                      </li>
+                    </div>
+                  </ul>
                 <!-- Formulario para añadir una nueva ausencia -->
                 <div *ngIf="showAddAusenciaForm" class="form-ausencia">
                   <h4>Añadir Nueva Ausencia</h4>
@@ -241,19 +254,6 @@
                   </form>
                 </div>
             
-                <!-- Lista de ausencias -->
-                <div class="ausencias-container">
-                  <h4>Lista de Ausencias</h4>
-                  <ul>
-                    <div *ngFor="let ausencia of ausencias; let i = index" class="ausencia-item">
-                      <li>
-                        <p><strong>Usuario:</strong> {{ ausencia.usuario }}</p>
-                        <p><strong>Motivo:</strong> {{ ausencia.motivo }}</p>
-                        <p><strong>Desde:</strong> {{ ausencia.fechaInicio | date:'dd/MM/yyyy' }} <strong>Hasta:</strong> {{ ausencia.fechaFin | date:'dd/MM/yyyy' }}</p>
-                        <button (click)="openDeleteModalAusencia(i)" class="eliminar-btn">Eliminar ausencia</button>
-                      </li>
-                    </div>
-                  </ul>
             
                   <!-- Modal de confirmación para eliminar una ausencia -->
                   <div class="modal-overlay" *ngIf="showDeleteModalAusencia">
@@ -265,7 +265,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            
             
               <div class="calendar-contain">
                 <h2>Turnos horarios</h2>
