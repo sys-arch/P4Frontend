@@ -946,13 +946,18 @@ html, body {
     border: none;
     border-radius: 0.26vw;
     cursor: pointer;
-    font-size: 1.54vh; /* Consistente con el botón en 'turnos-horarios-container' */
+    font-size: 1.54vh;
     font-weight: bold;
     margin-top: 1.1vh;
     margin-bottom: 1.1vh;
     transition: background-color 0.3s ease;
-    width: 100%;
+    /* Elimina la propiedad width o ajústala */
+    width: auto; /* O puedes especificar un ancho fijo si lo prefieres */
+    display: block; /* Para centrar el botón */
+    margin-left: auto;
+    margin-right: auto;
 }
+
 
 .add-ausencia-btn:hover {
     background-color: #45b06a;
@@ -1157,4 +1162,4 @@ html, body {
   
   .EliminarTurno-btn:hover {
     background-color: #c9302c;
-
+  }
