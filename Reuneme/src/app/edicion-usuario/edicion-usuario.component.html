@@ -14,7 +14,7 @@
 
 <div class="perfil-container">
   <div class="profile-info">
-    <h2>{{ editUserRole === 'admin' ? 'Editar Cuenta de Usuario' : 'Cambiar Contraseña' }}</h2>
+    <h2>{{ isAdmin ? 'Editar Cuenta de Administrador' : 'Cambiar Contraseña' }}</h2>
 
     <div class="profile-picture">
       <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="Profile Image" class="profile-img" />
@@ -38,33 +38,33 @@
         </div>
 
         <!-- Campos específicos para el administrador -->
-        <div class="textbox" *ngIf="editUserRole === 'admin'">
+        <div class="textbox" *ngIf="isAdmin">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="editUserRole === 'admin'">
+        <div class="textbox" *ngIf="isAdmin">
           <input type="checkbox" id="interno" formControlName="interno">
           <label for="interno">Interno</label>
         </div>
 
         <!-- Campos específicos para el usuario regular -->
-        <div class="textbox" *ngIf="editUserRole === 'empleado'">
+        <div class="textbox" *ngIf="!isAdmin">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="editUserRole === 'empleado'">
+        <div class="textbox" *ngIf="!isAdmin">
           <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
           <label for="departamento">Departamento</label>
         </div>
 
-        <div class="textbox" *ngIf="editUserRole === 'empleado'">
+        <div class="textbox" *ngIf="!isAdmin">
           <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" ">
           <label for="alta">Fecha de Alta*</label>
         </div>
 
-        <div class="textbox" *ngIf="editUserRole === 'empleado'">
+        <div class="textbox" *ngIf="!isAdmin">
           <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
           <label for="perfil">Perfil</label>
         </div>
@@ -72,7 +72,6 @@
         <!-- Botón para reestablecer contraseña visible solo si el perfil en edición es el propio -->
         <button *ngIf="user.email === loggedUserEmail" class="btnred" (click)="showNewModal()">Reestablecer
           Contraseña</button>
-
       </div>
 
       <p class="required-info">Los campos(*) son obligatorios.</p>

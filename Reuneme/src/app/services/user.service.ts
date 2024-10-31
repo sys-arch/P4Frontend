@@ -97,15 +97,23 @@ export class UserService {
         return this.client.post(`${httpUrl}pwd/reset`, body, { headers, responseType: 'text' });
     }
 
-    // Método para actualizar un usuario existente basado en el email
-    updateUserByEmail(email: string, userData: any, token: string): Observable<any> {
+    // Método para actualizar un administrador existente
+    updateAdmin(adminData: any, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Formateo correcto del token
+            'Authorization': `Bearer ${token}`
         });
-        return this.client.put(`${httpUrl}users/${email}`, userData, { headers });
+        return this.client.put(`${httpUrl}admins/modificarAdministrador`, adminData, { headers });
     }
 
+    // Método para actualizar un empleado existente
+    updateEmpleado(empleadoData: any, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });
+    }
 
     verDatosEmpleado(email: string): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
