@@ -317,10 +317,27 @@ html, body {
     height: 22%;
     box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); 
     border: 0.22vh solid #444;
+
     display: block;
     opacity: 1;
     text-align: center;
     color: #ffffff;
+}
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #ff4d4d;
+    padding: 5.5vh; /* Equivalente a 50px */
+    border-radius: 2.75vh; /* Equivalente a 25px */
+    width: 22%; /* Equivalente a 330px, basado en ancho estándar */
+    height: 26%; /* Equivalente a 230px */
+    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
+    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
+
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
 }
 /* Estilos generales del modal de eliminación */
 .delete-modal {
@@ -1140,4 +1157,4 @@ html, body {
   
   .EliminarTurno-btn:hover {
     background-color: #c9302c;
-  }
+

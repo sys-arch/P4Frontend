@@ -15,7 +15,6 @@ import { HeaderComponent } from '../shared/header/header.component';
 })
 export class EdicionUsuarioComponent implements OnInit {
   userForm!: FormGroup;
-  userEmail: string = '';
   isAdmin: boolean = false;
   loggedUserEmail: string = '';
   token: string = ''; 
@@ -23,18 +22,20 @@ export class EdicionUsuarioComponent implements OnInit {
   profilePicture: string | ArrayBuffer | null = null;
   isLoading: boolean = false;
   showNewPWModal: boolean = false;
+  user: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
+    this.user = history.state['user'];
     this.token = localStorage.getItem('token') || '';
-    this.loggedUserEmail = localStorage.getItem('email') || '';
 
+    // Determinar si el usuario es administrador
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
@@ -44,11 +45,9 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    console.log('Token:', this.token);
 
-    this.userEmail = this.route.snapshot.paramMap.get('email') || '';
-
-    if (!this.isAdmin && this.userEmail !== this.loggedUserEmail) {
+    // Verificar permisos de edición
+    if (this.isAdmin && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
       console.error('No tiene permiso para editar este usuario');
       this.router.navigate(['/ventana-principal']);
       return;
@@ -63,120 +62,124 @@ export class EdicionUsuarioComponent implements OnInit {
   }
 
   initializeForm(): void {
-    if (this.isAdmin) {
-      this.userForm = this.formBuilder.group({
-        nombre: ['', Validators.required],
-        apellidos: ['', Validators.required],
-        correo: ['', [Validators.required, Validators.email]],
-        departamento: ['', Validators.required],
-        centroTrabajo: ['', Validators.required],
-        alta: ['', Validators.required],
-        perfil: ['', Validators.required],
-        password: [''],
-      });
-    } else {
-      this.userForm = this.formBuilder.group({
-        password: ['', [Validators.required, Validators.minLength(8)]],
-      });
-    }
+    this.userForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      apellidos: ['', Validators.required],
+      correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
+      centroTrabajo: ['', Validators.required],
+      ...(this.isAdmin ? { 
+          interno: [null], // Campo específico de administrador 
+          password: this.user.email === this.loggedUserEmail ? [''] : [] 
+      } : {
+          departamento: ['', Validators.required],
+          fechaAlta: ['', Validators.required],
+          perfil: ['', Validators.required],
+          password: ['', [Validators.required, Validators.minLength(8)]]
+      })
+    });
   }
 
   loadUserData(): void {
     this.isLoading = true;
-  
-    // Verificar si el usuario es administrador o si está viendo su propio perfil
-    if (this.isAdmin || this.userEmail === this.loggedUserEmail) {
-      const userInfoObservable = this.isAdmin
-        ? this.userService.verDatosAdmin(this.userEmail)  // Llama a verDatosAdmin si es administrador
-        : this.userService.verDatosEmpleado(this.userEmail); // Llama a verDatosEmpleado si es empleado
-  
-      userInfoObservable.subscribe(
-        (data: any) => {
-          this.isLoading = false;
-  
-          if (data) {
+
+    const getUserData = this.isAdmin  
+        ? this.userService.verDatosAdmin(this.user.email) 
+        : this.userService.verDatosEmpleado(this.user.email);
+    
+    getUserData.subscribe(
+      (data) => {
+        this.isLoading = false;
+
+        if (data) {
+          if (this.isAdmin) {
             this.userForm.patchValue({
               nombre: data.nombre,
               apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,
-              departamento: data.departamento,
+              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
               centroTrabajo: data.centro,
-              alta: data.fechaalta,
-              perfil: data.perfil,
+              interno: data.interno
             });
-  
-            this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
           } else {
-            console.error('Datos del usuario no encontrados');
-            this.router.navigate(['/ventana-principal']);
+            this.userForm.patchValue({
+              nombre: data.nombre,
+              apellidos: `${data.apellido1} ${data.apellido2}`,
+              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
+              centroTrabajo: data.centro,
+              departamento: data.departamento,
+              fechaAlta: data.fechaalta,
+              perfil: data.perfil
+            });
           }
-        },
-        (error: any) => {
-          console.error('Error al cargar los datos del usuario:', error);
-          this.isLoading = false;
+          this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
+        } else {
+          console.error('Datos del usuario no encontrados');
           this.router.navigate(['/ventana-principal']);
         }
-      );
-    } else {
-      console.error('No tiene permiso para editar este usuario');
-      this.router.navigate(['/ventana-principal']);
-    }
+      },
+      (error) => {
+        console.error('Error al cargar los datos del usuario:', error);
+        this.isLoading = false;
+        this.router.navigate(['/ventana-principal']);
+      }
+    );
   }
-  
+
   onSubmit(): void {
     if (this.userForm.valid) {
-      this.isLoading = true; // Muestra el indicador de carga
-  
-      // Define los datos que se enviarán según el rol del usuario
-      const updateData = this.isAdmin ? this.userForm.value : { password: this.userForm.get('password')?.value };
-  
-      // Llama al servicio para actualizar los datos del usuario en el backend
-      this.userService.updateUserByEmail(this.userEmail, updateData, this.token).subscribe(
-        (response) => {
-          console.log('Usuario actualizado:', response);
-          this.isLoading = false; // Oculta el indicador de carga
-  
-          // Redirige después de guardar según el rol
-          if (this.isAdmin) {
-            this.router.navigate(['/ventana-principal']);
-          } else {
-            this.router.navigate(['/perfil-usuario']);
+        this.isLoading = true;
+
+        const updateData = {
+            ...this.userForm.value,
+            email: this.user.email,  // Incluye el email en el payload
+            password: this.userForm.get('password')?.value || undefined
+        };
+
+        const updateUser = this.isAdmin
+            ? this.userService.updateAdmin(updateData, this.token)
+            : this.userService.updateEmpleado(updateData, this.token);
+
+        updateUser.subscribe({
+          next: (response: any) => {
+              this.isLoading = false;
+              console.log('Usuario actualizado:', response);
+              this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+          },
+          error: (error: any) => {
+              this.isLoading = false;
+              console.error('Error al actualizar el usuario:', error);
           }
-        },
-        (error) => {
-          console.error('Error al actualizar el usuario:', error);
-          this.isLoading = false;
-        }
-      );
+      });
+      
     } else {
-      console.error('Formulario no válido');
-    }
-  }
+        console.error('Formulario no válido');
+    }
+}
+
 
   navigateToUserList(): void {
     this.router.navigate(['/ventana-principal']);
   }
+
   cancel(): void {
     this.showNewPWModal = false;
   }
+
   showNewModal(): void {
     this.showNewPWModal = true;
   }
+
   confirmNewP(): void {
-
     this.showNewPWModal = false;
-    this.userService.forgotPassword(this.userEmail).subscribe({
-      next: (response: string) => {
-        this.isLoading = false;
-      
-        console.log('Respuesta recibida: ', response);
-        
-      },
-      error: (error) => {
-        this.isLoading = false;
-
-        console.error('Error generando el token: ', error);
-      }
+    this.userService.forgotPassword(this.user?.email || '').subscribe({
+        next: (response: string) => {
+            this.isLoading = false;
+            console.log('Respuesta recibida: ', response);
+        },
+        error: (error) => {
+            this.isLoading = false;
+            console.error('Error generando el token: ', error);
+        }
     });
-  }
+}
+
 }

@@ -51,7 +51,7 @@ export class VentanaPrincipalComponent implements OnInit {
     },
     {
       firstName: 'Maria',
-      lastName: 'González',
+      lastName: 'González Diaz del Campo Blanco de Castilla',
       email: 'maria.gonzalez@example.com',
       isAdmin: false,
       profilePicture: 'assets/images/test-perfil2.jpg',
@@ -348,9 +348,10 @@ loadAllUsers(): void {
   }
 
   // Método para navegar a la vista de edición de usuario
-  editUser(userEmail: string): void {
-    if (userEmail) {
-      this.router.navigate(['/edicion-usuario', userEmail]);
+  editUser(user: any): void {
+    if (user) {
+      this.router.navigate(['/edicion-usuario'], { state: { user } });
+
     } else {
       console.error('El correo electrónico del usuario no está definido');
     }

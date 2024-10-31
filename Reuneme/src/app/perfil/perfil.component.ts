@@ -89,6 +89,14 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  editUser(userEmail: string): void {
+    if (userEmail) {
+      this.router.navigate(['/edicion-usuario', userEmail]);
+    } else {
+      console.error('El correo electrónico del usuario no está definido');
+    }
+  }
+
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;

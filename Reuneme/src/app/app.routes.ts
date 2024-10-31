@@ -22,7 +22,7 @@ export const routes: Routes = [
     { path: 'ventana-principal', component: VentanaPrincipalComponent },
     { path: 'contrasena-olvidada', component: ContrasenaOlvidadaComponent },
     { path: 'reset-contrasena', component: ResetContrasenaComponent },
-    { path: 'edicion-usuario/:email', component: EdicionUsuarioComponent },
+    { path: 'edicion-usuario', component: EdicionUsuarioComponent },
     { path: '**', redirectTo: '' }
     
 ];
