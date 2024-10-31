@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; 
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,10 +8,6 @@ import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 
-
-
-
-
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
@@ -19,8 +15,6 @@ import { HeaderComponent } from '../shared/header/header.component';
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
-
-
 export class VentanaPrincipalComponent implements OnInit {
   titulo: string = 'Bienvenido a la Ventana Principal';
   isAdmin: boolean = true;
@@ -131,6 +125,36 @@ export class VentanaPrincipalComponent implements OnInit {
         );
       }
     }
+
+    // Cargar ausencias desde localStorage al inicializar el componente
+    const ausenciasGuardadas = localStorage.getItem('ausencias');
+    if (ausenciasGuardadas) {
+      this.ausencias = JSON.parse(ausenciasGuardadas).map((ausencia: any) => ({
+        ...ausencia,
+        fechaInicio: new Date(ausencia.fechaInicio),
+        fechaFin: new Date(ausencia.fechaFin)
+      }));
+    } else {
+      // Inicializar con datos por defecto si no hay ausencias en localStorage
+      this.ausencias = [
+        {
+          fechaInicio: new Date('2024-01-01'),
+          fechaFin: new Date('2024-02-01'),
+          motivo: 'Vacaciones',
+          usuario: 'Aaron Smith',
+          texto: 'Ausencia: 01/01/2024 - 01/02/2024 (Motivo: Vacaciones)'
+        },
+        {
+          fechaInicio: new Date('2022-03-01'),
+          fechaFin: new Date('2022-04-01'),
+          motivo: 'Enfermedad',
+          usuario: 'Maria González',
+          texto: 'Ausencia: 01/03/2022 - 01/04/2022 (Motivo: Enfermedad)'
+        },
+      ];
+      // Guardar las ausencias iniciales en localStorage
+      localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
+    }
   }
   
   visitProfile(selectedUser: any): void {
@@ -141,9 +165,6 @@ export class VentanaPrincipalComponent implements OnInit {
       console.error('El usuario seleccionado no está definido');
     }
   }
-  
-
-  
 
   selectTab(tab: string) {
     this.activeTab = tab;
@@ -267,7 +288,6 @@ loadAllUsers(): void {
       this.showBlockModal = false;
   }
 
-
   toggleValidation(user: any): void {
     if (user.estado === 'No validado') {
       this.selectedUser = user;
@@ -292,14 +312,10 @@ loadAllUsers(): void {
     }
   }
   
-  
-
   cancelValidation(): void {
     this.selectedUser = null;
     this.showValiModal = false;
   }
-
-  
 
   filteredUsers() {
     return this.users
@@ -340,7 +356,7 @@ loadAllUsers(): void {
     }
   }
   
-  /*<!-- AÑADIDO NUEVO BORRAR LUEGO-->*/
+  /*---------------------------------- Turnos Horarios ----------------------------------*/
   turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
     {
       inicio: this.convertirAHorasEnMinutos("07", "00"),
@@ -363,8 +379,7 @@ loadAllUsers(): void {
   horaFinMinuto: string | null = null;
 
   showDeleteModalTurn: boolean = false;
-  turnoAEliminar: number | null = null;  // Añade esta propiedad aquí
-
+  turnoAEliminar: number | null = null;
 
   addTurnoHorario() {
     if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
@@ -400,26 +415,16 @@ loadAllUsers(): void {
   haySuperposicion(inicio: number, fin: number): boolean {
     return this.turnosHorarios.some(turno => 
       (inicio >= turno.inicio && inicio < turno.fin) || // comprobar empezar turno existente
-      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existenes
-      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existenes
+      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existente
+      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existente
     );
   }
-
-
-  removeTurnoHorario(index: number) {
-    if (confirm(`¿Estás seguro de que quieres eliminar el turno: ${this.turnosHorarios[index].texto}?`)) {
-      this.turnosHorarios.splice(index, 1);
-    }
-  }
-
-
 
   // Método para abrir el modal de confirmación
   openDeleteModal(index: number) {
     this.showDeleteModalTurn = true;
     this.turnoAEliminar = index;
   }
-
 
   // Confirmar eliminación del turno
   confirmDeleteTurn() {
@@ -435,22 +440,104 @@ loadAllUsers(): void {
     this.turnoAEliminar = null;
     this.showDeleteModalTurn = false;
   }
- // Metodos de ausencias 
- 
- ausencias = [
-  {
-    fechaInicio: '01/01/2024',
-    fechaFin: '01/02/2024',
-    motivo: 'Vacaciones',
-    usuario: 'Aaron Smith',
-    
-  },
-  {
-    fechaInicio: '01/03/2022',
-    fechaFin: '01/04/2022',
-    motivo: 'Enfermedad',
-    usuario: 'Maria González',
-  },
-];
-}
 
+  /*---------------------------------- Métodos de Ausencias ----------------------------------*/
+  
+  ausencias: { 
+    fechaInicio: Date; 
+    fechaFin: Date; 
+    motivo: string; 
+    usuario: string;
+    texto: string;
+  }[] = [];
+
+  nuevaAusencia: { 
+    fechaInicio: Date | null; 
+    fechaFin: Date | null; 
+    motivo: string; 
+    usuario: string;
+  } = {
+    fechaInicio: null,
+    fechaFin: null,
+    motivo: '',
+    usuario: ''
+  };
+
+  showAddAusenciaForm: boolean = false;
+  showDeleteModalAusencia: boolean = false;
+  ausenciaAEliminar: number | null = null;
+
+  // Método para mostrar/ocultar el formulario de añadir ausencia
+  toggleAddAusenciaForm(): void {
+    this.showAddAusenciaForm = !this.showAddAusenciaForm;
+  }
+
+  // Método para añadir una nueva ausencia
+  addAusencia(): void {
+    if (!this.nuevaAusencia.fechaInicio || !this.nuevaAusencia.fechaFin || !this.nuevaAusencia.usuario || !this.nuevaAusencia.motivo) {
+      alert("Por favor, completa todos los campos de la ausencia.");
+      return;
+    }
+
+    // Validar que la fecha de inicio no sea posterior a la fecha de fin
+    if (this.nuevaAusencia.fechaInicio > this.nuevaAusencia.fechaFin) {
+      alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+      return;
+    }
+
+    // Validar solapamiento de fechas
+    if (this.haySuperposicionAusencia(this.nuevaAusencia.fechaInicio, this.nuevaAusencia.fechaFin)) {
+      alert("La ausencia se superpone con otra existente. Por favor, selecciona otro rango de fechas.");
+      return;
+    }
+
+    const textoAusencia = `Ausencia: ${this.nuevaAusencia.fechaInicio.toLocaleDateString()} - ${this.nuevaAusencia.fechaFin.toLocaleDateString()} (Motivo: ${this.nuevaAusencia.motivo})`;
+
+    // Agregar la ausencia
+    this.ausencias.push({
+      fechaInicio: this.nuevaAusencia.fechaInicio,
+      fechaFin: this.nuevaAusencia.fechaFin,
+      motivo: this.nuevaAusencia.motivo,
+      usuario: this.nuevaAusencia.usuario,
+      texto: textoAusencia
+    });
+
+    // Guardar las ausencias actualizadas en localStorage
+    localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
+
+    // Reiniciar el formulario
+    this.nuevaAusencia = { fechaInicio: null, fechaFin: null, usuario: '', motivo: '' };
+    this.showAddAusenciaForm = false;
+  }
+
+  // Método para verificar superposición de ausencias
+  haySuperposicionAusencia(inicio: Date, fin: Date): boolean {
+    return this.ausencias.some(ausencia =>
+      (inicio <= ausencia.fechaFin && fin >= ausencia.fechaInicio)
+    );
+  }
+
+  // Métodos para manejar el modal de confirmación de eliminación de ausencia
+  openDeleteModalAusencia(index: number): void {
+    this.showDeleteModalAusencia = true;
+    this.ausenciaAEliminar = index;
+  }
+
+  confirmDeleteAusencia(): void {
+    if (this.ausenciaAEliminar !== null) {
+      this.ausencias.splice(this.ausenciaAEliminar, 1);
+
+      // Actualizar localStorage después de eliminar
+      localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
+
+      this.ausenciaAEliminar = null;
+    }
+    this.showDeleteModalAusencia = false;
+  }
+
+  cancelDeleteAusencia(): void {
+    this.ausenciaAEliminar = null;
+    this.showDeleteModalAusencia = false;
+  }
+
+}

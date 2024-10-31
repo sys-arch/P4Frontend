@@ -209,24 +209,64 @@
             </div>
 
             <app-loader *ngIf="isLoading"></app-loader>
-            
             <h2>Panel de Administrador</h2>
-
             <div class="calend-ausen-container">
               <div class="ausencias-contain">
-                <h2>Consulta de ausencias</h2>
+                <h3>Consulta de Ausencias</h3>
+                <button (click)="toggleAddAusenciaForm()">
+                  {{ showAddAusenciaForm ? 'Cancelar' : 'Añadir Ausencia' }}
+                </button>
+            
+                <!-- Formulario para añadir una nueva ausencia -->
+                <div *ngIf="showAddAusenciaForm" class="form-ausencia">
+                  <h4>Añadir Nueva Ausencia</h4>
+                  <form (ngSubmit)="addAusencia()">
+                    <label>
+                      Nombre de Usuario:
+                      <input [(ngModel)]="nuevaAusencia.usuario" name="usuario" required>
+                    </label>
+                    <label>
+                      Motivo:
+                      <input [(ngModel)]="nuevaAusencia.motivo" name="motivo" required>
+                    </label>
+                    <label>
+                      Fecha de Inicio:
+                      <input type="date" [(ngModel)]="nuevaAusencia.fechaInicio" name="fechaInicio" required>
+                    </label>
+                    <label>
+                      Fecha de Fin:
+                      <input type="date" [(ngModel)]="nuevaAusencia.fechaFin" name="fechaFin" required>
+                    </label>
+                    <button type="submit">Añadir Ausencia</button>
+                  </form>
+                </div>
+            
+                <!-- Lista de ausencias -->
                 <div class="ausencias-container">
+                  <h4>Lista de Ausencias</h4>
                   <ul>
-                    <div *ngFor="let ausencia of ausencias" class="ausencia-item">
+                    <div *ngFor="let ausencia of ausencias; let i = index" class="ausencia-item">
                       <li>
                         <p><strong>Usuario:</strong> {{ ausencia.usuario }}</p>
                         <p><strong>Motivo:</strong> {{ ausencia.motivo }}</p>
-                        <p><strong>Desde:</strong> {{ ausencia.fechaInicio }} <strong>Hasta:</strong> {{ ausencia.fechaFin }}</p>
+                        <p><strong>Desde:</strong> {{ ausencia.fechaInicio | date:'dd/MM/yyyy' }} <strong>Hasta:</strong> {{ ausencia.fechaFin | date:'dd/MM/yyyy' }}</p>
+                        <button (click)="openDeleteModalAusencia(i)" class="eliminar-btn">Eliminar ausencia</button>
                       </li>
                     </div>
                   </ul>
+            
+                  <!-- Modal de confirmación para eliminar una ausencia -->
+                  <div class="modal-overlay" *ngIf="showDeleteModalAusencia">
+                    <div class="modal-content">
+                      <p>¿Estás seguro de que deseas eliminar esta ausencia?</p>
+                      <button (click)="confirmDeleteAusencia()" class="eliminar-btn">Eliminar</button>
+                      <button (click)="cancelDeleteAusencia()" class="cancel-btn">Cancelar</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
+            
               <div class="calendar-contain">
                 <h2>Turnos horarios</h2>
                   <!-- AÑADIDO NUEVO BORRAR LUEGO-->

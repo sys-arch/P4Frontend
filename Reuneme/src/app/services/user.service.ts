@@ -156,4 +156,29 @@ export class UserService {
     
         return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
+    getAusencias(token: string): Observable<any[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.get<any[]>(`${httpUrl}ausencias`, { headers });
+    }
+
+    // Añadir una nueva ausencia
+    addAusencia(ausencia: any, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.post(`${httpUrl}ausencias`, ausencia, { headers });
+    }
+
+    // Eliminar una ausencia por ID
+    deleteAusencia(id: number, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+        return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
+    }
 }
