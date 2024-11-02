@@ -46,7 +46,7 @@ export class RegistroAdminComponent {
   }
 
   validarPassword(): boolean {
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+\-_ç<>])[A-Za-z\d@$!%*?&#+\-_ç<>]{8,}$/;
 
     if (RegExp(passwordRegEx).exec(this.password1)) {
       this.passwordError = '';
@@ -105,10 +105,11 @@ export class RegistroAdminComponent {
     this.userService.registerAdmin(this.nombre, this.primerApellido, this.segundoApellido, this.email, this.centro, this.password1, this.password2, this.interno)
       .subscribe({
         next: (response: any) => {
-          console.log('Usuario registrado con éxito:', response);
+          console.log('Administrador registrado con éxito:', response);
+          this.navigateTo('/ventana-principal');
         },
         error: (error: any) => {
-          console.error('Error al registrar el usuario:', error);
+          console.error('Error al registrar el administrador:', error);
         }
       });
   }
@@ -120,5 +121,12 @@ export class RegistroAdminComponent {
       this.isLoading = false;
       this.router.navigate([route]);
     }, 1000);
+  }
+
+  focusNext(nextFieldIf: string){
+    const nextElement = document.getElementById(nextFieldIf);
+    if (nextElement){
+      nextElement.focus();
+    }
   }
 }

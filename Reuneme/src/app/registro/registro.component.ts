@@ -44,6 +44,16 @@ export class RegistroComponent {
     private readonly userService: UserService
   ) {}
 
+  // Validación de la fecha de alta debe ser menor o igual a la fecha actual
+  validateFechaAlta(): void {
+    this.fechaInvalid = false;
+    const alta = new Date(this.fechaAlta);
+    const fechaActual = new Date();
+    if (alta > fechaActual) {
+      this.fechaInvalid = true;
+    }
+  }
+
   // Validación de formato de correo electrónico
   validateEmail(): void {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -53,7 +63,7 @@ export class RegistroComponent {
   
   // Validación de la contraseña
   validarPassword(): boolean {
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+\-_ç<>])[A-Za-z\d@$!%*?&#+\-_ç<>]{8,}$/;
 
     if (RegExp(passwordRegEx).exec(this.password1)) {
       this.passwordError = '';
@@ -92,6 +102,12 @@ export class RegistroComponent {
       alert("Correo electrónico inválido");
       return;
     } 
+
+    if (this.fechaInvalid) {
+      alert("Fecha de alta inválida");
+      return;
+    }
+
     // El primero comprueba el formato de la contraseña y 
     // el segundo si las contraseñas coinciden
     if (!this.validarPassword()) {
@@ -133,6 +149,7 @@ export class RegistroComponent {
       .subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito:', response);
+          this.navigateTo('/login');
         },
         error: (error) => {
           console.error('Error al registrar el usuario:', error);
@@ -140,7 +157,6 @@ export class RegistroComponent {
       });
   }
   
-
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;
@@ -150,4 +166,10 @@ export class RegistroComponent {
     }, 1000);
   }
 
+  focusNext(nextFieldIf: string){
+    const nextElement = document.getElementById(nextFieldIf);
+    if (nextElement){
+      nextElement.focus();
+    }
+  }
 }

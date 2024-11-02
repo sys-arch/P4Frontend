@@ -1,29 +1,42 @@
-/* Contenedor del footer */
 .footer {
     width: 100%;
     position: fixed;
     bottom: 0;
     left: 0;
     background-color: rgba(28, 28, 28, 0.95);
-    padding: 10px 20px;
+    padding: 1.1vh 2.2vh; /* Equivalente a 10px y 20px */
     display: flex;
-    justify-content: center; /* Centra los enlaces horizontalmente */
+    justify-content: space-between; /* Espacio entre los enlaces y el copyright */
     align-items: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+    box-shadow: 0 -0.22vh 0.55vh rgba(0, 0, 0, 0.5); /* Equivalente a -2px y 5px */
     z-index: 10;
+    margin-top: 2.2vh; /* Equivalente a 20px */
+}
+
+@media (max-height: 700px), (max-width: 650px) {
+    .footer {
+        display: none; /* Oculta el footer completamente */
+    }
+}
+
+@media (max-height: 700px), (max-width:650px) {
+    .footer {
+        display: flex;
+    }
 }
 
 .footer-content {
     display: flex;
-    justify-content: center; /* Solo centramos los enlaces */
+    justify-content: center;
     align-items: center;
-    width: 100%;
+    gap: 3.3vh; 
 }
 
 .footer-links {
     list-style: none;
     display: flex;
-    gap: 30px; /* Espacio entre los enlaces */
+    gap: 2.2vh;
     padding: 0;
     margin: 0;
 }
@@ -33,13 +46,13 @@
 }
 
 .footer-links li:not(:last-child)::after {
-    content: ""; /* Línea separadora */
+    content: "";
     position: absolute;
-    right: -10px; /* Ajusta la posición de la línea */
+    right: -1.1vh; /* Equivalente a -10px */
     top: 50%; /* Alinea verticalmente */
     transform: translateY(-50%);
-    height: 15px; /* Longitud de la línea */
-    width: 1px; /* Ancho de la línea */
+    height: 1.65vh; /* Equivalente a 15px */
+    width: 0.11vh; /* Equivalente a 1px */
     background-color: #666; /* Color de la línea */
     opacity: 0.5; /* Suaviza el color */
 }
@@ -47,7 +60,7 @@
 .footer-links li a {
     color: #b3b3b3;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 1.54vh; /* Equivalente a 14px */
 }
 
 .footer-links li a:hover {
@@ -55,16 +68,11 @@
     text-decoration: underline;
 }
 
-/* Estilo del copyright separado */
 .footer-info {
-    width: 100%; /* Toma todo el ancho para posicionarse mejor */
-    text-align: right; /* Alineación a la derecha */
-    position: fixed;
-    bottom: 10px; /* Espacio desde la parte inferior */
-    right: 20px; /* Espacio desde el lado derecho */
-    font-size: 12px;
+    font-size: 1.32vh;
     color: #b3b3b3;
-    z-index: 11; /* Asegurar que esté visible por encima de otros elementos */
+    text-align: right;
+    margin-left: auto; 
 }
 
 .footer-info span {

@@ -1,0 +1,93 @@
+[33mcb8939d[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #28 from sys-arch/Luis
+[33mbb1af91[m[33m ([m[1;31morigin/Luis[m[33m, [m[1;32mLuis[m[33m)[m Lista obtiene usuarios correctamente
+[33m7cabc88[m Perfil del usuario logueado en ventana principal
+[33maebf683[m Reducción de codigo duplicado
+[33m888de24[m shared footer
+[33m5744f4e[m Perfil con backend
+[33m4fc0211[m Merge branch 'Luis' of https://github.com/sys-arch/P4Frontend into Luis
+[33m6040415[m Merge pull request #27 from sys-arch/dev
+[33m1b38a61[m[33m ([m[1;31morigin/dev[m[33m)[m Merge pull request #26 from sys-arch/Antonio
+[33m35b5d95[m[33m ([m[1;31morigin/Antonio[m[33m)[m Resuelto error en superposición turnos horarios
+[33mbb0118e[m Resuelto conflicto
+[33m9296542[m Guardando coambios en user.service.ts
+[33mf9212e2[m Merge pull request #25 from sys-arch/dev
+[33mef06d76[m Merge pull request #24 from sys-arch/Ivan
+[33m6f58e5b[m[33m ([m[1;31morigin/Ivan[m[33m)[m Merge branch 'dev' into Ivan
+[33ma73251d[m Merge pull request #23 from sys-arch/Antonio
+[33m0526254[m Turnos de horarios de calendarios
+[33m115a2e2[m Creación pestaña Ausencias Calendario
+[33m3df62ec[m Tarea de Edicion de Usuarios
+[33mc5ff4f6[m Merge pull request #22 from sys-arch/Luis
+[33mb34e6be[m Reset password 2
+[33m6bf27f5[m Merge pull request #21 from sys-arch/Luis
+[33m241c785[m Reestablecimiento de Contraseña Completo
+[33m33953ad[m Reestablecimiento de contraseña funcional
+[33mf0a00b7[m Más Avances restablecer contraseña
+[33mc8d0d51[m Merge pull request #20 from sys-arch/Luis
+[33mdb81e4d[m Avances en recuperación de contraseña
+[33m0600f95[m Merge pull request #19 from sys-arch/Luis
+[33m8a26a6f[m Frontend de Recuperar contraseña y ajustes varios 2
+[33m35b0a81[m Frontend de Recuperar contraseña y ajustes varios
+[33m7d86f83[m Merge pull request #17 from sys-arch/dev
+[33mc239c08[m Merge pull request #16 from sys-arch/Adrian
+[33md41beed[m[33m ([m[1;31morigin/Adrian[m[33m)[m Ajustes varios en el frontend
+[33me3ceaab[m Merge pull request #14 from sys-arch/Adrian
+[33m53abeef[m Merge branch 'dev' into Adrian
+[33m3cae301[m Ajustes conexión Registro
+[33m7500309[m Merge pull request #13 from sys-arch/Luis
+[33mb587600[m Perfil de usuario, boton añadir administrador
+[33meb58f0c[m Retoque ver usuario/admin y registrar usuario
+[33m44a5090[m Refinamiento perfiles p1
+[33me257525[m Merge pull request #12 from sys-arch/dev
+[33mb7e5c1b[m Merge pull request #11 from sys-arch/Yoli
+[33med39366[m Merge branch 'dev' into Yoli
+[33m3ff7a03[m arreglado
+[33mbb1d938[m problema de impresion
+[33m5c8bd01[m Merge pull request #10 from sys-arch/Luis
+[33m6eb49b1[m Login integrado con backend
+[33m3f7c1c3[m Merge pull request #9 from sys-arch/Luis
+[33m6fc086a[m Tareas de pop up y confirmacion de bloqueo y eliminación de usuario
+[33md72f12a[m Inicio Bloqueo y desbloqueo de usuario frontend
+[33meb672da[m Merge pull request #8 from sys-arch/Luis
+[33m1a0a166[m Lista de Usuarios en Ventana Principal
+[33m75c0601[m Avance en Ventana Principal Admin
+[33m9e1b22f[m Avance en Ventana Principal Admin
+[33m4fef300[m Inicio de ventana principal/Admin
+[33mcfbc079[m[33m ([m[1;32mdev[m[33m)[m Merge pull request #7 from sys-arch/Adrian
+[33m0dc89fd[m Merge branch 'dev' into Adrian
+[33m2a3d22b[m Ajustes frontend
+[33m027894d[m Merge pull request #6 from sys-arch/Luis
+[33m6240ea7[m Registro de Admins en proceso Finalizado
+[33me2ca318[m Registro de Admins en proceso
+[33me1a508a[m esto
+[33m7094d7b[m Merge branch 'Yoli' into dev
+[33mf1a0b79[m Merge pull request #4 from sys-arch/Adrian
+[33m6a43ba2[m Merge branch 'dev' into Adrian
+[33mfbfbbb0[m cambios para que no salte error al mergear
+[33m57d2e6b[m Finalización frontend registro
+[33m169735d[m Agregar perfilUsuario y modificar rutas y componentes
+[33m9db4720[m Merge pull request #3 from sys-arch/Luis
+[33m55eec75[m Página Doble Factor en construcción
+[33m10962e1[m cambios para poder tener el dev nuevo
+[33me5f66f6[m Merge pull request #2 from sys-arch/Luis
+[33m4e720fb[m Interfaz Login 4
+[33m4a34e26[m Ajustes en frontend del Registro
+[33m6f3d293[m Merge pull request #1 from sys-arch/Luis
+[33mcd4991e[m Interfaz Login 3
+[33m02a53c2[m Interfaz Login 2
+[33m78eaf68[m Interfaz Login
+[33m27c6db8[m inicio del perfil de admin
+[33mbaf6ee7[m Frontend ventana registro
+[33m317b4ca[m Asegurar compatibilidad
+[33mb73f6dc[m Faltaria hacer compatible con backend
+[33m739bc92[m Avance Login
+[33m7790aa0[m Avance en Login
+[33m666890a[m Sobrescribiendo Luis con el contenido de dev
+[33mdf83cf7[m Formulario admin inicio (no terminado)
+[33m653bd83[m Proyecto Angular
+[33m2f31fef[m Portada Frontend con Logo HD
+[33m629711c[m Reapply "Creación Portada Frontend"
+[33mc734566[m Revert "Creación Portada Frontend"
+[33m313fa12[m Creación Portada Frontend
+[33m93b7f35[m Update README.md
+[33m64f06d7[m Initial commit

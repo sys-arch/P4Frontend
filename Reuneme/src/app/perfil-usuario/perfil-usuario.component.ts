@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
+import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 
+
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent, ContrasenaOlvidadaComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './perfil-usuario.component.html',
   styleUrls: ['./perfil-usuario.component.css']
 })
@@ -27,27 +28,38 @@ export class PerfilUsuarioComponent implements OnInit {
     perfil: 'Perfil'
   };
 
-  profilePicture: string | ArrayBuffer | null = null;
+  profilePicture: string | ArrayBuffer | null = 'assets/UsuarioSinFoto.png';
   isLoading: boolean = false;
+  token: string = '';
 
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private gravatarService: GravatarService,
+    private readonly route: ActivatedRoute
   ) {}
   
   ngOnInit(): void {
     const token = localStorage.getItem('token') || '';
-    const email = localStorage.getItem('email') || '';
+    const localEmail = localStorage.getItem('email') || '';
 
-    // Llamada al servicio para obtener la información del usuario
-    if (token && email) {
-      this.getUserInfo(email, token);
+    // Obtener el parámetro 'email' de la URL
+    const routeEmail = this.route.snapshot.paramMap.get('email');
+
+    // Determinar el email a usar
+    const emailToUse = routeEmail || localEmail;
+
+    if (token && emailToUse) {
+      console.log('Cargando perfil para el email:', emailToUse);
+      this.getUserInfo(emailToUse, token);
+    } else {
+      console.error('No se encontró un email válido para cargar el perfil');
     }
   }
 
   getUserInfo(email: string, token: string): void {
     this.isLoading = true;
-    this.userService.getUserInfo(email, token).subscribe(
+    this.userService.verDatosEmpleado(email).subscribe(
       (userInfo: any) => {
         this.user.nombre = userInfo.nombre;
         this.user.apellidos = `${userInfo.apellido1} ${userInfo.apellido2}`;
@@ -56,6 +68,7 @@ export class PerfilUsuarioComponent implements OnInit {
         this.user.centroTrabajo = userInfo.centro || 'N/A';
         this.user.alta = userInfo.fechaalta || 'N/A';
         this.user.perfil = userInfo.perfil || 'N/A';
+        this.profilePicture = this.gravatarService.getGravatarUrl(userInfo.email);
         this.isLoading = false;
       },
       (error) => {
@@ -79,6 +92,19 @@ export class PerfilUsuarioComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
+
+  // Método para redirigir a cambiar la contraseña
+  navigateToChangePassword(): void {
+    this.router.navigate(['/edicion-usuario'], { state: { token: this.token } });
+  }
+  editUser(userEmail: string): void {
+    if (userEmail) {
+      this.router.navigate(['/edicion-usuario', userEmail]);
+    } else {
+      console.error('El correo electrónico del usuario no está definido');
+    }
+  }
+
 
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
