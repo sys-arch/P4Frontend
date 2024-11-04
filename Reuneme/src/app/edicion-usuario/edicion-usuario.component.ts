@@ -35,6 +35,9 @@ export class EdicionUsuarioComponent implements OnInit {
     this.user = history.state['user'];
     this.token = localStorage.getItem('token') || '';
 
+    //Verificar this.user
+    console.log('Contenido de this.user en ngOnInit:', this.user);
+
     // Determinar si el usuario es administrador
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
@@ -82,16 +85,20 @@ export class EdicionUsuarioComponent implements OnInit {
   loadUserData(): void {
     this.isLoading = true;
 
-    const getUserData = this.user.isAdmin
-      ? this.userService.verDatosAdmin(this.user.email)
-      : this.userService.verDatosEmpleado(this.user.email);
+    //Verificar Valor email
+    console.log('Valor de this.user:', this.user);
+    console.log('Valor de this.user.email:', this.user?.email);
+
+    const getUserData = this.user.isAdmin //Problema: Como filtrar si el email es de administrador o no
+      ? this.userService.verDatosAdmin(this.user) //This.user == email
+      : this.userService.verDatosEmpleado(this.user);
 
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
 
         if (data) {
-          if (this.isAdmin) {
+          if (this.user.isAdmin) {
             this.userForm.patchValue({
               nombre: data.nombre,
               apellidos: `${data.apellido1} ${data.apellido2}`,
