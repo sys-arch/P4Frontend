@@ -1,6 +1,8 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <app-header></app-header>
 
+<app-menu></app-menu>    
+
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
 <div *ngIf="isAdmin" class="tabs-container">
   <button (click)="selectTab('tab0')" [class.active]="activeTab==='talb0'">Calendario</button>
