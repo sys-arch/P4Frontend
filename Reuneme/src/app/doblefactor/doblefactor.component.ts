@@ -1,14 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
-import { CommonModule } from '@angular/common';
+import { FooterComponent } from '../shared/footer/footer.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 @Component({
   selector: 'app-doblefactor',
   standalone: true,
   templateUrl: './doblefactor.component.html',
   styleUrl: './doblefactor.component.css',
-  imports: [CommonModule,LoaderComponent]
+  imports: [CommonModule,LoaderComponent,HeaderComponent, FooterComponent]
 })
 export class DoblefactorComponent {
   isLoading: boolean = false;

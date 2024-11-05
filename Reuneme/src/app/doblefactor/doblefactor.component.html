@@ -1,78 +1,26 @@
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página en Construcción</title>
-    <style>
-        body, html {
-        height: 100%;
-        margin: 0;
-        font-family: Arial, sans-serif;
-        }
+<app-header></app-header>
 
-        /* Estilo del contenedor con la imagen de fondo */
-        .bg-container {
-        background-image: url('/assets/images/under-construction.png'); /* Imagen de página en construcción */
-        height: 70%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: #ffffff;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+<div class="bg-container"></div>
 
-        /* Estilo del texto */
-        .construction-text {
-        font-size: 48px;
-        font-weight: bold;
-        margin-bottom: 40px;
-        }
+<div class="notification">
+    <span class="notification-icon">⚠️</span> Prevención de delitos cibernéticos
+    <a href="#" class="notification-link">Por favor, revise estos consejos importantes</a> sobre cómo prevenir el ciberdelito, como reconocer nuestras comunicaciones oficiales y habilitar la autenticación de dos factores.
+</div>
 
-        /* Estilo de los botones */
-        .btn-container {
-        display: flex;
-        gap: 20px; /* Espacio entre los botones */
-        }
-
-        .btn {
-        background-color: #007bff;
-        border: none;
-        color: white;
-        padding: 15px 30px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 18px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-        background-color: #0056b3;
-        }
-    </style>
-    </head>
-    <body>
-    <div class="bg-container">
-        <div class="construction-text">Página en Construcción</div>
-        <div class="btn-container">
-
-        <button class="btn" (click)="navigateTo('/perfil-admin')">Perfil Admin</button>
-
-        <button class="btn" (click)="navigateTo('/perfil-usuario')">Perfil Usuario</button>
-
-        <button class="btn" (click)="navigateTo('/registro-admin')">Registro Admin</button>
-        
-        <button class="btn" (click)="navigateTo('/ventana-principal')">Ventana Principal</button>
-
-        <button class="btn" (click)="navigateTo('/reset-contrasena')">Reset Contraseña</button>
-        </div>
+<main class="auth-container">
+    <h2 class="auth-title">Por favor, introduzca su código de autenticación de dos factores</h2>
+    <div class="code-input-container">
+        <input type="text" maxlength="6" class="code-input" placeholder="0 1 2 3 4 5">
     </div>
-    </body>
-</html>
+    <button class="confirm-button">Confirmar</button>
+</main>
+
+<div class="btn-container">
+    <button class="btn" (click)="navigateTo('/perfil-admin')">Perfil Admin</button>
+    <button class="btn" (click)="navigateTo('/perfil-usuario')">Perfil Usuario</button>
+    <button class="btn" (click)="navigateTo('/registro-admin')">Registro Admin</button>
+    <button class="btn" (click)="navigateTo('/ventana-principal')">Ventana Principal</button>
+    <button class="btn" (click)="navigateTo('/reset-contrasena')">Restablecer Contraseña</button>
+</div>
+
+<app-footer></app-footer>
