@@ -33,9 +33,15 @@ export class EdicionUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = history.state['user'];
+    
+    if (!this.user || !this.user.email) {
+        console.error('Usuario no definido o datos incompletos');
+        this.router.navigate(['/ventana-principal']);
+        return;
+    }
+    
+    // Continuar con la asignación del token y verificación del rol
     this.token = localStorage.getItem('token') || '';
-
-    // Determinar si el usuario es administrador
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
@@ -46,16 +52,11 @@ export class EdicionUsuarioComponent implements OnInit {
       return;
     }
 
-    // Verificar permisos de edición
-    if (this.isAdmin && this.user.email.startsWith('a-') && this.user.email !== this.loggedUserEmail) {
-      console.error('No tiene permiso para editar este usuario');
-      this.router.navigate(['/ventana-principal']);
-      return;
-    }
-
+    console.log('Email del usuario:', this.user.email);
+    
     this.initializeForm();
     this.loadUserData();
-  }
+}
 
   togglePasswordVisibility(): void {
     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
@@ -89,7 +90,6 @@ export class EdicionUsuarioComponent implements OnInit {
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
-
         if (data) {
           if (this.isAdmin) {
             this.userForm.patchValue({
