@@ -21,6 +21,24 @@
     <button class="btn" (click)="navigateTo('/registro-admin')">Registro Admin</button>
     <button class="btn" (click)="navigateTo('/ventana-principal')">Ventana Principal</button>
     <button class="btn" (click)="navigateTo('/reset-contrasena')">Restablecer Contraseña</button>
+    <button class="btn" (click)="openModal()">Activar segundo factor</button>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isModalOpen" class="modal">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h3>Activar segundo factor de autenticación</h3>
+        <p>1. Para activar el segundo factor de autenticación, instale Google Authenticator en su teléfono y escanee el código QR.</p>
+        <img src="/assets/images/qr.png" alt="Código QR" class="qr-image">
+        <p>2. Escriba el código generado por Google Authenticator y presione aceptar.</p>
+        <div class="input-group">
+            <label for="auth-code">Código</label>
+            <input type="text" id="auth-code" placeholder="Ingrese el código">
+        </div>
+        <button class="accept-button">Aceptar</button>
+    </div>
 </div>
 
 <app-footer></app-footer>
+
