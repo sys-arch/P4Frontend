@@ -7,11 +7,13 @@ import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { CalendarioComponent } from '../shared/calendario/calendario.component';
+import { MenuComponent } from '../shared/menu/menu.component';
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent,CalendarioComponent, MenuComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
