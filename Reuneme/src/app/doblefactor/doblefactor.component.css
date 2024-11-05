@@ -148,7 +148,7 @@
 
 .modal-content {
     background-color: #ffffff;
-    padding: 2rem;
+    padding: 2rem 2rem 0.5rem; /* Reduce el padding inferior para acercar el borde al input */
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
@@ -166,7 +166,7 @@
 .modal-title {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333; /* Color negro */
+    color: #333;
     margin-bottom: 1rem;
     text-align: center;
 }
@@ -190,7 +190,7 @@
     margin: 0;
 }
 
-/* Imagen QR centrada y sin bordes redondeados */
+/* Imagen QR centrada */
 .qr-image {
     display: block;
     margin: 1.5rem auto;
@@ -251,4 +251,30 @@
 
 .accept-button:hover {
     background-color: #0056b3;
+}
+
+/* Campo de respaldo */
+.backup-code {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+    z-index: 1000;
+}
+
+.backup-code p {
+    margin: 0;
+    padding: 0.3rem 0;
+}
+
+.backup-input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    margin-top: 0.1rem;
 }
