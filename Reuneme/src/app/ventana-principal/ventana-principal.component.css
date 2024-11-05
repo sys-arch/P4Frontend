@@ -262,37 +262,47 @@ html, body {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    max-width: 120vw;
+    height: auto;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
 }
+.modal-overlay h3 {
+    color: #f1f1f1;
+    font-size: 1.2em;
+    font-weight: 500;
+    text-shadow: 0.11vh 0.11vh 0.33vh rgba(0, 0, 0, 0.5);
+    word-wrap: breaak-word;
+    white-space: pre-wrap;
+}
+
 .modal {
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    background-color: #2a2a2a !important; /* Fondo ligeramente más claro */
-    padding: 2.75vh !important; /* Equivalente a 25px */
-    border-radius: 1.65vh !important; /* Equivalente a 15px */
-    z-index: 2147483647 !important; /* Asegura que esté en el frente */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    display: block !important; /* Forzar que esté visible */
-    opacity: 1 !important; /* Asegura que no esté opaco */
-    text-align: center; /* Centrar contenido */
-    color: #f1f1f1; /* Texto más claro */
+    background-color: #2a2a2a !important;
+    padding: 2.75vh !important;
+    border-radius: 1.65vh !important;
+    z-index: 2147483647 !important;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4);
+    display: block !important;
+    opacity: 1 !important;
+    text-align: center; 
+    color: #f1f1f1;
 }
 /* Estilos para el modal de bloqueo */
 .block-modal {
-    background-color: #2a2a2a; /* Color más neutro */
-    padding: 2.2vh; /* Equivalente a 20px */
-    border-radius: 1.65vh; /* Equivalente a 15px */
-    width: 13.9vw; /* Equivalente a 300px en proporción de ancho */
-    height: 16.5vh; /* Equivalente a 150px en proporción de altura */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    border: 0.22vh solid #444; /* Equivalente a 2px */
+    background-color: #2a2a2a;
+    padding: 2.2vh;
+    border-radius: 1.65vh;
+    width: 20%;
+    height: 22%;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4);
+    border: 0.22vh solid #444;
     display: block;
     opacity: 1;
     text-align: center;
@@ -300,19 +310,60 @@ html, body {
 }
 
 .validate-modal {
-    background-color: #2a2a2a; /* Color más neutro */
-    padding: 2.2vh; /* Equivalente a 20px */
-    border-radius: 1.65vh; /* Equivalente a 15px */
-    width: 15.9vw; /* Equivalente a 300px en proporción de ancho */
-    height: 16.5vh; /* Equivalente a 150px en proporción de altura */
-    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); /* Sombra proporcional */
-    border: 0.22vh solid #444; /* Equivalente a 2px */
+    background-color: #2a2a2a;
+    padding: 2.2vh;
+    border-radius: 1.65vh;
+    width: 20%;
+    height: 22%;
+    box-shadow: 0 0.88vh 1.76vh rgba(0, 0, 0, 0.4); 
+    border: 0.22vh solid #444;
+
     display: block;
     opacity: 1;
     text-align: center;
     color: #ffffff;
 }
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #ff4d4d;
+    padding: 5.5vh; /* Equivalente a 50px */
+    border-radius: 2.75vh; /* Equivalente a 25px */
+    width: 22%; /* Equivalente a 330px, basado en ancho estándar */
+    height: 26%; /* Equivalente a 230px */
+    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
+    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
 
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+}
+/* Estilos generales del modal de eliminación */
+.delete-modal {
+    background-color: #ff4d4d;
+    padding: 5.5vh; /* Equivalente a 50px */
+    border-radius: 2.75vh; /* Equivalente a 25px */
+    width: 22%; /* Equivalente a 330px, basado en ancho estándar */
+    height: 26%; /* Equivalente a 230px */
+    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
+    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
+    display: block;
+    opacity: 1;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+}
+
+/* Texto de advertencia */
+.warning-text {
+    font-size: 1.43vh; /* Equivalente a 13px */
+    color: #f1c40f;
+    margin-top: 0.55vh; /* Equivalente a 5px */
+    margin-bottom: 2.75vh; /* Equivalente a 25px */
+    text-align: center;
+    font-weight: bold;
+}
 
 .calend-ausen-container h2 {
     text-shadow: 0.051vw 0.051vw 0.26vw rgba(0, 0, 0, 0.5); /* 1px, 1px, 5px */
@@ -363,33 +414,6 @@ html, body {
 .cancel-btn:hover {
     background-color: #5a6268; /* Color más oscuro al hacer hover */
 }
-
-/* Estilos generales del modal de eliminación */
-.delete-modal {
-    background-color: #ff4d4d;
-    padding: 5.5vh; /* Equivalente a 50px */
-    border-radius: 2.75vh; /* Equivalente a 25px */
-    width: 16.2vw; /* Equivalente a 330px, basado en ancho estándar */
-    height: 21.2vh; /* Equivalente a 230px */
-    box-shadow: 0 1.65vh 2.75vh rgba(0, 0, 0, 0.6); /* Proporcional para mayor profundidad */
-    border: 0.33vh solid #ff3b3b; /* Equivalente a 3px */
-    display: block;
-    opacity: 1;
-    text-align: center;
-    color: #ffffff;
-    position: relative;
-}
-
-/* Texto de advertencia */
-.warning-text {
-    font-size: 1.43vh; /* Equivalente a 13px */
-    color: #f1c40f;
-    margin-top: 0.55vh; /* Equivalente a 5px */
-    margin-bottom: 2.75vh; /* Equivalente a 25px */
-    text-align: center;
-    font-weight: bold;
-}
-
 
 .ventana-principal {
     text-align: center;
@@ -814,7 +838,7 @@ html, body {
     overflow: hidden;
     white-space: normal;
     word-wrap: break-word; 
-  }
+}
  /* Contenedor principal para la lista de ausencias */
 .ausencias-container {
     background-color: #2e2e2e;
@@ -840,45 +864,151 @@ html, body {
     font-size: 14px;
     font-weight: bold;
 }
-
-.selectores-ausencias select,
-.selectores-ausencias input {
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    background-color: #525252;
-    color: white;
-    font-size: 14px;
+.ausencias-contain {
+    flex: 1; 
+    margin-right: 0.52vw; /* Similar al margen de 'turnos' */
+    background-color: #2e2e2e; 
+    border-radius: 0.41vw; 
+    padding: 1.1vh; 
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word; 
 }
 
+/* Contenedor principal de la lista de ausencias */
+.ausencias-container {
+    background-color: #2e2e2e;
+    padding: 2.2vh; /* Ajustado para coincidir con 'turnos-horarios-container' */
+    border-radius: 0.41vw; 
+    color: #ffffff;
+    box-shadow: 0 0.21vw 0.41vw rgba(0, 0, 0, 0.3);
+    text-align: left;
+    margin-top: 2.2vh;
+}
+
+/* Estilo de la lista de ausencias */
 .ausencias-container ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
+
+/* Estilo de cada ausencia en la lista */
 .ausencias-container li {
-    padding: 10px 0; /* Aumentar el padding */
-    font-size: 18px; /* Aumentar el tamaño de letra */
-    border-bottom: 1px solid #444; /* Línea de separación entre ausencias */
+    padding: 0.88vh 0; /* Ajustado para coincidir con 'turnos-horarios-container li' */
+    font-size: 1.75vh; /* Ajustado para coincidir con 'turnos-horarios-container li' */
+    border-bottom: 0.052vw solid #444; 
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #ffffff; /* Asegurarse de que el texto sea blanco */
+    color: #ffffff;
 }
-.ausencias-container li p {
-    margin-left: 10px; /* Ajusta el valor según sea necesario */
-}
-/* Asegurarse de que el texto en negrita sea blanco */
-.ausencias-container li strong {
-    color: #ffffff; /* Color blanco para el texto en negrita */
-}
+
+/* Estilo de los párrafos y texto en negrita dentro de cada ausencia */
 .ausencias-container p,
 .ausencias-container strong {
-    color: #ffffff; /* Color blanco */
-    font-size: 16px; /* Ajusta el tamaño de la fuente según sea necesario */
+    color: #ffffff;
+    font-size: 1.54vh; /* Ajustado para consistencia */
+}
+
+/* Estilo del botón para eliminar ausencia */
+.ausencias-container ul li button {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    font-size: 1.75vh; /* Coincide con 'turnos-horarios-container ul li button' */
+    cursor: pointer;
+    text-align: center;
+    padding: 0.88vh 1.1vw;
+    border-radius: 0.26vw;
+    transition: all 0.3s ease;
+    box-shadow: 0 0.21vw 0.41vw rgba(0, 0, 0, 0.2);
+}
+
+/* Efectos hover y active para el botón de eliminar ausencia */
+.ausencias-container ul li button:hover {
+    background-color: #5a6268;
+    transform: scale(1.05);
+    box-shadow: 0 0.31vw 0.62vw rgba(0, 0, 0, 0.4);
+}
+
+.ausencias-container ul li button:active {
+    background-color: #495057;
+    transform: scale(0.95);
+    box-shadow: 0 0.15vw 0.31vw rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo del botón "Añadir Ausencia" */
+.add-ausencia-btn {
+    background-color: #5fc67d;
+    color: white;
+    padding: 1.1vh 2.1vw;
+    border: none;
+    border-radius: 0.26vw;
+    cursor: pointer;
+    font-size: 1.54vh;
+    font-weight: bold;
+    margin-top: 1.1vh;
+    margin-bottom: 1.1vh;
+    transition: background-color 0.3s ease;
+    /* Elimina la propiedad width o ajústala */
+    width: auto; /* O puedes especificar un ancho fijo si lo prefieres */
+    display: block; /* Para centrar el botón */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
+.add-ausencia-btn:hover {
+    background-color: #45b06a;
+}
+
+/* Estilo del formulario para añadir una nueva ausencia */
+.form-ausencia {
+    background-color: #2e2e2e;
+    padding: 2.2vh;
+    border-radius: 0.41vw;
+    color: #ffffff;
+    box-shadow: 0 0.21vw 0.41vw rgba(0, 0, 0, 0.3);
+    margin-top: 2.2vh;
+}
+
+/* Estilo de los campos y etiquetas del formulario */
+.form-ausencia label {
+    display: block;
+    margin-bottom: 1.1vh;
+    font-size: 1.54vh;
+    font-weight: bold;
+}
+
+.form-ausencia input {
+    width: 100%;
+    padding: 0.88vh;
+    margin-bottom: 1.1vh;
+    border: none;
+    border-radius: 0.26vw;
+    background-color: #3d3d3d;
+    color: white;
+    font-size: 1.54vh;
+}
+
+/* Botón para añadir ausencia dentro del formulario */
+.form-ausencia button[type="submit"] {
+    background-color: #5fc67d;
+    color: white;
+    padding: 1.1vh 2.1vw;
+    border: none;
+    border-radius: 0.26vw;
+    cursor: pointer;
+    font-size: 1.54vh;
+    font-weight: bold;
+    margin-top: 1.1vh;
+    transition: background-color 0.3s ease;
+}
+
+.form-ausencia button[type="submit"]:hover {
+    background-color: #45b06a;
+}
 .calendar-contain {
     flex: 1; 
     margin-left: 0.52vw; /* 10px en relación con 1963px */

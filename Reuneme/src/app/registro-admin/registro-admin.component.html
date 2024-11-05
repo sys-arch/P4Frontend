@@ -6,7 +6,7 @@
             <div class="form-column">
                 <!-- Nombre -->
                 <div class="textbox">
-                    <input type="text" id="nombre" placeholder="" [(ngModel)]="nombre" name="nombre" required />
+                    <input type="text" id="nombre" placeholder="" [(ngModel)]="nombre" name="nombre" required (keydown.enter)="focusNext('primerApellido')"/>
                     <label for="nombre">Nombre*</label>
                 </div>
                 
@@ -14,18 +14,19 @@
                 <div class="form-grid">
                     <!-- Primer Apellido -->
                     <div class="textbox">
-                        <input type="text" id="primerApellido" placeholder="" [(ngModel)]="primerApellido" name="primerApellido" required />
+                        <input type="text" id="primerApellido" placeholder="" [(ngModel)]="primerApellido" name="primerApellido" required (keydown.enter)="focusNext('segundoApellido')" />
                         <label for="primerApellido">Primer Apellido*</label>
                     </div>
                     <!-- Segundo Apellido -->
                     <div class="textbox">
-                        <input type="text" id="segundoApellido" placeholder="" [(ngModel)]="segundoApellido" name="segundoApellido" />
+                        <input type="text" id="segundoApellido" placeholder="" [(ngModel)]="segundoApellido" name="segundoApellido" required (keydown.enter)="focusNext('email')"/>
                         <label for="segundoApellido">Segundo Apellido</label>
                     </div>
                 </div>
                 <!-- Correo Electrónico -->
                 <div class="textbox">
-                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"/>
+                    <input type="email" id="email" placeholder="" [(ngModel)]="email" name="email" required (blur)="validateEmail()"
+                    (keydown.enter)="focusNext('centro')"/>
                     <label for="email">Correo Electrónico*</label>
                 </div>
                 <div class="error-container">
@@ -35,7 +36,7 @@
                 </div>
                 <!-- Centro -->
                 <div class="textbox">
-                    <input type="text" id="centro" placeholder="" [(ngModel)]="centro" name="centro" required />
+                    <input type="text" id="centro" placeholder="" [(ngModel)]="centro" name="centro" required (keydown.enter)="focusNext('password1')"/>
                     <label for="centro">Centro*</label>
                 </div>
 
@@ -51,7 +52,7 @@
 
                 <!-- Contraseña -->
                 <div class="textbox password-box">
-                    <input type="password" id="password1" placeholder="" name="password1" [(ngModel)]="password1" required />
+                    <input type="password" id="password1" placeholder="" name="password1" [(ngModel)]="password1" required (keydown.enter)="focusNext('password2')"/>
                     <label for="password1">Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility1()" (keypress)="togglePasswordVisibility1()">{{ passwordVisible1 ? 'Ocultar' : 'Mostrar' }}</span>
                 </div>
@@ -62,7 +63,7 @@
                 </div>
                 <!-- Repetir Contraseña -->
                 <div class="textbox password-box">
-                    <input type="password" id="password2" placeholder="" name="password2" [(ngModel)]="password2" required />
+                    <input type="password" id="password2" placeholder="" name="password2" [(ngModel)]="password2" />
                     <label for="password2">Repetir Contraseña*</label>
                     <span class="toggle-password" (click)="togglePasswordVisibility2()" (keypress)="togglePasswordVisibility2()">{{ passwordVisible2 ? 'Ocultar' : 'Mostrar' }}</span>
                 </div>

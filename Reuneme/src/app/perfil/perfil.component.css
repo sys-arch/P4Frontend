@@ -106,18 +106,18 @@
 
 /* Botón de volver */
 .back-button-container {
+  width: 10%;
   position: fixed;
-  bottom: 6%;
-  left: 20px;
+  bottom: 8%;
+  left: -2%;
 }
-
 .back-button {
   background-color: #007bff;
   border: none;
-  padding: 10px 20px;
+  padding: 8%;
   border-radius: 5px;
   color: white;
-  font-size: 14px;
+  font-size: 0.8em;
   cursor: pointer;
 }
 
