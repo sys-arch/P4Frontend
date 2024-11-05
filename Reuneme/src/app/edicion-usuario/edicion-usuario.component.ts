@@ -77,17 +77,18 @@ export class EdicionUsuarioComponent implements OnInit {
   initializeForm(): void {
     this.userForm = this.formBuilder.group({
       nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
+      apellido1: ['', Validators.required],
+      apellido2: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
       centroTrabajo: ['', Validators.required],
       ...(this.role === 'administrador' ? {
         interno: [null], // Campo específico de administrador 
-        password: this.user.email === this.loggedUserEmail ? [''] : []
+        password: ['', [Validators.minLength(8)]]
       } : {
         departamento: ['', Validators.required],
         fechaAlta: ['', Validators.required],
         perfil: ['', Validators.required],
-        password: ['', [Validators.required, Validators.minLength(8)]]
+        password: ['', [Validators.minLength(8)]]
       })
     });
   }
@@ -111,15 +112,18 @@ export class EdicionUsuarioComponent implements OnInit {
           // Aplica los valores al formulario basado en el rol
           this.userForm.patchValue({
             nombre: data.nombre,
-            apellidos: `${data.apellido1} ${data.apellido2}`,
+            apellido1: data.apellido1, 
+            apellido2: data.apellido2,
             correo: data.email,
             centroTrabajo: data.centro,
             ...(this.role === 'administrador' ? {
-              interno: data.interno
+              interno: data.interno,
+              password: data.password
             } : {
               departamento: data.departamento,
               fechaAlta: this.convertToDateString(data.fechaalta),
-              perfil: data.perfil
+              perfil: data.perfil,
+              password: data.password
             })
           });
   
@@ -141,35 +145,67 @@ export class EdicionUsuarioComponent implements OnInit {
     if (this.userForm.valid) {
       this.isLoading = true;
   
-      // Prepara los datos para la actualización, excluyendo campos innecesarios
-      const updateData = {
-        ...this.userForm.getRawValue(), // Obtiene todos los valores, incluidos los deshabilitados
-        email: this.user.email,         // Asegura que el email no se modifique
-        password: this.userForm.get('password')?.value || undefined
-      };
+      // Verificar si el usuario es un administrador o un empleado y obtener sus datos completos
+      const getUserData = this.role === 'administrador'
+        ? this.userService.verDatosAdmin(this.user) // Llama a `verDatosAdmin` si es administrador
+        : this.userService.verDatosEmpleado(this.user); // Llama a `verDatosEmpleado` si es empleado
   
-      // Llama al método adecuado de UserService según el rol del usuario
-      const updateUser = this.role === 'administrador'
-        ? this.userService.updateAdmin(updateData, this.token) // Método para actualizar administradores
-        : this.userService.updateEmpleado(updateData, this.token); // Método para actualizar empleados
+      getUserData.subscribe(
+        (existingUser: any) => {
+          // Construir el objeto updateData a partir de los datos existentes y los valores actualizables del formulario
+          let updateData: any = {
+            ...existingUser, // Incluir todos los atributos del objeto original
   
-      updateUser.subscribe({
-        next: (response: any) => {
-          this.isLoading = false;
-          console.log('Usuario actualizado:', response);
-          // Navega a la página correspondiente según si es administrador o empleado
-          this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+            // Actualizar solo los atributos permitidos desde el formulario
+            nombre: this.userForm.get('nombre')?.value,
+            apellido1: this.userForm.get('apellido1')?.value,
+            apellido2: this.userForm.get('apellido2')?.value,
+            centro: this.userForm.get('centroTrabajo')?.value,
+            ...(this.role === 'administrador' ? {
+              interno: this.userForm.get('interno')?.value || false
+            } : {
+              departamento: this.userForm.get('departamento')?.value,
+              fechaalta: this.userForm.get('fechaAlta')?.value,
+              perfil: this.userForm.get('perfil')?.value
+            })
+          };
+  
+          console.log('Datos enviados:', updateData);
+  
+          // Llamada al servicio de actualización
+          const updateUser = this.role === 'administrador'
+            ? this.userService.updateAdmin(updateData, this.token)
+            : this.userService.updateEmpleado(updateData, this.token);
+  
+          updateUser.subscribe({
+            next: (response: any) => {
+              this.isLoading = false;
+              console.log('Usuario actualizado:', response);
+              this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+            },
+            error: (error: any) => {
+              this.isLoading = false;
+              console.error('Error al actualizar el usuario:', error);
+            }
+          });
         },
-        error: (error: any) => {
+        (error: any) => {
           this.isLoading = false;
-          console.error('Error al actualizar el usuario:', error);
+          console.error('Error al obtener los datos existentes del usuario:', error);
         }
-      });
-  
+      );
     } else {
       console.error('Formulario no válido');
+      console.log('Errores en el formulario:', this.userForm.errors);
+      for (const controlName in this.userForm.controls) {
+        if (this.userForm.controls[controlName].invalid) {
+          console.log(`Control ${controlName} es inválido:`, this.userForm.controls[controlName].errors);
+        }
+      }
     }
   }
+  
+  
   
 
 
