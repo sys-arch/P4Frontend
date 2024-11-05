@@ -1,5 +1,8 @@
 <app-header></app-header>
 
+<form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+
 <div *ngIf="showNewPWModal" class="modal-overlay">
   <div class="modal delete-modal">
     <h3>¿Reestablecer contraseña?</h3>
@@ -14,7 +17,7 @@
 
 <div class="perfil-container">
   <div class="profile-info">
-    <h2>{{ isAdmin ? 'Editar Cuenta de Administrador' : 'Cambiar Contraseña' }}</h2>
+    <h2>{{ role === 'administrador' ? 'Editar Cuenta de Administrador' : 'Editar Cuenta de Empleado' }}</h2>
 
     <div class="profile-picture">
       <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="Profile Image" class="profile-img" />
@@ -33,39 +36,38 @@
         </div>
 
         <div class="textbox">
-          <!-- Eliminado el atributo [disabled] -->
           <input type="email" id="correo" formControlName="correo" required placeholder=" ">
           <label for="correo">Correo*</label>
         </div>
 
         <!-- Campos específicos para el administrador -->
-        <div class="textbox" *ngIf="isAdmin">
+        <div class="textbox" *ngIf="role === 'administrador'">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="isAdmin">
+        <div class="textbox" *ngIf="role === 'administrador'">
           <input type="checkbox" id="interno" formControlName="interno">
           <label for="interno">Interno</label>
         </div>
 
-        <!-- Campos específicos para el usuario regular -->
-        <div class="textbox" *ngIf="!isAdmin">
+        <!-- Campos específicos para el empleado -->
+        <div class="textbox" *ngIf="role === 'empleado'">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
+        <div class="textbox" *ngIf="role === 'empleado'">
           <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
           <label for="departamento">Departamento</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
+        <div class="textbox" *ngIf="role === 'empleado'">
           <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" ">
           <label for="alta">Fecha de Alta*</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
+        <div class="textbox" *ngIf="role === 'empleado'">
           <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
           <label for="perfil">Perfil</label>
         </div>

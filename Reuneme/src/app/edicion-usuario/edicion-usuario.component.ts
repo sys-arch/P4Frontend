@@ -23,6 +23,7 @@ export class EdicionUsuarioComponent implements OnInit {
   isLoading: boolean = false;
   showNewPWModal: boolean = false;
   user: any;
+  role: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,11 +35,11 @@ export class EdicionUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.user = history.state['user'];
     this.token = localStorage.getItem('token') || '';
-
-    //Verificar this.user
+  
+    // Verificar this.user
     console.log('Contenido de this.user en ngOnInit:', this.user);
-
-    // Determinar si el usuario es administrador
+  
+    // Determinar si el usuario es administrador o empleado basándose en el token
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
@@ -48,17 +49,26 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-
-    // Verificar permisos de edición
-    if (!this.isAdmin && this.user.email !== this.loggedUserEmail) {
-      console.error('No tiene permiso para editar este usuario');
-      this.router.navigate(['/ventana-principal']);
-      return;
-    }
-
-    this.initializeForm();
-    this.loadUserData();
+  
+    // Obtener el rol antes de inicializar el formulario
+    this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
+      (response) => {
+        this.role = response.role; // Asigna el rol basado en la respuesta del servicio
+        console.log('Rol del usuario:', this.role);
+  
+        // Llama a `initializeForm()` después de definir el rol
+        this.initializeForm();
+  
+        // Cargar los datos del usuario después de inicializar el formulario
+        this.loadUserData();
+      },
+      (error) => {
+        console.error('Error al verificar el rol del usuario:', error);
+        this.router.navigate(['/ventana-principal']);
+      }
+    );
   }
+  
 
   togglePasswordVisibility(): void {
     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
@@ -70,7 +80,7 @@ export class EdicionUsuarioComponent implements OnInit {
       apellidos: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
       centroTrabajo: ['', Validators.required],
-      ...(this.isAdmin ? {
+      ...(this.role === 'administrador' ? {
         interno: [null], // Campo específico de administrador 
         password: this.user.email === this.loggedUserEmail ? [''] : []
       } : {
@@ -81,42 +91,38 @@ export class EdicionUsuarioComponent implements OnInit {
       })
     });
   }
+  
 
   loadUserData(): void {
     this.isLoading = true;
-
-    //Verificar Valor email
-    console.log('Valor de this.user:', this.user);
-    console.log('Valor de this.user.email:', this.user?.email);
-
-    const getUserData = this.user.isAdmin //Problema: Como filtrar si el email es de administrador o no
-      ? this.userService.verDatosAdmin(this.user) //This.user == email
-      : this.userService.verDatosEmpleado(this.user);
-
+  
+    // Verificar si el email pertenece a un administrador o a un empleado
+    const getUserData = this.role === 'administrador'
+      ? this.userService.verDatosAdmin(this.user) // Si es administrador, llama a `verDatosAdmin`
+      : this.userService.verDatosEmpleado(this.user); // Si es empleado, llama a `verDatosEmpleado`
+  
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
-
+  
         if (data) {
-          if (this.user.isAdmin) {
-            this.userForm.patchValue({
-              nombre: data.nombre,
-              apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
-              centroTrabajo: data.centro,
+          console.log('Nombre recibido:', data.nombre);
+
+          // Aplica los valores al formulario basado en el rol
+          this.userForm.patchValue({
+            nombre: data.nombre,
+            apellidos: `${data.apellido1} ${data.apellido2}`,
+            correo: data.email,
+            centroTrabajo: data.centro,
+            ...(this.role === 'administrador' ? {
               interno: data.interno
-            });
-          } else {
-            this.userForm.patchValue({
-              nombre: data.nombre,
-              apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
-              centroTrabajo: data.centro,
+            } : {
               departamento: data.departamento,
-              fechaAlta: data.fechaalta,
+              fechaAlta: this.convertToDateString(data.fechaalta),
               perfil: data.perfil
-            });
-          }
+            })
+          });
+  
           this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
         } else {
           console.error('Datos del usuario no encontrados');
@@ -130,25 +136,28 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     );
   }
-
+  
   onSubmit(): void {
     if (this.userForm.valid) {
       this.isLoading = true;
-
+  
+      // Prepara los datos para la actualización, excluyendo campos innecesarios
       const updateData = {
-        ...this.userForm.value,
-        email: this.user.email,  // Incluye el email en el payload
+        ...this.userForm.getRawValue(), // Obtiene todos los valores, incluidos los deshabilitados
+        email: this.user.email,         // Asegura que el email no se modifique
         password: this.userForm.get('password')?.value || undefined
       };
-
-      const updateUser = this.isAdmin
-        ? this.userService.updateAdmin(updateData, this.token)
-        : this.userService.updateEmpleado(updateData, this.token);
-
+  
+      // Llama al método adecuado de UserService según el rol del usuario
+      const updateUser = this.role === 'administrador'
+        ? this.userService.updateAdmin(updateData, this.token) // Método para actualizar administradores
+        : this.userService.updateEmpleado(updateData, this.token); // Método para actualizar empleados
+  
       updateUser.subscribe({
         next: (response: any) => {
           this.isLoading = false;
           console.log('Usuario actualizado:', response);
+          // Navega a la página correspondiente según si es administrador o empleado
           this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
         },
         error: (error: any) => {
@@ -156,11 +165,12 @@ export class EdicionUsuarioComponent implements OnInit {
           console.error('Error al actualizar el usuario:', error);
         }
       });
-
+  
     } else {
       console.error('Formulario no válido');
     }
   }
+  
 
 
   navigateToUserList(): void {
@@ -188,5 +198,16 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     });
   }
+
+  convertToDateString(dateString: string): string {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${year}-${month}-${day}`;
+}
 
 }

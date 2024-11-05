@@ -190,4 +190,15 @@ export class UserService {
         });
         return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
     }
+
+    // Obtener el rol de un usuario por email
+    getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token
+        });
+
+        return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
+    }
+ 
 }
