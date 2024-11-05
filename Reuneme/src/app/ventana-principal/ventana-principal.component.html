@@ -3,13 +3,17 @@
 
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
 <div *ngIf="isAdmin" class="tabs-container">
+  <button (click)="selectTab('tab0')" [class.active]="activeTab==='talb0'">Calendario</button>
   <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
   <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias / Turnos horarios</button>
 </div>
 
 <!-- Contenido de las pestañas -->
 <div class="tab-content">
-
+  <!--Contenido pestaña Calendario-->
+  <div *ngIf="activeTab==='tab0'">
+    <app-calendario></app-calendario>
+  </div>
   <!-- Contenido pestaña Usuarios-->
   <div *ngIf="activeTab === 'tab1'">
     <div class="ventana-principal">
