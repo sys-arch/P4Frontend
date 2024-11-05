@@ -127,21 +127,6 @@ export class RegistroComponent {
 
     let formattedDate = this.fechaAlta ? this.fechaAlta.toString().split('T')[0] : '';
 
-    console.log({
-    email: this.email,
-    pwd1: this.password1,
-    pwd2: this.password2,
-    nombre: this.nombre,
-    apellido1: this.apellido,
-    apellido2: this.apellido2,
-    centro: this.centro,
-    departamento: this.departamento,
-    perfil: this.perfilLaboral,
-    fechaalta: formattedDate,
-    bloqueado: this.bloqueado,
-    verificado: this.verificado
-});
-
     this.userService.register(this.email, this.password1,this.password2, this.nombre,
               this.apellido, this.apellido2, this.centro,
               this.departamento, this.perfilLaboral, formattedDate,

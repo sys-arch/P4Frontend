@@ -189,4 +189,27 @@ export class UserService {
         });
         return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
     }
+
+    crearReunion(
+        asunto: string,
+        fecha: string,
+        todoElDia: boolean,
+        horaDesde: string,
+        horaHasta: string,
+        ubicacion: string,
+        observaciones: string
+    ): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const info = {
+            asunto: asunto,
+            fecha: fecha,
+            todoElDia: todoElDia,
+            horaDesde: horaDesde,
+            horaHasta: horaHasta,
+            ubicacion: ubicacion,
+            observaciones: observaciones
+        };
+
+        return this.client.post(`${httpUrl}users/crearReunion`, info, { headers, responseType: 'text' });
+    }
 }
