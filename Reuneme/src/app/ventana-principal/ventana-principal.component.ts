@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -223,6 +223,8 @@ loadAllUsers(): void {
           estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
         };
       });
+      this.users.sort((a, b) => a.lastName.localeCompare(b.lastName));
+
       this.isLoading = false;
     },
     (error) => {
