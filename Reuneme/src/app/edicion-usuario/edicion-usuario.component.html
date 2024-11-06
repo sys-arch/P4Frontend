@@ -1,86 +1,101 @@
 <app-header></app-header>
 
-<div *ngIf="showNewPWModal" class="modal-overlay">
-  <div class="modal delete-modal">
-    <h3>¿Reestablecer contraseña?</h3>
-    <p class="warning-text">Al pulsar confirmar, se mandará un correo al email del usuario con un link para reestablecer
-      la contraseña</p>
-    <div class="modal-actions">
-      <button class="confirm-btn" (click)="confirmNewP()">Confirmar</button>
-      <button class="cancel-btn" (click)="cancel()">Cancelar</button>
+<form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div *ngIf="showNewPWModal" class="modal-overlay">
+    <div class="modal delete-modal">
+      <h3>¿Reestablecer contraseña?</h3>
+      <p class="warning-text">
+        Al pulsar confirmar, se mandará un correo al email del usuario con un link para reestablecer la contraseña
+      </p>
+      <div class="modal-actions">
+        <button class="confirm-btn" (click)="confirmNewP()">Confirmar</button>
+        <button class="cancel-btn" (click)="cancel()">Cancelar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="perfil-container">
-  <div class="profile-info">
-    <h2>{{ isAdmin ? 'Editar Cuenta de Administrador' : 'Cambiar Contraseña' }}</h2>
+  <div class="perfil-container">
+    <div class="profile-info">
+      <h2>{{ role === 'administrador' ? 'Editar Cuenta de Administrador' : 'Editar Cuenta de Empleado' }}</h2>
 
-    <div class="profile-picture">
-      <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="Profile Image" class="profile-img" />
-    </div>
+      <div class="profile-picture">
+        <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="Profile Image" class="profile-img" />
+      </div>
 
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <!-- Formulario duplicado: se debe eliminar uno de ellos -->
+      <!-- Elimina esta segunda etiqueta <form> -->
+      <!-- <form [formGroup]="userForm" (ngSubmit)="onSubmit()"> -->
+
       <div class="info-fields">
         <div class="textbox">
-          <input type="text" id="nombre" formControlName="nombre" required placeholder=" ">
+          <input type="text" id="nombre" formControlName="nombre" required placeholder=" " />
           <label for="nombre">Nombre*</label>
         </div>
 
+        <!-- Campo de apellido1 -->
         <div class="textbox">
-          <input type="text" id="apellidos" formControlName="apellidos" required placeholder=" ">
-          <label for="apellidos">Apellidos*</label>
+          <input type="text" id="apellido1" formControlName="apellido1" required placeholder=" " />
+          <label for="apellido1">Primer Apellido*</label>
+        </div>
+
+        <!-- Campo de apellido2 -->
+        <div class="textbox">
+          <input type="text" id="apellido2" formControlName="apellido2" placeholder=" " />
+          <label for="apellido2">Segundo Apellido</label>
         </div>
 
         <div class="textbox">
-          <input type="email" id="correo" formControlName="correo" required placeholder=" " [disabled]="true">
+          <input type="email" id="correo" formControlName="correo" required placeholder=" " />
           <label for="correo">Correo*</label>
         </div>
 
         <!-- Campos específicos para el administrador -->
-        <div class="textbox" *ngIf="isAdmin">
-          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
+        <div class="textbox" *ngIf="role === 'administrador'">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" " />
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="isAdmin">
-          <input type="checkbox" id="interno" formControlName="interno">
+        <div class="textbox" *ngIf="role === 'administrador'">
+          <input type="checkbox" id="interno" formControlName="interno" />
           <label for="interno">Interno</label>
         </div>
 
-        <!-- Campos específicos para el usuario regular -->
-        <div class="textbox" *ngIf="!isAdmin">
-          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" ">
+        <!-- Campos específicos para el empleado -->
+        <div class="textbox" *ngIf="role === 'empleado'">
+          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" " />
           <label for="centroTrabajo">Centro de Trabajo*</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
-          <input type="text" id="departamento" formControlName="departamento" placeholder=" ">
+        <div class="textbox" *ngIf="role === 'empleado'">
+          <input type="text" id="departamento" formControlName="departamento" placeholder=" " />
           <label for="departamento">Departamento</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
-          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" ">
+        <div class="textbox" *ngIf="role === 'empleado'">
+          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " />
           <label for="alta">Fecha de Alta*</label>
         </div>
 
-        <div class="textbox" *ngIf="!isAdmin">
-          <input type="text" id="perfil" formControlName="perfil" placeholder=" ">
+        <div class="textbox" *ngIf="role === 'empleado'">
+          <input type="text" id="perfil" formControlName="perfil" placeholder=" " />
           <label for="perfil">Perfil</label>
         </div>
 
         <!-- Botón para reestablecer contraseña visible solo si el perfil en edición es el propio -->
-        <button *ngIf="user.email === loggedUserEmail" class="btnred" (click)="showNewModal()">Reestablecer
-          Contraseña</button>
+        <button *ngIf="user.email === loggedUserEmail" class="btnred" (click)="showNewModal()">
+          Reestablecer Contraseña
+        </button>
       </div>
 
       <p class="required-info">Los campos(*) son obligatorios.</p>
       <button class="btn" type="submit">Guardar Cambios</button>
-    </form>
+      <!-- </form> --> <!-- Eliminar esta etiqueta de cierre -->
+    </div>
 
     <div class="back-button-container">
       <button class="back-button" (click)="navigateToUserList()">Volver</button>
     </div>
   </div>
+
   <app-footer></app-footer>
-</div>
+</form>
