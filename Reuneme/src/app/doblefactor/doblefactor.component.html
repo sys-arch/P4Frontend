@@ -12,9 +12,9 @@
 <main class="auth-container">
     <h2 class="auth-title">Por favor, introduzca su código de autenticación de dos factores</h2>
     <div class="code-input-container">
-        <input type="text" maxlength="6" class="code-input" placeholder="0 1 2 3 4 5">
+        <input type="text" maxlength="6" class="code-input" placeholder="0 1 2 3 4 5" [(ngModel)]="authCode">
     </div>
-    <button class="confirm-button">Confirmar</button>
+    <button class="confirm-button"(click)="verificarCodigo()">Confirmar</button>
 </main>
 
 <div class="btn-container">
@@ -32,17 +32,17 @@
         <span class="close" (click)="closeModal()">&times;</span>
         <h3>Activar segundo factor de autenticación</h3>
         <p>1. Para activar el segundo factor de autenticación, instale Google Authenticator en su teléfono y escanee el código QR.</p>
-        <img src="/assets/images/qr.png" alt="Código QR" class="qr-image">
+        <img [src]="qrCodeUrl" alt="Código QR" class="qr-image">
         <p>2. Escriba el código generado por Google Authenticator y presione aceptar.</p>
         <div class="input-group">
             <label for="auth-code">Código</label>
-            <input type="text" id="auth-code" placeholder="Ingrese el código">
+            <input type="text" id="auth-code" placeholder="Ingrese el código" [(ngModel)]="authCode">
         </div>
-        <button class="accept-button">Aceptar</button>
+        <button class="accept-button" (click)="verificarCodigo()">Aceptar</button>
         <div class="backup-code">
             <p>¿No puede escanear?</p>
             <p>Ingrese el siguiente código en su aplicación autenticadora:</p>
-            <input type="text" value="MTQTJSPOTY5UFYX7XTY2PPDLW33RKBSI" readonly class="backup-input">
+            <input type="text" [value]="secretKey" readonly class="backup-input">
         </div>
     </div>
 </div>
