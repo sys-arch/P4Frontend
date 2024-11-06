@@ -34,6 +34,7 @@ export class EdicionUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = history.state['user'];
+
     
     if (!this.user || !this.user.email) {
         console.error('Usuario no definido o datos incompletos');
@@ -52,6 +53,7 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
 
     this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
       (response) => {
@@ -98,6 +100,7 @@ export class EdicionUsuarioComponent implements OnInit {
     });
   }
 
+
   loadUserData(): void {
     this.isLoading = true;
 
@@ -108,11 +111,11 @@ export class EdicionUsuarioComponent implements OnInit {
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
-        
+
         if (data) {
           this.userForm.patchValue({
             nombre: data.nombre,
-            apellido1: data.apellido1, 
+            apellido1: data.apellido1,
             apellido2: data.apellido2,
             correo: data.email,
             centroTrabajo: data.centro,
@@ -144,7 +147,6 @@ export class EdicionUsuarioComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid) {
       this.isLoading = true;
-
       const getUserData = this.role === 'administrador'
         ? this.userService.verDatosAdmin(this.user)
         : this.userService.verDatosEmpleado(this.user);
@@ -152,7 +154,9 @@ export class EdicionUsuarioComponent implements OnInit {
       getUserData.subscribe(
         (existingUser: any) => {
           let updateData: any = {
+
             ...existingUser,
+
             nombre: this.userForm.get('nombre')?.value,
             apellido1: this.userForm.get('apellido1')?.value,
             apellido2: this.userForm.get('apellido2')?.value,
@@ -165,6 +169,7 @@ export class EdicionUsuarioComponent implements OnInit {
               perfil: this.userForm.get('perfil')?.value
             })
           };
+
 
           const updateUser = this.role === 'administrador'
             ? this.userService.updateAdmin(updateData, this.token)
@@ -195,6 +200,7 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     }
   }
+
 
   navigateToUserList(): void {
     this.router.navigate(['/ventana-principal']);
@@ -231,4 +237,5 @@ export class EdicionUsuarioComponent implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
+
 }
