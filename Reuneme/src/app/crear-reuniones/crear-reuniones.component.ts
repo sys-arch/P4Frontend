@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
@@ -13,7 +13,7 @@ import { HeaderComponent } from '../shared/header/header.component';
   templateUrl: './crear-reuniones.component.html',
   styleUrl: './crear-reuniones.component.css'
 })
-export class CrearReunionesComponent implements OnInit {
+export class CrearReunionesComponent{
   isLoading: boolean=false;
   asunto: string = '';
   fecha: string = '';
@@ -22,18 +22,17 @@ export class CrearReunionesComponent implements OnInit {
   horaHasta: string = '';
   ubicacion: string = '';
   observaciones: string = '';
-  estado: string = 'abierta';
   
-  ubicaciones = ['Sala 1', 'Sala 2', 'Sala 3', 'Online'];
   fechaInvalid = false;
+  horasInvalid = false;
   errorMessage: string = '';
+
 
   constructor(
     private readonly router: Router,
     private readonly userService: UserService
   ) {}
-  ngOnInit(): void {
-  }
+  
 
   // Validación de la fecha de la reunión debe ser mayor o igual a la fecha actual
   validateFecha(): void {
@@ -45,10 +44,25 @@ export class CrearReunionesComponent implements OnInit {
     }
   }
 
-  validarHorario(): boolean {
-    const inicioLaboral = '08:00';
-    const finLaboral = '18:00';
-    return this.horaDesde >= inicioLaboral && this.horaHasta <= finLaboral && this.horaDesde < this.horaHasta;
+  validarHorario(): void {
+    this.horasInvalid = false;
+    if (this.horaDesde && this.horaHasta) {
+      const horaDesde = parseInt(this.horaDesde.split(':')[0]);
+      const horaHasta = parseInt(this.horaHasta.split(':')[0]);
+      if (horaDesde >= horaHasta || horaDesde < 8 || horaHasta > 19) {
+        this.horasInvalid = true;
+      } 
+    }
+  }
+
+  onToggleTodoElDia(): void {
+    if (this.todoElDia) {
+      this.horaDesde = '08:00';
+      this.horaHasta = '19:00';
+    } else {
+      this.horaDesde = '';
+      this.horaHasta = '';
+    }
   }
 
   onSubmit(): void {
@@ -58,8 +72,15 @@ export class CrearReunionesComponent implements OnInit {
       return;
     }
 
+    if(this.horasInvalid) {
+      this.errorMessage = 'Horario inválido. La hora de inicio debe ser menor a la hora de fin y estar entre las 8:00 y 19:00.';
+      return;
+    }
     // Validar si los campos obligatorios están vacíos
-    if (!this.asunto || !this.estado || !this.fecha || !this.horaDesde || !this.horaHasta || !this.ubicacion) {
+    if (!this.asunto ||
+      !this.fecha ||
+      (!this.todoElDia && (!this.horaDesde || !this.horaHasta)) ||
+      !this.ubicacion) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
       return; 
     }
@@ -69,7 +90,7 @@ export class CrearReunionesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Reunión creada con éxito:', response);
-          this.navigateTo('/calendario');
+          this.navigateTo('/');
         },
         error: (error) => {
           console.error('Error al crear la reunión:', error);

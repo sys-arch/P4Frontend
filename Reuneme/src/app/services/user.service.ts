@@ -209,7 +209,6 @@ export class UserService {
             ubicacion: ubicacion,
             observaciones: observaciones
         };
-
         return this.client.post(`${httpUrl}users/crearReunion`, info, { headers, responseType: 'text' });
     }
 }
