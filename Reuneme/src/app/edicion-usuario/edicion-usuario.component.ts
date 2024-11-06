@@ -23,6 +23,7 @@ export class EdicionUsuarioComponent implements OnInit {
   isLoading: boolean = false;
   showNewPWModal: boolean = false;
   user: any;
+  role: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,6 +43,11 @@ export class EdicionUsuarioComponent implements OnInit {
     
     // Continuar con la asignación del token y verificación del rol
     this.token = localStorage.getItem('token') || '';
+  
+    // Verificar this.user
+    console.log('Contenido de this.user en ngOnInit:', this.user);
+  
+    // Determinar si el usuario es administrador o empleado basándose en el token
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
@@ -51,6 +57,25 @@ export class EdicionUsuarioComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+  
+    // Obtener el rol antes de inicializar el formulario
+    this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
+      (response) => {
+        this.role = response.role; // Asigna el rol basado en la respuesta del servicio
+        console.log('Rol del usuario:', this.role);
+  
+        // Llama a `initializeForm()` después de definir el rol
+        this.initializeForm();
+  
+        // Cargar los datos del usuario después de inicializar el formulario
+        this.loadUserData();
+      },
+      (error) => {
+        console.error('Error al verificar el rol del usuario:', error);
+        this.router.navigate(['/ventana-principal']);
+      }
+    );
+  }
 
     // Verificar permisos de edición
     if (!this.isAdmin && this.user.email !== this.loggedUserEmail) {
@@ -71,51 +96,56 @@ export class EdicionUsuarioComponent implements OnInit {
   initializeForm(): void {
     this.userForm = this.formBuilder.group({
       nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
+      apellido1: ['', Validators.required],
+      apellido2: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
       centroTrabajo: ['', Validators.required],
-      ...(this.isAdmin ? {
+      ...(this.role === 'administrador' ? {
         interno: [null], // Campo específico de administrador 
-        password: this.user.email === this.loggedUserEmail ? [''] : []
+        password: ['', [Validators.minLength(8)]]
       } : {
         departamento: ['', Validators.required],
         fechaAlta: ['', Validators.required],
         perfil: ['', Validators.required],
-        password: ['', [Validators.required, Validators.minLength(8)]]
+        password: ['', [Validators.minLength(8)]]
       })
     });
   }
+  
 
   loadUserData(): void {
     this.isLoading = true;
-
-    const getUserData = this.user.isAdmin
-      ? this.userService.verDatosAdmin(this.user.email)
-      : this.userService.verDatosEmpleado(this.user.email);
-
+  
+    // Verificar si el email pertenece a un administrador o a un empleado
+    const getUserData = this.role === 'administrador'
+      ? this.userService.verDatosAdmin(this.user) // Si es administrador, llama a `verDatosAdmin`
+      : this.userService.verDatosEmpleado(this.user); // Si es empleado, llama a `verDatosEmpleado`
+  
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
+        
         if (data) {
-          if (this.isAdmin) {
-            this.userForm.patchValue({
-              nombre: data.nombre,
-              apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
-              centroTrabajo: data.centro,
-              interno: data.interno
-            });
-          } else {
-            this.userForm.patchValue({
-              nombre: data.nombre,
-              apellidos: `${data.apellido1} ${data.apellido2}`,
-              correo: data.email,  // Sobrescribe el campo correo con el valor obtenido de los datos
-              centroTrabajo: data.centro,
+          console.log('Nombre recibido:', data.nombre);
+
+          // Aplica los valores al formulario basado en el rol
+          this.userForm.patchValue({
+            nombre: data.nombre,
+            apellido1: data.apellido1, 
+            apellido2: data.apellido2,
+            correo: data.email,
+            centroTrabajo: data.centro,
+            ...(this.role === 'administrador' ? {
+              interno: data.interno,
+              password: data.password
+            } : {
               departamento: data.departamento,
-              fechaAlta: data.fechaalta,
-              perfil: data.perfil
-            });
-          }
+              fechaAlta: this.convertToDateString(data.fechaalta),
+              perfil: data.perfil,
+              password: data.password
+            })
+          });
+  
           this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
         } else {
           console.error('Datos del usuario no encontrados');
@@ -129,37 +159,73 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     );
   }
-
+  
   onSubmit(): void {
     if (this.userForm.valid) {
       this.isLoading = true;
-
-      const updateData = {
-        ...this.userForm.value,
-        email: this.user.email,  // Incluye el email en el payload
-        password: this.userForm.get('password')?.value || undefined
-      };
-
-      const updateUser = this.isAdmin
-        ? this.userService.updateAdmin(updateData, this.token)
-        : this.userService.updateEmpleado(updateData, this.token);
-
-      updateUser.subscribe({
-        next: (response: any) => {
-          this.isLoading = false;
-          console.log('Usuario actualizado:', response);
-          this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+  
+      // Verificar si el usuario es un administrador o un empleado y obtener sus datos completos
+      const getUserData = this.role === 'administrador'
+        ? this.userService.verDatosAdmin(this.user) // Llama a `verDatosAdmin` si es administrador
+        : this.userService.verDatosEmpleado(this.user); // Llama a `verDatosEmpleado` si es empleado
+  
+      getUserData.subscribe(
+        (existingUser: any) => {
+          // Construir el objeto updateData a partir de los datos existentes y los valores actualizables del formulario
+          let updateData: any = {
+            ...existingUser, // Incluir todos los atributos del objeto original
+  
+            // Actualizar solo los atributos permitidos desde el formulario
+            nombre: this.userForm.get('nombre')?.value,
+            apellido1: this.userForm.get('apellido1')?.value,
+            apellido2: this.userForm.get('apellido2')?.value,
+            centro: this.userForm.get('centroTrabajo')?.value,
+            ...(this.role === 'administrador' ? {
+              interno: this.userForm.get('interno')?.value || false
+            } : {
+              departamento: this.userForm.get('departamento')?.value,
+              fechaalta: this.userForm.get('fechaAlta')?.value,
+              perfil: this.userForm.get('perfil')?.value
+            })
+          };
+  
+          console.log('Datos enviados:', updateData);
+  
+          // Llamada al servicio de actualización
+          const updateUser = this.role === 'administrador'
+            ? this.userService.updateAdmin(updateData, this.token)
+            : this.userService.updateEmpleado(updateData, this.token);
+  
+          updateUser.subscribe({
+            next: (response: any) => {
+              this.isLoading = false;
+              console.log('Usuario actualizado:', response);
+              this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
+            },
+            error: (error: any) => {
+              this.isLoading = false;
+              console.error('Error al actualizar el usuario:', error);
+            }
+          });
         },
-        error: (error: any) => {
+        (error: any) => {
           this.isLoading = false;
-          console.error('Error al actualizar el usuario:', error);
+          console.error('Error al obtener los datos existentes del usuario:', error);
         }
-      });
-
+      );
     } else {
       console.error('Formulario no válido');
+      console.log('Errores en el formulario:', this.userForm.errors);
+      for (const controlName in this.userForm.controls) {
+        if (this.userForm.controls[controlName].invalid) {
+          console.log(`Control ${controlName} es inválido:`, this.userForm.controls[controlName].errors);
+        }
+      }
     }
   }
+  
+  
+  
 
 
   navigateToUserList(): void {
@@ -187,5 +253,16 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     });
   }
+
+  convertToDateString(dateString: string): string {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${year}-${month}-${day}`;
+}
 
 }
