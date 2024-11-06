@@ -1,36 +1,40 @@
 <div class="pagina-fondo">
   <div class="calendario-contenedor">
-    <!-- Botones para cambiar la vista (Mes o Semana) -->
     <div class="calendario-filtros">
       <button (click)="filtrarPorMes()">Ver por Mes</button>
       <button (click)="filtrarPorSemana()">Ver por Semana</button>
     </div>
 
-    <!-- Mostrar el nombre del mes o de la semana según la vista -->
     <div class="calendario-nombre-mes">
       {{ nombreMes }}
     </div>
 
-    <!-- Navegación de semanas con flechas (sólo visible en la vista de semana) -->
     <div *ngIf="vista === 'semana'" class="semana-navegacion">
       <button class="boton-navegacion-izquierda" (click)="anteriorSemana()">&larr;</button>
       <span class="semana-titulo">{{ obtenerNumeroSemana() }} semana de {{ obtenerNombreMes(mesActual) }}</span>
       <button class="boton-navegacion-derecha" (click)="siguienteSemana()">&rarr;</button>
     </div>
 
-    <!-- Contenedor del calendario en cuadrícula -->
-    <div class="calendario-grid">
+    <div class="calendario-grid calendario-header">
+      <div class="calendario-header-dia">Lun</div>
+      <div class="calendario-header-dia">Mar</div>
+      <div class="calendario-header-dia">Mié</div>
+      <div class="calendario-header-dia">Jue</div>
+      <div class="calendario-header-dia">Vie</div>
+      <div class="calendario-header-dia">Sáb</div>
+      <div class="calendario-header-dia">Dom</div>
+    </div>
+
+    <div class="calendario-grid calendario-dias">
       <div
         *ngFor="let dia of diasFiltrados"
         class="calendario-dia"
-        (click)="abrirModalReunion(dia)"
+        (click)="dia ? abrirModalReunion(dia) : null"
       >
-        <div class="calendario-dia-numero">{{ dia.getDate() }}</div>
-        <div class="calendario-dia-label">{{ dia | date: 'EEE' }}</div>
+        <div *ngIf="dia" class="calendario-dia-numero">{{ dia.getDate() }}</div>
       </div>
     </div>
 
-    <!-- Navegación de meses con flechas (sólo visible en la vista de mes) -->
     <button *ngIf="vista === 'mes'" class="boton-navegacion izquierdo" (click)="mesAnterior()">&larr;</button>
     <button *ngIf="vista === 'mes'" class="boton-navegacion derecho" (click)="mesSiguiente()">&rarr;</button>
   </div>
