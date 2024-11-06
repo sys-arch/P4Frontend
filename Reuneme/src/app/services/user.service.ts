@@ -191,7 +191,7 @@ updateEmpleado(empleadoData: any, token: string): Observable<any> {
         });
         return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
     }
-
+  
     // Obtener el rol de un usuario por email
     getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
         const headers = new HttpHeaders({
@@ -201,5 +201,26 @@ updateEmpleado(empleadoData: any, token: string): Observable<any> {
 
         return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
     }
-
+  
+  crearReunion(
+        asunto: string,
+        fecha: string,
+        todoElDia: boolean,
+        horaDesde: string,
+        horaHasta: string,
+        ubicacion: string,
+        observaciones: string
+    ): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const info = {
+            asunto: asunto,
+            fecha: fecha,
+            todoElDia: todoElDia,
+            horaDesde: horaDesde,
+            horaHasta: horaHasta,
+            ubicacion: ubicacion,
+            observaciones: observaciones
+        };
+        return this.client.post(`${httpUrl}users/crearReunion`, info, { headers, responseType: 'text' });
+    }
 }
