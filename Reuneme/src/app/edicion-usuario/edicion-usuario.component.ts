@@ -34,12 +34,16 @@ export class EdicionUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = history.state['user'];
+
+    
+    if (!this.user || !this.user.email) {
+        console.error('Usuario no definido o datos incompletos');
+        this.router.navigate(['/ventana-principal']);
+        return;
+    }
+    
     this.token = localStorage.getItem('token') || '';
 
-    // Verificar this.user
-    console.log('Contenido de this.user en ngOnInit:', this.user);
-
-    // Determinar si el usuario es administrador o empleado basándose en el token
     if (this.token.startsWith('a-')) {
       this.isAdmin = true;
     } else if (this.token.startsWith('e-')) {
@@ -50,16 +54,11 @@ export class EdicionUsuarioComponent implements OnInit {
       return;
     }
 
-    // Obtener el rol antes de inicializar el formulario
+
     this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
       (response) => {
-        this.role = response.role; // Asigna el rol basado en la respuesta del servicio
-        console.log('Rol del usuario:', this.role);
-
-        // Llama a `initializeForm()` después de definir el rol
+        this.role = response.role;
         this.initializeForm();
-
-        // Cargar los datos del usuario después de inicializar el formulario
         this.loadUserData();
       },
       (error) => {
@@ -67,8 +66,16 @@ export class EdicionUsuarioComponent implements OnInit {
         this.router.navigate(['/ventana-principal']);
       }
     );
-  }
 
+    if (!this.isAdmin && this.user.email !== this.loggedUserEmail) {
+      console.error('No tiene permiso para editar este usuario');
+      this.router.navigate(['/ventana-principal']);
+      return;
+    }
+
+    this.initializeForm();
+    this.loadUserData();
+  }
 
   togglePasswordVisibility(): void {
     this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
@@ -79,10 +86,10 @@ export class EdicionUsuarioComponent implements OnInit {
       nombre: ['', Validators.required],
       apellido1: ['', Validators.required],
       apellido2: ['', Validators.required],
-      correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
+      correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]],
       centroTrabajo: ['', Validators.required],
       ...(this.role === 'administrador' ? {
-        interno: [null], // Campo específico de administrador 
+        interno: [null],
         password: ['', [Validators.minLength(8)]]
       } : {
         departamento: ['', Validators.required],
@@ -97,19 +104,15 @@ export class EdicionUsuarioComponent implements OnInit {
   loadUserData(): void {
     this.isLoading = true;
 
-    // Verificar si el email pertenece a un administrador o a un empleado
     const getUserData = this.role === 'administrador'
-      ? this.userService.verDatosAdmin(this.user) // Si es administrador, llama a `verDatosAdmin`
-      : this.userService.verDatosEmpleado(this.user); // Si es empleado, llama a `verDatosEmpleado`
+      ? this.userService.verDatosAdmin(this.user)
+      : this.userService.verDatosEmpleado(this.user);
 
     getUserData.subscribe(
       (data) => {
         this.isLoading = false;
 
         if (data) {
-          console.log('Nombre recibido:', data.nombre);
-
-          // Aplica los valores al formulario basado en el rol
           this.userForm.patchValue({
             nombre: data.nombre,
             apellido1: data.apellido1,
@@ -144,19 +147,16 @@ export class EdicionUsuarioComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid) {
       this.isLoading = true;
-
-      // Verificar si el usuario es un administrador o un empleado y obtener sus datos completos
       const getUserData = this.role === 'administrador'
-        ? this.userService.verDatosAdmin(this.user) // Llama a `verDatosAdmin` si es administrador
-        : this.userService.verDatosEmpleado(this.user); // Llama a `verDatosEmpleado` si es empleado
+        ? this.userService.verDatosAdmin(this.user)
+        : this.userService.verDatosEmpleado(this.user);
 
       getUserData.subscribe(
         (existingUser: any) => {
-          // Construir el objeto updateData a partir de los datos existentes y los valores actualizables del formulario
           let updateData: any = {
-            ...existingUser, // Incluir todos los atributos del objeto original
 
-            // Actualizar solo los atributos permitidos desde el formulario
+            ...existingUser,
+
             nombre: this.userForm.get('nombre')?.value,
             apellido1: this.userForm.get('apellido1')?.value,
             apellido2: this.userForm.get('apellido2')?.value,
@@ -170,9 +170,7 @@ export class EdicionUsuarioComponent implements OnInit {
             })
           };
 
-          console.log('Datos enviados:', updateData);
 
-          // Llamada al servicio de actualización
           const updateUser = this.role === 'administrador'
             ? this.userService.updateAdmin(updateData, this.token)
             : this.userService.updateEmpleado(updateData, this.token);
@@ -180,7 +178,6 @@ export class EdicionUsuarioComponent implements OnInit {
           updateUser.subscribe({
             next: (response: any) => {
               this.isLoading = false;
-              console.log('Usuario actualizado:', response);
               this.router.navigate(this.isAdmin ? ['/ventana-principal'] : ['/perfil-usuario']);
             },
             error: (error: any) => {
@@ -196,7 +193,6 @@ export class EdicionUsuarioComponent implements OnInit {
       );
     } else {
       console.error('Formulario no válido');
-      console.log('Errores en el formulario:', this.userForm.errors);
       for (const controlName in this.userForm.controls) {
         if (this.userForm.controls[controlName].invalid) {
           console.log(`Control ${controlName} es inválido:`, this.userForm.controls[controlName].errors);
@@ -204,9 +200,6 @@ export class EdicionUsuarioComponent implements OnInit {
       }
     }
   }
-
-
-
 
 
   navigateToUserList(): void {
@@ -226,7 +219,6 @@ export class EdicionUsuarioComponent implements OnInit {
     this.userService.forgotPassword(this.user?.email || '').subscribe({
       next: (response: string) => {
         this.isLoading = false;
-        console.log('Respuesta recibida: ', response);
       },
       error: (error) => {
         this.isLoading = false;
