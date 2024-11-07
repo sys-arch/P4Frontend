@@ -1,0 +1,43 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - dev  # Cambia a la rama que prefieras
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descarga el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Configura Maven y compila la aplicación
+      - name: Set up JDK 21  # Cambia la versión de JDK si es necesario
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'temurin'  # Cambia si necesitas otra distribución
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      # Encuentra el archivo JAR y súbelo al servidor
+      - name: Upload JAR via SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          # Encuentra el archivo JAR que comienza con "reuneme-"
+          JAR_FILE=$(ls target/reuneme-*.jar | head -n 1)
+          if [ -f "$JAR_FILE" ]; then
+            echo "Uploading $JAR_FILE to SFTP server..."
+            curl -T "$JAR_FILE" "sftp://$SFTP_USER:$SFTP_PASSWORD@$SFTP_HOST:$SFTP_PORT/path/to/remote/directory/$(basename $JAR_FILE)"
+          else
+            echo "No JAR file found!"
+            exit 1
+          fi
