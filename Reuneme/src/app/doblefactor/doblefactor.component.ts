@@ -111,8 +111,10 @@ export class DoblefactorComponent {
             );
           }
           this.router.navigate(['/ventana-principal']);
+        }else {
+          alert("Código incorrecto. Inténtelo de nuevo.");
         }
-      alert("Código incorrecto. Inténtelo de nuevo.");
+      
       });
     } else {
       alert("Por favor, ingrese el código de autenticación.");
