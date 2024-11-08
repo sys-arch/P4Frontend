@@ -82,37 +82,8 @@ export class LoginComponent {
           // Guarda el token y el email en localStorage
           localStorage.setItem('token', response);
           localStorage.setItem('email', user.email);
+          this.router.navigate(['/doblefactor']);
           
-          // Determina si es un administrador o un empleado y obtiene los datos de 2FA
-          if (response.startsWith('a-')) {
-            this.userService.verDatosAdmin(user.email).subscribe(
-              (userInfo: any) => {
-                this.twoFactorEnabled = userInfo.twoFA;
-                console.log('TwoFactorEnabled e (Admin):', userInfo.twoFA);
-                
-                // Navegar después de obtener el valor actualizado de twoFactorEnabled
-                if (this.twoFactorEnabled) {
-                  this.router.navigate(['/doblefactor']);
-                } else {
-                  this.router.navigate(['/ventana-principal']);
-                }
-              }
-            );
-          } else {
-            this.userService.verDatosEmpleado(user.email).subscribe(
-              (userInfo: any) => {
-                this.twoFactorEnabled = userInfo.twoFA;
-                console.log('TwoFactorEnabled e (Empleado):', userInfo.twoFA);
-                
-                // Navegar después de obtener el valor actualizado de twoFactorEnabled
-                if (this.twoFactorEnabled) {
-                  this.router.navigate(['/doblefactor']);
-                } else {
-                  this.router.navigate(['/ventana-principal']);
-                }
-              }
-            );
-          }
         },
         (error) => {
           console.error('Error en el inicio de sesión:', error);

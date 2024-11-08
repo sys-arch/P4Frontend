@@ -172,8 +172,8 @@ export class EdicionUsuarioComponent implements OnInit {
 
 
           const updateUser = this.role === 'administrador'
-            ? this.userService.updateAdmin(updateData, this.token)
-            : this.userService.updateEmpleado(updateData, this.token);
+            ? this.userService.updateAdmin(updateData)
+            : this.userService.updateEmpleado(updateData);
 
           updateUser.subscribe({
             next: (response: any) => {
