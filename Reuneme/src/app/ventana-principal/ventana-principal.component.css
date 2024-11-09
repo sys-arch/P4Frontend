@@ -142,14 +142,45 @@ html, body {
     overflow: hidden;
     transition-duration: .3s;
     box-shadow: 0.22vh 0.22vh 1.1vh rgba(0, 0, 0, 0.199); /* Equivalente a 2px 2px 10px */
-    background-color: rgb(134, 132, 132);
-}  
+    background-color: rgb(255, 65, 65);
+}
+
+
+/* Signo más */
+.sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign svg {
+    width: 3.3vh; /* Equivalente a 30px */
+    height: 3.3vh; /* Equivalente a 30px */
+}
+
+.sign svg path {
+    fill: white;
+}
+  
+  /* Texto */
+  .text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 0.65em;
+    font-weight: 600;
+    transition-duration: .3s;
+  }
 
 .Btn2:hover {
     width: 19.76vh; /* Equivalente a 180px */
     border-radius: 4.39vh; /* Equivalente a 40px */
     transition-duration: .3s;
-    background-color: rgb(255, 65, 65);
+    
 }
 
 .Btn2:hover .sign {

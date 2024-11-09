@@ -9,14 +9,13 @@ import { AusenciasComponent } from '../shared/ausencias/ausencias.component';
 import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
-import { MenuComponent } from '../shared/menu/menu.component';
 import { ListaUsuariosComponent } from '../shared/lista-usuarios/lista-usuarios.component';
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, MenuComponent, AusenciasComponent, ListaUsuariosComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, AusenciasComponent, ListaUsuariosComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })

@@ -39,12 +39,7 @@
   
   <!--VISTA DE ADMINISTRADOR -->
   <div *ngIf="isAdmin">
-    <app-menu></app-menu>
     
-  </div>
-
-
-
     <!-- recordar quitar esto-->
     <div *ngIf="activeTab === 'tab0'" class="tab-content">
       <app-calendario></app-calendario>
@@ -94,6 +89,7 @@
         </div>
       </div>
     </div>
+  </div>
       
   
 </div>

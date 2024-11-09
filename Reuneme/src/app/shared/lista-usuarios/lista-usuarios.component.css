@@ -251,6 +251,10 @@
     display: flex; /* Muestra las acciones al hacer hover */
 }
 
+.user-actions {
+    display: none;
+}
+
 
 .user-name-lastname {
     display: flex;
