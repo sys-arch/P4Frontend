@@ -1,0 +1,139 @@
+
+<h3 class="lista-usuarios-panel-title">Panel de Administración</h3>
+    <!-- Botón Añadir Admin -->
+
+    <div class="admin-controls">
+      <button class="Btn" (click)="navigateTo('/registro-admin')">
+        <div class="sign">
+          <svg viewBox="0 0 512 512"><path d="M256 112c17.7 0 32 14.3 32 32v80h80c17.7 0 32 14.3 32 32s-14.3 32-32 32h-80v80c0 17.7-14.3 32-32 32s-32-14.3-32-32v-80h-80c-17.7 0-32-14.3-32-32s14.3-32 32-32h80v-80c0-17.7 14.3-32 32-32z"></path></svg>
+        </div>
+        <div class="text">Añadir Administrador</div>
+      </button>
+    </div>
+   
+    <!-- Barra de búsqueda y filtros (Solo visible para administradores) -->
+    <div class="search-filter-container">
+      <div class="filter-options">
+        <label for="search-by">Buscar por :</label>
+        <select id="search-by" [(ngModel)]="searchBy">
+          <option value="name">Nombre</option>
+          <option value="email">Correo Electrónico</option>
+        </select>
+        <input type="text" id="search-input" placeholder="Buscar" [(ngModel)]="searchQuery">
+        <label for="filter-by">Filtrar por :</label>
+        <select id="filter-by" [(ngModel)]="filterBy">
+          <option value="all">Todos los usuarios</option>
+          <option value="admin">Administradores</option>
+          <option value="employee">Empleados</option>
+          <option value="blocked">Usuarios Bloqueados</option>
+          <option value="validated">Usuarios Validados</option>
+          <option value="notValidated">Usuarios No Validados</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Lista de usuarios -->
+    <div class="center-container">
+    <div class="user-list-container">
+      <div class="user-list-header">
+        <span class="column-header">Foto</span>
+        <span class="column-header">Nombre Completo</span>
+        <span class="column-header">Correo Electrónico</span>
+        <span class="column-header">Bloqueado</span>
+        <span class="column-header">Validado</span>
+        <span class="column-header">Acciones</span>
+      </div>
+
+      <div class="user-list-content">
+        <div *ngFor="let user of filteredUsers()" class="user-list-row" >
+          <div class="user-photo" (click)="visitProfile(user)" (keypress)="visitProfile(user)">
+            <img [src]="user.profilePicture" alt="Foto de perfil">
+            <small>{{ user.isAdmin ? 'Admin' : 'Usuario' }}</small>
+          </div>
+
+          <div class="user-name-lastname" (click)="visitProfile(user)" (keypress)="visitProfile(user)">
+            <span class="user-name">{{ user.firstName }}</span>
+            <span class="user-lastname">{{ user.lastName }}</span>
+          </div>
+
+          <div class="user-email" (click)="visitProfile(user)" (keypress)="visitProfile(user)">{{ user.email }}</div>
+
+          <!-- Botón para bloquear o desbloquear -->
+          <div class="user-blocked">
+            <button
+              class="block-btn"
+              (click)="toggleBlocked(user)"
+              [ngClass]="{'blocked': user.estado === 'Bloqueado', 'unblocked': user.estado !== 'Bloqueado'}"
+              [title]="user.estado === 'Bloqueado' ? 'Desbloquear' : 'Bloquear'">
+              <i class="material-icons">{{ user.estado === 'Bloqueado' ? 'block' : 'how_to_reg' }}</i>
+              <span class="block-btn-text">{{ user.estado === 'Bloqueado' ? 'Desbloquear' : 'Bloquear' }}</span>
+            </button>
+          </div>
+
+          <!-- Columna de Validado o No Validado -->
+          <div class="user-status"
+            [ngClass]="{
+              'status-validado': user.estado === 'Validado',
+              'status-no-validado': user.estado === 'No validado'
+            }"
+            (click)="toggleValidation(user)">
+            <i class="material-icons">{{ user.estado === 'Validado' ? 'check_circle' : 'cancel' }}</i>
+            <span>{{ user.estado }}</span>
+          </div>
+
+          <!-- Acciones: Editar, Eliminar -->
+          <div class="user-actions">
+            <button class="action-btn edit-btn" title="Editar" [disabled]="user.estado === 'Bloqueado'"
+              [ngClass]="{'blocked-btn': user.estado === 'Bloqueado'}"
+              (click)="editUser(user.email)">
+              <i class="material-icons">edit</i>
+            </button>
+
+            <button class="action-btn delete-btn" title="Eliminar" (click)="toggleDelete(user)">
+              <i class="material-icons">delete</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+<div>
+    
+  <!-- Modal para confirmar el bloqueo -->
+  <div *ngIf="showBlockModal" class="modal-overlay">
+    <div class="modal block-modal">
+      <h3>¿Bloquear a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
+      <div class="modal-actions">
+        <button class="confirm-btn" (click)="confirmBlock()">Aceptar</button>
+        <button class="cancel-btn" (click)="cancelBlock()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para confirmar la validación -->
+  <div *ngIf="showValiModal && selectedUser?.estado === 'No validado'" class="modal-overlay">
+    <div class="modal validate-modal">
+      <h3>¿Validar a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
+      <div class="modal-actions">
+        <button class="confirm-btn" (click)="confirmValidation()">Validar</button>
+        <button class="cancel-btn" (click)="cancelValidation()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+          
+  <!-- Modal para confirmar la eliminación -->
+  <div *ngIf="showDeleteModal" class="modal-overlay">
+    <div class="modal delete-modal">
+      <h3>¿Eliminar a {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}?</h3>
+      <p class="warning-text">Una vez eliminado se perderán todos los datos del usuario.</p>
+      <div class="modal-actions">
+        <button class="confirm-btn" (click)="confirmDelete()" [disabled]="countdown > 0">
+          Eliminar {{ countdown > 0 ? '(' + countdown + ')' : '' }}
+        </button>
+        <button class="cancel-btn" (click)="cancelDelete()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+</div>

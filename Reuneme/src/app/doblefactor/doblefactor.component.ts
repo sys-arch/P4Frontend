@@ -94,6 +94,7 @@ export class DoblefactorComponent {
 
   // Método para cerrar el modal
   verificarCodigo(): void {
+    console.log('Código verificado:', this.authCode)
     if (this.authCode) {
       this.twoFactorService.verificar2FA(this.email, +this.authCode).subscribe(response => {
         if (response) {
