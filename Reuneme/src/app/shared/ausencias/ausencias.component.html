@@ -1,0 +1,56 @@
+<div class="ausencias-panel-container">
+    <h3 class="ausencias-panel-title">Panel de Ausencias</h3>
+
+    <div class="user-list-container">
+        <!-- Encabezado de la lista -->
+        <div class="user-list-header">
+            <span>Usuario</span>
+            <span>Motivo</span>
+            <span>Desde</span>
+            <span>Hasta</span>
+        </div>
+    
+        <!-- Contenido de la lista de ausencias -->
+        <div class="user-list-content">
+            <div *ngFor="let ausencia of ausencias; let i = index" class="user-list-row">
+                <span>{{ ausencia.usuario }}</span>
+                <span>{{ ausencia.motivo }}</span>
+                <span>{{ ausencia.fechaInicio | date:'dd/MM/yyyy' }}</span>
+                <span>{{ ausencia.fechaFin | date:'dd/MM/yyyy' }}</span>
+                <button (click)="openDeleteModalAusencia(i)" class="action-btn delete-btn">Eliminar</button>
+            </div>
+        </div>
+    
+        <!-- Botón de añadir ausencia -->
+        <button (click)="toggleAddAusenciaForm()" class="add-button add-ausencia-btn">
+            {{ showAddAusenciaForm ? 'Cancelar' : 'Añadir Ausencia' }}
+        </button>
+    
+        <!-- Formulario para añadir una nueva ausencia -->
+        <div *ngIf="showAddAusenciaForm" class="form-ausencia">
+            <h4>Añadir Nueva Ausencia</h4>
+            <form (ngSubmit)="addAusencia()">
+                <div class="form-row">
+                    <label>
+                        Nombre de Usuario:
+                        <input type="text" [(ngModel)]="nuevaAusencia.usuario" name="usuario" required>
+                    </label>
+                    <label>
+                        Motivo:
+                        <input type="text" [(ngModel)]="nuevaAusencia.motivo" name="motivo" required>
+                    </label>
+                    <label>
+                        Fecha de Inicio:
+                        <input type="date" [(ngModel)]="nuevaAusencia.fechaInicio" name="fechaInicio" required>
+                    </label>
+                    <label>
+                        Fecha de Fin:
+                        <input type="date" [(ngModel)]="nuevaAusencia.fechaFin" name="fechaFin" required>
+                    </label>
+                    <!-- Botón en la misma fila que los campos -->
+                    <button type="submit" class="add-button">Añadir Ausencia</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
