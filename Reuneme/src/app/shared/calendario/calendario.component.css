@@ -10,41 +10,41 @@
 .contenido {
   position: relative;
   z-index: 1;
-  padding: 35px; /* Aumento en el padding */
+  padding: 35px;
 }
 
 .calendario-contenedor {
   position: relative;
-  width: 95%; /* Aumento en el ancho */
-  max-width: 900px; /* Aumento en el tamaño máximo */
+  width: 95%;
+  max-width: 900px;
   margin: 120px auto;
-  padding: 30px; /* Aumento en el padding */
+  padding: 30px;
   background-color: #2e2e2e;
-  border-radius: 1.2vh; /* Aumento en el borde redondeado */
-  box-shadow: 0 1.2vh 2.4vh rgba(0, 0, 0, 0.3); /* Aumento en la sombra */
+  border-radius: 1.2vh;
+  box-shadow: 0 1.2vh 2.4vh rgba(0, 0, 0, 0.3);
   color: #e0e0e0;
 }
 
 .calendario-nombre-mes {
   text-align: center;
-  font-size: 3.2vh; /* Aumento en el tamaño de fuente */
+  font-size: 3.2vh;
   font-weight: bold;
   margin: 3vh 0;
   color: #ffffff;
-  text-shadow: 0.2vh 0.2vh 0.5vh rgba(0, 0, 0, 0.5); /* Aumento en la sombra del texto */
+  text-shadow: 0.2vh 0.2vh 0.5vh rgba(0, 0, 0, 0.5);
 }
 
 .boton-navegacion {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  padding: 2vh 3vw; /* Aumento en el tamaño de padding */
-  font-size: 2.5vh; /* Aumento en el tamaño de fuente */
+  padding: 2vh 3vw;
+  font-size: 2.5vh;
   cursor: pointer;
   background-color: #444;
   color: #fff;
   border: none;
-  border-radius: 1.2vh; /* Aumento en el borde redondeado */
+  border-radius: 1.2vh;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 0.8vh 1.4vh rgba(0, 0, 0, 0.2);
 }
@@ -80,7 +80,7 @@
   color: #fff;
   border: none;
   border-radius: 1.2vh;
-  font-size: 2.2vh; /* Aumento en el tamaño de fuente */
+  font-size: 2.2vh;
   font-weight: bold;
   box-shadow: 0 0.8vh 1.5vh rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -95,10 +95,11 @@
   transform: scale(0.95);
 }
 
+/* Estilos para la vista mensual */
 .calendario-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.8vh; /* Aumento en el espaciado de los días */
+  gap: 0.8vh;
 }
 
 .calendario-dia {
@@ -107,7 +108,7 @@
   text-align: center;
   background-color: #3d3d3d;
   color: #f1f1f1;
-  border-radius: 0.7vw; /* Aumento en el borde redondeado */
+  border-radius: 0.7vw;
   box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -118,13 +119,108 @@
 }
 
 .calendario-dia-numero {
-  font-size: 2.4vh; /* Aumento en el tamaño de fuente */
+  font-size: 2.4vh;
   font-weight: bold;
   height: 70px;
   width: 50px;
 }
 
 .calendario-dia-label {
-  font-size: 2vh; /* Aumento en el tamaño de fuente */
+  font-size: 2vh;
+  color: #b3b3b3;
+}
+
+
+/* Vista semanal con horas a la izquierda y días a la derecha */
+.semana-vista {
+  display: flex;
+}
+
+.horas-column {
+  width: 80px; /* Fija el ancho para la columna de horas */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 10px;
+}
+
+.hora-item {
+  font-size: 1.8vh;
+  color: #b3b3b3;
+  padding: 15px 0;
+  text-align: right;
+}
+
+.calendario-semana-grid {
+  flex: 1; /* Toma el resto del espacio */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.8vh;
+}
+
+.calendario-dia-semana {
+  border: 1px solid #444;
+  background-color: #3d3d3d;
+  color: #f1f1f1;
+  border-radius: 0.7vw;
+  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 5px;
+}
+
+.calendario-dia-semana:hover {
+  background-color: #5a5a5a;
+  transform: scale(1.05);
+}
+
+.calendario-dia-numero {
+  font-size: 2.2vh;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Contenedor de horas en cada día */
+.calendario-horas {
+  display: flex;
+  flex-direction: column;
+}
+
+.hora-evento {
+  flex: 1;
+  border-top: 1px solid #555;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.hora-evento:hover {
+  background-color: #4a4a4a;
+}
+
+/* Estilos para la vista mensual */
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.8vh;
+}
+
+.calendario-dia {
+  border: 1px solid #444;
+  padding: 2vh;
+  text-align: center;
+  background-color: #3d3d3d;
+  color: #f1f1f1;
+  border-radius: 0.7vw;
+  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.calendario-dia:hover {
+  background-color: #5a5a5a;
+  transform: scale(1.15);
+}
+
+.calendario-dia-label {
+  font-size: 2vh;
   color: #b3b3b3;
 }

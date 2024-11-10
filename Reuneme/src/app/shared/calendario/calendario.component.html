@@ -1,5 +1,5 @@
 <div class="pagina-fondo">
-  <div class="calendario-contenedor">
+  <div [ngClass]="{'calendario-contenedor': true, 'vista-semana': vista === 'semana'}">
     <div class="calendario-filtros">
       <button (click)="filtrarPorMes()">Ver por Mes</button>
       <button (click)="filtrarPorSemana()">Ver por Semana</button>
@@ -9,12 +9,14 @@
       {{ nombreMes }}
     </div>
 
+    <!-- Navegación de semanas solo visible en la vista de semana -->
     <div *ngIf="vista === 'semana'" class="semana-navegacion">
       <button class="boton-navegacion-izquierda" (click)="anteriorSemana()">&larr;</button>
       <span class="semana-titulo">{{ obtenerNumeroSemana() }} semana de {{ obtenerNombreMes(mesActual) }}</span>
       <button class="boton-navegacion-derecha" (click)="siguienteSemana()">&rarr;</button>
     </div>
 
+    <!-- Encabezado de días de la semana para ambas vistas -->
     <div class="calendario-grid calendario-header">
       <div class="calendario-header-dia">Lun</div>
       <div class="calendario-header-dia">Mar</div>
@@ -25,16 +27,32 @@
       <div class="calendario-header-dia">Dom</div>
     </div>
 
-    <div class="calendario-grid calendario-dias">
-      <div
-        *ngFor="let dia of diasFiltrados"
-        class="calendario-dia"
-        (click)="dia ? abrirModalReunion(dia) : null"
-      >
+    <!-- Contenedor de la vista semanal con horas a la izquierda -->
+    <div class="semana-vista" *ngIf="vista === 'semana'">
+      <div class="horas-column">
+        <div *ngFor="let hora of horas" class="hora-item">{{ hora }}</div>
+      </div>
+
+      <div class="calendario-semana-grid">
+        <div *ngFor="let dia of diasFiltrados" [ngClass]="{'calendario-dia-semana': dia, 'calendario-dia-vacio': !dia}">
+          <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
+          <div class="calendario-horas">
+            <div *ngFor="let hora of horas" class="hora-evento" (click)="dia ? abrirModalReunion(dia, hora) : null">
+              <!-- Espacio para futuros eventos -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor de la vista mensual -->
+    <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias">
+      <div *ngFor="let dia of diasFiltrados" [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
         <div *ngIf="dia" class="calendario-dia-numero">{{ dia.getDate() }}</div>
       </div>
     </div>
 
+    <!-- Botones de navegación de meses -->
     <button *ngIf="vista === 'mes'" class="boton-navegacion izquierdo" (click)="mesAnterior()">&larr;</button>
     <button *ngIf="vista === 'mes'" class="boton-navegacion derecho" (click)="mesSiguiente()">&rarr;</button>
   </div>

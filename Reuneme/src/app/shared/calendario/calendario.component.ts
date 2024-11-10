@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -17,6 +16,10 @@ export class CalendarioComponent implements OnInit {
   mesActual: number = new Date().getMonth();
   añoActual: number = new Date().getFullYear();
   semanaActual: number = 0;
+  horas: string[] = [
+    '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
+    '15:00', '16:00', '17:00', '18:00'
+  ];
 
   ngOnInit() {
     this.generarDiasDelAnio();
@@ -62,19 +65,17 @@ export class CalendarioComponent implements OnInit {
 
   filtrarPorSemana() {
     this.vista = 'semana';
-    const primerDiaMes = new Date(this.añoActual, this.mesActual, 1);
-    const primerDiaSemana = new Date(primerDiaMes);
-    primerDiaSemana.setDate(primerDiaMes.getDate() + this.semanaActual * 7);
+    const primerDiaSemana = new Date(this.añoActual, this.mesActual, 1 + this.semanaActual * 7);
+    const diaInicioSemana = primerDiaSemana.getDay() === 0 ? 6 : primerDiaSemana.getDay() - 1;
+    
+    primerDiaSemana.setDate(primerDiaSemana.getDate() - diaInicioSemana);
 
-    const finSemana = new Date(primerDiaSemana);
-    finSemana.setDate(primerDiaSemana.getDate() + 6);
-
-    this.diasFiltrados = Array(7).fill(null); // Rellenar inicialmente con null
-    this.diasDelAnio.forEach((dia) => {
-      if (dia >= primerDiaSemana && dia <= finSemana) {
-        const dayOfWeek = dia.getDay() === 0 ? 6 : dia.getDay() - 1;
-        this.diasFiltrados[dayOfWeek] = dia;
-      }
+    // Crear un array para los 7 días de la semana
+    this.diasFiltrados = Array.from({ length: 7 }, (_, i) => {
+      const dia = new Date(primerDiaSemana);
+      dia.setDate(primerDiaSemana.getDate() + i);
+      // Filtra los días que no son del mes actual
+      return dia.getMonth() === this.mesActual ? dia : null;
     });
 
     this.nombreMes = `${this.obtenerNumeroSemana()} semana de ${this.obtenerNombreMes(this.mesActual)} ${this.añoActual}`;
@@ -141,7 +142,8 @@ export class CalendarioComponent implements OnInit {
     this.filtrarPorSemana();
   }
 
-  abrirModalReunion(dia: Date) {
-    console.log(`Crear reunión para el día: ${dia}`);
+  abrirModalReunion(dia: Date | null, hora?: string) {
+    if (!dia) return;
+    console.log(`Crear reunión para el día: ${dia} a las ${hora || ''}`);
   }
 }
