@@ -14,8 +14,16 @@ export class ReunionService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
   });
-    return this.client.get(`${httpUrl}/${reunionId}`, { headers });
+    return this.client.get(`${httpUrl}empleados/reunionByID/${reunionId}`, { headers });
   }
+
+  // Método para obtener todos los emails 
+  getAllUsers(): Observable<any[]> {
+    const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+    });
+    return this.client.get<any[]>(`${httpUrl}admins/listaEmpleados`, { headers });
+}
 
   crearReunion(
     asunto: string,
@@ -36,14 +44,30 @@ export class ReunionService {
         ubicacion: ubicacion,
         observaciones: observaciones
     };
-    return this.client.post(`${httpUrl}users/crearReunion`, info, { headers, responseType: 'text' });
+    return this.client.post(`${httpUrl}empleados/reunion`, info, { headers, responseType: 'text' });
 }
 
-  updateReunion(reunionData: any): Observable<any> {
+  updateReunion(id: any, reunionData: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
-  });
+    });
 
-    return this.client.put(`${httpUrl}/reunion/modificarReunion`, reunionData, {headers});
+    return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
+  }
+
+  addAsistente(idReunion: any, idUsuario: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.client.post(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
+  }
+
+  deleteAsistente(idReunion: any, idUsuario: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.client.delete(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
   }
 }
