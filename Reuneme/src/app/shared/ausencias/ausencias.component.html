@@ -1,5 +1,16 @@
 <div class="ausencias-panel-container">
     <h3 class="ausencias-panel-title">Panel de Ausencias</h3>
+    <div class="search-filter-container">
+        <div class="filter-options">
+            <label for="search-by">Buscar por :</label>
+            <select id="search-by" [(ngModel)]="searchBy" (change)="filterAusencias()">
+                <option value="name">Nombre</option>
+                <option value="email">Correo Electrónico</option>
+                <option value="motivo">Motivo</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Buscar" [(ngModel)]="searchQuery" (input)="filterAusencias()">
+        </div>
+    </div>
 
     <div class="user-list-container">
         <!-- Encabezado de la lista -->
@@ -12,12 +23,12 @@
     
         <!-- Contenido de la lista de ausencias -->
         <div class="user-list-content">
-            <div *ngFor="let ausencia of ausencias; let i = index" class="user-list-row">
-                <span>{{ ausencia.usuario }}</span>
+            <div *ngFor="let ausencia of filteredAusencias" class="user-list-row">
+                <span>{{ ausencia.usuarioNombreCompleto }}</span>
                 <span>{{ ausencia.motivo }}</span>
                 <span>{{ ausencia.fechaInicio | date:'dd/MM/yyyy' }}</span>
                 <span>{{ ausencia.fechaFin | date:'dd/MM/yyyy' }}</span>
-                <button (click)="openDeleteModalAusencia(i)" class="action-btn delete-btn">Eliminar</button>
+                <button *ngIf="ausencia.id !== undefined" (click)="deleteAusencia(ausencia.id!)" class="action-btn delete-btn">Eliminar</button>
             </div>
         </div>
     
@@ -27,13 +38,13 @@
         </button>
     
         <!-- Formulario para añadir una nueva ausencia -->
-        <div *ngIf="showAddAusenciaForm" class="form-ausencia">
+        <div *ngIf="showAddAusenciaForm"class="form-ausencia" >
             <h4>Añadir Nueva Ausencia</h4>
             <form (ngSubmit)="addAusencia()">
                 <div class="form-row">
                     <label>
-                        Nombre de Usuario:
-                        <input type="text" [(ngModel)]="nuevaAusencia.usuario" name="usuario" required>
+                        Email de Usuario:
+                        <input type="text" [(ngModel)]="nuevaAusencia.usuarioEmail" name="usuarioEmail" required>
                     </label>
                     <label>
                         Motivo:

@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AusenciaService } from '../../services/ausencia.service';
 
 interface Ausencia {
-  usuario: string;
+  id?: number;
+  usuarioEmail: string;
+  usuarioNombreCompleto: string;
   motivo: string;
   fechaInicio: Date;
   fechaFin: Date;
@@ -14,18 +17,48 @@ interface Ausencia {
   standalone: true,
   templateUrl: './ausencias.component.html',
   styleUrls: ['./ausencias.component.css'],
-  imports: [FormsModule, CommonModule] // Importar FormsModule y CommonModule directamente en el componente
+  imports: [FormsModule, CommonModule],
+  providers: [AusenciaService]
 })
-export class AusenciasComponent {
-  ausencias: Ausencia[] = [
-    { usuario: 'Juan Delgado Pérez', motivo: 'Vacaciones', fechaInicio: new Date(2024, 0, 15), fechaFin: new Date(2024, 0, 20) },
-    { usuario: 'Guillermo Espejo Palome', motivo: 'Enfermedad', fechaInicio: new Date(2024, 1, 1), fechaFin: new Date(2024, 1, 10) }
-  ]; // Ejemplo de datos iniciales
-
+export class AusenciasComponent implements OnInit {
+  ausencias: Ausencia[] = [];
+  filteredAusencias: Ausencia[] = [];
   showAddAusenciaForm: boolean = false;
-  showDeleteModalAusencia: boolean = false;
-  nuevaAusencia: Ausencia = { usuario: '', motivo: '', fechaInicio: new Date(), fechaFin: new Date() };
-  indexToDelete: number | null = null;
+  nuevaAusencia: Partial<Ausencia> = { usuarioEmail: '', motivo: '', fechaInicio: new Date(), fechaFin: new Date() };
+  token: string = 'your-auth-token-here'; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
+  searchBy: string = 'name';
+  searchQuery: string = '';
+
+  constructor(private ausenciaService: AusenciaService) {}
+
+  ngOnInit() {
+    this.getTodasLasAusencias();
+  }
+
+  // Método para obtener todas las ausencias
+  getTodasLasAusencias() {
+    const today = new Date();
+    this.ausenciaService.getTodasLasAusencias().subscribe(
+      (data: any[]) => {
+        // Filtramos y ordenamos las ausencias
+        this.ausencias = data
+          .map(ausencia => ({
+            id: ausencia.id,
+            usuarioEmail: ausencia.usuario.email,
+            usuarioNombreCompleto: `${ausencia.usuario.nombre} ${ausencia.usuario.apellido1}`,
+            motivo: ausencia.motivo,
+            fechaInicio: new Date(ausencia.fechaInicio),
+            fechaFin: new Date(ausencia.fechaFin)
+          }))
+          .filter(ausencia => ausencia.fechaFin >= today) // Excluir ausencias pasadas
+          .sort((a, b) => a.fechaInicio.getTime() - b.fechaInicio.getTime()); // Ordenar por fecha de inicio ascendente
+        
+        // Inicializar la lista filtrada
+        this.filteredAusencias = [...this.ausencias];
+      },
+      error => console.error('Error al obtener ausencias:', error)
+    );
+  }
 
   // Método para alternar la visibilidad del formulario de añadir ausencia
   toggleAddAusenciaForm() {
@@ -37,36 +70,45 @@ export class AusenciasComponent {
 
   // Método para añadir una nueva ausencia
   addAusencia() {
-    if (this.nuevaAusencia.usuario && this.nuevaAusencia.motivo && this.nuevaAusencia.fechaInicio && this.nuevaAusencia.fechaFin) {
-      this.ausencias.push({ ...this.nuevaAusencia });
-      this.resetNuevaAusencia();
-      this.showAddAusenciaForm = false;
+    if (this.nuevaAusencia.usuarioEmail && this.nuevaAusencia.motivo && this.nuevaAusencia.fechaInicio && this.nuevaAusencia.fechaFin) {
+      this.ausenciaService.addAusencia(this.nuevaAusencia.usuarioEmail, this.nuevaAusencia).subscribe(
+        response => {
+          this.getTodasLasAusencias(); // Refresca la lista tras añadir una nueva ausencia
+          this.resetNuevaAusencia();
+          this.showAddAusenciaForm = false;
+        },
+        error => console.error('Error al añadir la ausencia:', error)
+      );
     }
   }
 
-  // Método para abrir el modal de confirmación de eliminación de ausencia
-  openDeleteModalAusencia(index: number) {
-    this.indexToDelete = index;
-    this.showDeleteModalAusencia = true;
+  // Método para eliminar una ausencia y refrescar la lista
+  deleteAusencia(id: number) {
+    this.ausenciaService.deleteAusencia(id.toString(), this.token).subscribe(
+      () => {
+        this.getTodasLasAusencias(); // Refresca la lista tras eliminar la ausencia
+      },
+      error => console.error('Error al eliminar la ausencia:', error)
+    );
   }
 
-  // Método para confirmar la eliminación de una ausencia
-  confirmDeleteAusencia() {
-    if (this.indexToDelete !== null) {
-      this.ausencias.splice(this.indexToDelete, 1);
-      this.indexToDelete = null;
-      this.showDeleteModalAusencia = false;
-    }
-  }
-
-  // Método para cancelar la eliminación de una ausencia
-  cancelDeleteAusencia() {
-    this.showDeleteModalAusencia = false;
-    this.indexToDelete = null;
+  // Método para filtrar ausencias en base a searchBy y searchQuery
+  filterAusencias() {
+    const query = this.searchQuery.toLowerCase();
+    this.filteredAusencias = this.ausencias.filter(ausencia => {
+      if (this.searchBy === 'name') {
+        return ausencia.usuarioNombreCompleto.toLowerCase().includes(query);
+      } else if (this.searchBy === 'email') {
+        return ausencia.usuarioEmail.toLowerCase().includes(query);
+      } else if (this.searchBy === 'motivo') {
+        return ausencia.motivo.toLowerCase().includes(query);
+      }
+      return false;
+    });
   }
 
   // Método para reiniciar los valores de la nueva ausencia
   private resetNuevaAusencia() {
-    this.nuevaAusencia = { usuario: '', motivo: '', fechaInicio: new Date(), fechaFin: new Date() };
+    this.nuevaAusencia = { usuarioEmail: '', motivo: '', fechaInicio: new Date(), fechaFin: new Date() };
   }
 }
