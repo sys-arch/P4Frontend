@@ -23,6 +23,7 @@ export class LoginComponent {
   emailInvalid = false;
   loginFailed = false;
   isLoading = false;
+  twoFactorEnabled = false;
 
   passwordInvalid = false;
   domainInvalid = false;
@@ -81,7 +82,8 @@ export class LoginComponent {
           // Guarda el token y el email en localStorage
           localStorage.setItem('token', response);
           localStorage.setItem('email', user.email);
-          this.router.navigate(['/ventana-principal']);
+          this.router.navigate(['/doblefactor']);
+          
         },
         (error) => {
           console.error('Error en el inicio de sesión:', error);
