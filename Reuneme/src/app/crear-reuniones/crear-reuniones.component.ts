@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderComponent } from "../loader/loader.component";
-import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { ReunionService } from '../services/reunion.service';
 @Component({
   selector: 'app-crear-reuniones',
   standalone: true,
@@ -30,7 +30,7 @@ export class CrearReunionesComponent{
 
   constructor(
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly reunionService: ReunionService
   ) {}
   
 
@@ -85,7 +85,7 @@ export class CrearReunionesComponent{
       return; 
     }
 
-    this.userService.crearReunion(this.asunto, this.fecha,this.todoElDia, this.horaDesde,
+    this.reunionService.crearReunion(this.asunto, this.fecha,this.todoElDia, this.horaDesde,
               this.horaHasta, this.ubicacion, this.observaciones)
       .subscribe({
         next: (response) => {

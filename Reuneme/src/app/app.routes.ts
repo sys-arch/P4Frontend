@@ -11,6 +11,7 @@ import { ResetContrasenaComponent } from './reset-contrasena/reset-contrasena.co
 import { VentanaPrincipalComponent } from './ventana-principal/ventana-principal.component';
 import { EdicionUsuarioComponent } from './edicion-usuario/edicion-usuario.component';
 import { CrearReunionesComponent } from './crear-reuniones/crear-reuniones.component';
+import { ModificarReunionesComponent } from './modificar-reuniones/modificar-reuniones.component';
 
 export const routes: Routes = [
     {path: '', component: LandingPageComponent},
@@ -25,6 +26,7 @@ export const routes: Routes = [
     { path: 'reset-contrasena', component: ResetContrasenaComponent },
     { path: 'edicion-usuario', component: EdicionUsuarioComponent },
     { path: 'crear-reuniones', component: CrearReunionesComponent },
+    { path: 'modificar-reuniones', component: ModificarReunionesComponent },
     { path: '**', redirectTo: '' }
     
 ];
