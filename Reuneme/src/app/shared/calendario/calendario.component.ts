@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ReunionService } from '../../services/reunion.service';
 
 @Component({
   selector: 'app-calendario',
@@ -20,6 +22,12 @@ export class CalendarioComponent implements OnInit {
     '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
     '15:00', '16:00', '17:00', '18:00'
   ];
+  diaSeleccionado: Date | null = null;
+
+  constructor(
+    private readonly router: Router,
+    private readonly reunionService: ReunionService
+  )  { }
 
   ngOnInit() {
     this.generarDiasDelAnio();
@@ -142,8 +150,36 @@ export class CalendarioComponent implements OnInit {
     this.filtrarPorSemana();
   }
 
-  abrirModalReunion(dia: Date | null, hora?: string) {
-    if (!dia) return;
-    console.log(`Crear reunión para el día: ${dia} a las ${hora || ''}`);
+  abrirModalReunion(dia: Date): void {
+    // Usar Intl.DateTimeFormat para convertir la fecha a la zona horaria de España
+    const formatter = new Intl.DateTimeFormat("es-ES", {
+      timeZone: "Europe/Madrid",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+    const formattedDate = formatter.format(dia);
+    const fechaFormateada = formattedDate.split(',')[0].split('/').reverse().join('-');
+    this.reunionService.setFechaSeleccionada(fechaFormateada);
+    this.router.navigate(['/crear-reuniones']);
+  }
+  
+
+
+  
+  mostrarBtnCrearReunion(dia: Date) {
+    this.diaSeleccionado = dia;
+  }
+  ocultarBtnCrearReunion() {
+    this.diaSeleccionado = null;
+  }
+
+  navigateTo(route: string, dia: Date): void {
+    setTimeout(() => {
+      this.router.navigate([route], { queryParams: { fecha: dia.toISOString() } });
+    }, 1000);
   }
 }
