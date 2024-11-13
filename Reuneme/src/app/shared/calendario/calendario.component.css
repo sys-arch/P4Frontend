@@ -4,7 +4,7 @@
   width: 100%;
   height: 100vh;
   position: relative;
-  overflow: auto;
+  
 }
 
 .contenido {
@@ -12,12 +12,11 @@
   z-index: 1;
   padding: 35px;
 }
-
 .calendario-contenedor {
   position: relative;
   width: 95%;
   max-width: 1000px;
-  margin: 120px auto;
+  margin: -20px auto 120px auto; /* Margen negativo para elevar el contenedor */
   padding: 50px;
   background-color: #2e2e2e;
   border-radius: 1.2vh;
@@ -238,4 +237,49 @@
 .calendario-dia-label {
   font-size: 2vh;
   color: #b3b3b3;
+}
+
+
+/* Leyenda */
+.leyenda {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: #2e2e2e;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  font-size: 1.5vh;
+  margin-bottom: 10px;
+}
+
+.leyenda-circulo {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Colores específicos */
+.organizador {
+  background-color: orange;
+}
+
+.asistente {
+  background-color: blue;
+}
+
+.asistida {
+  background-color: green;
+}
+
+.no-asistida {
+  background-color: gray;
 }

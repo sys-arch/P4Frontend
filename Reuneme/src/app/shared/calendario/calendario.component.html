@@ -56,4 +56,20 @@
     <button *ngIf="vista === 'mes'" class="boton-navegacion izquierdo" (click)="mesAnterior()">&larr;</button>
     <button *ngIf="vista === 'mes'" class="boton-navegacion derecho" (click)="mesSiguiente()">&rarr;</button>
   </div>
+
+  <!-- Leyenda de colores en la parte derecha de la pantalla -->
+  <div class="leyenda">
+    <div class="leyenda-item">
+      <span class="leyenda-circulo organizador"></span> Organizador
+    </div>
+    <div class="leyenda-item">
+      <span class="leyenda-circulo asistente"></span> Asistente
+    </div>
+    <div class="leyenda-item">
+      <span class="leyenda-circulo asistida"></span> Asistida
+    </div>
+    <div class="leyenda-item">
+      <span class="leyenda-circulo no-asistida"></span> No asistida
+    </div>
+  </div>
 </div>
