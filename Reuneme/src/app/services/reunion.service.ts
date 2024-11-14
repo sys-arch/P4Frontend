@@ -57,6 +57,14 @@ export class ReunionService {
     return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
   }
 
+  cerrarReunion(idReunion: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { headers });
+  }
+
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

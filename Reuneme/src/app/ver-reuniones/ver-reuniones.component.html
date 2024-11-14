@@ -10,7 +10,6 @@
 					<label for="asunto">Asunto de la reunión</label>
 					<p id="asunto">{{ reunionData.asunto }}</p>
 				</div>
-
 				<!-- Organizador (email) -->
 				<div class="textbox">
 					<label for="organizador">Organizador de la reunión</label>
@@ -23,7 +22,6 @@
 					<label for="inicio">Inicio estimado</label>
 					<p id="inicio">{{ reunionData.inicio | date: 'dd/MM/yyyy, HH:mm' }}</p>
 				</div>
-
 				<!-- Fecha y hora de fin -->
 				<div class="textbox">
 					<label for="fin">Finalización estimada</label>
@@ -36,7 +34,6 @@
 					<label for="ubicacion">Ubicación</label>
 					<p id="ubicacion">{{ reunionData.ubicacion }}</p>
 				</div>
-
 				<!-- Estado -->
 				<div class="textbox">
 					<label for="estado">Estado de la reunión</label>
@@ -56,11 +53,10 @@
 					<li *ngFor="let participante of reunionData.participantes">{{ participante }}</li>
 				</ul>
 			</div>
-		
     </div>
 	<div class="actions">
 		<button class="btn" (click)="navigateTo('/modificar-reuniones')">Editar</button>
-		<button class="btn" (click)="deleteReunion()">Eliminar</button>
+		<button class="btn" (click)="cerrarReunion()">Eliminar</button>
 	</div>
     
     <div class="back-button-container">

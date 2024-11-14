@@ -56,13 +56,13 @@
 					<div class="form-grid">
 						<!-- Hora Desde -->
 						<div class="textbox">
-							<input type="time" id="horaDesde" [(ngModel)]="horaDesde" name="horaDesde" required [disabled]="todoElDia" />
-							<label for="horaDesde">Desde</label>
+							<input type="time" id="inicio" [(ngModel)]="inicio" name="inicio" required [disabled]="todoElDia" />
+							<label for="inicio">Desde</label>
 						</div>
 						<!-- Hora Hasta -->
 						<div class="textbox">
-							<input type="time" id="horaHasta" [(ngModel)]="horaHasta" name="horaHasta" required [disabled]="todoElDia" />
-							<label for="horaHasta">Hasta</label>
+							<input type="time" id="fin" [(ngModel)]="fin" name="fin" required [disabled]="todoElDia" />
+							<label for="fin">Hasta</label>
 						</div>
 					</div>
 				</div>
@@ -114,7 +114,7 @@
 	</div>
 
 	<div class="back-button-container">
-		<button class="back-button" (click)="navigateTo('/')">Volver</button>
+		<button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
 	</div>
 
   	<app-loader *ngIf="isLoading"></app-loader>

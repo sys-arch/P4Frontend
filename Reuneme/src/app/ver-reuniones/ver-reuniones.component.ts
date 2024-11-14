@@ -19,14 +19,16 @@ export class VerReunionesComponent implements OnInit{
 
   isLoading: boolean=false;
   organizador: string = '';
+  reunionId: string = ''; 
   asunto: string = '';
   fecha: string = '';
   todoElDia: boolean = false;
-  horaDesde: string = '';
-  horaHasta: string = '';
+  inicio: string = '';
+  fin: string = '';
   ubicacion: string = '';
   observaciones: string = '';
   estado: string = '';
+
   reunionData: any;
 
 
@@ -36,25 +38,62 @@ export class VerReunionesComponent implements OnInit{
   ) {}
 
 ngOnInit(): void {
-  this.getReunion('1');
+  this.getReunion('1'); // ID de reunion de prueba 
 }
 
 getReunion (reunionId: string): void {
   this.reunionService.getReunionById(reunionId).subscribe({
     next: (data) => {
       this.reunionData = data; // Asignar todos los datos obtenidos
-        this.organizador = data.organizador?.email || '';
+      this.organizador = data.organizador?.email || '';
+      this.fecha = this.formatDate(data.inicio);
+      this.inicio = this.formatTime(data.inicio);
+      this.fin = this.formatTime(data.fin);
+
     },
     error: (error) => {
       console.error('Error al obtener la reunion', error);
     }
-
   })
-
 }
 
-deleteReunion() {
-  throw new Error('Method not implemented.');
+editReunion(): void {
+  this.router.navigate([`/modificar-reuniones`], {
+    state : {
+      reunionData: this.reunionData,
+      organizador: this.organizador,
+      reunionId: this.reunionId,
+      fecha: this.fecha,
+      inicio: this.inicio,
+      fin: this.fin
+    }
+  });
+}
+
+// Función para formatear la fecha en formato yyyy-MM-dd
+formatDate(dateTime: string): string {
+  const date = new Date(dateTime);
+    return date.toISOString().split('T')[0]; // yyyy-MM-dd
+}
+
+// Función para formatear la hora en formato HH:mm
+formatTime(dateTime: string): string {
+  const date = new Date(dateTime);
+  return date.toTimeString().slice(0, 5); // HH:mm
+}
+
+cerrarReunion(): void {
+  this.reunionService.cerrarReunion(this.reunionId).subscribe({
+    next: (response) => {
+      console.log('Reunión cerrada exitosamente:', response);
+      alert('La reunión ha sido cerrada');
+      this.navigateTo('/ventana-principal');
+    },
+    error: (error) => {
+      console.error('Error al cerrada la reunión:', error);
+      alert('Hubo un problema al cerrar la reunión. Intenta nuevamente.');
+    }
+  });
 }
 
 navigateTo(route: string): void {
