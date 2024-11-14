@@ -19,7 +19,8 @@
                             [(ngModel)]="fecha" 
                             name="fecha" 
                             required 
-                            (blur)="validateFecha()"/>
+                            (blur)="validateFecha()"
+							[disabled]="true"/>
                         <label for="fecha">Fecha*</label>
 				</div>
 				<div class="error-container">
@@ -68,11 +69,11 @@
 			</div>
 		</form>
 		<div class="actions" [class.extra-margin]="!todoElDia">
-			<button class="btn" (click)="reunionForm.ngSubmit.emit()">Crear Reunión</button>
+			<button class="btn" (click)="reunionForm.ngSubmit.emit()" >Crear Reunión</button>
 		</div>
 	</div>
 	<div class="back-button-container">
-		<button class="back-button" (click)="navigateTo('/')">Volver</button>
+		<button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
 	</div>
 
 	<app-loader *ngIf="isLoading"></app-loader>

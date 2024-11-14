@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { LoaderComponent } from "../loader/loader.component";
+import { LoaderComponent } from "../shared/loader/loader.component";
 import { TwoFactorService } from '../services/twoFactor.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';

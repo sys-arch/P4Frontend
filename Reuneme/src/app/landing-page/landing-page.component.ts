@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from "../loader/loader.component"; // Importar CommonModule para ngIf
+import { LoaderComponent } from "../shared/loader/loader.component"; // Importar CommonModule para ngIf
 
 @Component({
   selector: 'app-landing-page',
