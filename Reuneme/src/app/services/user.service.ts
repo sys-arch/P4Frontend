@@ -208,4 +208,20 @@ export class UserService {
 
         return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
     }
+
+    desactivar2FA(email: string, secretKey: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        const body = {
+            email: email,
+            clavesecreta: secretKey,
+            twoFA: false
+        };
+
+        // Llamada al backend para desactivar el 2FA
+        return this.client.put(`${httpUrl}users/desactivar-2fa`, body, { headers });
+    }
 }
