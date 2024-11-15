@@ -126,7 +126,6 @@ export class UserService {
             'Authorization': `Bearer ${token}`
         });
         // Imprimir el valor del token directamente antes de la solicitud
-        console.log('Token enviado en Authorization:', headers.get('Authorization'));
         return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
     }
 
@@ -136,7 +135,6 @@ export class UserService {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         });
-        console.log('Token enviado en Authorization (verDatosAdmin):', headers.get('Authorization'));
         return this.client.get(`${httpUrl}admins/verDatos?email=${email}`, { headers });
     }
 
@@ -145,10 +143,11 @@ export class UserService {
     getAllUsers(token: string): Observable<any[]> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}` // Agregamos "Bearer " antes del token
         });
         return this.client.get<any[]>(`${httpUrl}admins/all`, { headers });
     }
+    
 
     deleteUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
@@ -177,32 +176,35 @@ export class UserService {
 
         return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
-    getAusencias(token: string): Observable<any[]> {
+    getAusencias(): Observable<any[]> {
+        const token = localStorage.getItem('token');
+        console.log('Token en getAusencias:', token);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.get<any[]>(`${httpUrl}ausencias`, { headers });
     }
+    
 
-    // Añadir una nueva ausencia
+    // Añadir una nueva ausencia con token en Authorization
     addAusencia(ausencia: any, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.post(`${httpUrl}ausencias`, ausencia, { headers });
     }
 
-    // Eliminar una ausencia por ID
+    // Eliminar una ausencia por ID con token en Authorization
     deleteAusencia(id: number, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
     }
-  
+
     // Obtener el rol de un usuario por email
     getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
         const headers = new HttpHeaders({
