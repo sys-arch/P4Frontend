@@ -19,7 +19,8 @@
                             [(ngModel)]="fecha" 
                             name="fecha" 
                             required 
-                            (blur)="validateFecha()"/>
+                            (blur)="validateFecha()"
+							[disabled]="true"/>
                         <label for="fecha">Fecha*</label>
 				</div>
 				<div class="error-container">
@@ -72,7 +73,7 @@
 		</div>
 	</div>
 	<div class="back-button-container">
-		<button class="back-button" (click)="navigateTo('/')">Volver</button>
+		<button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
 	</div>
 
 	<app-loader *ngIf="isLoading"></app-loader>

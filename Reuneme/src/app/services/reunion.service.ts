@@ -8,13 +8,15 @@ import { httpUrl } from '../commons';
 })
 export class ReunionService {
 
+  private fechaSeleccionada: string = '';
+
   constructor(private client: HttpClient) { }
 
   getReunionById(reunionId: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
   });
-    return this.client.get(`${httpUrl}empleados/reunionByID/${reunionId}`, { headers });
+    return this.client.get(`${httpUrl}empleados/reunion/${reunionId}/ver`, { headers });
   }
 
   // Método para obtener todos los emails 
@@ -26,23 +28,23 @@ export class ReunionService {
 }
 
   crearReunion(
+    organizador: string,
     asunto: string,
-    fecha: string,
-    todoElDia: boolean,
     horaDesde: string,
     horaHasta: string,
     ubicacion: string,
-    observaciones: string
+    observaciones: string,
+    estado: string
 ): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const info = {
+        organizador: organizador,
         asunto: asunto,
-        fecha: fecha,
-        todoElDia: todoElDia,
-        horaDesde: horaDesde,
-        horaHasta: horaHasta,
+        inicio: horaDesde,
+        fin: horaHasta,
         ubicacion: ubicacion,
-        observaciones: observaciones
+        observaciones: observaciones,
+        estado: estado
     };
     return this.client.post(`${httpUrl}empleados/reunion`, info, { headers, responseType: 'text' });
 }
@@ -53,6 +55,14 @@ export class ReunionService {
     });
 
     return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
+  }
+
+  cerrarReunion(idReunion: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { headers });
   }
 
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {
@@ -69,5 +79,13 @@ export class ReunionService {
     });
 
     return this.client.delete(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
+  }
+
+  setFechaSeleccionada(fecha: string): void {
+    this.fechaSeleccionada = fecha;
+  }
+
+  getFechaSeleccionada(): string | null {
+    return this.fechaSeleccionada;
   }
 }

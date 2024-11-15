@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContrasenaOlvidadaComponent } from "../contrasena-olvidada/contrasena-olvidada.component";
-import { LoaderComponent } from '../loader/loader.component';
+import { LoaderComponent } from '../shared/loader/loader.component';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
@@ -13,7 +12,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 @Component({
   selector: 'app-registro-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, ContrasenaOlvidadaComponent, HeaderComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent],
   templateUrl: './registro-admin.component.html',
   styleUrls: ['./registro-admin.component.css']
 })

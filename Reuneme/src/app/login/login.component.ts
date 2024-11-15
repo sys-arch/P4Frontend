@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../loader/loader.component";
+import { LoaderComponent } from "../shared/loader/loader.component";
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -52,7 +53,8 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private userService: UserService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authservice: AuthService
   ) {}
 
   // Método de inicio de sesión que llama al servicio `UserService`
@@ -72,6 +74,8 @@ export class LoginComponent {
         pwd: this.password
       };
   
+      this.authservice.setEmail(user.email); // Guardar el email para posibles usos futuros
+
       // Mostrar los datos que se van a enviar al backend
       console.log('Datos enviados al backend:');
   
