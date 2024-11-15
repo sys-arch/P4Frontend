@@ -62,7 +62,11 @@ export class UserService {
         password2: string,
         interno: boolean
     ): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
         const info = {
             nombre: nombre,
             apellido1: apellido1,
@@ -73,8 +77,8 @@ export class UserService {
             pwd2: password2,
             interno: interno
         };
-
-        return this.client.post(`${httpUrl}admins/register`, info, { headers, responseType: 'text' });
+        console.log("Token enviado en Authorization:", headers.get('Authorization'));
+        return this.client.post(`${httpUrl}admins/register`, info, { headers });
     }
     forgotPassword(email: string): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -207,5 +211,20 @@ export class UserService {
         });
 
         return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
+    }
+
+    desactivar2FA(email: string, secretKey: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        const body = {
+            email: email,
+            clavesecreta: secretKey,
+            twoFA: false
+        };
+        // Llamada al backend para desactivar el 2FA
+        return this.client.put(`${httpUrl}users/desactivar-2fa`, body, { headers });
     }
 }
