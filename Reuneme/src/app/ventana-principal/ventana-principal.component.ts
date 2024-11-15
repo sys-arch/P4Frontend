@@ -10,12 +10,14 @@ import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ListaUsuariosComponent } from '../shared/lista-usuarios/lista-usuarios.component';
 import { LoaderComponent } from "../shared/loader/loader.component";
+import { TurnosHorariosComponent } from "../shared/turnos-horarios/turnos-horarios.component";
+
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, AusenciasComponent, ListaUsuariosComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, AusenciasComponent, ListaUsuariosComponent, TurnosHorariosComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
@@ -161,90 +163,5 @@ export class VentanaPrincipalComponent implements OnInit {
       this.isLoading = false;
       this.router.navigate([route]);
     }, 1000);
-  }
-
-  /*---------------------------------- Turnos Horarios ----------------------------------*/
-  turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
-    {
-      inicio: this.convertirAHorasEnMinutos("07", "00"),
-      fin: this.convertirAHorasEnMinutos("15", "00"),
-      texto: "Turno horario: 07:00 - 15:00"
-    },
-    {
-      inicio: this.convertirAHorasEnMinutos("15", "00"),
-      fin: this.convertirAHorasEnMinutos("23", "00"),
-      texto: "Turno horario: 15:00 - 23:00"
-    }
-  ];
-
-  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')); 
-  minutos: string[] = ['00', '15', '30', '45'];
-
-  horaInicioHora: string | null = null;
-  horaInicioMinuto: string | null = null;
-  horaFinHora: string | null = null;
-  horaFinMinuto: string | null = null;
-
-  showDeleteModalTurn: boolean = false;
-  turnoAEliminar: number | null = null;
-
-  addTurnoHorario() {
-    if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
-      alert("Por favor, selecciona tanto la hora de inicio como la de fin.");
-      return;
-    }
-
-    const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
-    const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
-
-    if (this.haySuperposicion(inicio, fin)) {
-      alert("El turno se superpone con otro existente. Por favor, elige otro intervalo.");
-      return;
-    }
-
-    // Agregar el turno si no hay superposición
-    const textoTurno = `Turno horario: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`;
-    this.turnosHorarios.push({ inicio, fin, texto: textoTurno });
-
-    // Reiniciar las selecciones
-    this.horaInicioHora = null;
-    this.horaInicioMinuto = null;
-    this.horaFinHora = null;
-    this.horaFinMinuto = null;
-  }
-
-  // Función para convertir horas y minutos en minutos desde el inicio del día
-  convertirAHorasEnMinutos(hora: string, minuto: string): number {
-    return parseInt(hora, 10) * 60 + parseInt(minuto, 10);
-  }
-
-  // Función para verificar superposición de turnos
-  haySuperposicion(inicio: number, fin: number): boolean {
-    return this.turnosHorarios.some(turno => 
-      (inicio >= turno.inicio && inicio < turno.fin) || // comprobar empezar turno existente
-      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existente
-      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existente
-    );
-  }
-
-  // Método para abrir el modal de confirmación
-  openDeleteModal(index: number) {
-    this.showDeleteModalTurn = true;
-    this.turnoAEliminar = index;
-  }
-
-  // Confirmar eliminación del turno
-  confirmDeleteTurn() {
-    if (this.turnoAEliminar !== null) {
-      this.turnosHorarios.splice(this.turnoAEliminar, 1);
-      this.turnoAEliminar = null;
-    }
-    this.showDeleteModalTurn = false;
-  }
-
-  // Cancelar eliminación
-  cancelDeleteTurn() {
-    this.turnoAEliminar = null;
-    this.showDeleteModalTurn = false;
   }
 }
