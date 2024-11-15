@@ -111,29 +111,23 @@ export class DoblefactorComponent {
   // Método para cerrar el modal
   verificarCodigo(): void {
     if (this.authCode) {
-      this.twoFactorService.verificar2FA(this.email, +this.authCode).subscribe(response => {
-        if (response) {
-          const updateData = { email: this.email, clavesecreta: this.secretKey, twoFA: false }; // Cambiamos twoFA a false tras verificar
-
-          if (this.loggedUser.isAdmin) {
-            this.userService.updateAdmin(updateData).subscribe(
-              () => {},
-              (error) => console.error('Error al actualizar el administrador:', error)
-            );
-          } else {
-            this.userService.updateEmpleado(updateData).subscribe(
-              () => {},
-              (error) => console.error('Error al actualizar el empleado:', error)
-            );
-          }
-          this.router.navigate(['/ventana-principal']);
-        }else {
-          alert("Código incorrecto. Inténtelo de nuevo.");
-        }
-      
-      });
+        this.twoFactorService.verificar2FA(this.email, +this.authCode).subscribe(response => {
+            if (response) {
+                // Llamada a desactivar2FA después de verificar el código 2FA
+                this.userService.desactivar2FA(this.email, this.secretKey).subscribe(
+                    () => {
+                        console.log('2FA desactivado con éxito');
+                        this.router.navigate(['/ventana-principal']);
+                    },
+                    (error) => console.error('Error al desactivar el 2FA:', error)
+                );
+            } else {
+                alert("Código incorrecto. Inténtelo de nuevo.");
+            }
+        });
     } else {
-      alert("Por favor, ingrese el código de autenticación.");
+        alert("Por favor, ingrese el código de autenticación.");
     }
-  }
+}
+
 }
