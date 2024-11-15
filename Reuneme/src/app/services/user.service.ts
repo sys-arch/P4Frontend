@@ -224,6 +224,7 @@ export class UserService {
             clavesecreta: secretKey,
             twoFA: false
         };
+
         // Llamada al backend para desactivar el 2FA
         return this.client.put(`${httpUrl}users/desactivar-2fa`, body, { headers });
     }
