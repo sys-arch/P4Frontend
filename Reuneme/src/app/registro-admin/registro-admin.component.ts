@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from '../shared/loader/loader.component';
 import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LoaderComponent } from '../shared/loader/loader.component';
 
 
 
@@ -19,13 +20,13 @@ import { HeaderComponent } from '../shared/header/header.component';
 export class RegistroAdminComponent {
   
   nombre: string = '';
-  primerApellido: string = ''; // Primer Apellido
-  segundoApellido: string = ''; // Segundo Apellido
+  primerApellido: string = '';
+  segundoApellido: string = '';
   email: string = '';
   centro: string = '';
   password1: string = '';
   password2: string = '';
-  interno: boolean = false;  // Campo interno añadido
+  interno: boolean = false;
   passwordError: string = '';
   confirmPasswordError: string = '';
   passwordVisible1 = false;
@@ -105,6 +106,8 @@ export class RegistroAdminComponent {
       .subscribe({
         next: (response: any) => {
           console.log('Administrador registrado con éxito:', response);
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('email', this.email);
           this.navigateTo('/ventana-principal');
         },
         error: (error: any) => {
@@ -122,6 +125,7 @@ export class RegistroAdminComponent {
     }, 1000);
   }
 
+  // Método para enfocar el siguiente campo segun el evento
   focusNext(nextFieldIf: string){
     const nextElement = document.getElementById(nextFieldIf);
     if (nextElement){
