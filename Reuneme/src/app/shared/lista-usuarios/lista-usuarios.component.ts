@@ -1,5 +1,5 @@
-import { Component,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GravatarService } from '../../services/gravatar.service';
@@ -269,13 +269,13 @@ toggleValidation(user: any): void {
     // Obtener el parámetro 'email' de la URL o usar el email de localStorage
     const routeEmail = this.route.snapshot.paramMap.get('email');
     this.myemail = routeEmail || localEmail;
+    this.isAdmin = this.isAdminUser();
   
     // Determina si el usuario es administrador o empleado basado en el prefijo del token
-    if (this.token.startsWith('a-')) {
-      this.isAdmin = true;
+    if (this.isAdmin) {
       this.loggedUser.role = 'admin';
       this.loadAllUsers(); // Cargar todos los usuarios si es administrador
-    } else if (this.token.startsWith('e-')) {
+    } else {
       this.isAdmin = false;
       this.loggedUser.role = 'employee';
     }
@@ -310,6 +310,20 @@ toggleValidation(user: any): void {
     }
 
     
+  }
+  private isAdminUser(): boolean {
+    const token = this.token;
+    if (!token) {
+      return false;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Verifica tanto "ROLE_ADMIN" como "ADMIN"
+      return payload.role === 'ROLE_ADMIN' || payload.role === 'ADMIN';
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return false;
+    }
   }
 
   
