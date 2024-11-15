@@ -2,5 +2,5 @@ projectKey=2024-g03-frontend
 serverUrl=http://seralu4.esi.uclm.es:1521
 serverVersion=10.6.0.92116
 dashboardUrl=http://seralu4.esi.uclm.es:1521/dashboard?id=2024-g03-frontend
-ceTaskId=1ab5f053-ac52-4239-9cf3-7c70f599c752
-ceTaskUrl=http://seralu4.esi.uclm.es:1521/api/ce/task?id=1ab5f053-ac52-4239-9cf3-7c70f599c752
+ceTaskId=50f55a07-9b55-4bc1-9717-52a0998a9db1
+ceTaskUrl=http://seralu4.esi.uclm.es:1521/api/ce/task?id=50f55a07-9b55-4bc1-9717-52a0998a9db1

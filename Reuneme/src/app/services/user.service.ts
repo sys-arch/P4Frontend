@@ -12,9 +12,9 @@ export class UserService {
     // Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        return this.client.put(`${httpUrl}users/login`, user, { headers, responseType: 'text' });
+        return this.client.put(`${httpUrl}users/login`, user, { headers });
     }
+
 
     // Método register con headers
     register(
@@ -116,15 +116,23 @@ export class UserService {
 
 
     verDatosEmpleado(email: string): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        // Pasar el email como parámetro en la URL
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        // Imprimir el valor del token directamente antes de la solicitud
+        console.log('Token enviado en Authorization:', headers.get('Authorization'));
         return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
     }
 
     verDatosAdmin(email: string): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        console.log('Token enviado en Authorization (verDatosAdmin):', headers.get('Authorization'));
         return this.client.get(`${httpUrl}admins/verDatos?email=${email}`, { headers });
     }
 

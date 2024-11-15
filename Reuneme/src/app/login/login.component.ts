@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
+import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
-import { AuthService } from '../services/auth.service';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
 
 @Component({
@@ -59,44 +59,42 @@ export class LoginComponent {
 
   // Método de inicio de sesión que llama al servicio `UserService`
   loginAttempt(): void {
-
     this.resetValidationStates(); // Resetear todos los estados de error
     this.onEmailChange(); // Validar el email actual
     this.validatePassword(); // Validar la contraseña
-    
-    
-  
-    // Validar si el correo electrónico y la contraseña son válidos antes de proceder
+
     if (!this.emailInvalid && !this.passwordInvalid && !this.domainInvalid) {
-      // Crear el objeto `user` con las credenciales del usuario
       const user = {
         email: this.username,
         pwd: this.password
       };
-  
-      this.authservice.setEmail(user.email); // Guardar el email para posibles usos futuros
 
-      // Mostrar los datos que se van a enviar al backend
-      console.log('Datos enviados al backend:');
-  
-      // Llamar al servicio `login` pasando el objeto `user`
+      this.authservice.setEmail(user.email); // Guardar el email para posibles usos futuros
+      this.isLoading = true; // Mostrar el loader durante la solicitud
+
       this.userService.login(user).subscribe(
         (response) => {
-          console.log('Respuesta del servidor:', response);
-          // Guarda el token y el email en localStorage
-          localStorage.setItem('token', response);
-          localStorage.setItem('email', user.email);
-          this.router.navigate(['/doblefactor']);
-          
+          this.isLoading = false;
+          if (response && response.token) {
+            console.log('Respuesta del servidor:', response);
+            localStorage.setItem('token', response.token); // Guardar el token
+            localStorage.setItem('email', user.email); // Guardar el email
+            this.router.navigate(['/doblefactor']);
+          } else {
+            this.loginFailed = true;
+            this.errorMessage = 'No se pudo iniciar sesión. Intente nuevamente.';
+          }
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error en el inicio de sesión:', error);
-          this.loginFailed = true; // Mostrar el mensaje de error
+          this.loginFailed = true;
           this.errorMessage = 'Las credenciales ingresadas no son correctas. Intente nuevamente.';
-          this.cdr.detectChanges(); // Asegurar que Angular detecte el cambio
+          this.cdr.detectChanges();
         }
       );
-    } else{ this.loginFailed = true; // Mostrar el mensaje de error
+    } else {
+      this.loginFailed = true;
     }
   }
   

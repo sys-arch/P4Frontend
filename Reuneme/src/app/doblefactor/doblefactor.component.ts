@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { LoaderComponent } from "../shared/loader/loader.component";
 import { TwoFactorService } from '../services/twoFactor.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
 
 @Component({
@@ -27,7 +27,7 @@ export class DoblefactorComponent {
   token: string = localStorage.getItem('token') || '';
   loggedUser: any = {
     set2fa: false,
-    isAdmin: this.token.startsWith('a-')
+    isAdmin: this.isAdminUser()
   };
 
   constructor(
@@ -37,8 +37,8 @@ export class DoblefactorComponent {
   ) {}
 
   ngOnInit(): void {
-    this.email =  localStorage.getItem('email') || '';
-    
+    this.email = localStorage.getItem('email') || '';
+
     if (this.loggedUser.isAdmin) {
       this.userService.verDatosAdmin(this.email).subscribe(
         (userInfo: any) => {
@@ -51,10 +51,10 @@ export class DoblefactorComponent {
           console.error('Error al obtener la información del administrador:', error);
         }
       );
-    
     } else {
       this.userService.verDatosEmpleado(this.email).subscribe(
         (userInfo: any) => {
+          console.log(userInfo);
           this.loggedUser.set2fa = userInfo.twoFA;
           if (this.loggedUser.set2fa) {
             this.openModal();
@@ -65,9 +65,25 @@ export class DoblefactorComponent {
         }
       );
     }
-  
   }
 
+  // Método para verificar si el usuario es administrador basado en el token
+  private isAdminUser(): boolean {
+    const token = this.token;
+    if (!token) {
+      return false;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Verifica tanto "ROLE_ADMIN" como "ADMIN"
+      return payload.role === 'ROLE_ADMIN' || payload.role === 'ADMIN';
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return false;
+    }
+  }
+  
+  
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {
     this.isLoading = true;
