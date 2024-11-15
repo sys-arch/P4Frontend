@@ -1,1 +1,61 @@
-<p>turnos-horarios works!</p>
+<h3 class="turnos-horarios-panel-title">Panel de turnos horarios</h3>
+<div class="turnos-horarios-container">
+  
+    <h3 class="cabec-turnos-title">Turnos Horarios</h3>
+    <ul>
+      <li *ngFor="let turno of turnosHorarios; let i = index" class="turno-item">
+        <span>{{ turno.texto }}</span>
+      </li>
+    </ul>
+
+
+    <div class="selectores-horas">
+      <label for="horaInicio">Hora de inicio:</label>
+      <select id="horaInicioHora" [(ngModel)]="horaInicioHora">
+        <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+      </select>
+      :
+      <select id="horaInicioMinuto" [(ngModel)]="horaInicioMinuto">
+        <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+      </select>
+      <label for="horaFin">Hora de fin:</label>
+      <select id="horaFinHora" [(ngModel)]="horaFinHora">
+        <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+      </select>
+      :
+      <select id="horaFinMinuto" [(ngModel)]="horaFinMinuto">
+        <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
+      </select>
+    </div>
+    <div class="botones-accion">
+      <button (click)="openAddTurnoModal()" [disabled]="isAddButtonDisabled">Añadir turno horario</button>
+      <button (click)="openGuardarModal()" [disabled] = "isSaveButtonDisabled" class="guardarTurnos-btn">Guardar turnos horarios</button>
+    </div>
+</div>
+
+
+  <!-- Modales -->
+<div *ngIf="isAdmin">
+ <!-- Modal de confirmación para guardar turnos horarios -->
+  <div class="modal-overlay" *ngIf="showGuardarModal">
+    <div class="modalT">
+     <p>¿Estás seguro de que deseas guardar estos horarios? No podrás modificarlos más tarde</p>
+      <div class="modal-actionsT">
+        <button (click)="confirmGuardarHorarios()" class="confirmar-btn">Guardar</button>
+       <button (click)="cancelGuardarHorarios()" class="cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para añadir turno horario -->
+  <div class="modal-overlay" *ngIf="showAddTurnoModal">
+    <div class="modalT">
+      <p>¿Estás seguro de que deseas añadir un turno? No podrás borrarlo más tarde</p>
+      <div class="modal-actionsT">
+        <button (click)="confirmAddTurnoHorario()" class="confirmar-btn">Añadir</button>
+        <button (click)="cancelAddTurnoHorario()" class="cancel-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+ 
+</div>
