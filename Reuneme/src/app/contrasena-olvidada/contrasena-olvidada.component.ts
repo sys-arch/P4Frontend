@@ -21,6 +21,7 @@ export class ContrasenaOlvidadaComponent {
   emailInvalid: boolean = false;  // Controla si el formato del email es inválido
   emailSent: boolean = false;  // Controla si se ha enviado el correo correctamente
   errorMessage: string = '';  // Almacena mensajes de error
+  showResetMessage: boolean = false;  // Muestra un mensaje de éxito al restablecer la contraseña
 
   // Expresiones regulares y configuraciones de validación
   private readonly emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -80,6 +81,8 @@ export class ContrasenaOlvidadaComponent {
   passwordResetAttempt(event: Event): void {
     // Prevenir el comportamiento predeterminado del formulario
     event.preventDefault();
+    this.showResetMessage = true;
+
 
     if (!this.validateEmail()) {
       return;
