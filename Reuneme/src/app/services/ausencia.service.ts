@@ -9,26 +9,36 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
 
 export class AusenciaService {
     constructor(private client: HttpClient) { }
-
     // Método para añadir una nueva ausencia
     addAusencia(email: string, ausencia: any): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        console.log(token);
+        console.log(ausencia);
         const url = `${httpUrl}admins/anadirAusencia?email=${email}`;
-
+    
         return this.client.put(url, ausencia, { headers });
     }
 
-    // Otros métodos relacionados con la gestión de ausencias
+    // Método para obtener todas las ausencias
     getTodasLasAusencias(): Observable<any[]> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
         return this.client.get<any[]>(`${httpUrl}admins/todasAusencias`, { headers });
     }
 
     // Método para eliminar una ausencia por ID
-    deleteAusencia(id: string, token: string): Observable<any> {
+    deleteAusencia(id: string): Observable<any> {
+        const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.delete(`${httpUrl}admins/eliminarAusencia/${id}`, { headers });
     }

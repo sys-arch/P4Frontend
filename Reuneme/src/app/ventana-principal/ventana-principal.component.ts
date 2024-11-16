@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
 import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { AusenciasComponent } from '../shared/ausencias/ausencias.component';
@@ -10,12 +9,15 @@ import { CalendarioComponent } from '../shared/calendario/calendario.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ListaUsuariosComponent } from '../shared/lista-usuarios/lista-usuarios.component';
+import { LoaderComponent } from "../shared/loader/loader.component";
+import { TurnosHorariosComponent } from "../shared/turnos-horarios/turnos-horarios.component";
+
 
 
 @Component({
   selector: 'app-ventana-principal',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, AusenciasComponent, ListaUsuariosComponent],
+  imports: [CommonModule, FormsModule, LoaderComponent, FooterComponent, HeaderComponent, CalendarioComponent, AusenciasComponent, ListaUsuariosComponent, TurnosHorariosComponent],
   templateUrl: './ventana-principal.component.html',
   styleUrls: ['./ventana-principal.component.css']
 })
@@ -86,13 +88,11 @@ export class VentanaPrincipalComponent implements OnInit {
     // Obtener el parámetro 'email' de la URL o usar el email de localStorage
     const routeEmail = this.route.snapshot.paramMap.get('email');
     this.myemail = routeEmail || localEmail;
-  
+    this.isAdmin = this.isAdminUser();
     // Determina si el usuario es administrador o empleado basado en el prefijo del token
-    if (this.token.startsWith('a-')) {
-      this.isAdmin = true;
+    if (this.isAdmin) {
       this.loggedUser.role = 'admin';
-      this.loadAllUsers(); // Cargar todos los usuarios si es administrador
-    } else if (this.token.startsWith('e-')) {
+    } else {
       this.isAdmin = false;
       this.loggedUser.role = 'employee';
     }
@@ -126,36 +126,20 @@ export class VentanaPrincipalComponent implements OnInit {
       }
     }
 
-    
 
-    // Cargar ausencias desde localStorage al inicializar el componente
-    const ausenciasGuardadas = localStorage.getItem('ausencias');
-    if (ausenciasGuardadas) {
-      this.ausencias = JSON.parse(ausenciasGuardadas).map((ausencia: any) => ({
-        ...ausencia,
-        fechaInicio: new Date(ausencia.fechaInicio),
-        fechaFin: new Date(ausencia.fechaFin)
-      }));
-    } else {
-      // Inicializar con datos por defecto si no hay ausencias en localStorage
-      this.ausencias = [
-        {
-          fechaInicio: new Date('2024-01-01'),
-          fechaFin: new Date('2024-02-01'),
-          motivo: 'Vacaciones',
-          usuario: 'Aaron Smith',
-          texto: 'Ausencia: 01/01/2024 - 01/02/2024 (Motivo: Vacaciones)'
-        },
-        {
-          fechaInicio: new Date('2022-03-01'),
-          fechaFin: new Date('2022-04-01'),
-          motivo: 'Enfermedad',
-          usuario: 'Maria González',
-          texto: 'Ausencia: 01/03/2022 - 01/04/2022 (Motivo: Enfermedad)'
-        },
-      ];
-      // Guardar las ausencias iniciales en localStorage
-      localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
+  }
+  private isAdminUser(): boolean {
+    const token = this.token;
+    if (!token) {
+      return false;
+    }
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Verifica tanto "ROLE_ADMIN" como "ADMIN"
+      return payload.role === 'ROLE_ADMIN' || payload.role === 'ADMIN';
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return false;
     }
   }
   
@@ -180,225 +164,4 @@ export class VentanaPrincipalComponent implements OnInit {
       this.router.navigate([route]);
     }, 1000);
   }
-
-  /*---------------------------------- Turnos Horarios ----------------------------------*/
-  turnosHorarios: { inicio: number; fin: number; texto: string }[] = [
-    {
-      inicio: this.convertirAHorasEnMinutos("07", "00"),
-      fin: this.convertirAHorasEnMinutos("15", "00"),
-      texto: "Turno horario: 07:00 - 15:00"
-    },
-    {
-      inicio: this.convertirAHorasEnMinutos("15", "00"),
-      fin: this.convertirAHorasEnMinutos("23", "00"),
-      texto: "Turno horario: 15:00 - 23:00"
-    }
-  ];
-
-  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')); 
-  minutos: string[] = ['00', '15', '30', '45'];
-
-  horaInicioHora: string | null = null;
-  horaInicioMinuto: string | null = null;
-  horaFinHora: string | null = null;
-  horaFinMinuto: string | null = null;
-
-  showDeleteModalTurn: boolean = false;
-  turnoAEliminar: number | null = null;
-
-  addTurnoHorario() {
-    if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
-      alert("Por favor, selecciona tanto la hora de inicio como la de fin.");
-      return;
-    }
-
-    const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
-    const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
-
-    if (this.haySuperposicion(inicio, fin)) {
-      alert("El turno se superpone con otro existente. Por favor, elige otro intervalo.");
-      return;
-    }
-
-    // Agregar el turno si no hay superposición
-    const textoTurno = `Turno horario: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`;
-    this.turnosHorarios.push({ inicio, fin, texto: textoTurno });
-
-    // Reiniciar las selecciones
-    this.horaInicioHora = null;
-    this.horaInicioMinuto = null;
-    this.horaFinHora = null;
-    this.horaFinMinuto = null;
-  }
-
-  // Función para convertir horas y minutos en minutos desde el inicio del día
-  convertirAHorasEnMinutos(hora: string, minuto: string): number {
-    return parseInt(hora, 10) * 60 + parseInt(minuto, 10);
-  }
-
-  // Función para verificar superposición de turnos
-  haySuperposicion(inicio: number, fin: number): boolean {
-    return this.turnosHorarios.some(turno => 
-      (inicio >= turno.inicio && inicio < turno.fin) || // comprobar empezar turno existente
-      (fin > turno.inicio && fin <= turno.fin) || // comprobar terminar turno existente
-      (inicio <= turno.inicio && fin >= turno.fin) // comprobar envolver completamente turno existente
-    );
-  }
-
-  // Método para abrir el modal de confirmación
-  openDeleteModal(index: number) {
-    this.showDeleteModalTurn = true;
-    this.turnoAEliminar = index;
-  }
-
-  // Confirmar eliminación del turno
-  confirmDeleteTurn() {
-    if (this.turnoAEliminar !== null) {
-      this.turnosHorarios.splice(this.turnoAEliminar, 1);
-      this.turnoAEliminar = null;
-    }
-    this.showDeleteModalTurn = false;
-  }
-
-  // Cancelar eliminación
-  cancelDeleteTurn() {
-    this.turnoAEliminar = null;
-    this.showDeleteModalTurn = false;
-  }
-
-  /*---------------------------------- Métodos de Ausencias ----------------------------------*/
-  
-  ausencias: { 
-    fechaInicio: Date; 
-    fechaFin: Date; 
-    motivo: string; 
-    usuario: string;
-    texto: string;
-  }[] = [];
-
-  nuevaAusencia: { 
-    fechaInicio: Date | null; 
-    fechaFin: Date | null; 
-    motivo: string; 
-    usuario: string;
-  } = {
-    fechaInicio: null,
-    fechaFin: null,
-    motivo: '',
-    usuario: ''
-  };
-
-  showAddAusenciaForm: boolean = false;
-  showDeleteModalAusencia: boolean = false;
-  ausenciaAEliminar: number | null = null;
-
-  // Método para mostrar/ocultar el formulario de añadir ausencia
-  toggleAddAusenciaForm(): void {
-    this.showAddAusenciaForm = !this.showAddAusenciaForm;
-  }
-
-  // Método para añadir una nueva ausencia
-  addAusencia(): void {
-    if (!this.nuevaAusencia.fechaInicio || !this.nuevaAusencia.fechaFin || !this.nuevaAusencia.usuario || !this.nuevaAusencia.motivo) {
-      alert("Por favor, completa todos los campos de la ausencia.");
-      return;
-    }
-
-    // Validar que la fecha de inicio no sea posterior a la fecha de fin
-    if (this.nuevaAusencia.fechaInicio > this.nuevaAusencia.fechaFin) {
-      alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
-      return;
-    }
-
-    // Validar solapamiento de fechas
-    if (this.haySuperposicionAusencia(this.nuevaAusencia.fechaInicio, this.nuevaAusencia.fechaFin)) {
-      alert("La ausencia se superpone con otra existente. Por favor, selecciona otro rango de fechas.");
-      return;
-    }
-
-    const textoAusencia = `Ausencia: ${this.nuevaAusencia.fechaInicio.toLocaleDateString()} - ${this.nuevaAusencia.fechaFin.toLocaleDateString()} (Motivo: ${this.nuevaAusencia.motivo})`;
-
-    // Agregar la ausencia
-    this.ausencias.push({
-      fechaInicio: this.nuevaAusencia.fechaInicio,
-      fechaFin: this.nuevaAusencia.fechaFin,
-      motivo: this.nuevaAusencia.motivo,
-      usuario: this.nuevaAusencia.usuario,
-      texto: textoAusencia
-    });
-
-    // Guardar las ausencias actualizadas en localStorage
-    localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
-
-    // Reiniciar el formulario
-    this.nuevaAusencia = { fechaInicio: null, fechaFin: null, usuario: '', motivo: '' };
-    this.showAddAusenciaForm = false;
-  }
-
-  // Método para verificar superposición de ausencias
-  haySuperposicionAusencia(inicio: Date, fin: Date): boolean {
-    return this.ausencias.some(ausencia =>
-      (inicio <= ausencia.fechaFin && fin >= ausencia.fechaInicio)
-    );
-  }
-
-  // Métodos para manejar el modal de confirmación de eliminación de ausencia
-  openDeleteModalAusencia(index: number): void {
-    this.showDeleteModalAusencia = true;
-    this.ausenciaAEliminar = index;
-  }
-
-  confirmDeleteAusencia(): void {
-    if (this.ausenciaAEliminar !== null) {
-      this.ausencias.splice(this.ausenciaAEliminar, 1);
-
-      // Actualizar localStorage después de eliminar
-      localStorage.setItem('ausencias', JSON.stringify(this.ausencias));
-
-      this.ausenciaAEliminar = null;
-    }
-    this.showDeleteModalAusencia = false;
-  }
-
-  cancelDeleteAusencia(): void {
-    this.ausenciaAEliminar = null;
-    this.showDeleteModalAusencia = false;
-  }
-
-
-
-
-
-  // Cargar todos los usuarios
-  loadAllUsers(): void {
-    this.isLoading = true;
-    this.users = []; // Limpia la lista antes de recargar
-  
-    this.userService.getAllUsers(this.token).subscribe(
-      (userList: any[]) => {
-        console.log('Lista de usuarios:', userList);
-        this.users = userList.map(userInfo => {
-          const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
-          const isBlocked = !isAdmin && userInfo.bloqueado === true;
-          
-          return {
-            firstName: userInfo.nombre,
-            lastName: `${userInfo.apellido1} ${userInfo.apellido2}`,
-            email: userInfo.email,
-            isAdmin: isAdmin,
-            profilePicture: this.gravatarService.getGravatarUrl(userInfo.email),
-            estado: isAdmin ? 'Validado' : (isBlocked ? 'Bloqueado' : (userInfo.verificado ? 'Validado' : 'No validado')),
-          };
-        });
-        this.users.sort((a, b) => a.lastName.localeCompare(b.lastName));
-  
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error al obtener la lista de usuarios:', error);
-        this.isLoading = false;
-      }
-    );
-  }
-
 }

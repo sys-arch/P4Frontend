@@ -98,6 +98,7 @@ export class LoginComponent {
     }
   }
   
+  
   // Validar que el correo electrónico ingresado tenga un formato válido cada vez que cambie
   onEmailChange(): void {
     this.resetEmailValidationStates(); // Restablecer estados de validación de email al cambiar

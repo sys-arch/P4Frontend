@@ -105,7 +105,7 @@ private formatDate(date: any): string {
 
   // Método para eliminar una ausencia y refrescar la lista
   deleteAusencia(id: number) {
-    this.ausenciaService.deleteAusencia(id.toString(), this.token).subscribe(
+    this.ausenciaService.deleteAusencia(id.toString()).subscribe(
       () => {
         this.getTodasLasAusencias(); // Refresca la lista tras eliminar la ausencia
       },
