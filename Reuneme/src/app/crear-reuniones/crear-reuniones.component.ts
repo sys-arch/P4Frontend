@@ -30,7 +30,7 @@ export class CrearReunionesComponent implements OnInit {
   fechaInvalid = false;
   horasInvalid = false;
   errorMessage: string = '';
-
+  token: string = '';
 
   constructor(
     private readonly router: Router,
@@ -113,15 +113,16 @@ export class CrearReunionesComponent implements OnInit {
       (!this.todoElDia && (!this.horaDesde || !this.horaHasta)) ||
       !this.ubicacion) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
+      alert(this.errorMessage);
       return; 
     }
 
     this.reunionService.crearReunion(this.organizador,this.asunto, inicio,
-              fin, this.ubicacion, this.observaciones, this.estado)
+      fin, this.ubicacion, this.observaciones, this.estado)
       .subscribe({
         next: (response) => {
           console.log('Reunión creada con éxito:', response);
-          this.navigateTo('/ver-reuniones');
+          this.navigateTo('/reuniones');  
         },
         error: (error) => {
           console.error('Error al crear la reunión:', error);
