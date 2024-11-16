@@ -1,4 +1,4 @@
-import { HttpClient , HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { httpUrl } from '../commons';
@@ -13,11 +13,22 @@ export class ReunionService {
   constructor(private client: HttpClient) { }
 
   getReunionById(reunionId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-  });
-    return this.client.get(`${httpUrl}empleados/reunion/${reunionId}/ver`, { headers });
+    const token = localStorage.getItem('token');
+    console.log("Token", token);
+    
+    const headers = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    console.log("Headers", headers);
+  
+    return this.client.post(
+      `${httpUrl}empleados/reunion/${reunionId}/ver`,
+      {}, // Cuerpo vacío, ya que no necesitas enviar un body
+      { headers } // Aquí los headers van en el objeto de configuración
+    );
   }
+  
 
   // Método para obtener todos los emails 
   getAllUsers(): Observable<any[]> {
@@ -36,7 +47,11 @@ export class ReunionService {
     observaciones: string,
     estado: string
 ): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
     const info = {
         organizador: organizador,
         asunto: asunto,
