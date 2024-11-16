@@ -1,13 +1,13 @@
 <div class="pagina-fondo">
   <div [ngClass]="{'calendario-contenedor': true, 'vista-semana': vista === 'semana'}">
+    <!-- Botones de vista -->
     <div class="calendario-filtros">
       <button (click)="filtrarPorMes()">Ver por Mes</button>
       <button (click)="filtrarPorSemana()">Ver por Semana</button>
     </div>
 
-    <div class="calendario-nombre-mes">
-      {{ nombreMes }}
-    </div>
+    <!-- Nombre del mes -->
+    <div class="calendario-nombre-mes">{{ nombreMes }}</div>
 
     <!-- Navegación de semanas solo visible en la vista de semana -->
     <div *ngIf="vista === 'semana'" class="semana-navegacion">
@@ -16,7 +16,7 @@
       <button class="boton-navegacion-derecha" (click)="siguienteSemana()">&rarr;</button>
     </div>
 
-    <!-- Encabezado de días de la semana para ambas vistas -->
+    <!-- Encabezado de días de la semana -->
     <div class="calendario-grid calendario-header">
       <div class="calendario-header-dia">Lun</div>
       <div class="calendario-header-dia">Mar</div>
@@ -27,32 +27,45 @@
       <div class="calendario-header-dia">Dom</div>
     </div>
 
-    <!-- Contenedor de la vista semanal con horas a la izquierda -->
-    <div class="semana-vista" *ngIf="vista === 'semana'">
+    <!-- Vista mensual -->
+    <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias">
+      <div
+        *ngFor="let dia of diasFiltrados"
+        [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
+        <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
+        <!-- Botón "Crear Reunión" solo si el día pertenece al mes seleccionado -->
+        <button 
+      *ngIf="dia && dia.getMonth() === mesActual && dia.getDay() !== 0 && dia.getDay() !== 6" 
+      class="btn-crear-reunion" 
+      (click)="abrirModalReunion(dia, '08:00')">
+      +
+    </button>
+      </div>
+    </div>
+
+    <!-- Vista semanal -->
+    <div *ngIf="vista === 'semana'" class="semana-vista">
+      <!-- Columna de horas -->
       <div class="horas-column">
         <div *ngFor="let hora of horas" class="hora-item">{{ hora }}</div>
       </div>
 
+      <!-- Rejilla de días y eventos -->
       <div class="calendario-semana-grid">
-        <div *ngFor="let dia of diasFiltrados" [ngClass]="{'calendario-dia-semana': dia, 'calendario-dia-vacio': !dia}">
+        <div
+          *ngFor="let dia of diasFiltrados"
+          [ngClass]="{'calendario-dia-semana': dia, 'calendario-dia-vacio': !dia}">
           <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
           <div class="calendario-horas">
-            <div *ngFor="let hora of horas" class="hora-evento" (click)="dia ? abrirModalReunion(dia) : null">
-              <!-- Espacio para futuros eventos -->
+            <div
+              *ngFor="let hora of horas"
+              class="hora-evento"
+              [ngClass]="dia ? obtenerClaseReunion(dia, hora) : ''"
+              (click)="dia && dia.getDay() !== 0 && dia.getDay() !== 6 ? abrirModalReunion(dia, hora) : null"
+              [class.no-click]="dia && (dia.getDay() === 0 || dia.getDay() === 6)">
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Contenedor de la vista mensual -->
-    <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias">
-      <div *ngFor="let dia of diasFiltrados" 
-          [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}" 
-          (mouseenter)="dia ? mostrarBtnCrearReunion(dia) : null" 
-          (mouseleave)="ocultarBtnCrearReunion()">
-        <div *ngIf="dia" class="calendario-dia-numero">{{ dia.getDate() }}</div>
-        <button *ngIf="dia === diaSeleccionado" (click)="dia ? abrirModalReunion(dia) : null">Crear Reunión</button>
       </div>
     </div>
 
@@ -61,7 +74,7 @@
     <button *ngIf="vista === 'mes'" class="boton-navegacion derecho" (click)="mesSiguiente()">&rarr;</button>
   </div>
 
-  <!-- Leyenda de colores en la parte derecha de la pantalla -->
+  <!-- Leyenda -->
   <div class="leyenda">
     <div class="leyenda-item">
       <span class="leyenda-circulo organizador"></span> Organizador

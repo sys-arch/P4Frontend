@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EdicionUsuarioComponent } from './edicion-usuario.component';
 import { UserService } from '../services/user.service';
 import { of } from 'rxjs';
@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 describe('EdicionUsuarioComponent', () => {
   let component: EdicionUsuarioComponent;
   let fixture: ComponentFixture<EdicionUsuarioComponent>;
-  let httpMock: HttpTestingController;
+  let httpMock: HttpTestingController | undefined;
   let userService: UserService;
   let routerSpy = { navigate: jasmine.createSpy('navigate') };
 
@@ -18,11 +18,18 @@ describe('EdicionUsuarioComponent', () => {
       imports: [
         ReactiveFormsModule, 
         HttpClientTestingModule,
-        EdicionUsuarioComponent  // Importa el componente como standalone aquí
+        EdicionUsuarioComponent // Importa el componente como standalone aquí
       ],
       providers: [
         UserService,
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
+            params: of({ id: 'mockId' }),
+          },
+        }
       ]
     }).compileComponents();
   });
@@ -36,7 +43,10 @@ describe('EdicionUsuarioComponent', () => {
   });
 
   afterEach(() => {
-    httpMock.verify();
+    // Verifica si httpMock está definido antes de llamar a verify()
+    if (httpMock) {
+      httpMock.verify();
+    }
   });
 
   it('debería crear el componente', () => {
