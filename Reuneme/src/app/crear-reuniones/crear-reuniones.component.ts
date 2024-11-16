@@ -121,7 +121,7 @@ export class CrearReunionesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Reunión creada con éxito:', response);
-          this.navigateTo('/');
+          this.navigateTo('/ver-reuniones');
         },
         error: (error) => {
           console.error('Error al crear la reunión:', error);

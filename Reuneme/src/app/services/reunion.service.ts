@@ -16,7 +16,7 @@ export class ReunionService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
   });
-    return this.client.get(`${httpUrl}empleados/reunionByID/${reunionId}`, { headers });
+    return this.client.get(`${httpUrl}empleados/reunion/${reunionId}/ver`, { headers });
   }
 
   // Método para obtener todos los emails 
@@ -28,7 +28,7 @@ export class ReunionService {
 }
 
   crearReunion(
-    orgazinador: string,
+    organizador: string,
     asunto: string,
     horaDesde: string,
     horaHasta: string,
@@ -38,7 +38,7 @@ export class ReunionService {
 ): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const info = {
-        organizador: orgazinador,
+        organizador: organizador,
         asunto: asunto,
         inicio: horaDesde,
         fin: horaHasta,
@@ -55,6 +55,14 @@ export class ReunionService {
     });
 
     return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
+  }
+
+  cerrarReunion(idReunion: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { headers });
   }
 
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {
