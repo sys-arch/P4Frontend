@@ -152,7 +152,7 @@ export class UserService {
     deleteUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         const body = { email: email }; // Email en el cuerpo de la solicitud en formato JSON
         return this.client.delete(`${httpUrl}admins/borrarEmpleado`, { headers, body });
@@ -161,7 +161,7 @@ export class UserService {
     blockUserByEmail(email: string, bloquear: boolean, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
 
         // Agregamos los parámetros email y bloquear directamente en la URL
@@ -170,7 +170,7 @@ export class UserService {
     verifyUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         const body = { email: email }; // JSON con el email
 
