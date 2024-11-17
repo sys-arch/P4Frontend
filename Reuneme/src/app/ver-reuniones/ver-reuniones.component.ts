@@ -29,9 +29,8 @@ export class VerReunionesComponent implements OnInit{
   observaciones: string = '';
   estado: string = '';
 
-  reunionData: any;
+  reunionData: any = {};
   token: string = '';
-
 
   constructor(
     private readonly router: Router,
@@ -43,16 +42,19 @@ export class VerReunionesComponent implements OnInit{
     this.token = localStorage.getItem('token') || '';
     this.getReunion('1'); // ID de reunión de prueba
   }
-  
+
 
 getReunion (reunionId: string): void {
   this.reunionService.getReunionById(reunionId).subscribe({
-    next: (data) => {
-      this.reunionData = data; // Asignar todos los datos obtenidos
-      this.organizador = data.organizador?.email || '';
-      this.fecha = this.formatDate(data.inicio);
-      this.inicio = this.formatTime(data.inicio);
-      this.fin = this.formatTime(data.fin);
+    next: (response) => {
+      console.log('Reunión obtenida:', response);
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('email', this.organizador);
+      this.reunionData = response; // Asignar todos los datos obtenidos
+      this.organizador = response.organizador?.email || '';
+      this.fecha = this.formatDate(response.inicio);
+      this.inicio = this.formatTime(response.inicio);
+      this.fin = this.formatTime(response.fin);
 
     },
     error: (error) => {

@@ -69,7 +69,6 @@ export class ModificarReunionesComponent implements OnInit {
         this.ubicacion = reunionData.ubicacion;
         this.estado = reunionData.estado;
         this.observaciones = reunionData.observaciones;
-        //this.participantes = reunionData.participantes || [];
         this.todoElDia = reunionData.todoElDia || false;
       }
     }
@@ -77,35 +76,20 @@ export class ModificarReunionesComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getReunionDetails('1');
+    this.getReunion("1"); // ID de reunión de prueba
 
   }
 
-
-  // Obtener los detalles de la reunión a editar
-  getReunionDetails(reunionId: string): void {
+  getReunion(reunionId: string): void {
     this.reunionService.getReunionById(this.reunionId).subscribe({
       next: (data) => {
-        this.reunionData = data
-        //this.asistentes = reunion.asistentes || []; // Lista de correos de los asistentes
-  
-        // Obtener la lista de todos los empleados (posibles asistentes)
-        this.reunionService.getAllUsers().subscribe({
-          next: (users: any[]) => {
-            this.usuarios = users.map(user => ({
-              ...user,
-              isAsistente: this.asistentes.includes(user.correo)
-            }));
-          },
-          error: (error: any) => {
-            console.error('Error al obtener la lista de empleados:', error);
-          }
-        });
+        this.reunionData = data;
+        console.log('Datos de la reunión:', this.reunionData);
       },
-      error: (error: any) => {
-        console.error('Error al obtener la reunión:', error);
+      error: (err) => {
+        console.error('Error al obtener la reunión:', err);
       }
-    });
+    }); 
   }
 
   onSubmit(): void {
@@ -131,8 +115,7 @@ export class ModificarReunionesComponent implements OnInit {
       inicio: this.inicio,
       fin: this.fin,
       ubicacion: this.ubicacion,
-      observaciones: this.observaciones,
-      asistentes: this.asistentes
+      observaciones: this.observaciones
     };
 
     this.reunionService.updateReunion(this.reunionId, reunionData)
@@ -145,6 +128,27 @@ export class ModificarReunionesComponent implements OnInit {
           console.error('Error al actualizar la reunión:', error);
         }
       });
+  }
+
+  cargarUsuarios() {
+    this.reunionService.getPosiblesAsistentes().subscribe({
+      next: (data) => {
+        this.asistentes = data;
+        this.filteredUsers = data;
+        this.marcarAsistentes();
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios:', err);
+      }
+    });
+  }
+
+  // Marcar a los usuarios que son asistentes de la reunión (compara por ID)
+  marcarAsistentes() {
+    this.filteredUsers.forEach(user => {
+      // Verificar si el usuario es un asistente de la reunión
+      user.isAsistente = this.asistentes.some(asistente => asistente === user.id);
+    });
   }
 
   filterUsuarios(): void {
