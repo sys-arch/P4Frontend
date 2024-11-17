@@ -34,7 +34,7 @@ export class CalendarioComponent implements OnInit {
   ngOnInit() {
     this.generarDiasDelAnio();
     this.aplicarFiltro();
-    
+    this.cargarReunionesMock(); // Llama al método para cargar los datos mock
   }
 
   generarDiasDelAnio() {
@@ -152,95 +152,53 @@ export class CalendarioComponent implements OnInit {
     }
     this.filtrarPorSemana();
   }
-
-  abrirModalReunion(dia: Date | null, hora: string): void {
-    // Si 'dia' es null, no hacer nada
-    if (!dia) return;
-  
-    // Usar Intl.DateTimeFormat para convertir la fecha a la zona horaria de España
-    const formatter = new Intl.DateTimeFormat("es-ES", {
-      timeZone: "Europe/Madrid",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-    
-    const formattedDate = formatter.format(dia);
-    const fechaFormateada = formattedDate.split(',')[0].split('/').reverse().join('-');
-  
-    // Setear la fecha seleccionada en el servicio
-    this.reunionService.setFechaSeleccionada(fechaFormateada);
-  
-    // Navegar a la página de creación de reuniones pasando la fecha y hora
-    this.router.navigate(['/crear-reuniones'], {
-      queryParams: {
-        fecha: fechaFormateada,
-        horaDesde: hora || '08:00', // Si no se pasa hora, poner '08:00' por defecto
-      },
-    });
-  }
-  
-  
-
-  cargarReuniones() {
-    // Reuniones de prueba directamente en el método
-    this.reuniones = [
-      {
-        id: 1,
-        inicio: new Date(this.añoActual, this.mesActual, 10, 9, 0).toISOString(), // 10 del mes actual, 9:00 AM
-        fin: new Date(this.añoActual, this.mesActual, 10, 10, 0).toISOString(), // 10 del mes actual, 10:00 AM
-        creador: 'organizador',
-        asistencia: 'asistida',
-        asistente: ['USUARIO_ACTUAL'], // Usuario actual está asistiendo
-      },
-      {
-        id: 2,
-        inicio: new Date(this.añoActual, this.mesActual, 12, 11, 0).toISOString(), // 12 del mes actual, 11:00 AM
-        fin: new Date(this.añoActual, this.mesActual, 12, 12, 0).toISOString(), // 12 del mes actual, 12:00 PM
-        creador: 'organizador',
-        asistencia: 'no-asistida',
-        asistente: ['otro_usuario'],
-      },
-      {
-        id: 3,
-        inicio: new Date(this.añoActual, this.mesActual, 15, 14, 0).toISOString(), // 15 del mes actual, 2:00 PM
-        fin: new Date(this.añoActual, this.mesActual, 15, 15, 0).toISOString(), // 15 del mes actual, 3:00 PM
-        creador: 'otro_usuario',
-        asistencia: 'asistida',
-        asistente: ['USUARIO_ACTUAL'], // Usuario actual está asistiendo
-      },
-      {
-        id: 4,
-        inicio: new Date(this.añoActual, this.mesActual, 20, 16, 0).toISOString(), // 20 del mes actual, 4:00 PM
-        fin: new Date(this.añoActual, this.mesActual, 20, 17, 0).toISOString(), // 20 del mes actual, 5:00 PM
-        creador: 'organizador',
-        asistencia: 'asistida',
-        asistente: ['otro_usuario'],
-      },
-    ];
+  crearReunion0(): void {
+    // Navegar directamente a la página de creación de reuniones
+    this.router.navigate(['/crear-reuniones']);
   }
   
 
-  obtenerClaseReunion(dia: Date, hora: string): string {
+  //borrar esto
+  cargarReunionesMock() {
+    this.reuniones = this.reunionService.obtenerReunionesMock();
+  }
+  //esto no 
+  
+  
+  obtenerClaseReunion(dia: Date, hora: string): { clase: string, asunto?: string } | null {
     const reunion = this.reuniones.find(
       (r) =>
-        new Date(r.inicio).toDateString() === dia.toDateString() &&
-        r.inicio.includes(hora)
+        new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
+        new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
     );
-
-    if (!reunion) return '';
-
-    if (reunion.creador === 'organizador') return 'reunion-organizador';
-    if (reunion.asistencia === 'asistida') return 'reunion-asistida';
-    if (reunion.asistencia === 'no-asistida') return 'reunion-no-asistida';
-    if (reunion.asistente.includes('USUARIO_ACTUAL')) return 'reunion-asistente';
-
-    return '';
+  
+    if (!reunion) return null;
+  
+    let clase = '';
+    if (reunion.creador === 'organizador') clase = 'reunion-organizador';
+    else if (reunion.asistencia === 'asistida') clase = 'reunion-asistida';
+    else if (reunion.asistencia === 'no-asistida') clase = 'reunion-no-asistida';
+    else if (reunion.asistente.includes('USUARIO_ACTUAL')) clase = 'reunion-asistente';
+  
+    return { clase, asunto: reunion.asunto };
   }
-
+  
+  getColor(clase: string | undefined): string {
+    if (!clase) {
+      console.warn('Clase no definida, devolviendo color transparente.');
+      return 'transparent'; // Por defecto, transparente si no hay clase
+    }
+  
+    const colores: Record<string, string> = {
+      'reunion-organizador': 'orange',
+      'reunion-asistida': 'green',
+      'reunion-no-asistida': 'gray',
+      'reunion-asistente': 'blue',
+    };
+  
+    return colores[clase] ?? 'transparent'; // Devuelve el color o transparente si no coincide
+  }
+  
   
   mostrarBtnCrearReunion(dia: Date) {
     this.diaSeleccionado = dia;
@@ -248,7 +206,6 @@ export class CalendarioComponent implements OnInit {
   ocultarBtnCrearReunion() {
     this.diaSeleccionado = null;
   }
-
   navigateTo(route: string, dia: Date): void {
     setTimeout(() => {
       this.router.navigate([route], { queryParams: { fecha: dia.toISOString() } });

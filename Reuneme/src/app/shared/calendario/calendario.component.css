@@ -1,14 +1,14 @@
-
 .contenido {
   position: relative;
   z-index: 1;
-  padding: 35px;
+  padding: 20px;
 }
+
 .calendario-contenedor {
   position: relative;
   width: 95%;
   max-width: 1000px;
-  margin: -10% auto 120px auto; /* Margen negativo para elevar el contenedor */
+  margin: -10% auto 120px auto;
   padding: 50px;
   background-color: #2e2e2e;
   border-radius: 1.2vh;
@@ -86,7 +86,6 @@
   transform: scale(0.95);
 }
 
-/* Estilos para la vista mensual */
 .calendario-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -112,8 +111,7 @@
 .calendario-dia-numero {
   font-size: 2.4vh;
   font-weight: bold;
-  height: 70px;
-  width: 50px;
+  text-align: center;
 }
 
 .calendario-dia-label {
@@ -121,32 +119,37 @@
   color: #b3b3b3;
 }
 
-
-/* Vista semanal con horas a la izquierda y días a la derecha */
 .semana-vista {
   display: flex;
 }
 
 .horas-column {
-  width: 80px; /* Fija el ancho para la columna de horas */
+  width: 50px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding-right: 10px;
+  margin-top: 30px;
+  padding-right: 15px;
+  color: #b3b3b3;
+  font-size: 1.8vh;
+}
+.calendario-dia-vacio .hora-slot {
+  display: none;
 }
 
 .hora-item {
-  font-size: 1.8vh;
-  color: #b3b3b3;
-  padding: 15px 0;
+  height: 27px;
+  width: auto ;
   text-align: right;
+  padding-right: 10px;
+  margin-bottom: 15px;
 }
 
 .calendario-semana-grid {
-  flex: 1; /* Toma el resto del espacio */
+  flex: 3;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.8vh;
+  gap: 1vh;
 }
 
 .calendario-dia-semana {
@@ -157,6 +160,8 @@
   box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.3s ease;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .calendario-dia-semana:hover {
@@ -164,13 +169,6 @@
   transform: scale(1.05);
 }
 
-.calendario-dia-numero {
-  font-size: 2.2vh;
-  font-weight: bold;
-  text-align: center;
-}
-
-/* Contenedor de horas en cada día */
 .calendario-horas {
   display: flex;
   flex-direction: column;
@@ -183,56 +181,17 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
-.vista-semana .horas-column {
-  grid-column: 1;
-  display: flex;
-  flex-direction: column;
-  padding-right: 20px; /* Aumenta el espacio a la derecha de las horas */
-  margin-left: -60px; /* Mueve las horas hacia la izquierda */
-  color: #b3b3b3;
-  font-size: 1.8vh;
-}
-
-.hora-item {
-  height: 40px;
-  text-align: right;
-  padding-right: 10px; /* Aumenta el padding para alinear el texto más a la derecha */
-}
 
 .hora-evento:hover {
   background-color: #4a4a4a;
 }
 
-/* Estilos para la vista mensual */
-.calendario-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.8vh;
+.hora-slot {
+  height: 45px;
+  border: 1px solid #ccc;
+  position: relative;
 }
 
-.calendario-dia {
-  border: 1px solid #444;
-  padding: 2vh;
-  text-align: center;
-  background-color: #3d3d3d;
-  color: #f1f1f1;
-  border-radius: 0.7vw;
-  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.calendario-dia:hover {
-  background-color: #5a5a5a;
-  transform: scale(1.15);
-}
-
-.calendario-dia-label {
-  font-size: 2vh;
-  color: #b3b3b3;
-}
-
-
-/* Leyenda */
 .leyenda {
   position: fixed;
   top: 50%;
@@ -259,7 +218,6 @@
   margin-right: 8px;
 }
 
-/* Colores específicos */
 .organizador {
   background-color: orange;
 }
@@ -275,29 +233,39 @@
 .no-asistida {
   background-color: gray;
 }
-/* Estilo para el botón "Crear Reunión" */
+
 .btn-crear-reunion {
-  background-color: #5fc67d; /* Verde */
-  color: #fff; /* Color del texto */
-  border: none; /* Sin bordes */
-  border-radius: 50%; /* Redondeado */
-  width: 40px; /* Ancho del botón */
-  height: 40px; /* Alto del botón */
-  display: flex; /* Centrar el contenido */
-  align-items: center; /* Centrar el contenido verticalmente */
-  justify-content: center; /* Centrar el contenido horizontalmente */
-  font-size: 1.5rem; /* Tamaño del texto */
-  font-weight: bold; /* Negrita */
-  cursor: pointer; /* Cursor al pasar por encima */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
-  transition: transform 0.2s, background-color 0.3s; /* Transiciones */
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  background-color: #138530 !important;
+  color: #fff;
+  border-radius: 50% !important;
+  width: 80px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.3s;
 }
 
 .btn-crear-reunion:hover {
-  background-color: #45b06a; /* Verde oscuro al pasar el mouse */
-  transform: scale(1.1); /* Aumentar tamaño al pasar el mouse */
+  background-color: #105d2e;
+  transform: scale(1.1);
 }
 
 .btn-crear-reunion:active {
-  transform: scale(0.9); /* Reducir tamaño al hacer clic */
+  transform: scale(0.9);
+}
+
+.reunion-circulo {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
 }

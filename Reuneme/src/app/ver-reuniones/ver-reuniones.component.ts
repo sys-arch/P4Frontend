@@ -1,11 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
+import { ReunionService } from '../services/reunion.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
-import { CommonModule } from '@angular/common';
-import { ReunionService } from '../services/reunion.service';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
 
 @Component({
@@ -38,9 +38,11 @@ export class VerReunionesComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
+    console.log('ngOnInit ejecutado'); // Confirma que el método se llama
     this.token = localStorage.getItem('token') || '';
     this.getReunion('1'); // ID de reunión de prueba
   }
+
 
 getReunion (reunionId: string): void {
   this.reunionService.getReunionById(reunionId).subscribe({

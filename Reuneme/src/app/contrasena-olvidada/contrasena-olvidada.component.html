@@ -10,8 +10,11 @@
         <h2>Recuperar Contraseña</h2>
 
         <!-- Texto explicativo mejorado -->
-        <p class="recovery-text">
+        <p *ngIf="!showResetMessage" class="recovery-text">
             Se enviará un correo para reiniciar tu contraseña a tu dirección de email.
+        </p>
+        <p *ngIf="showResetMessage" class="recovery-text">
+            Por favor, revisa tu bandeja de entrada
         </p>
 
         <!-- Formulario de recuperación -->
@@ -22,6 +25,7 @@
                 <input type="text" id="email" [(ngModel)]="email" name="email" placeholder="Correo Electrónico" required />
                 <label for="email">Correo Electrónico</label>
             </div>
+            
 
             <!-- Botón para enviar la solicitud de recuperación -->
             <button type="submit" (click)="passwordResetAttempt($event)" class="btn">Enviar Instrucciones</button>
