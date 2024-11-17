@@ -7,7 +7,6 @@ import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ReunionService } from '../services/reunion.service';
 import { UserService } from '../services/user.service';
-import { get } from 'node:http';
 
 @Component({
   selector: 'app-modificar-reuniones',
@@ -148,7 +147,7 @@ export class ModificarReunionesComponent implements OnInit {
   marcarAsistentes() {
     this.filteredUsers.forEach(user => {
       // Verificar si el usuario es un asistente de la reunión
-      user.isAsistente = this.asistentes.some(asistente => asistente.id === user.id);
+      user.isAsistente = this.asistentes.some(asistente => asistente === user.id);
     });
   }
 
