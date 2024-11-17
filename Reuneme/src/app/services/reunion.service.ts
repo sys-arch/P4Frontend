@@ -49,31 +49,26 @@ private reunionesMock = [
 
   constructor(private client: HttpClient) { }
 
-  getReunionById(reunionId: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    console.log("Token", token);
-    
-    const headers = new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+  private getHeaders(withAuth: boolean = true): HttpHeaders {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
     });
-    console.log("Headers", headers);
-  
-    return this.client.post(
-      `${httpUrl}empleados/reunion/${reunionId}/ver`,
-      {}, // Cuerpo vacío, ya que no necesitas enviar un body
-      { headers } // Aquí los headers van en el objeto de configuración
-    );
+    if (withAuth) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      } else {
+        throw new Error('Token no encontrado.');
+      }
+    }
+    return headers;
   }
   
 
-  // Método para obtener todos los emails 
-  getAllUsers(): Observable<any[]> {
-    const headers = new HttpHeaders({
-        'Content-Type': 'application/json'
-    });
-    return this.client.get<any[]>(`${httpUrl}admins/listaEmpleados`, { headers });
-}
+  getReunionById(reunionId: string): Observable<any> {
+    const headers = this.getHeaders();
+    return this.client.post(`${httpUrl}empleados/reunion/${reunionId}/ver`,{}, { headers });
+  }
 
   crearReunion(
     organizador: string,
@@ -84,11 +79,7 @@ private reunionesMock = [
     observaciones: string,
     estado: string
 ): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+    const headers = this.getHeaders();
     const info = {
         organizador: organizador,
         asunto: asunto,
@@ -98,39 +89,33 @@ private reunionesMock = [
         observaciones: observaciones,
         estado: estado
     };
-    return this.client.post(`${httpUrl}empleados/reunion`, info, { headers, responseType: 'text' });
+    console.log("Token enviado en Authorization:", headers.get('Authorization'));
+    return this.client.post(`${httpUrl}empleados/reunion`, info, { headers });
 }
 
   updateReunion(id: any, reunionData: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
+    const headers = this.getHeaders();
     return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
   }
 
   cerrarReunion(idReunion: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
+    const headers = this.getHeaders();
     return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { headers });
   }
 
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
+    const headers = this.getHeaders();
     return this.client.post(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
   }
 
   deleteAsistente(idReunion: any, idUsuario: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
+    const headers = this.getHeaders();
     return this.client.delete(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
+  }
+
+  getPosiblesAsistentes(): Observable<any[]> {
+    const headers = this.getHeaders();
+    return this.client.get<any[]>(`${httpUrl}empleado/reunion/asistentes`, { headers });
   }
 
   setFechaSeleccionada(fecha: string): void {
