@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 
@@ -36,6 +36,11 @@ export class CalendarioComponent implements OnInit {
     this.aplicarFiltro();
     this.cargarReunionesMock(); // Llama al método para cargar los datos mock
   }
+  setVista(vista: 'mes' | 'semana') {
+    this.vista = vista;
+    this.aplicarFiltro(); // Aplica el filtro según la vista seleccionada
+  }
+  
 
   generarDiasDelAnio() {
     this.diasDelAnio = [];
@@ -54,7 +59,18 @@ export class CalendarioComponent implements OnInit {
       this.filtrarPorSemana();
     }
   }
-
+  
+  obtenerReunionesDelDia(dia: Date): { clase: string, asunto: string }[] {
+    return this.reuniones
+      .filter(reunion => new Date(reunion.inicio).toLocaleDateString() === dia.toLocaleDateString())
+      .map(reunion => ({
+        clase: this.obtenerClaseReunion(dia, reunion.hora)?.clase || 'default',
+        asunto: reunion.asunto
+      }));
+  }
+  
+  
+  
   filtrarPorMes() {
     this.vista = 'mes';
     this.diasFiltrados = this.calcularDiasDelMes(this.mesActual, this.añoActual);
@@ -156,6 +172,15 @@ export class CalendarioComponent implements OnInit {
     // Navegar directamente a la página de creación de reuniones
     this.router.navigate(['/crear-reuniones']);
   }
+  cambiarPeriodo(direccion: 'anterior' | 'siguiente') {
+    if (this.vista === 'mes') {
+      // Cambiar por mes
+      direccion === 'anterior' ? this.mesAnterior() : this.mesSiguiente();
+    } else if (this.vista === 'semana') {
+      // Cambiar por semana
+      direccion === 'anterior' ? this.anteriorSemana() : this.siguienteSemana();
+    }
+  }
   
 
   //borrar esto
@@ -183,21 +208,20 @@ export class CalendarioComponent implements OnInit {
     return { clase, asunto: reunion.asunto };
   }
   
+  
   getColor(clase: string | undefined): string {
     if (!clase) {
-      console.warn('Clase no definida, devolviendo color transparente.');
-      return 'transparent'; // Por defecto, transparente si no hay clase
+      return 'transparent'; // Devuelve transparente si no hay clase
     }
-  
     const colores: Record<string, string> = {
       'reunion-organizador': 'orange',
       'reunion-asistida': 'green',
       'reunion-no-asistida': 'gray',
       'reunion-asistente': 'blue',
     };
-  
-    return colores[clase] ?? 'transparent'; // Devuelve el color o transparente si no coincide
+    return colores[clase] || 'transparent';
   }
+  
   
   
   mostrarBtnCrearReunion(dia: Date) {

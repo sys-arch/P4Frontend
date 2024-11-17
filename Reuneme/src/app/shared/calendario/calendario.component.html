@@ -1,111 +1,106 @@
 <div class="pagina-fondo">
-  <div [ngClass]="{'calendario-contenedor': true, 'vista-semana': vista === 'semana'}">
-    <!-- Botones de vista y botón "Crear Reunión" -->
-    <div class="calendario-filtros">
-      <button (click)="filtrarPorMes()">Ver por Mes</button>
-      <button (click)="filtrarPorSemana()">Ver por Semana</button>
-      <!-- Botón "Crear Reunión" -->
-      <button class="btn-crear-reunion"(click)="crearReunion0()">+</button>
-    </div>
-
-    <!-- Nombre del mes -->
-    <div class="calendario-nombre-mes">{{ nombreMes }}</div>
-
-    <!-- Navegación de semanas solo visible en la vista de semana -->
-    <div *ngIf="vista === 'semana'" class="semana-navegacion">
-      <button class="boton-navegacion-izquierda" (click)="anteriorSemana()">&larr;</button>
-      <span class="semana-titulo">{{ obtenerNumeroSemana() }} semana de {{ obtenerNombreMes(mesActual) }}</span>
-      <button class="boton-navegacion-derecha" (click)="siguienteSemana()">&rarr;</button>
-    </div>
-
-    <!-- Encabezado de días de la semana -->
-    <div class="calendario-grid calendario-header">
-      <div class="calendario-header-dia">Lun</div>
-      <div class="calendario-header-dia">Mar</div>
-      <div class="calendario-header-dia">Mié</div>
-      <div class="calendario-header-dia">Jue</div>
-      <div class="calendario-header-dia">Vie</div>
-      <div class="calendario-header-dia">Sáb</div>
-      <div class="calendario-header-dia">Dom</div>
-    </div>
-
-    <!-- Vista mensual -->
-    <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias">
-      <div
-        *ngFor="let dia of diasFiltrados"
-        [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
-        
-        <!-- Número del día -->
-        <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
-
-        <div *ngIf="dia" class="calendario-reuniones">
-          <div
-            *ngFor="let hora of horas"
-            class="reunion-item"
-            [ngClass]="obtenerClaseReunion(dia, hora)?.clase">
-            <!-- Círculo de color -->
-            <div 
-              *ngIf="obtenerClaseReunion(dia, hora)" 
-              class="reunion-circulo" 
-              [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}">
-            </div>
-            <!-- Hora y asunto -->
-            <span *ngIf="obtenerClaseReunion(dia, hora)">
-              {{ hora }} - {{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}
-            </span>
+  <div class="calendario-contenedor">
+    <!-- Columna Izquierda -->
+    <div class="calendario-columna columna-izquierda">
+      <!-- Cabecera del calendario -->
+      <div class="calendario-header">
+        <!-- Botones para cambiar de mes o semana -->
+        <div class="cambio-mes">
+          <button class="boton-cambio" (click)="cambiarPeriodo('anterior')">&lt;</button>
+          <div class="calendario-nombre-mes">
+            {{ vista === 'mes' ? nombreMes : obtenerNumeroSemana() + ' semana de ' + obtenerNombreMes(mesActual) }}
           </div>
-        </div>        
-      </div>
-    </div>
+          <button class="boton-cambio" (click)="cambiarPeriodo('siguiente')">&gt;</button>
+        </div>
 
-    <div *ngIf="vista === 'semana'" class="semana-vista">
-      <!-- Columna de horas -->
-      <div class="horas-column">
-        <div *ngFor="let hora of horas" class="hora-item">{{ hora }}</div>
+        <!-- Dropdown de vista en la esquina superior derecha -->
+        <div class="dropdown">
+          <button class="dropdown-btn">{{ vista === 'mes' ? 'Mes' : 'Semana' }}</button>
+          <div class="dropdown-content">
+            <button (click)="filtrarPorMes()">Mes</button>
+            <button (click)="filtrarPorSemana()">Semana</button>
+          </div>
+        </div>
       </div>
-    
-      <!-- Rejilla de días y eventos -->
-      <div class="calendario-semana-grid">
+
+      <!-- Días de la semana -->
+      <div class="calendario-grid calendario-header-dias">
+        <div class="calendario-header-dia">Lun</div>
+        <div class="calendario-header-dia">Mar</div>
+        <div class="calendario-header-dia">Mié</div>
+        <div class="calendario-header-dia">Jue</div>
+        <div class="calendario-header-dia">Vie</div>
+        <div class="calendario-header-dia">Sáb</div>
+        <div class="calendario-header-dia">Dom</div>
+      </div>
+
+      <!-- Calendario Vista Mensual -->
+      <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias">
         <div
           *ngFor="let dia of diasFiltrados"
-          [ngClass]="{'calendario-dia-semana': dia, 'calendario-dia-vacio': !dia}">
-          
-          <!-- Número del día -->
+          [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
           <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
-    
-          <!-- Reuniones por horas -->
-          <div class="calendario-horas">
-            <div *ngFor="let hora of horas" class="hora-slot">
+          <div *ngIf="dia" class="calendario-reuniones">
+            <ng-container *ngFor="let hora of horas">
               <div 
-                *ngIf="dia && obtenerClaseReunion(dia, hora)" 
-                class="reunion-item" 
+                *ngIf="obtenerClaseReunion(dia, hora)" 
+                class="reunion-item"
                 [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}">
-                <span>{{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}</span>
+                {{ obtenerClaseReunion(dia, hora)?.asunto }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendario Vista Semanal -->
+      <div *ngIf="vista === 'semana'" class="semana-vista">
+        <!-- Columna de horas -->
+        <div class="horas-column">
+          <div *ngFor="let hora of horas" class="hora-item">{{ hora }}</div>
+        </div>
+
+        <!-- Rejilla de días y eventos -->
+        <div class="calendario-semana-grid">
+          <div
+            *ngFor="let dia of diasFiltrados"
+            [ngClass]="{'calendario-dia-semana': dia, 'calendario-dia-vacio': !dia}">
+            <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
+            <div class="calendario-horas">
+              <div *ngFor="let hora of horas" class="hora-slot">
+                <div
+                  *ngIf="dia && obtenerClaseReunion(dia, hora)"
+                  class="reunion-item"
+                  [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}">
+                  <span>{{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Botones de navegación de meses -->
-    <button *ngIf="vista === 'mes'" class="boton-navegacion izquierdo" (click)="mesAnterior()">&larr;</button>
-    <button *ngIf="vista === 'mes'" class="boton-navegacion derecho" (click)="mesSiguiente()">&rarr;</button>
-  </div>
 
-  <!-- Leyenda -->
-  <div class="leyenda">
-    <div class="leyenda-item">
-      <span class="leyenda-circulo organizador"></span> Organizador
-    </div>
-    <div class="leyenda-item">
-      <span class="leyenda-circulo asistente"></span> Asistente
-    </div>
-    <div class="leyenda-item">
-      <span class="leyenda-circulo asistida"></span> Asistida
-    </div>
-    <div class="leyenda-item">
-      <span class="leyenda-circulo no-asistida"></span> No asistida
+    <!-- Columna Derecha -->
+    <div class="calendario-columna columna-derecha">
+      <!-- Botón Crear Reunión -->
+      <button class="btn-crear-reunion" (click)="crearReunion0()">+ Crear Reunión</button>
+
+      <!-- Leyenda -->
+      <div class="leyenda">
+        <div class="leyenda-item">
+          <span class="leyenda-circulo organizador"></span> Organizador
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-circulo asistente"></span> Asistente
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-circulo asistida"></span> Asistida
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-circulo no-asistida"></span> No asistida
+        </div>
+      </div>
     </div>
   </div>
 </div>
