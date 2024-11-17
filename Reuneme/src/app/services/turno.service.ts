@@ -19,8 +19,7 @@ export class TurnoService {
         console.log(token);
         console.log(turno);
         const url = `${httpUrl}admins/anadirTurno`;
-        console.log(token);
-        console.log(url);
+        
 
         return this.client.post(url, turno, { headers });
     }
