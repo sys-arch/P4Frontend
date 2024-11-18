@@ -142,7 +142,7 @@ export class ModificarReunionesComponent implements OnInit {
   cargarUsuarios() {
     this.reunionService.getPosiblesAsistentes().subscribe({
       next: (data) => {
-        this.asistentes = data;
+        this.usuarios = data;
         this.filteredUsers = data;
         this.marcarAsistentes();
       },
@@ -155,12 +155,16 @@ export class ModificarReunionesComponent implements OnInit {
   // Marcar a los usuarios que son asistentes de la reunión (compara por ID)
   marcarAsistentes() {
     this.filteredUsers.forEach(user => {
-      // Verificar si el usuario es un asistente de la reunión
       user.isAsistente = this.asistentes.some(asistente => asistente === user.id);
     });
   }
 
   filterUsuarios(): void {
+    if(!this.searchQuery) {
+      this.filteredUsers = [...this.usuarios];
+      return;
+    }
+
     const normalizedSearchQuery = this.normalizeString(this.searchQuery.toLowerCase());
     this.filteredUsers = this.usuarios.filter(usuario =>
       this.normalizeString(usuario.nombre.toLowerCase()).startsWith(normalizedSearchQuery) ||
@@ -185,8 +189,8 @@ export class ModificarReunionesComponent implements OnInit {
   // Validación de la fecha
   validateFecha(): void {
     this.fechaInvalid = false;
-  const reunion = new Date(this.fecha);
-  const fechaActual = new Date();
+    const reunion = new Date(this.fecha);
+    const fechaActual = new Date();
 
   // Comparar fecha y hora si es el mismo día
   if (reunion.toDateString() === fechaActual.toDateString() && this.inicio) {
@@ -251,8 +255,12 @@ export class ModificarReunionesComponent implements OnInit {
       next: () => {
         usuario.isAsistente = !usuario.isAsistente;
         console.log(`Asistente ${usuario.isAsistente ? 'añadido' : 'eliminado'} con éxito.`);
+        alert(`Asistente ${usuario.isAsistente ? 'añadido' : 'eliminado'} con éxito.`);
       },
-      error: (error) => console.error(`Error al ${action} asistente:`, error)
+      error: (error) => {
+        usuario.isAsistente = !usuario.isAsistente;
+        console.error(`Error al ${action} asistente:`, error);
+      }
     });
   }
 

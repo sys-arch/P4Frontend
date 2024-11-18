@@ -229,7 +229,7 @@ html {
   justify-content: flex-start;
   padding: 1vh; /* Ajuste del espacio interno */
   overflow: hidden; /* Asegura que el contenido no desborde */
-}adding: 1.2vh; /* Espaciado interno */
+}
 
 
 .calendario-dia:hover {
