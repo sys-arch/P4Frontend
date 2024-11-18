@@ -6,7 +6,7 @@ import { LoaderComponent } from "../shared/loader/loader.component";
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ReunionService } from '../services/reunion.service';
-import { UserService } from '../services/user.service';
+
 
 @Component({
   selector: 'app-modificar-reuniones',
@@ -45,90 +45,99 @@ export class ModificarReunionesComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly reunionService: ReunionService
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { 
-      reunionId: string ,
-      reunionData: any,
-      organizador: string,
-      fecha: string,
-      inicio: string,
-      fin: string,
-    };
-
-    if(state){
-      const { reunionData, organizador, reunionId, fecha, inicio, fin } = state;
-      this.organizador = organizador || '';
-      this.reunionId = reunionId || '';
-      this.fecha = fecha || '';
-      this.inicio = inicio || '';
-      this.fin = fin || '';
-      if (reunionData) {
-        this.asunto = reunionData.asunto;
-        this.ubicacion = reunionData.ubicacion;
-        this.estado = reunionData.estado;
-        this.observaciones = reunionData.observaciones;
-        this.todoElDia = reunionData.todoElDia || false;
-      }
-    }
-  }
+    private readonly reunionService: ReunionService,
+    private readonly route: ActivatedRoute
+  ) {  }
 
   ngOnInit(): void {
+    const reunionId = this.route.snapshot.paramMap.get('id');
 
-    this.getReunion("1"); // ID de reunión de prueba
+    if (reunionId) {
+      this.cargarDatosReunion(reunionId);
+    } else {
+      console.error('Reunion ID is null');
+    }
+
+    this.cargarUsuarios();
 
   }
 
-  getReunion(reunionId: string): void {
-    this.reunionService.getReunionById(this.reunionId).subscribe({
+  cargarDatosReunion(id: string): void {
+    this.reunionService.getReunionById(id).subscribe({
       next: (data) => {
         this.reunionData = data;
-        console.log('Datos de la reunión:', this.reunionData);
+        this.mapearDatosReunion();
       },
       error: (err) => {
-        console.error('Error al obtener la reunión:', err);
+        console.error('Error al cargar la reunión:', err);
       }
-    }); 
+    });
+  }
+
+  mapearDatosReunion(): void {
+    // Asigna los valores recibidos a las propiedades del componente
+    this.asunto = this.reunionData.asunto;
+    this.fecha = this.formatDate(this.reunionData.inicio);
+    this.todoElDia = this.reunionData.todoElDia || false;
+    this.inicio = this.formatTime(this.reunionData.inicio);
+    this.fin = this.formatTime(this.reunionData.fin);
+    this.ubicacion = this.reunionData.ubicacion;
+    this.observaciones = this.reunionData.observaciones;
+    this.estado = this.reunionData.estado;
+  }
+
+  // Función para formatear la fecha en formato yyyy-MM-dd
+  formatDate(dateTime: string): string {
+    const date = new Date(dateTime);
+      return date.toISOString().split('T')[0]; // yyyy-MM-dd
+  }
+  
+  // Función para formatear la hora en formato HH:mm
+  formatTime(dateTime: string): string {
+    const date = new Date(dateTime);
+    return date.toTimeString().slice(0, 5); // HH:mm
+  }
+
+  validarFormulario(): { valido: boolean, mensaje: string } {
+    if (this.fechaInvalid) {
+      return { valido: false, mensaje: 'Fecha inválida. No puede ser una fecha pasada.' };
+    }
+  
+    if (this.horasInvalid) {
+      return { valido: false, mensaje: 'Horario inválido. La hora de inicio debe ser menor a la hora de fin y estar entre las 8:00 y 19:00.' };
+    }
+  
+    if (!this.asunto || !this.fecha || (!this.todoElDia && (!this.inicio || !this.fin)) || !this.ubicacion) {
+      return { valido: false, mensaje: 'Todos los campos obligatorios deben estar llenos.' };
+    }
+  
+    return { valido: true, mensaje: '' };
   }
 
   onSubmit(): void {
-    if (this.fechaInvalid) {
-      this.errorMessage = 'Fecha inválida. No puede ser una fecha pasada.';
+    const { inicio, fin } = this.combinarFechasYHoras();
+    const { valido, mensaje } = this.validarFormulario();
+    if (!valido) {
+      this.errorMessage = mensaje;
       return;
     }
-
-    if (this.horasInvalid) {
-      this.errorMessage = 'Horario inválido. La hora de inicio debe ser menor a la hora de fin y estar entre las 8:00 y 19:00.';
-      return;
-    }
-
-    // Validar si los campos obligatorios están vacíos
-    if (!this.asunto || !this.fecha || (!this.todoElDia && (!this.inicio || !this.fin)) || !this.ubicacion) {
-      this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
-      return;
-    }
-
+  
     const reunionData = {
       asunto: this.asunto,
-      fecha: this.fecha,
-      inicio: this.inicio,
-      fin: this.fin,
+      inicio: inicio,
+      fin: fin,
       ubicacion: this.ubicacion,
-      observaciones: this.observaciones
+      observaciones: this.observaciones,
+      estado: this.estado
     };
-
-    this.reunionService.updateReunion(this.reunionId, reunionData)
-      .subscribe({
-        next: (response) => {
-          console.log('Reunión actualizada con éxito:', response);
-          this.navigateTo('/calendario');
-        },
-        error: (error) => {
-          console.error('Error al actualizar la reunión:', error);
-        }
-      });
+  
+    console.log('Datos de la reunión a actualizar:', reunionData);
+    this.reunionService.updateReunion(this.reunionData.id, reunionData).subscribe({
+      next: () => this.router.navigate(['/ver-reuniones', this.reunionData.id]),
+      error: (error) => console.error('Error al actualizar la reunión:', error)
+    });
   }
+  
 
   cargarUsuarios() {
     this.reunionService.getPosiblesAsistentes().subscribe({
@@ -152,20 +161,14 @@ export class ModificarReunionesComponent implements OnInit {
   }
 
   filterUsuarios(): void {
-    // Si no hay texto en el campo de búsqueda, simplemente se muestra todos los usuarios
-    if (!this.searchQuery) {
-      this.filteredUsers = [...this.usuarios];  // Muestra todos los usuarios
-    } else {
-      
-      const normalizedSearchQuery = this.normalizeString(this.searchQuery.toLowerCase());
-
-      this.filteredUsers = this.usuarios.filter(usuario =>
-        this.normalizeString(usuario.nombre.toLowerCase()).startsWith(normalizedSearchQuery) ||
-        this.normalizeString(usuario.correo.toLowerCase()).startsWith(normalizedSearchQuery) ||
-        this.normalizeString(usuario.apellido.toLowerCase()).startsWith(normalizedSearchQuery)
-      );
-    }
+    const normalizedSearchQuery = this.normalizeString(this.searchQuery.toLowerCase());
+    this.filteredUsers = this.usuarios.filter(usuario =>
+      this.normalizeString(usuario.nombre.toLowerCase()).startsWith(normalizedSearchQuery) ||
+      this.normalizeString(usuario.email.toLowerCase()).startsWith(normalizedSearchQuery) ||
+      this.normalizeString(usuario.apellido1.toLowerCase()).startsWith(normalizedSearchQuery)
+    );
   }
+  
   // Normalizar el texto para hacer coincidencias sin importar las tildes
   normalizeString(text: string): string {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -182,11 +185,19 @@ export class ModificarReunionesComponent implements OnInit {
   // Validación de la fecha
   validateFecha(): void {
     this.fechaInvalid = false;
-    const reunion = new Date(this.fecha);
-    const fechaActual = new Date();
-    if (reunion < fechaActual) {
+  const reunion = new Date(this.fecha);
+  const fechaActual = new Date();
+
+  // Comparar fecha y hora si es el mismo día
+  if (reunion.toDateString() === fechaActual.toDateString() && this.inicio) {
+    const horaActual = fechaActual.getHours() * 60 + fechaActual.getMinutes();
+    const horaInicio = parseInt(this.inicio.split(':')[0]) * 60 + parseInt(this.inicio.split(':')[1]);
+    if (horaInicio < horaActual) {
       this.fechaInvalid = true;
     }
+  } else if (reunion < fechaActual) {
+    this.fechaInvalid = true;
+  }
   }
 
   // Validación de horarios
@@ -195,14 +206,33 @@ export class ModificarReunionesComponent implements OnInit {
     if (this.inicio && this.fin) {
       const horaDesde = parseInt(this.inicio.split(':')[0]);
       const horaHasta = parseInt(this.fin.split(':')[0]);
-      if (horaDesde >= horaHasta) {
+  
+      if (horaDesde >= horaHasta || horaDesde < 8 || horaHasta > 19) {
         this.horasInvalid = true;
       }
     }
   }
 
+  // Funciones que generan el formato (yyyy-MM-dd HH:mm)
+  combinarFechasYHoras(): { inicio: string, fin: string } {
+  const inicioFecha = this.combineFechaHora(this.fecha, this.inicio);
+  const finFecha = this.combineFechaHora(this.fecha, this.fin);
+
+  return { inicio: inicioFecha, fin: finFecha };
+  }
+
+  combineFechaHora(fecha: string, hora: string): string {
+    if (!fecha || !hora) {
+      throw new Error("La fecha o la hora no pueden estar vacías.");
+    }
+    return `${fecha}T${hora}:00`; // Formato ISO 8601
+  }
+
   onToggleTodoElDia(): void {
     if (this.todoElDia) {
+      this.inicio = '08:00';
+      this.fin = '19:00';
+    } else {
       this.inicio = '';
       this.fin = '';
     }
@@ -211,34 +241,20 @@ export class ModificarReunionesComponent implements OnInit {
   // Añadir o eliminar un asistente
   toggleAsistente(usuario: any): void {
     const action = usuario.isAsistente ? 'añadir' : 'eliminar';
-    const confirmMessage = `¿Quieres ${action} este participante?`;
-
-    if (confirm(confirmMessage)) {
-      if (usuario.isAsistente) {
-        this.reunionService.addAsistente(this.reunionId, usuario.correo).subscribe({
-          next: (response) => {
-            console.log('Asistente añadido con éxito:', response);
-            this.asistentes.push(usuario.correo);
-          },
-          error: (error) => {
-            console.error('Error al añadir al asistente:', error);
-          }
-        });
-      } else {
-        this.reunionService.deleteAsistente(this.reunionId, usuario.correo).subscribe({
-          next: (response) => {
-            console.log('Asistente eliminado con éxito:', response);
-            this.asistentes = this.asistentes.filter(email => email !== usuario.correo);
-          },
-          error: (error) => {
-            console.error('Error al eliminar al asistente:', error);
-          }
-        });
-      }
-    } else {
-      usuario.isAsistente = !usuario.isAsistente;
-    }
-  } 
+    if (!confirm(`¿Quieres ${action} este participante?`)) return;
+  
+    const observable = usuario.isAsistente 
+      ? this.reunionService.addAsistente(this.reunionData.id, usuario.email)
+      : this.reunionService.deleteAsistente(this.reunionData.id, usuario.email);
+  
+    observable.subscribe({
+      next: () => {
+        usuario.isAsistente = !usuario.isAsistente;
+        console.log(`Asistente ${usuario.isAsistente ? 'añadido' : 'eliminado'} con éxito.`);
+      },
+      error: (error) => console.error(`Error al ${action} asistente:`, error)
+    });
+  }
 
   // Navegar a otra ruta
   navigateTo(route: string): void {

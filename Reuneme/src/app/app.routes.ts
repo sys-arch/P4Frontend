@@ -28,9 +28,9 @@ export const routes: Routes = [
     { path: 'reset-contrasena', component: ResetContrasenaComponent },
     { path: 'edicion-usuario', component: EdicionUsuarioComponent },
     { path: 'crear-reuniones', component: CrearReunionesComponent },
-    { path: 'modificar-reuniones', component: ModificarReunionesComponent },
-    { path: 'ver-reuniones', component: VerReunionesComponent },
     { path: 'buzon-reuniones', component: BuzonReunionesComponent},
+    { path: 'modificar-reuniones/:id', component: ModificarReunionesComponent },
+    { path: 'ver-reuniones/:id', component: VerReunionesComponent },
     { path: '**', redirectTo: '' }
     
 ];
