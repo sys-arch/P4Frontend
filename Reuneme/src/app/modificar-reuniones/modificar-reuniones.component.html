@@ -2,7 +2,7 @@
 
 <div class="reunion-container">
 	<div class="reunion-box">
-    <h2>Modificar Reunión</h2>
+    <h2>Editar información de la Reunión</h2>
 		<form #reunionForm="ngForm" (ngSubmit)="onSubmit()">
 			<div class="form-column">
 				<!-- Asunto de la reunión -->
@@ -56,7 +56,7 @@
 					<div class="form-grid">
 						<!-- Hora Desde -->
 						<div class="textbox">
-							<input type="time" id="inicio" [(ngModel)]="inicio" name="inicio" required [disabled]="todoElDia" />
+							<input type="time" id="inicio" [(ngModel)]="inicio" name="inicio" [value]="true" required [disabled]="todoElDia" />
 							<label for="inicio">Desde</label>
 						</div>
 						<!-- Hora Hasta -->
@@ -100,7 +100,7 @@
 								[(ngModel)]="usuario.isAsistente" 
 								name="asistente{{usuario.nombre}}" 
 								(change)="toggleAsistente(usuario)" />
-							{{ usuario.nombre }} {{usuario.apellido}} ({{ usuario.correo }})
+							{{ usuario.nombre }} {{usuario.apellido1}} {{usuario.apellido2}} ({{ usuario.email }})
 						</label>
 					</div>
 				</div>

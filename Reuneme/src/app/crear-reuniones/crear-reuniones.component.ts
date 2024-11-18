@@ -30,7 +30,6 @@ export class CrearReunionesComponent implements OnInit {
   fechaInvalid = false;
   horasInvalid = false;
   errorMessage: string = '';
-  token: string = '';
 
   constructor(
     private readonly router: Router,
@@ -39,12 +38,7 @@ export class CrearReunionesComponent implements OnInit {
 
   ) {}
   
-  ngOnInit(): void {
-    const fechaSeleccionada = this.reunionService.getFechaSeleccionada();
-    if (fechaSeleccionada) {
-      this.fecha = fechaSeleccionada
-    }
-  }
+  ngOnInit(): void { }
 
   // Validación de la fecha de la reunión debe ser mayor o igual a la fecha actual
   validateFecha(): void {
@@ -117,13 +111,12 @@ export class CrearReunionesComponent implements OnInit {
       return; 
     }
     console.log("Organizador:", this.organizador);
-
     this.reunionService.crearReunion(this.organizador,this.asunto, inicio,
       fin, this.ubicacion, this.observaciones, this.estado)
       .subscribe({
         next: (response) => {
           console.log('Reunión creada con éxito:', response);
-          this.navigateTo('/reuniones');  
+          this.router.navigate(['/ver-reuniones', response.id]);
         },
         error: (error) => {
           console.error('Error al crear la reunión:', error);
