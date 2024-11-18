@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
+import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BuzonReunionesComponent],
   templateUrl: './calendario.component.html',
   styleUrls: ['./calendario.component.css']
 })
