@@ -95,17 +95,17 @@ private reunionesMock = [
 
   updateReunion(id: any, reunionData: any): Observable<any> {
     const headers = this.getHeaders();
-    return this.client.put(`${httpUrl}empleado/reunion/${id}/modificar`, reunionData, { headers });
+    return this.client.put(`${httpUrl}empleados/reunion/${id}/modificar`, reunionData, { headers });
   }
 
   cerrarReunion(idReunion: any): Observable<any> {
     const headers = this.getHeaders();
-    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { headers });
+    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { },{ headers });
   }
 
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {
     const headers = this.getHeaders();
-    return this.client.post(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
+    return this.client.post(`${httpUrl}empleados/reunion/${idReunion}/asistente/${idUsuario}`, {},{ headers });
   }
 
   deleteAsistente(idReunion: any, idUsuario: any): Observable<any> {
@@ -115,7 +115,7 @@ private reunionesMock = [
 
   getPosiblesAsistentes(): Observable<any[]> {
     const headers = this.getHeaders();
-    return this.client.get<any[]>(`${httpUrl}empleado/reunion/asistentes`, { headers });
+    return this.client.get<[]>(`${httpUrl}empleados/reunion/asistentes`, { headers });
   }
 
   setFechaSeleccionada(fecha: string): void {
