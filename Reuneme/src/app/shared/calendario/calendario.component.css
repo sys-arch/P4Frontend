@@ -234,11 +234,11 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
   padding: 1vh;
   overflow: hidden; /* Evita desbordes */
   border-radius: 10px; /* Añade bordes redondeados */
 
+}
 
 
 .calendario-dia:hover {
