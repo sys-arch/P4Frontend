@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReunionService } from '../services/reunion.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
@@ -34,13 +34,18 @@ export class VerReunionesComponent implements OnInit{
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly reunionService: ReunionService
   ) {}
 
   ngOnInit(): void {
-    console.log('ngOnInit ejecutado'); // Confirma que el método se llama
-    this.token = localStorage.getItem('token') || '';
-    this.getReunion('1'); // ID de reunión de prueba
+    
+    const reunionId = this.route.snapshot.paramMap.get('id');
+    if (reunionId) {
+      this.getReunion(reunionId);
+    } else {
+      console.error('ID de reunión no proporcionado');
+    }
   }
 
 
@@ -48,8 +53,6 @@ getReunion (reunionId: string): void {
   this.reunionService.getReunionById(reunionId).subscribe({
     next: (response) => {
       console.log('Reunión obtenida:', response);
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('email', this.organizador);
       this.reunionData = response; // Asignar todos los datos obtenidos
       this.organizador = response.organizador?.email || '';
       this.fecha = this.formatDate(response.inicio);
@@ -64,16 +67,8 @@ getReunion (reunionId: string): void {
 }
 
 editReunion(): void {
-  this.router.navigate([`/modificar-reuniones`], {
-    state : {
-      reunionData: this.reunionData,
-      organizador: this.organizador,
-      reunionId: this.reunionId,
-      fecha: this.fecha,
-      inicio: this.inicio,
-      fin: this.fin
-    }
-  });
+  console.log('Reunión a modificar:', this.reunionData);
+  this.router.navigate(['/modificar-reuniones', this.reunionData.id]);
 }
 
 // Función para formatear la fecha en formato yyyy-MM-dd
@@ -89,7 +84,7 @@ formatTime(dateTime: string): string {
 }
 
 cerrarReunion(): void {
-  this.reunionService.cerrarReunion(this.reunionId).subscribe({
+  this.reunionService.cerrarReunion(this.reunionData.id).subscribe({
     next: (response) => {
       console.log('Reunión cerrada exitosamente:', response);
       alert('La reunión ha sido cerrada');
