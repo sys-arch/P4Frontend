@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
@@ -20,7 +20,7 @@ export class CalendarioComponent implements OnInit {
   añoActual: number = new Date().getFullYear();
   semanaActual: number = 0;
   horas: string[] = [
-    '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', 
+    '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00',
     '15:00', '16:00', '17:00', '18:00'
   ];
   diaSeleccionado: Date | null = null;
@@ -29,13 +29,30 @@ export class CalendarioComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly reunionService: ReunionService
+    private readonly reunionService: ReunionService,
+    private readonly renderer: Renderer2
   )  { }
 
   ngOnInit() {
+    this.vista = 'semana'; // Configura la vista inicial como semanal
+    this.calcularSemanaActual(); // Calcula la semana actual
     this.generarDiasDelAnio();
     this.aplicarFiltro();
     this.cargarReunionesMock(); // Llama al método para cargar los datos mock
+  }
+  
+  calcularSemanaActual() {
+    const hoy = new Date();
+    this.añoActual = hoy.getFullYear();
+    this.mesActual = hoy.getMonth();
+  
+    // Calcular el número de la semana actual
+    const primerDiaMes = new Date(this.añoActual, this.mesActual, 1);
+    const diaInicioSemana = primerDiaMes.getDay() === 0 ? 6 : primerDiaMes.getDay() - 1;
+  
+    const diaDelMes = hoy.getDate();
+    const diasDesdeInicio = diaDelMes + diaInicioSemana - 1; // Días desde el inicio del mes
+    this.semanaActual = Math.floor(diasDesdeInicio / 7); // Calcula la semana actual
   }
   setVista(vista: 'mes' | 'semana') {
     this.vista = vista;
@@ -69,15 +86,42 @@ export class CalendarioComponent implements OnInit {
         asunto: reunion.asunto
       }));
   }
+  calcularSemanasDelMes(mes: number, año: number): number {
+    const primerDia = new Date(año, mes, 1);
+    const ultimoDia = new Date(año, mes + 1, 0);
+
+    const diaDeLaSemanaInicio = primerDia.getDay() === 0 ? 6 : primerDia.getDay() - 1;
+    const diaDeLaSemanaFin = ultimoDia.getDay() === 0 ? 6 : ultimoDia.getDay() - 1;
+
+    // Total días del mes + días de la semana antes y después del mes
+    const totalDias = ultimoDia.getDate() + diaDeLaSemanaInicio + (6 - diaDeLaSemanaFin);
+
+    // Dividir por 7 para obtener semanas completas
+    return Math.ceil(totalDias / 7);
+  }
+
   
-  
-  
+
+  semanasDelMes: number = 0;
+
   filtrarPorMes() {
     this.vista = 'mes';
     this.diasFiltrados = this.calcularDiasDelMes(this.mesActual, this.añoActual);
+
+    // Calcular cuántas semanas tiene el mes actual
+    this.semanasDelMes = this.calcularSemanasDelMes(this.mesActual, this.añoActual);
+
+    // Actualizar la variable CSS para ajustar la altura de las filas
+    this.renderer.setStyle(
+      document.documentElement,
+      '--semanas-del-mes',
+      this.semanasDelMes.toString()
+    );
+
     this.nombreMes = `${this.obtenerNombreMes(this.mesActual)} ${this.añoActual}`;
-    this.semanaActual = 0; 
+    this.semanaActual = 0;
   }
+
 
   calcularDiasDelMes(mes: number, año: number): (Date | null)[] {
     const primerDiaMes = new Date(año, mes, 1);
@@ -93,22 +137,48 @@ export class CalendarioComponent implements OnInit {
 
   filtrarPorSemana() {
     this.vista = 'semana';
-    const primerDiaSemana = new Date(this.añoActual, this.mesActual, 1 + this.semanaActual * 7);
-    const diaInicioSemana = primerDiaSemana.getDay() === 0 ? 6 : primerDiaSemana.getDay() - 1;
-    
-    primerDiaSemana.setDate(primerDiaSemana.getDate() - diaInicioSemana);
-
-    // Crear un array para los 7 días de la semana
+  
+    // Determinar el lunes de la semana actual
+    const hoy = new Date(this.añoActual, this.mesActual, 1 + this.semanaActual * 7);
+    const diaInicioSemana = hoy.getDay() === 0 ? 6 : hoy.getDay() - 1;
+    const primerDiaSemana = new Date(hoy);
+    primerDiaSemana.setDate(hoy.getDate() - diaInicioSemana);
+  
+    // Crear un array de 7 días consecutivos
     this.diasFiltrados = Array.from({ length: 7 }, (_, i) => {
       const dia = new Date(primerDiaSemana);
       dia.setDate(primerDiaSemana.getDate() + i);
-      // Filtra los días que no son del mes actual
-      return dia.getMonth() === this.mesActual ? dia : null;
+      return dia; // Incluir todos los días, incluso de diferentes meses
     });
-
-    this.nombreMes = `${this.obtenerNumeroSemana()} semana de ${this.obtenerNombreMes(this.mesActual)} ${this.añoActual}`;
+  
+    // Validar primer y último día
+    const primerDia = this.diasFiltrados[0] ?? new Date();
+    const ultimoDia = this.diasFiltrados[this.diasFiltrados.length - 1] ?? new Date();
+  
+    // Si los días cruzan meses, asegúrate de no duplicar intervalos
+    this.diasFiltrados = this.diasFiltrados.filter(
+      (dia) =>
+        dia !== null && // Validar que dia no sea null
+        (dia.getMonth() === primerDia.getMonth() || dia.getMonth() === ultimoDia.getMonth())
+    );
+  
+    // Construir el nombre del intervalo
+    const diaInicio = primerDia.getDate();
+    const mesInicio = this.obtenerNombreMes(primerDia.getMonth());
+    const diaFin = ultimoDia.getDate();
+    const mesFin = this.obtenerNombreMes(ultimoDia.getMonth());
+  
+    if (primerDia.getMonth() !== ultimoDia.getMonth()) {
+      // Caso en que la semana cruza a otro mes
+      this.nombreMes = `${diaInicio} de ${mesInicio} - ${diaFin} de ${mesFin}`;
+    } else {
+      // Caso en que la semana está dentro del mismo mes
+      this.nombreMes = `${diaInicio} - ${diaFin} de ${mesInicio}`;
+    }
+  
+    console.log(`Título actualizado: ${this.nombreMes}`); // Verificar en la consola
   }
-
+  
   obtenerNombreMes(mesIndex: number): string {
     const nombresMeses = [
       'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -188,6 +258,9 @@ export class CalendarioComponent implements OnInit {
   cargarReunionesMock() {
     this.reuniones = this.reunionService.obtenerReunionesMock();
   }
+
+
+  
   //esto no 
   
   
@@ -202,9 +275,7 @@ export class CalendarioComponent implements OnInit {
   
     let clase = '';
     if (reunion.creador === 'organizador') clase = 'reunion-organizador';
-    else if (reunion.asistencia === 'asistida') clase = 'reunion-asistida';
-    else if (reunion.asistencia === 'no-asistida') clase = 'reunion-no-asistida';
-    else if (reunion.asistente.includes('USUARIO_ACTUAL')) clase = 'reunion-asistente';
+    else clase = 'reunion-asistente';
   
     return { clase, asunto: reunion.asunto };
   }
@@ -215,10 +286,9 @@ export class CalendarioComponent implements OnInit {
       return 'transparent'; // Devuelve transparente si no hay clase
     }
     const colores: Record<string, string> = {
-      'reunion-organizador': 'orange',
-      'reunion-asistida': 'green',
-      'reunion-no-asistida': 'gray',
-      'reunion-asistente': 'blue',
+      'reunion-organizador': '#ef6c00',
+    
+      'reunion-asistente': '#4285f4',
     };
     return colores[clase] || 'transparent';
   }
