@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<div class="reunion-container">
+    <div class="reunion-box">
+        <h2>Detalles de la Reunión</h2>
+        <div class="form-column">
+				<div class="form-grid">
+					<!-- Asunto de la reunión -->
+					<div *ngIf="reunionData">
+						<div class="textbox">
+							<label for="asunto">Asunto de la reunión</label>
+							<p id="asunto">{{ reunionData?.asunto }}</p>
+						</div>
+					</div>
+				<!-- Organizador (email) -->
+				<div class="textbox">
+					<label for="organizador">Organizador de la reunión</label>
+					<p id="organizador">{{ organizador }}</p>
+				</div>
+			</div>
+			<div class="form-grid">
+				<!-- Fecha y hora de inicio -->
+				<div class="textbox">
+					<label for="inicio">Inicio estimado</label>
+					<p id="inicio">{{ reunionData?.inicio | date: 'dd/MM/yyyy, HH:mm' }}</p>
+				</div>
+				<!-- Fecha y hora de fin -->
+				<div class="textbox">
+					<label for="fin">Finalización estimada</label>
+					<p id="fin">{{ reunionData?.fin | date: 'dd/MM/yyyy, HH:mm' }}</p>
+				</div>
+			</div>
+			<div class="form-grid">
+				<!-- Ubicación -->
+				<div class="textbox">
+					<label for="ubicacion">Ubicación</label>
+					<p id="ubicacion">{{ reunionData?.ubicacion }}</p>
+				</div>
+				<!-- Estado -->
+				<div class="textbox">
+					<label for="estado">Estado de la reunión</label>
+					<p id="estado">{{ reunionData?.estado }}</p>
+				</div>
+			</div>
+		</div>
+            <!-- Observaciones -->
+            <div class="textbox" id="observaciones-box">
+                <label for="observaciones">Observaciones</label>
+                <p id="observaciones">{{ reunionData?.observaciones }}</p>
+            </div>
+			<!-- Participantes -->
+			<div class="textbox" id="participantes-box">
+				<label for="participantes">Asistentes a la reunión</label>
+				<ul id="participantes">
+					<li *ngFor="let participante of reunionData.participantes">{{ participante }}</li>
+				</ul>
+			</div>
+    </div>
+	<div class="actions">
+		<button class="btn" (click)="navigateTo('/modificar-reuniones')">Editar</button>
+		<button class="btn" (click)="cerrarReunion()">Eliminar</button>
+	</div>
+    
+    <div class="back-button-container">
+        <button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
+    </div>
+
+    <app-loader *ngIf="isLoading"></app-loader>
+    <app-footer></app-footer>
+</div>

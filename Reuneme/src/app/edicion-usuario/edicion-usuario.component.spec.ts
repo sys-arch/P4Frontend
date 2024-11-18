@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EdicionUsuarioComponent } from './edicion-usuario.component';
 import { UserService } from '../services/user.service';
 import { of } from 'rxjs';
@@ -9,20 +9,27 @@ import { of } from 'rxjs';
 describe('EdicionUsuarioComponent', () => {
   let component: EdicionUsuarioComponent;
   let fixture: ComponentFixture<EdicionUsuarioComponent>;
-  let httpMock: HttpTestingController;
+  let httpMock: HttpTestingController | undefined;
   let userService: UserService;
   let routerSpy = { navigate: jasmine.createSpy('navigate') };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ // Cambiado a imports en lugar de declarations
+      imports: [
         ReactiveFormsModule, 
         HttpClientTestingModule,
-        EdicionUsuarioComponent // Mueve el componente standalone aquí
+        EdicionUsuarioComponent // Importa el componente como standalone aquí
       ],
       providers: [
         UserService,
-        { provide: Router, useValue: routerSpy }
+        { provide: Router, useValue: routerSpy },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
+            params: of({ id: 'mockId' }),
+          },
+        }
       ]
     }).compileComponents();
   });
@@ -36,7 +43,10 @@ describe('EdicionUsuarioComponent', () => {
   });
 
   afterEach(() => {
-    httpMock.verify();
+    // Verifica si httpMock está definido antes de llamar a verify()
+    if (httpMock) {
+      httpMock.verify();
+    }
   });
 
   it('debería crear el componente', () => {
@@ -47,12 +57,10 @@ describe('EdicionUsuarioComponent', () => {
     component.isAdmin = true;
     component.initializeForm();
     expect(component.userForm.contains('nombre')).toBeTruthy();
-    expect(component.userForm.contains('apellidos')).toBeTruthy();
+    expect(component.userForm.contains('apellido1')).toBeTruthy();
+    expect(component.userForm.contains('apellido2')).toBeTruthy();
     expect(component.userForm.contains('correo')).toBeTruthy();
-    expect(component.userForm.contains('departamento')).toBeTruthy();
     expect(component.userForm.contains('centroTrabajo')).toBeTruthy();
-    expect(component.userForm.contains('alta')).toBeTruthy();
-    expect(component.userForm.contains('perfil')).toBeTruthy();
     expect(component.userForm.contains('password')).toBeTruthy();
   });
 
@@ -60,24 +68,23 @@ describe('EdicionUsuarioComponent', () => {
     const mockEmail = 'usuario@ejemplo.com';
     const mockData = {
       nombre: 'Nuevo Nombre',
-      apellidos: 'Nuevos Apellidos',
+      apellido1: 'Primer Apellido',
+      apellido2: 'Segundo Apellido',
       correo: 'nuevo@ejemplo.com',
-      departamento: 'IT',
       centroTrabajo: 'Madrid',
-      alta: '2021-01-01',
-      perfil: 'Admin',
+      interno: false,
       password: 'nuevaPassword'
     };
-    component.userEmail = mockEmail;
+    component.loggedUserEmail = mockEmail;
     component.isAdmin = true;
     component.token = 'fake-token';
     component.initializeForm();
     component.userForm.setValue(mockData);
 
-    spyOn(userService, 'updateUserByEmail').and.returnValue(of({ message: 'Usuario actualizado exitosamente' }));
+    spyOn(userService, 'updateAdmin').and.returnValue(of({ message: 'Usuario actualizado exitosamente' }));
     component.onSubmit();
 
-    expect(userService.updateUserByEmail).toHaveBeenCalledWith(mockEmail, mockData, 'fake-token');
+    expect(userService.updateAdmin).toHaveBeenCalledWith(jasmine.objectContaining(mockData));
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/ventana-principal']);
   });
 
@@ -86,7 +93,7 @@ describe('EdicionUsuarioComponent', () => {
     component.initializeForm();
     expect(component.userForm.contains('password')).toBeTruthy();
     expect(component.userForm.contains('nombre')).toBeFalsy();
-    expect(component.userForm.contains('apellidos')).toBeFalsy();
+    expect(component.userForm.contains('apellido1')).toBeFalsy();
+    expect(component.userForm.contains('apellido2')).toBeFalsy();
   });
 });
-

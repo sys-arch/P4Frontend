@@ -12,9 +12,9 @@ export class UserService {
     // Método login con headers y URL base
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        return this.client.put(`${httpUrl}users/login`, user, { headers, responseType: 'text' });
+        return this.client.put(`${httpUrl}users/login`, user, { headers });
     }
+
 
     // Método register con headers
     register(
@@ -62,7 +62,11 @@ export class UserService {
         password2: string,
         interno: boolean
     ): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({ 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
         const info = {
             nombre: nombre,
             apellido1: apellido1,
@@ -73,8 +77,8 @@ export class UserService {
             pwd2: password2,
             interno: interno
         };
-
-        return this.client.post(`${httpUrl}admins/register`, info, { headers, responseType: 'text' });
+        console.log("Token enviado en Authorization:", headers.get('Authorization'));
+        return this.client.post(`${httpUrl}admins/register`, info, { headers });
     }
     forgotPassword(email: string): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -97,96 +101,133 @@ export class UserService {
         return this.client.post(`${httpUrl}pwd/reset`, body, { headers, responseType: 'text' });
     }
 
-    // Método para actualizar un administrador existente
-    updateAdmin(adminData: any, token: string): Observable<any> {
+        // Método para actualizar un administrador existente
+    updateAdmin(adminData: any): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
         });
         return this.client.put(`${httpUrl}admins/modificarAdministrador`, adminData, { headers });
     }
 
     // Método para actualizar un empleado existente
-    updateEmpleado(empleadoData: any, token: string): Observable<any> {
+    updateEmpleado(empleadoData: any): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+
         });
         return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });
     }
 
+
     verDatosEmpleado(email: string): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
-        // Pasar el email como parámetro en la URL
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        // Imprimir el valor del token directamente antes de la solicitud
         return this.client.get(`${httpUrl}empleados/verDatos?email=${email}`, { headers });
     }
-    
+
     verDatosAdmin(email: string): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
         return this.client.get(`${httpUrl}admins/verDatos?email=${email}`, { headers });
     }
-    
+
 
     // Método para obtener todos los emails (solo para administradores) (GET /users/emails)
     getAllUsers(token: string): Observable<any[]> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}` // Agregamos "Bearer " antes del token
         });
         return this.client.get<any[]>(`${httpUrl}admins/all`, { headers });
     }
+    
+
     deleteUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         const body = { email: email }; // Email en el cuerpo de la solicitud en formato JSON
         return this.client.delete(`${httpUrl}admins/borrarEmpleado`, { headers, body });
     }
-    
+
     blockUserByEmail(email: string, bloquear: boolean, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
-        
+
         // Agregamos los parámetros email y bloquear directamente en la URL
         return this.client.put(`${httpUrl}admins/cambiarEstadoBloqueo?email=${email}&bloquear=${bloquear}`, null, { headers });
     }
     verifyUserByEmail(email: string, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         const body = { email: email }; // JSON con el email
-    
+
         return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
-    getAusencias(token: string): Observable<any[]> {
+    getAusencias(): Observable<any[]> {
+        const token = localStorage.getItem('token');
+        console.log('Token en getAusencias:', token);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.get<any[]>(`${httpUrl}ausencias`, { headers });
     }
+    
 
-    // Añadir una nueva ausencia
+    // Añadir una nueva ausencia con token en Authorization
     addAusencia(ausencia: any, token: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
         return this.client.post(`${httpUrl}ausencias`, ausencia, { headers });
     }
 
-    // Eliminar una ausencia por ID
+    // Eliminar una ausencia por ID con token en Authorization
     deleteAusencia(id: number, token: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
+    }
+
+    // Obtener el rol de un usuario por email
+    getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': token
         });
-        return this.client.delete(`${httpUrl}ausencias/${id}`, { headers });
+
+        return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
+    }
+
+    desactivar2FA(email: string, secretKey: string): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+        const body = {
+            email: email,
+            clavesecreta: secretKey,
+            twoFA: false
+        };
+
+        // Llamada al backend para desactivar el 2FA
+        return this.client.put(`${httpUrl}users/desactivar-2fa`, body, { headers });
     }
 }

@@ -1,0 +1,439 @@
+.contenido {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.dropdown-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-btn:hover {
+  background-color: #e5e5e5;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+  right: 0;
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content button {
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-content button:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+.calendario-contenedor {
+  position: fixed;
+  top: 6vh;
+  bottom: 6vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%; /* Aumenta el ancho total del contenedor */
+  max-width: 1600px; /* Aumenta el límite de ancho máximo */
+  background-color: #2e2e2e;
+  border-radius: 1.2vh;
+  box-shadow: 0 1.2vh 2.4vh rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  height: calc(100vh - 12vh); /* Mantiene el alto ajustado */
+}
+
+
+.calendario-columna {
+  padding: 20px;
+}
+
+.columna-izquierda {
+  flex: 5; /* Aumentamos el espacio del calendario */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.columna-derecha {
+  flex: 0.75; /* Reducimos más la columna derecha */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-left: 1px solid #444; /* Separador visual */
+  padding: 15px; /* Margen reducido */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden; /* Evita scroll global */
+}
+
+html {
+  height: 100%;
+}
+
+.calendario-nombre-mes {
+  font-size: 3.2vh;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0.2vh 0.2vh 0.5vh rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+
+.cambio-mes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.boton-cambio {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.boton-cambio:hover {
+  color: #000;
+}
+.calendario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: relative;
+}
+
+.calendario-header-dia {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2vh;
+  color: #e0e0e0;
+  padding: 0.5vh 0; /* Ajusta el espaciado interno */
+  text-shadow: 0.1vh 0.1vh 0.3vh rgba(0, 0, 0, 0.5);
+}
+
+.boton-navegacion {
+  background-color: #5fc67d;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.6vh;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 0 10px;
+}
+
+.boton-navegacion:hover {
+  background-color: #45b06a;
+  transform: scale(1.05);
+}
+
+.mes-anterior {
+  position: relative;
+  margin-right: auto; /* Alineado a la izquierda */
+}
+
+.mes-siguiente {
+  position: relative;
+  margin-left: auto; /* Alineado a la derecha */
+}
+
+.calendario-filtros {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3vh;
+}
+
+.calendario-filtros button {
+  margin: 0 2vh;
+  padding: 2vh 3vw;
+  cursor: pointer;
+  background-color: #5fc67d;
+  color: #fff;
+  border: none;
+  border-radius: 1.2vh;
+  font-size: 2.2vh;
+  font-weight: bold;
+  box-shadow: 0 0.8vh 1.5vh rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.calendario-filtros button:hover {
+  background-color: #45b06a;
+  transform: scale(1.0);
+}
+
+.calendario-filtros button:active {
+  transform: scale(0.95);
+}
+
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.8vh;
+}
+
+.calendario-dia {
+  position: relative;
+  border: 1px solid #444;
+  background-color: #3d3d3d;
+  color: #f1f1f1;
+  height: 13vh; /* Mantiene la misma altura */
+  border-radius: 0.7vw;
+  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
+  text-align: left;
+  width: 100%;
+  aspect-ratio: 1; /* Mantiene la forma cuadrada */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1vh; /* Ajuste del espacio interno */
+  overflow: hidden; /* Asegura que el contenido no desborde */
+}adding: 1.2vh; /* Espaciado interno */
+
+
+.calendario-dia:hover {
+  background-color: #5a5a5a;
+  transform: scale(1.05); /* Pequeño zoom al pasar el mouse */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.calendario-reuniones {
+  flex: 1; /* Permite a las reuniones ocupar el espacio disponible */
+  overflow-y: auto; /* Activa el scroll vertical si es necesario */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vh; /* Espaciado entre reuniones */
+  padding: 0.5vh;
+}
+
+.reunion-item {
+  flex: none; /* Los elementos no comparten el espacio, usan un tamaño fijo */
+  text-align: center;
+  color: #fff;
+  background-color: #444;
+  border-radius: 8px;
+  font-size: 1.6vh;
+  padding: 0.5vh;
+  margin-bottom: 0.3vh; /* Espaciado entre elementos */
+  box-shadow: 0 0.3vh 0.6vh rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reunion-item:hover {
+  background-color: #555;
+  transform: scale(1.05);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+
+
+.calendario-dia-label {
+  font-size: 2vh;
+  color: #b3b3b3;
+}
+
+.semana-vista {
+  display: flex;
+}
+
+.horas-column {
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 30px;
+  padding-right: 15px;
+  color: #b3b3b3;
+  font-size: 1.8vh;
+}
+.calendario-dia-vacio .hora-slot {
+  display: none;
+}
+
+.hora-item {
+  height: 27px;
+  width: auto ;
+  text-align: right;
+  padding-right: 10px;
+  margin-bottom: 15px;
+}
+
+.calendario-semana-grid {
+  flex: 3;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1vh;
+}
+
+.calendario-dia-semana {
+  border: 1px solid #444;
+  background-color: #3d3d3d;
+  color: #f1f1f1;
+  border-radius: 0.7vw;
+  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendario-dia-semana:hover {
+  background-color: #5a5a5a;
+  transform: scale(1.05);
+}
+
+.calendario-horas {
+  display: flex;
+  flex-direction: column;
+}
+
+.hora-evento {
+  flex: 1;
+  border-top: 1px solid #555;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.hora-evento:hover {
+  background-color: #4a4a4a;
+}
+
+.hora-slot {
+  height: 45px;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+.leyenda {
+  background-color: #3c3c3c;
+  padding: 10px; /* Ajusta el padding */
+  border-radius: 8px;
+  box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+  font-size: 1.4vh;
+  width: 100%; /* Se adapta al nuevo ancho reducido */
+}
+
+.leyenda {
+  position: absolute;
+  bottom: 20px; /* Más separación del borde inferior */
+  right: 20px; /* Más separación del borde derecho */
+  background-color: #3c3c3c;
+  padding: 15px; /* Aumenta el padding para mayor espacio interno */
+  border-radius: 10px; /* Esquinas más suaves */
+  box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+  font-size: 1.6vh; /* Texto más grande */
+  width: 150px; /* Incrementa el ancho */
+  z-index: 5; /* Asegura que está encima de otros elementos */
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Espaciado mayor entre elementos */
+}
+
+.leyenda-item:last-child {
+  margin-bottom: 0; /* Sin margen en el último */
+}
+
+.leyenda-circulo {
+  width: 20px; /* Círculos más grandes */
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+
+.organizador {
+  background-color: orange;
+}
+
+.asistente {
+  background-color: blue;
+}
+
+.asistida {
+  background-color: green;
+}
+
+.no-asistida {
+  background-color: gray;
+}
+.btn-crear-reunion {
+  background-color: #2e86de; /* Azul suave */
+  color: #ffffff;
+  border: none; /* Sin borde */
+  border-radius: 8px; /* Esquinas redondeadas */
+  padding: 12px 25px; /* Más grande para destacar */
+  font-size: 1.6vh; /* Texto proporcional */
+  font-weight: 600; /* Negrita ligera */
+  cursor: pointer;
+  box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.2); /* Sombra más sutil */
+  transition: all 0.3s ease-in-out; /* Transiciones suaves */
+  margin-top: 20px;
+}
+
+.btn-crear-reunion:hover {
+  background-color: #1e5aa1; /* Azul más oscuro */
+  transform: scale(1.05); /* Pequeña expansión */
+}
+
+.btn-crear-reunion:active {
+  transform: scale(0.95); /* Contracción al clic */
+  box-shadow: 0 0.2vh 0.4vh rgba(0, 0, 0, 0.3); /* Sombra reducida */
+}
+
+
+.reunion-circulo {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}

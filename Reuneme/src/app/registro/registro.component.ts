@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../loader/loader.component";
+import { LoaderComponent } from "../shared/loader/loader.component";
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
@@ -126,21 +126,6 @@ export class RegistroComponent {
     // const hashedPassword = this.password1; // Aquí sería el cifrado real.
 
     let formattedDate = this.fechaAlta ? this.fechaAlta.toString().split('T')[0] : '';
-
-    console.log({
-    email: this.email,
-    pwd1: this.password1,
-    pwd2: this.password2,
-    nombre: this.nombre,
-    apellido1: this.apellido,
-    apellido2: this.apellido2,
-    centro: this.centro,
-    departamento: this.departamento,
-    perfil: this.perfilLaboral,
-    fechaalta: formattedDate,
-    bloqueado: this.bloqueado,
-    verificado: this.verificado
-});
 
     this.userService.register(this.email, this.password1,this.password2, this.nombre,
               this.apellido, this.apellido2, this.centro,

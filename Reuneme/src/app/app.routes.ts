@@ -10,6 +10,9 @@ import { RegistroComponent } from './registro/registro.component';
 import { ResetContrasenaComponent } from './reset-contrasena/reset-contrasena.component';
 import { VentanaPrincipalComponent } from './ventana-principal/ventana-principal.component';
 import { EdicionUsuarioComponent } from './edicion-usuario/edicion-usuario.component';
+import { CrearReunionesComponent } from './crear-reuniones/crear-reuniones.component';
+import { ModificarReunionesComponent } from './modificar-reuniones/modificar-reuniones.component';
+import { VerReunionesComponent } from './ver-reuniones/ver-reuniones.component';
 
 export const routes: Routes = [
     {path: '', component: LandingPageComponent},
@@ -23,6 +26,9 @@ export const routes: Routes = [
     { path: 'contrasena-olvidada', component: ContrasenaOlvidadaComponent },
     { path: 'reset-contrasena', component: ResetContrasenaComponent },
     { path: 'edicion-usuario', component: EdicionUsuarioComponent },
+    { path: 'crear-reuniones', component: CrearReunionesComponent },
+    { path: 'modificar-reuniones', component: ModificarReunionesComponent },
+    { path: 'ver-reuniones', component: VerReunionesComponent },
     { path: '**', redirectTo: '' }
     
 ];

@@ -1,0 +1,123 @@
+<app-header></app-header>
+
+<div class="reunion-container">
+	<div class="reunion-box">
+    <h2>Modificar Reunión</h2>
+		<form #reunionForm="ngForm" (ngSubmit)="onSubmit()">
+			<div class="form-column">
+				<!-- Asunto de la reunión -->
+				<div class="textbox">
+					<input type="text" id="asunto" placeholder="Asunto" [(ngModel)]="asunto" name="asunto" required/>
+					<label for="asunto">Asunto*</label>
+				</div>
+
+				<!-- Fecha de la reunión -->
+				<div class="textbox">
+					<input
+						type="date"
+						id="fecha"
+						placeholder="Fecha de la reunión"
+						[(ngModel)]="fecha"
+						name="fecha"
+						required
+						(blur)="validateFecha()"/>
+					<label for="fecha">Fecha*</label>
+				</div>
+				<div class="error-container">
+					<div *ngIf="fechaInvalid" class="error-message">
+						<small>La fecha de la reunión no puede ser anterior a la fecha actual.</small>
+					</div>
+				</div>
+
+				<!-- Opciones de horario -->
+				<fieldset class="duration-fieldset">
+					<legend>Duración de la reunión. Elegir una de las dos opciones:*</legend>
+					<div class="form-grid">
+						<label>
+							<input
+								type="radio"
+								[(ngModel)]="todoElDia"
+								name="todoElDia"
+								[value]="true"
+								(change)="onToggleTodoElDia()"/> Todo el día
+						</label>
+						<label>
+							<input
+								type="radio"
+								[(ngModel)]="todoElDia"
+								name="todoElDia"
+								[value]="false"
+								(change)="onToggleTodoElDia()"/> Intervalo específico
+						</label>
+					</div>
+				</fieldset>
+				
+				<div class="intervalo-horario" *ngIf="!todoElDia">
+					<div class="form-grid">
+						<!-- Hora Desde -->
+						<div class="textbox">
+							<input type="time" id="inicio" [(ngModel)]="inicio" name="inicio" required [disabled]="todoElDia" />
+							<label for="inicio">Desde</label>
+						</div>
+						<!-- Hora Hasta -->
+						<div class="textbox">
+							<input type="time" id="fin" [(ngModel)]="fin" name="fin" required [disabled]="todoElDia" />
+							<label for="fin">Hasta</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- Ubicación -->
+				<div class="textbox">
+					<input type="text" id="ubicacion" placeholder="Ubicación" [(ngModel)]="ubicacion" name="ubicacion" required/>
+					<label for="ubicacion">Ubicación*</label>
+				</div>
+
+				<!-- Observaciones -->
+				<div class="textbox">
+					<input type="text" id="observaciones" placeholder="Observaciones" [(ngModel)]="observaciones" name="observaciones" />
+					<label for="observaciones">Observaciones</label>
+				</div>
+				<p class="required-info">Los campos(*) son obligatorios.</p>
+				<!-- Campo de añadir participantes -->
+				<h3>Añadir Asistentes</h3>
+				<div class="search-container">
+					<input
+						type="text"
+						id="searchUser"
+						placeholder="Buscar usuario..."
+						name="searchQuery"
+						[(ngModel)]="searchQuery"
+						(input)="filterUsuarios()"
+						(keyup.enter)="onSearchEnter($event)"
+						class="search-input"/>
+				</div>
+				<div class="asistentes-container">
+					<div *ngFor="let usuario of filteredUsers">
+						<label>
+							<input
+								type="checkbox" 
+								[(ngModel)]="usuario.isAsistente" 
+								name="asistente{{usuario.nombre}}" 
+								(change)="toggleAsistente(usuario)" />
+							{{ usuario.nombre }} {{usuario.apellido}} ({{ usuario.correo }})
+						</label>
+					</div>
+				</div>
+				
+			</div>
+		</form>
+
+		<div class="actions" [class.extra-margin]="!todoElDia">
+			<button class="btn" (click)="reunionForm.ngSubmit.emit()">Actualizar Reunión</button>
+		</div>
+	</div>
+
+	<div class="back-button-container">
+		<button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
+	</div>
+
+  	<app-loader *ngIf="isLoading"></app-loader>
+
+	<app-footer></app-footer>
+</div>

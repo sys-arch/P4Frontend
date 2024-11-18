@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
     })
     export class AuthService {
     private userRole: 'admin' | 'user' = 'user';  // Valor por defecto es 'user'
+    private email: string = '';
 
     constructor() { }
 
@@ -17,4 +18,15 @@ import { Injectable } from '@angular/core';
     setRole(role: 'admin' | 'user'): void {
         this.userRole = role;
     }
+
+    // Método para guardar el correo del organizador
+    setEmail(email: string): void {
+        this.email = email;
+    }
+
+  // Método para obtener el correo del organizador
+    getEmail(): string {
+        return this.email;
+    }
+
 }
