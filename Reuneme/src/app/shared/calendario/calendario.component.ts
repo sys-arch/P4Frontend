@@ -5,6 +5,7 @@ import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
 
 
+
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -25,7 +26,9 @@ export class CalendarioComponent implements OnInit {
     '15:00', '16:00', '17:00', '18:00'
   ];
   diaSeleccionado: Date | null = null;
-  reuniones: any[] = [];
+  reunionOrg: any[] = [];
+  reunionAsist: any[] = []
+  myemail: string = '';
 
 
   constructor(
@@ -35,12 +38,65 @@ export class CalendarioComponent implements OnInit {
   )  { }
 
   ngOnInit() {
+    this.myemail = localStorage.getItem('email') || '';
     this.vista = 'semana'; // Configura la vista inicial como semanal
     this.calcularSemanaActual(); // Calcula la semana actual
     this.generarDiasDelAnio();
     this.aplicarFiltro();
-    this.cargarReunionesMock(); // Llama al método para cargar los datos mock
+    this.cargarReuniones(); // Llama al método para cargar los datos mock
   }
+
+  cargarReuniones() {
+    const email = localStorage.getItem('email') || '';
+
+    // Cargar reuniones organizadas
+    this.reunionService.getReunionesOrganizadas(email).subscribe(
+      (reunionesOrganizadas) => {
+        this.reunionOrg = reunionesOrganizadas;
+
+        // Cargar reuniones asistidas
+        this.reunionService.getReunionesAsistidas(email).subscribe(
+          (reunionesAsistidas) => {
+            this.reunionAsist = reunionesAsistidas;
+            console.log('Reuniones organizadas:', this.reunionOrg);
+            console.log('Reuniones asistidas:', this.reunionAsist);
+          },
+          (error) => {
+            console.error('Error al cargar reuniones asistidas:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Error al cargar reuniones organizadas:', error);
+      }
+    );
+  }
+  obtenerClaseReunion(dia: Date, hora: string): { clase: string, asunto?: string } | null {
+    // Buscar en reuniones organizadas
+    const reunionOrg = this.reunionOrg.find(
+      (r) =>
+        new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
+        new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
+    );
+
+    if (reunionOrg) {
+      return { clase: 'reunion-organizador', asunto: reunionOrg.asunto };
+    }
+
+    // Buscar en reuniones asistidas
+    const reunionAsist = this.reunionAsist.find(
+      (r) =>
+        new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
+        new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
+    );
+
+    if (reunionAsist) {
+      return { clase: 'reunion-asistente', asunto: reunionAsist.asunto };
+    }
+
+    return null;
+  }
+  
   
   calcularSemanaActual() {
     const hoy = new Date();
@@ -80,13 +136,27 @@ export class CalendarioComponent implements OnInit {
   }
   
   obtenerReunionesDelDia(dia: Date): { clase: string, asunto: string }[] {
-    return this.reuniones
-      .filter(reunion => new Date(reunion.inicio).toLocaleDateString() === dia.toLocaleDateString())
-      .map(reunion => ({
-        clase: this.obtenerClaseReunion(dia, reunion.hora)?.clase || 'default',
-        asunto: reunion.asunto
-      }));
+    // Combinar ambas listas para facilitar el filtrado
+    const todasReuniones = [...this.reunionOrg, ...this.reunionAsist];
+  
+    // Filtrar reuniones del día y mapear a la estructura esperada
+    return todasReuniones
+      .filter(reunion => 
+        new Date(reunion.inicio).toLocaleDateString() === dia.toLocaleDateString()
+      )
+      .map(reunion => {
+        // Determinar la clase según la lista de origen
+        const clase = this.reunionOrg.includes(reunion)
+          ? 'reunion-organizador'
+          : 'reunion-asistente';
+  
+        return {
+          clase: clase,
+          asunto: reunion.asunto
+        };
+      });
   }
+  
   calcularSemanasDelMes(mes: number, año: number): number {
     const primerDia = new Date(año, mes, 1);
     const ultimoDia = new Date(año, mes + 1, 0);
@@ -253,34 +323,7 @@ export class CalendarioComponent implements OnInit {
       direccion === 'anterior' ? this.anteriorSemana() : this.siguienteSemana();
     }
   }
-  
 
-  //borrar esto
-  cargarReunionesMock() {
-    this.reuniones = this.reunionService.obtenerReunionesMock();
-  }
-
-
-  
-  //esto no 
-  
-  
-  obtenerClaseReunion(dia: Date, hora: string): { clase: string, asunto?: string } | null {
-    const reunion = this.reuniones.find(
-      (r) =>
-        new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
-        new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
-    );
-  
-    if (!reunion) return null;
-  
-    let clase = '';
-    if (reunion.creador === 'organizador') clase = 'reunion-organizador';
-    else clase = 'reunion-asistente';
-  
-    return { clase, asunto: reunion.asunto };
-  }
-  
   
   getColor(clase: string | undefined): string {
     if (!clase) {

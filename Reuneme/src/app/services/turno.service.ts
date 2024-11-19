@@ -10,31 +10,35 @@ export class TurnoService {
     constructor(private client: HttpClient) {}
 
     // Método para añadir un nuevo turno
-    addTurno(turno: any): Observable<any> {
+    addTurnos(turnos: any[]): Observable<any> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         });
-        console.log(token);
-        console.log(turno);
-        const url = `${httpUrl}admins/anadirTurno`;
+        console.log('Token:', token);
+        console.log('Turnos a añadir:', turnos);
         
-
-        return this.client.post(url, turno, { headers });
+        const url = `${httpUrl}admins/anadirTurnos`;
+        
+        // Enviar la lista de turnos en el cuerpo de la solicitud
+        return this.client.post(url, turnos, { headers });
     }
+    
 
     // Método para obtener todos los turnos
     getTodosLosTurnos(): Observable<any[]> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
         });
-        const url = `${httpUrl}admins/turnos`;
+        const url = `${httpUrl}admins/turnos`; // Asegúrate de que httpUrl sea tu URL base correcta
         console.log(token);
         console.log(url);
-
-        return this.client.post<any[]>(url, {}, { headers });
+    
+        // Cambia `post` por `get`
+        return this.client.get<any[]>(url, { headers });
     }
+    
 }
