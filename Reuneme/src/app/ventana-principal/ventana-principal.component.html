@@ -40,10 +40,7 @@
   <!--VISTA DE ADMINISTRADOR -->
   <div *ngIf="isAdmin">
     
-    <!-- recordar quitar esto-->
-    <div *ngIf="activeTab === 'tab0'" class="tab-content">
-      <app-calendario></app-calendario>
-    </div>
+  
 
     <div *ngIf="activeTab === 'tab1'" class="tab-content">
       <app-lista-usuarios></app-lista-usuarios>
@@ -64,7 +61,6 @@
 
 <!-- Contenedor para las pestañas, posicionado junto al cuadro negro -->
 <div *ngIf="isAdmin" class="tabs-container">
-  <button (click)="selectTab('tab0')" [class.active]="activeTab==='talb0'">Calendario</button>
   <button (click)="selectTab('tab1')" [class.active]="activeTab === 'tab1'">Usuarios</button>
   <button (click)="selectTab('tab2')" [class.active]="activeTab === 'tab2'">Ausencias</button>
   <button (click)="selectTab('tab3')" [class.active]="activeTab === 'tab3'">Turnos Horarios</button>

@@ -60,6 +60,11 @@ max-width: 800px; /* Limita el ancho máximo si estás usando un porcentaje */
   padding: 0;
   transition: color 0.3s ease;
 }
+.turnos-horarios-container button:disabled {
+  background-color: #ccc; /* Gris claro */
+  cursor: not-allowed;
+  color: #666; /* Texto más tenue */
+}
 
 .turnos-horarios-container ul li button:hover {
   color: #ff4d4d; /* Cambia de color en hover para indicar que se puede eliminar */
@@ -175,17 +180,48 @@ transition: background-color 0.3s ease;
 }
 
 
+/* Botón "Guardar turnos horarios" */
 .botones-accion .guardarTurnos-btn {
-background-color: #007bff;;
-color: white;
-border: none;
-padding: 1.1vh 2.2vw; 
-border-radius: 0.6vh; 
-cursor: pointer;
-align-items: right;
-transition: background-color 0.3s ease;
+  background-color: #007bff; /* Azul predeterminado */
+  color: white;
+  border: none;
+  padding: 1.1vh 2.2vw;
+  border-radius: 0.6vh;
+  cursor: pointer;
+  align-items: right;
+  transition: background-color 0.3s ease;
 }
 
 .botones-accion .guardarTurnos-btn:hover {
-background-color: #0056b3; /* Azul más oscuro para el hover */
+  background-color: #0056b3; /* Azul más oscuro para el hover */
 }
+
+/* Asegúrate de que el estilo deshabilitado funcione */
+.botones-accion .guardarTurnos-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+/* Botón "Añadir ausencia" */
+.botones-accion .add-ausencia-btn {
+  background-color: #28a745; /* Verde predeterminado */
+  color: white;
+  border: none;
+  padding: 1.1vh 2.2vw;
+  border-radius: 0.6vh;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botones-accion .add-ausencia-btn:hover {
+  background-color: #218838; /* Verde más oscuro para el hover */
+}
+
+/* Estilo deshabilitado */
+.botones-accion .add-ausencia-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+
