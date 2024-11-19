@@ -9,24 +9,8 @@ import { httpUrl } from '../commons';
 export class ReunionService {
 //esto luego se borra es por hacer pruebas que no me va el back 
 private reunionesMock = [
-  {
-    id: 1,
-    inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 9, 0).toISOString(),
-    fin: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 10, 0).toISOString(),
-    creador: 'organizador',
-    asistencia: 'asistida',
-    asunto: "Reunión de prueba",
-    asistente: ['USUARIO_ACTUAL'],
-  },
-  {
-    id: 2,
-    inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 10, 15).toISOString(),
-    fin: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 11, 15).toISOString(),
-    creador: 'organizador',
-    asistencia: 'no-asistida',
-    asunto: "Seguimiento del proyecto",
-    asistente: ['otro_usuario'],
-  },
+  
+
   {
     id: 3,
     inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 12, 0).toISOString(),
@@ -45,24 +29,7 @@ private reunionesMock = [
     asunto: "Revisión de tareas",
     asistente: ['otro_usuario'],
   },
-  {
-    id: 5,
-    inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 15, 0).toISOString(),
-    fin: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 16, 0).toISOString(),
-    creador: 'organizador',
-    asistencia: 'no-asistida',
-    asunto: "Evaluación de desempeño",
-    asistente: ['USUARIO_ACTUAL'],
-  },
-  {
-    id: 6,
-    inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 16, 30).toISOString(),
-    fin: new Date(new Date().getFullYear(), new Date().getMonth(), 5, 17, 30).toISOString(),
-    creador: 'otro_usuario',
-    asistencia: 'asistida',
-    asunto: "Cierre del trimestre",
-    asistente: ['USUARIO_ACTUAL'],
-  },
+
   {
     id: 7,
     inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 19, 13, 0).toISOString(),
@@ -78,18 +45,47 @@ private reunionesMock = [
     fin: new Date(new Date().getFullYear(), new Date().getMonth(), 15, 12, 0).toISOString(),
     creador: 'otro_usuario',
     asistencia: 'asistida',
+    asunto: "Revisión de objetivos",
     asistente: ['USUARIO_ACTUAL'],
   },
   {
     id: 9,
-    inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 20, 16, 0).toISOString(),
-    fin: new Date(new Date().getFullYear(), new Date().getMonth(), 20, 17, 0).toISOString(),
-    creador: 'organizador',
-    asunto: "Testing",
+    inicio: new Date(new Date().getFullYear(), 9, 25, 14, 0).toISOString(), // Octubre
+    fin: new Date(new Date().getFullYear(), 9, 25, 15, 0).toISOString(),
+    creador: 'otro_usuario',
     asistencia: 'asistida',
-    asistente: ['otro_usuario'],
+    asunto: "Análisis de datos",
+    asistente: ['USUARIO_ACTUAL'],
+  },
+  {
+    id: 10,
+    inicio: new Date(new Date().getFullYear(), 10, 10, 16, 0).toISOString(), // Noviembre
+    fin: new Date(new Date().getFullYear(), 10, 10, 17, 0).toISOString(),
+    creador: 'otro_usuario',
+    asistencia: 'asistida',
+    asunto: "Evaluación de riesgos",
+    asistente: ['USUARIO_ACTUAL'],
+  },
+  {
+    id: 11,
+    inicio: new Date(new Date().getFullYear(), 11, 5, 9, 30).toISOString(), // Diciembre
+    fin: new Date(new Date().getFullYear(), 11, 5, 10, 30).toISOString(),
+    creador: 'otro_usuario',
+    asistencia: 'asistida',
+    asunto: "Preparación de cierre de año",
+    asistente: ['USUARIO_ACTUAL'],
+  },
+  {
+    id: 12,
+    inicio: new Date(new Date().getFullYear(), 11, 15, 11, 0).toISOString(), // Diciembre
+    fin: new Date(new Date().getFullYear(), 11, 15, 12, 0).toISOString(),
+    creador: 'otro_usuario',
+    asistencia: 'asistida',
+    asunto: "Reunión de equipos",
+    asistente: ['USUARIO_ACTUAL'],
   },
 ];
+
 
   private fechaSeleccionada: string = '';
 
@@ -176,5 +172,33 @@ private reunionesMock = [
   obtenerReunionesMock() {
     return this.reunionesMock;
   }
+
+  getReunionesAsistidas(email: string): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const payload = { email: email }; // Crear el cuerpo de la petición
+
+    return this.client.put<any[]>(`${httpUrl}empleados/reunion/asiste`, payload, { headers });
+  }
+  getReunionesOrganizadas(email: string): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token no encontrado. Por favor, inicia sesión.');
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const payload = { email: email }; // Crear el cuerpo de la petición
+
+    return this.client.put<any[]>(`${httpUrl}empleados/reunion/organizador`, payload, { headers });
+  }
+
 }
 

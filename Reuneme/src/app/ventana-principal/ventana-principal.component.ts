@@ -142,7 +142,15 @@ export class VentanaPrincipalComponent implements OnInit {
       return false;
     }
   }
-  
+  logout(): void {
+    this.isLoading = true;
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/login']);
+    }, 1000);
+  }
   visitProfile(selectedUser: any): void {
     if (selectedUser) {
       const route = selectedUser.isAdmin ? '/perfil-admin' : '/perfil-usuario';

@@ -30,6 +30,7 @@ export class LoginComponent {
   domainInvalid = false;
   errorMessage: string = '';
   @ViewChild('loginForm') loginForm!: NgForm;
+  
   submitForm(): void {
     this.loginForm
   }

@@ -206,11 +206,22 @@ html {
 .calendario-filtros button:active {
   transform: scale(0.95);
 }
+:root {
+  --altura-semana: calc(100% / 6); /* Máximo 6 semanas */
+}
 
 .calendario-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(var(--semanas-del-mes), 1fr);
   gap: 0.8vh;
+}
+.calendario-dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 días de la semana */
+  grid-template-rows: repeat(var(--semanas-del-mes, 6), 1fr); /* Ajusta el número de filas */
+  gap: 0.8vh;
+  height: 100%; /* Usa todo el espacio disponible */
 }
 
 .calendario-dia {
@@ -218,17 +229,14 @@ html {
   border: 1px solid #444;
   background-color: #3d3d3d;
   color: #f1f1f1;
-  height: 13vh; /* Mantiene la misma altura */
-  border-radius: 0.7vw;
-  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
-  text-align: left;
   width: 100%;
-  aspect-ratio: 1; /* Mantiene la forma cuadrada */
+  height: 100%; /* Ajusta la altura automáticamente según la fila */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 1vh; /* Ajuste del espacio interno */
-  overflow: hidden; /* Asegura que el contenido no desborde */
+  padding: 1vh;
+  overflow: hidden; /* Evita desbordes */
+  border-radius: 10px; /* Añade bordes redondeados */
 }
 
 
@@ -239,27 +247,29 @@ html {
 }
 
 .calendario-reuniones {
-  flex: 1; /* Permite a las reuniones ocupar el espacio disponible */
-  overflow-y: auto; /* Activa el scroll vertical si es necesario */
+  flex: 1;
+  overflow-y: auto; /* Activa el scroll si hay demasiadas reuniones */
+  max-height: calc(100% - 20px); /* Limita la altura para evitar desbordes */
   display: flex;
   flex-direction: column;
-  gap: 0.5vh; /* Espaciado entre reuniones */
-  padding: 0.5vh;
-}
+  margin-top: 2vh; /* Desplaza las reuniones hacia abajo */
 
+  gap: 0.5vh;
+}
 .reunion-item {
-  flex: none; /* Los elementos no comparten el espacio, usan un tamaño fijo */
+  flex: none;
   text-align: center;
   color: #fff;
   background-color: #444;
   border-radius: 8px;
   font-size: 1.6vh;
   padding: 0.5vh;
-  margin-bottom: 0.3vh; /* Espaciado entre elementos */
+  margin-bottom: 0.3vh;
   box-shadow: 0 0.3vh 0.6vh rgba(0, 0, 0, 0.3);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-height: 2em; /* Limita la altura de cada reunión */
 }
 
 .reunion-item:hover {
@@ -309,15 +319,12 @@ html {
 }
 
 .calendario-dia-semana {
+  position: relative;
   border: 1px solid #444;
   background-color: #3d3d3d;
   color: #f1f1f1;
-  border-radius: 0.7vw;
-  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 10px;
   padding: 5px;
-  display: flex;
-  flex-direction: column;
 }
 
 .calendario-dia-semana:hover {
@@ -341,11 +348,29 @@ html {
 .hora-evento:hover {
   background-color: #4a4a4a;
 }
+.calendario-dia:hover .calendario-dia-numero {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 .hora-slot {
   height: 45px;
   border: 1px solid #ccc;
   position: relative;
+  border: none; /* Elimina el borde de las horas */
+  background-color: transparent;
+}
+.calendario-dia-numero {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 1.8vh;
+  font-weight: bold;
+  color: #ffffff; /* El color debe ser siempre visible */
+  visibility: visible; /* Asegura que siempre esté visible */
+  opacity: 1; /* Asegura que no esté oculto por transparencia */
+  transition: none; /* Elimina transiciones innecesarias */
 }
 
 .leyenda {
@@ -391,20 +416,15 @@ html {
 
 
 .organizador {
-  background-color: orange;
+  background-color: #ef6c00
+
+  ;
 }
 
 .asistente {
-  background-color: blue;
+  background-color: #4285f4;
 }
 
-.asistida {
-  background-color: green;
-}
-
-.no-asistida {
-  background-color: gray;
-}
 .btn-crear-reunion {
   background-color: #2e86de; /* Azul suave */
   color: #ffffff;
