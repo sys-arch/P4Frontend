@@ -28,9 +28,15 @@
       </select>
     </div>
     <div class="botones-accion">
-      <button (click)="openAddTurnoModal()" [disabled]="isAddButtonDisabled">Añadir turno horario</button>
-      <button (click)="openGuardarModal()" [disabled] = "isSaveButtonDisabled" class="guardarTurnos-btn">Guardar turnos horarios</button>
+      <button (click)="openAddTurnoModal()" [disabled]="isAddButtonDisabled">
+        Añadir turno horario
+      </button>      
+      <button (click)="openGuardarModal()" [disabled]="isSaveButtonDisabled" class="guardarTurnos-btn">
+        Guardar turnos horarios
+      </button>
+      
     </div>
+    
 </div>
 
 
@@ -57,5 +63,6 @@
       </div>
     </div>
   </div>
+  
  
 </div>

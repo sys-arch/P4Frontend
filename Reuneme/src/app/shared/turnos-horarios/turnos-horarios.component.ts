@@ -108,13 +108,25 @@ export class TurnosHorariosComponent implements OnInit {
   openGuardarModal(): void {
     this.showGuardarModal = true;
   }
-
+  handleGuardarError(): void {
+    this.isAddButtonDisabled = false;
+    this.isSaveButtonDisabled = false;
+    alert('Ocurrió un error al guardar los horarios.');
+  }
+  
   confirmGuardarHorarios(): void {
-    // Guardar horarios en el backend si es necesario
-    this.showGuardarModal = false;
     this.isAddButtonDisabled = true;
     this.isSaveButtonDisabled = true;
+  
+    // Aquí puedes agregar lógica para guardar los horarios en el backend
+    this.showGuardarModal = false;
+  
+    // Simulación de retraso o respuesta del backend
+    setTimeout(() => {
+      alert('Horarios guardados exitosamente');
+    }, 1000);
   }
+  
 
   cancelGuardarHorarios(): void {
     this.showGuardarModal = false;
