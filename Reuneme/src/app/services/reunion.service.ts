@@ -172,5 +172,33 @@ private reunionesMock = [
   obtenerReunionesMock() {
     return this.reunionesMock;
   }
+
+  getReunionesAsistidas(email: string): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const payload = { email: email }; // Crear el cuerpo de la petición
+
+    return this.client.put<any[]>(`${httpUrl}empleados/reunion/asiste`, payload, { headers });
+  }
+  getReunionesOrganizadas(email: string): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token no encontrado. Por favor, inicia sesión.');
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const payload = { email: email }; // Crear el cuerpo de la petición
+
+    return this.client.put<any[]>(`${httpUrl}empleados/reunion/organizador`, payload, { headers });
+  }
+
 }
 
