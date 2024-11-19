@@ -13,7 +13,6 @@
     font-size: 1rem;
     position: absolute; /* Mantén el mensaje en una posición fija respecto a su contenedor */
     text-align: center;
-    position: absolute; /* Posiciona el mensaje dentro del contenedor */
     top: -40px; /* Ajusta la distancia vertical para estar más arriba */
     left: 50%; /* Centra horizontalmente */
     transform: translateX(-50%); /* Ajuste para el centrado perfecto */
