@@ -1,54 +1,58 @@
-<h3 class="turnos-horarios-panel-title">Panel de turnos horarios</h3>
+<h3 class="turnos-horarios-panel-title">Panel de Turnos Horarios</h3>
 <div class="turnos-horarios-container">
+  <h3 class="cabec-turnos-title">Lista de Turnos</h3>
   
-    <h3 class="cabec-turnos-title">Turnos Horarios</h3>
-    <ul>
-      <li *ngFor="let turno of turnosHorarios; let i = index" class="turno-item">
-        <span>{{ turno.texto }}</span>
-      </li>
-    </ul>
+  <!-- Lista de turnos horarios -->
+  <ul class="turnos-lista">
+    <li *ngFor="let turno of turnosHorarios; let i = index" class="turno-item">
+      <span>{{ turno.texto }}</span>
+    </li>
+  </ul>
 
-
-    <div class="selectores-horas">
+  <!-- Formulario para añadir turnos -->
+  <div class="selectores-horas" *ngIf="!isAddButtonDisabled">
+    <div class="selectores-fila">
       <label for="horaInicio">Hora de inicio:</label>
-      <select id="horaInicioHora" [(ngModel)]="horaInicioHora">
+      <select id="horaInicioHora" [(ngModel)]="horaInicioHora" class="selector-hora">
         <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
       </select>
       :
-      <select id="horaInicioMinuto" [(ngModel)]="horaInicioMinuto">
+      <select id="horaInicioMinuto" [(ngModel)]="horaInicioMinuto" class="selector-minuto">
         <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
       </select>
+    </div>
+    <div class="selectores-fila">
       <label for="horaFin">Hora de fin:</label>
-      <select id="horaFinHora" [(ngModel)]="horaFinHora">
+      <select id="horaFinHora" [(ngModel)]="horaFinHora" class="selector-hora">
         <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
       </select>
       :
-      <select id="horaFinMinuto" [(ngModel)]="horaFinMinuto">
+      <select id="horaFinMinuto" [(ngModel)]="horaFinMinuto" class="selector-minuto">
         <option *ngFor="let m of minutos" [value]="m">{{ m }}</option>
       </select>
     </div>
-    <div class="botones-accion">
-      <button (click)="openAddTurnoModal()" [disabled]="isAddButtonDisabled">
-        Añadir turno horario
-      </button>      
-      <button (click)="openGuardarModal()" [disabled]="isSaveButtonDisabled" class="guardarTurnos-btn">
-        Guardar turnos horarios
-      </button>
-      
-    </div>
-    
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="botones-accion">
+    <button (click)="addTurnoHorario()" [disabled]="isAddButtonDisabled" class="btn btn-primary">
+      Añadir turno horario
+    </button>
+    <button (click)="openGuardarModal()" [disabled]="isSaveButtonDisabled" class="btn btn-secondary guardarTurnos-btn">
+      Guardar turnos horarios
+    </button>
+  </div>
 </div>
 
-
-  <!-- Modales -->
+<!-- Modales -->
 <div *ngIf="isAdmin">
- <!-- Modal de confirmación para guardar turnos horarios -->
+  <!-- Modal de confirmación para guardar turnos horarios -->
   <div class="modal-overlay" *ngIf="showGuardarModal">
     <div class="modalT">
-     <p>¿Estás seguro de que deseas guardar estos horarios? No podrás modificarlos más tarde</p>
+      <p>¿Estás seguro de que deseas guardar estos horarios? No podrás modificarlos más tarde.</p>
       <div class="modal-actionsT">
-        <button (click)="confirmGuardarHorarios()" class="confirmar-btn">Guardar</button>
-       <button (click)="cancelGuardarHorarios()" class="cancel-btn">Cancelar</button>
+        <button (click)="confirmGuardarHorarios()" class="btn btn-success">Guardar</button>
+        <button (click)="cancelGuardarHorarios()" class="btn btn-danger">Cancelar</button>
       </div>
     </div>
   </div>
@@ -56,13 +60,11 @@
   <!-- Modal de confirmación para añadir turno horario -->
   <div class="modal-overlay" *ngIf="showAddTurnoModal">
     <div class="modalT">
-      <p>¿Estás seguro de que deseas añadir un turno? No podrás borrarlo más tarde</p>
+      <p>¿Estás seguro de que deseas añadir este turno? No podrás borrarlo más tarde.</p>
       <div class="modal-actionsT">
-        <button (click)="confirmAddTurnoHorario()" class="confirmar-btn">Añadir</button>
-        <button (click)="cancelAddTurnoHorario()" class="cancel-btn">Cancelar</button>
+        <button (click)="addTurnoHorario()" class="btn btn-success">Añadir</button>
+        <button (click)="cancelAddTurnoHorario()" class="btn btn-danger">Cancelar</button>
       </div>
     </div>
   </div>
-  
- 
 </div>

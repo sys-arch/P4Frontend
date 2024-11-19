@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TurnoService } from '../../services/turno.service';
 
@@ -8,6 +8,7 @@ interface TurnosHorarios {
   fin: number;
   texto: string;
 }
+
 @Component({
   standalone: true,
   selector: 'app-turnos-horarios',
@@ -15,13 +16,14 @@ interface TurnosHorarios {
   templateUrl: './turnos-horarios.component.html',
   styleUrls: ['./turnos-horarios.component.css'],
 })
-
-
+@Injectable({
+  providedIn: 'root', // Esto hace que el servicio esté disponible globalmente
+})
 export class TurnosHorariosComponent implements OnInit {
-  isAdmin: boolean = true;
-  turnosHorarios: TurnosHorarios[] = [];
-  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
-  minutos: string[] = ['00', '15', '30', '45'];
+  isAdmin: boolean = true; // Asume que el usuario es admin para mostrar los botones
+  turnosHorarios: TurnosHorarios[] = []; // Lista de turnos horarios acumulados
+  horas: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0')); // Rango de horas
+  minutos: string[] = ['00', '15', '30', '45']; // Intervalos de minutos
   horaInicioHora: string | null = null;
   horaInicioMinuto: string | null = null;
   horaFinHora: string | null = null;
@@ -34,20 +36,31 @@ export class TurnosHorariosComponent implements OnInit {
   constructor(private turnoService: TurnoService) {}
 
   ngOnInit(): void {
-    this.cargarTurnos();
+    this.cargarTurnos(); // Cargar los turnos iniciales
   }
 
-  // Cargar los turnos desde el backend
+  // Método para cargar turnos desde el backend
   cargarTurnos(): void {
     this.turnoService.getTodosLosTurnos().subscribe({
       next: (turnos: any[]) => {
+        if (turnos.length > 0) {
+          // Si hay turnos en la base de datos, deshabilitar los botones
+          this.isAddButtonDisabled = true;
+          this.isSaveButtonDisabled = true;
+        } else {
+          // Si no hay turnos, habilitar los botones
+          this.isAddButtonDisabled = false;
+          this.isSaveButtonDisabled = false;
+        }
+  
+        // Transformar los turnos obtenidos en el formato esperado
         this.turnosHorarios = turnos.map((turno, index) => {
           const [inicioHora, inicioMinuto] = turno.horaInicio.split(':');
           const [finHora, finMinuto] = turno.horaFinal.split(':');
           return {
             inicio: this.convertirAHorasEnMinutos(inicioHora, inicioMinuto),
             fin: this.convertirAHorasEnMinutos(finHora, finMinuto),
-            texto: `${index + 1}º Turno:                    ${inicioHora}:${inicioMinuto} - ${finHora}:${finMinuto}`,
+            texto: `${index + 1}º Turno: ${inicioHora}:${inicioMinuto} - ${finHora}:${finMinuto}`,
           };
         });
       },
@@ -57,47 +70,59 @@ export class TurnosHorariosComponent implements OnInit {
     });
   }
   
-  
 
-  // Añadir un nuevo turno al backend
+  // Añadir turno a la lista local
   addTurnoHorario(): void {
     if (!this.horaInicioHora || !this.horaInicioMinuto || !this.horaFinHora || !this.horaFinMinuto) {
       alert('Por favor, selecciona tanto la hora de inicio como la de fin.');
       return;
     }
-  
+
+    const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
+    const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
+
+    if (inicio >= fin) {
+      alert('La hora de inicio debe ser anterior a la hora de fin.');
+      return;
+    }
+
     const turno = {
-      horaInicio: `${this.horaInicioHora}:${this.horaInicioMinuto}:00`,
-      horaFinal: `${this.horaFinHora}:${this.horaFinMinuto}:00`
+      inicio,
+      fin,
+      texto: `${this.turnosHorarios.length + 1}º Turno: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`,
     };
-  
-    this.turnoService.addTurno(turno).subscribe({
+
+    this.turnosHorarios.push(turno); // Añadir turno a la lista local
+    this.resetFormulario(); // Limpiar el formulario
+    this.showAddTurnoModal = false; // Cerrar el modal
+  }
+
+  // Enviar todos los turnos acumulados al backend
+  guardarTurnos(): void {
+    const turnosBackend = this.turnosHorarios.map((turno) => ({
+      horaInicio: `${Math.floor(turno.inicio / 60)
+        .toString()
+        .padStart(2, '0')}:${(turno.inicio % 60).toString().padStart(2, '0')}:00`,
+      horaFinal: `${Math.floor(turno.fin / 60)
+        .toString()
+        .padStart(2, '0')}:${(turno.fin % 60).toString().padStart(2, '0')}:00`,
+    }));
+
+    this.turnoService.addTurnos(turnosBackend).subscribe({
       next: () => {
-        alert('Turno añadido con éxito');
-        this.cargarTurnos(); // Recargar turnos después de añadir uno nuevo
-        this.resetFormulario();
+        alert('Turnos guardados exitosamente.');
+        this.cargarTurnos(); // Recargar la lista desde el backend
       },
-      error: (error) => console.error('Error al añadir el turno:', error),
+      error: (error) => console.error('Error al guardar turnos:', error),
     });
   }
-  
-  
-  
-  
-  
 
-    
-
-  // Función para convertir horas y minutos en minutos desde el inicio del día
+  // Convierte horas y minutos en minutos desde el inicio del día
   convertirAHorasEnMinutos(hora: string, minuto: string): number {
     return parseInt(hora, 10) * 60 + parseInt(minuto, 10);
   }
 
-  // Función para verificar superposición de turnos
-  haySuperposicion(inicio: number, fin: number): boolean {
-    return this.turnosHorarios.some((turno) => inicio < turno.fin && fin > turno.inicio);
-  }
-
+  // Restablece el formulario de selección de horas
   resetFormulario(): void {
     this.horaInicioHora = null;
     this.horaInicioMinuto = null;
@@ -105,43 +130,26 @@ export class TurnosHorariosComponent implements OnInit {
     this.horaFinMinuto = null;
   }
 
-  openGuardarModal(): void {
-    this.showGuardarModal = true;
-  }
-  handleGuardarError(): void {
-    this.isAddButtonDisabled = false;
-    this.isSaveButtonDisabled = false;
-    alert('Ocurrió un error al guardar los horarios.');
-  }
-  
-  confirmGuardarHorarios(): void {
-    this.isAddButtonDisabled = true;
-    this.isSaveButtonDisabled = true;
-  
-    // Aquí puedes agregar lógica para guardar los horarios en el backend
-    this.showGuardarModal = false;
-  
-    // Simulación de retraso o respuesta del backend
-    setTimeout(() => {
-      alert('Horarios guardados exitosamente');
-    }, 1000);
-  }
-  
-
-  cancelGuardarHorarios(): void {
-    this.showGuardarModal = false;
-  }
-
+  // Abre el modal de confirmación para añadir turno
   openAddTurnoModal(): void {
     this.showAddTurnoModal = true;
   }
 
-  confirmAddTurnoHorario(): void {
-    this.addTurnoHorario();
+  cancelAddTurnoHorario(): void {
     this.showAddTurnoModal = false;
   }
 
-  cancelAddTurnoHorario(): void {
-    this.showAddTurnoModal = false;
+  // Abre el modal de confirmación para guardar turnos
+  openGuardarModal(): void {
+    this.showGuardarModal = true;
+  }
+
+  confirmGuardarHorarios(): void {
+    this.guardarTurnos(); // Guardar los turnos en el backend
+    this.showGuardarModal = false; // Cerrar el modal
+  }
+
+  cancelGuardarHorarios(): void {
+    this.showGuardarModal = false; // Cerrar el modal
   }
 }
