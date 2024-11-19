@@ -17,8 +17,8 @@ import { ReunionService } from '../services/reunion.service';
 })
 export class ModificarReunionesComponent implements OnInit {
   isLoading: boolean = false;
-  reunionId: string = '';  // ID de la reunión que se va a modificar
-  organizador: string = '';  // Correo del organizador
+  reunionId: string = '';
+  organizador: string = '';
   asunto: string = '';
   fecha: string = '';
   todoElDia: boolean = false;
@@ -27,8 +27,6 @@ export class ModificarReunionesComponent implements OnInit {
   ubicacion: string = '';
   observaciones: string = '';
   estado: string = '';
-
-  idUsuario: string = '';  // ID del asistente a añadir
 
   asistentes: string[] = [];  // Lista de IDs de los asistentes
   usuarios: any[] = [];  // Lista de usuarios
