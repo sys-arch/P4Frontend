@@ -333,8 +333,9 @@ html {
 }
 
 .calendario-horas {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  height: 720px; /* 12 horas (8:00 a 20:00) x 60 minutos */
+  border: 1px solid #ccc;
 }
 
 .hora-evento {

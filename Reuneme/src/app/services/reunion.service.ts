@@ -140,9 +140,9 @@ private reunionesMock = [
     return this.client.put(`${httpUrl}empleados/reunion/${id}/modificar`, reunionData, { headers });
   }
 
-  cerrarReunion(idReunion: any): Observable<any> {
+  cancelarReunion(idReunion: any): Observable<any> {
     const headers = this.getHeaders();
-    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cerrar`, { },{ headers });
+    return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cancelar`, { },{ headers });
   }
 
   addAsistente(idReunion: any, idUsuario: any): Observable<any> {

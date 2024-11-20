@@ -25,7 +25,6 @@ export class CalendarioComponent implements OnInit {
     '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00',
     '15:00', '16:00', '17:00', '18:00'
   ];
-  diaSeleccionado: Date | null = null;
   reunionOrg: any[] = [];
   reunionAsist: any[] = []
   myemail: string = '';
@@ -103,6 +102,26 @@ export class CalendarioComponent implements OnInit {
       this.router.navigate(['/ver-reuniones', id]);
     }
   }
+
+  obtenerReunionesDelDia(dia: Date | null): Array<{ inicio: string; fin: string; asunto: string; clase: string }> {
+    if(!dia){
+      return [];
+    }
+    // Combinar reuniones organizadas y asistidas
+    const reuniones = [...this.reunionOrg, ...this.reunionAsist];
+  
+    // Filtrar reuniones del día específico
+    return reuniones.filter(reunion => {
+      const inicio = new Date(reunion.inicio);
+      return inicio.toDateString() === dia.toDateString();
+    }).map(reunion => ({
+      inicio: reunion.inicio,
+      fin: reunion.fin,
+      asunto: reunion.asunto,
+      clase: this.reunionOrg.includes(reunion) ? 'organizador' : 'asistente', // Diferenciar si es organizador o asistente
+    }));
+  }
+  
   
   
   calcularSemanaActual() {
@@ -142,27 +161,6 @@ export class CalendarioComponent implements OnInit {
     }
   }
   
-  obtenerReunionesDelDia(dia: Date): { clase: string, asunto: string }[] {
-    // Combinar ambas listas para facilitar el filtrado
-    const todasReuniones = [...this.reunionOrg, ...this.reunionAsist];
-  
-    // Filtrar reuniones del día y mapear a la estructura esperada
-    return todasReuniones
-      .filter(reunion => 
-        new Date(reunion.inicio).toLocaleDateString() === dia.toLocaleDateString()
-      )
-      .map(reunion => {
-        // Determinar la clase según la lista de origen
-        const clase = this.reunionOrg.includes(reunion)
-          ? 'reunion-organizador'
-          : 'reunion-asistente';
-  
-        return {
-          clase: clase,
-          asunto: reunion.asunto
-        };
-      });
-  }
   
   calcularSemanasDelMes(mes: number, año: number): number {
     const primerDia = new Date(año, mes, 1);
@@ -265,11 +263,6 @@ export class CalendarioComponent implements OnInit {
     return nombresMeses[mesIndex];
   }
 
-  obtenerNumeroSemana(): string {
-    const semanas = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta'];
-    return semanas[this.semanaActual] || '';
-  }
-
   mesAnterior() {
     if (this.mesActual === 0) {
       this.mesActual = 11;
@@ -317,10 +310,10 @@ export class CalendarioComponent implements OnInit {
     }
     this.filtrarPorSemana();
   }
-  crearReunion0(): void {
-    // Navegar directamente a la página de creación de reuniones
+  crearReunion(): void {
     this.router.navigate(['/crear-reuniones']);
   }
+
   cambiarPeriodo(direccion: 'anterior' | 'siguiente') {
     if (this.vista === 'mes') {
       // Cambiar por mes
@@ -344,14 +337,21 @@ export class CalendarioComponent implements OnInit {
     return colores[clase] || 'transparent';
   }
   
-  
-  
-  mostrarBtnCrearReunion(dia: Date) {
-    this.diaSeleccionado = dia;
+  // Ajustar cuadro reunión a la franja horaria correspondiente en la vista semanal
+  calcularPosicionReunion(horaInicio: string): number {
+    const inicio = new Date(horaInicio);
+    const horas = inicio.getHours();
+    const minutos = inicio.getMinutes();
+    return horas * 60 + minutos; // Posición en minutos desde la medianoche
   }
-  ocultarBtnCrearReunion() {
-    this.diaSeleccionado = null;
+  
+  calcularAlturaReunion(horaInicio: string, horaFin: string): number {
+    const inicio = new Date(horaInicio);
+    const fin = new Date(horaFin);
+    const duracionMinutos = (fin.getTime() - inicio.getTime()) / 60000; // Duración en minutos
+    return duracionMinutos;
   }
+
   navigateTo(route: string, dia: Date): void {
     setTimeout(() => {
       this.router.navigate([route], { queryParams: { fecha: dia.toISOString() } });
