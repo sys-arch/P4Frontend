@@ -70,7 +70,10 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
-  obtenerClaseReunion(dia: Date, hora: string): { id: string, clase: string, asunto?: string } | null {
+  obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string } | null {
+    if(!dia || !hora){
+      return null;
+    }
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -102,27 +105,6 @@ export class CalendarioComponent implements OnInit {
       this.router.navigate(['/ver-reuniones', id]);
     }
   }
-
-  obtenerReunionesDelDia(dia: Date | null): Array<{ inicio: string; fin: string; asunto: string; clase: string }> {
-    if(!dia){
-      return [];
-    }
-    // Combinar reuniones organizadas y asistidas
-    const reuniones = [...this.reunionOrg, ...this.reunionAsist];
-  
-    // Filtrar reuniones del día específico
-    return reuniones.filter(reunion => {
-      const inicio = new Date(reunion.inicio);
-      return inicio.toDateString() === dia.toDateString();
-    }).map(reunion => ({
-      inicio: reunion.inicio,
-      fin: reunion.fin,
-      asunto: reunion.asunto,
-      clase: this.reunionOrg.includes(reunion) ? 'organizador' : 'asistente', // Diferenciar si es organizador o asistente
-    }));
-  }
-  
-  
   
   calcularSemanaActual() {
     const hoy = new Date();
