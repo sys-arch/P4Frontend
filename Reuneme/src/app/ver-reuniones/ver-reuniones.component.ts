@@ -83,8 +83,8 @@ formatTime(dateTime: string): string {
   return date.toTimeString().slice(0, 5); // HH:mm
 }
 
-cerrarReunion(): void {
-  this.reunionService.cerrarReunion(this.reunionData.id).subscribe({
+cancelarReunion(): void {
+  this.reunionService.cancelarReunion(this.reunionData.id).subscribe({
     next: (response) => {
       console.log('Reunión cerrada exitosamente:', response);
       alert('La reunión ha sido cerrada');

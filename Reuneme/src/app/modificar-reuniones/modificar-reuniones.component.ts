@@ -182,7 +182,7 @@ export class ModificarReunionesComponent implements OnInit {
       this.filterUsuarios();  // Filtra los usuarios cuando se presiona Enter
     }
   }
-  
+
 
   // Validación de la fecha
   validateFecha(): void {

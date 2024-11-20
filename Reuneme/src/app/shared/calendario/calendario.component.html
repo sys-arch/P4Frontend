@@ -33,7 +33,7 @@
 
       <!-- Calendario Vista Mensual -->
       <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias" 
-           [ngStyle]="{ '--semanas-del-mes': semanasDelMes }">
+          [ngStyle]="{ '--semanas-del-mes': semanasDelMes }">
         <div
           *ngFor="let dia of diasFiltrados"
           [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
@@ -43,7 +43,8 @@
               <div
                 *ngIf="obtenerClaseReunion(dia, hora)"
                 class="reunion-item"
-                [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}">
+                [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
+                (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
                 {{ obtenerClaseReunion(dia, hora)?.asunto }}
               </div>
             </ng-container>
@@ -66,7 +67,8 @@
                 <div
                   *ngIf="dia && obtenerClaseReunion(dia, hora)"
                   class="reunion-item"
-                  [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}">
+                  [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
+                  (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
                   <span>{{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}</span>
                 </div>
               </div>
@@ -77,9 +79,8 @@
     </div>
 
     <!-- Columna Derecha -->
-     
     <div class="calendario-columna columna-derecha">
-      <button class="btn-crear-reunion" (click)="crearReunion0()">+ Crear Reunión</button>
+      <button class="btn-crear-reunion" (click)="crearReunion()">+ Crear Reunión</button>
       <!-- Componente aceptar/rechazar invitaciones a reuniones -->
       <app-buzon-reuniones></app-buzon-reuniones>
       <div class="leyenda">
