@@ -71,30 +71,37 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
-  obtenerClaseReunion(dia: Date, hora: string): { clase: string, asunto?: string } | null {
+  obtenerClaseReunion(dia: Date, hora: string): { id: string, clase: string, asunto?: string } | null {
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
         new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
         new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
     );
-
+  
     if (reunionOrg) {
-      return { clase: 'reunion-organizador', asunto: reunionOrg.asunto };
+      return { id: reunionOrg.id, clase: 'reunion-organizador', asunto: reunionOrg.asunto };
     }
-
+  
     // Buscar en reuniones asistidas
     const reunionAsist = this.reunionAsist.find(
       (r) =>
         new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
         new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
     );
-
+  
     if (reunionAsist) {
-      return { clase: 'reunion-asistente', asunto: reunionAsist.asunto };
+      return { id: reunionAsist.id, clase: 'reunion-asistente', asunto: reunionAsist.asunto };
     }
-
+  
     return null;
+  }  
+
+  // Mostrar información de la reunión al pulsar sobre ella en el calendario
+  verReunion(id: string | undefined): void{
+    if(id){
+      this.router.navigate(['/ver-reuniones', id]);
+    }
   }
   
   
