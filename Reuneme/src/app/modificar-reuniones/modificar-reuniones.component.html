@@ -13,20 +13,17 @@
 
 				<!-- Fecha de la reunión -->
 				<div class="textbox">
-					<input
-						type="date"
-						id="fecha"
-						placeholder="Fecha de la reunión"
-						[(ngModel)]="fecha"
-						name="fecha"
-						required
-						(blur)="validateFecha()"/>
+					<input 
+						type="date" 
+						id="fecha" 
+						placeholder="Fecha de la reunión" 
+						[(ngModel)]="fecha" 
+						name="fecha" 
+						required 
+						(blur)="validateFecha()"
+						#fechaField="ngModel"
+					/>
 					<label for="fecha">Fecha*</label>
-				</div>
-				<div class="error-container">
-					<div *ngIf="fechaInvalid" class="error-message">
-						<small>La fecha de la reunión no puede ser anterior a la fecha actual.</small>
-					</div>
 				</div>
 
 				<!-- Opciones de horario -->
@@ -78,6 +75,12 @@
 					<input type="text" id="observaciones" placeholder="Observaciones" [(ngModel)]="observaciones" name="observaciones" />
 					<label for="observaciones">Observaciones</label>
 				</div>
+
+				<!-- Estado de la reunión -->
+				<div class="textbox">
+					<input type="text" id="estado" placeholder="Estado" [(ngModel)]="estado" name="estado" disabled/>
+					<label for="estado">Estado</label>
+				</div>
 				<p class="required-info">Los campos(*) son obligatorios.</p>
 				<!-- Campo de añadir participantes -->
 				<h3>Añadir Asistentes</h3>
@@ -120,4 +123,28 @@
   	<app-loader *ngIf="isLoading"></app-loader>
 
 	<app-footer></app-footer>
+</div>
+
+<div>
+	<!-- Modal de confirmación en cancelación reunión-->
+	<div class="modal-overlay" *ngIf="showModal">
+		<div class="modal-content">
+			<h3>Confirmación</h3>
+			<p>¿Estás seguro de que deseas modificar esta reunión?</p>
+			<div class="modal-actions">
+				<button class="cancel-btn" (click)="onCancelModal()">No, Volver</button>
+				<button class="confirm-btn" (click)="onConfirmUpdate()">Sí, Modificar</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-overlay" *ngIf="showErrorModal">
+		<div class="modal-content">
+			<h3>Error</h3>
+			<p>{{ errorMessage }}</p>
+			<div class="modal-actions">
+				<button class="btn" (click)="closeErrorModal()">Cerrar</button>
+			</div>
+		</div>
+	</div>
 </div>

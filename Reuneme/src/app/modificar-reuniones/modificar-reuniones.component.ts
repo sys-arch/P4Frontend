@@ -16,7 +16,10 @@ import { ReunionService } from '../services/reunion.service';
   styleUrls: ['./modificar-reuniones.component.css']
 })
 export class ModificarReunionesComponent implements OnInit {
+
   isLoading: boolean = false;
+  showModal: boolean = false;
+  showErrorModal: boolean = false;
   reunionId: string = '';
   organizador: string = '';
   asunto: string = '';
@@ -40,7 +43,6 @@ export class ModificarReunionesComponent implements OnInit {
 
   reunionData: any;
   
-
   constructor(
     private readonly router: Router,
     private readonly reunionService: ReunionService,
@@ -49,7 +51,6 @@ export class ModificarReunionesComponent implements OnInit {
 
   ngOnInit(): void {
     const reunionId = this.route.snapshot.paramMap.get('id');
-
     if (reunionId) {
       this.cargarDatosReunion(reunionId);
     } else {
@@ -57,7 +58,6 @@ export class ModificarReunionesComponent implements OnInit {
     }
 
     this.cargarUsuarios();
-
   }
 
   cargarDatosReunion(id: string): void {
@@ -108,18 +108,22 @@ export class ModificarReunionesComponent implements OnInit {
     if (!this.asunto || !this.fecha || (!this.todoElDia && (!this.inicio || !this.fin)) || !this.ubicacion) {
       return { valido: false, mensaje: 'Todos los campos obligatorios deben estar llenos.' };
     }
-  
     return { valido: true, mensaje: '' };
   }
 
   onSubmit(): void {
-    const { inicio, fin } = this.combinarFechasYHoras();
+    this.showModal = true;
+  }
+  
+  onConfirmUpdate(): void {
     const { valido, mensaje } = this.validarFormulario();
     if (!valido) {
-      this.errorMessage = mensaje;
+      this.showError(mensaje);
       return;
     }
-  
+
+    const { inicio, fin } = this.combinarFechasYHoras();
+
     const reunionData = {
       asunto: this.asunto,
       inicio: inicio,
@@ -128,14 +132,24 @@ export class ModificarReunionesComponent implements OnInit {
       observaciones: this.observaciones,
       estado: this.estado
     };
-  
+
     console.log('Datos de la reunión a actualizar:', reunionData);
     this.reunionService.updateReunion(this.reunionData.id, reunionData).subscribe({
-      next: () => this.router.navigate(['/ver-reuniones', this.reunionData.id]),
-      error: (error) => console.error('Error al actualizar la reunión:', error)
+      next: () => {
+        this.router.navigate(['/ver-reuniones', this.reunionData.id]);
+      },
+      error: (error) => {
+        console.error('Error al actualizar la reunión:', error);
+        if (this.estado === 'Cancelada' || this.estado === 'Realizada' || this.estado === 'Cerrada') {
+          this.errorMessage = 'No se puede modificar una reunión cancelada, realizada o cerrada.';
+        }
+    }
     });
+    this.showModal = false;
   }
-  
+  onCancelModal() {
+    this.showModal = false;
+  }
 
   cargarUsuarios() {
     this.reunionService.getPosiblesAsistentes().subscribe({
@@ -190,16 +204,16 @@ export class ModificarReunionesComponent implements OnInit {
     const reunion = new Date(this.fecha);
     const fechaActual = new Date();
 
-  // Comparar fecha y hora si es el mismo día
-  if (reunion.toDateString() === fechaActual.toDateString() && this.inicio) {
-    const horaActual = fechaActual.getHours() * 60 + fechaActual.getMinutes();
-    const horaInicio = parseInt(this.inicio.split(':')[0]) * 60 + parseInt(this.inicio.split(':')[1]);
-    if (horaInicio < horaActual) {
+    // Comparar fecha y hora si es el mismo día
+    if (reunion.toDateString() === fechaActual.toDateString() && this.inicio) {
+      const horaActual = fechaActual.getHours() * 60 + fechaActual.getMinutes();
+      const horaInicio = parseInt(this.inicio.split(':')[0]) * 60 + parseInt(this.inicio.split(':')[1]);
+      if (horaInicio < horaActual) {
+        this.fechaInvalid = true;
+      }
+    } else if (reunion < fechaActual) {
       this.fechaInvalid = true;
     }
-  } else if (reunion < fechaActual) {
-    this.fechaInvalid = true;
-  }
   }
 
   // Validación de horarios
@@ -269,6 +283,19 @@ export class ModificarReunionesComponent implements OnInit {
       this.isLoading = false;
       this.router.navigate([route]);
     }, 1000);
+  }
+
+  // Mostrar el modal con un mensaje de error
+  showError(message: string): void {
+    this.errorMessage = message;
+    this.showErrorModal = true;
+  }
+
+  // Cerrar el modal
+  closeErrorModal(): void {
+    this.showErrorModal = false;
+    this.errorMessage = '';
+    this.showModal = false;
   }
 }
 

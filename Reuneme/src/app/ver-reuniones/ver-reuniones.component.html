@@ -57,8 +57,8 @@
 			</div>
     </div>
 	<div class="actions">
-		<button class="btn" (click)="editReunion()">Editar</button>
-		<button class="btn" (click)="cancelarReunion()">Eliminar</button>
+		<button class="btn" (click)="editReunion()">Editar la reunión</button>
+		<button class="btn" (click)="cancelarReunion()">Cancelar la reunión</button>
 	</div>
     
     <div class="back-button-container">
@@ -67,4 +67,18 @@
 
     <app-loader *ngIf="isLoading"></app-loader>
     <app-footer></app-footer>
+</div>
+
+<div>
+	<!-- Modal de confirmación en cancelación reunión-->
+	<div class="modal-overlay" *ngIf="showModal">
+		<div class="modal-content">
+			<h3>Confirmación</h3>
+			<p>¿Estás seguro de que deseas cancelar esta reunión?</p>
+			<div class="modal-actions">
+				<button class="cancel-btn" (click)="onCancelModal()">No, Volver</button>
+				<button class="confirm-btn" (click)="onConfirmCancel()">Sí, Cancelar la reunión</button>
+			</div>
+		</div>
+	</div>
 </div>
