@@ -54,16 +54,14 @@
   background-color: #f0f0f0;
 }
 
-
-
 .calendario-contenedor {
   position: fixed;
   top: 6vh;
   bottom: 6vh;
   left: 50%;
   transform: translateX(-50%);
-  width: 95%; /* Aumenta el ancho total del contenedor */
-  max-width: 1600px; /* Aumenta el límite de ancho máximo */
+  width: 95%;
+  max-width: 1600px;
   background-color: #2e2e2e;
   border-radius: 1.2vh;
   box-shadow: 0 1.2vh 2.4vh rgba(0, 0, 0, 0.3);
@@ -71,36 +69,35 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  height: calc(100vh - 12vh); /* Mantiene el alto ajustado */
+  height: calc(100vh - 12vh);
 }
-
 
 .calendario-columna {
   padding: 20px;
 }
 
 .columna-izquierda {
-  flex: 5; /* Aumentamos el espacio del calendario */
+  flex: 5;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .columna-derecha {
-  flex: 0.75; /* Reducimos más la columna derecha */
+  flex: 0.75;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  border-left: 1px solid #444; /* Separador visual */
-  padding: 15px; /* Margen reducido */
+  border-left: 1px solid #444;
+  padding: 15px;
 }
 
 body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  overflow: hidden; /* Evita scroll global */
+  overflow: hidden;
 }
 
 html {
@@ -147,7 +144,7 @@ html {
   font-weight: bold;
   font-size: 2vh;
   color: #e0e0e0;
-  padding: 0.5vh 0; /* Ajusta el espaciado interno */
+  padding: 0.5vh 0;
   text-shadow: 0.1vh 0.1vh 0.3vh rgba(0, 0, 0, 0.5);
 }
 
@@ -170,12 +167,12 @@ html {
 
 .mes-anterior {
   position: relative;
-  margin-right: auto; /* Alineado a la izquierda */
+  margin-right: auto;
 }
 
 .mes-siguiente {
   position: relative;
-  margin-left: auto; /* Alineado a la derecha */
+  margin-left: auto;
 }
 
 .calendario-filtros {
@@ -207,7 +204,7 @@ html {
   transform: scale(0.95);
 }
 :root {
-  --altura-semana: calc(100% / 6); /* Máximo 6 semanas */
+  --altura-semana: calc(100% / 6);
 }
 
 .calendario-grid {
@@ -218,10 +215,10 @@ html {
 }
 .calendario-dias {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7 días de la semana */
-  grid-template-rows: repeat(var(--semanas-del-mes, 6), 1fr); /* Ajusta el número de filas */
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(var(--semanas-del-mes, 6), 1fr);
   gap: 0.8vh;
-  height: 100%; /* Usa todo el espacio disponible */
+  height: 100%;
 }
 
 .calendario-dia {
@@ -230,29 +227,28 @@ html {
   background-color: #3d3d3d;
   color: #f1f1f1;
   width: 100%;
-  height: 100%; /* Ajusta la altura automáticamente según la fila */
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 1vh;
-  overflow: hidden; /* Evita desbordes */
-  border-radius: 10px; /* Añade bordes redondeados */
+  overflow: hidden;
+  border-radius: 10px;
 }
-
 
 .calendario-dia:hover {
   background-color: #5a5a5a;
-  transform: scale(1.05); /* Pequeño zoom al pasar el mouse */
+  transform: scale(1.05);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .calendario-reuniones {
   flex: 1;
-  overflow-y: auto; /* Activa el scroll si hay demasiadas reuniones */
-  max-height: calc(100% - 20px); /* Limita la altura para evitar desbordes */
+  overflow-y: auto;
+  max-height: calc(100% - 20px);
   display: flex;
   flex-direction: column;
-  margin-top: 2vh; /* Desplaza las reuniones hacia abajo */
+  margin-top: 2vh;
 
   gap: 0.5vh;
 }
@@ -269,7 +265,9 @@ html {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-height: 2em; /* Limita la altura de cada reunión */
+  max-height: 2em;
+  position: relative;
+  z-index: 1;
 }
 
 .reunion-item:hover {
@@ -277,8 +275,6 @@ html {
   transform: scale(1.05);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
-
-
 
 .calendario-dia-label {
   font-size: 2vh;
@@ -353,12 +349,10 @@ html {
   opacity: 1;
 }
 
-
 .hora-slot {
   height: 45px;
-  border: 1px solid #ccc;
   position: relative;
-  border: none; /* Elimina el borde de las horas */
+  border: none;
   background-color: transparent;
 }
 .calendario-dia-numero {
@@ -367,88 +361,118 @@ html {
   left: 5px;
   font-size: 1.8vh;
   font-weight: bold;
-  color: #ffffff; /* El color debe ser siempre visible */
-  visibility: visible; /* Asegura que siempre esté visible */
-  opacity: 1; /* Asegura que no esté oculto por transparencia */
-  transition: none; /* Elimina transiciones innecesarias */
-}
-
-.leyenda {
-  background-color: #3c3c3c;
-  padding: 10px; /* Ajusta el padding */
-  border-radius: 8px;
-  box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
-  color: #e0e0e0;
-  font-size: 1.4vh;
-  width: 100%; /* Se adapta al nuevo ancho reducido */
+  color: #ffffff;
+  visibility: visible;
+  opacity: 1;
+  transition: none;
 }
 
 .leyenda {
   position: absolute;
-  bottom: 20px; /* Más separación del borde inferior */
-  right: 20px; /* Más separación del borde derecho */
+  bottom: 20px;
+  right: 20px;
   background-color: #3c3c3c;
-  padding: 15px; /* Aumenta el padding para mayor espacio interno */
-  border-radius: 10px; /* Esquinas más suaves */
+  padding: 15px;
+  border-radius: 10px;
   box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
   color: #e0e0e0;
-  font-size: 1.6vh; /* Texto más grande */
-  width: 150px; /* Incrementa el ancho */
-  z-index: 5; /* Asegura que está encima de otros elementos */
+  font-size: 1.6vh;
+  width: 150px;
+  z-index: 5;
 }
 
 .leyenda-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* Espaciado mayor entre elementos */
+  margin-bottom: 10px;
 }
 
 .leyenda-item:last-child {
-  margin-bottom: 0; /* Sin margen en el último */
+  margin-bottom: 0;
 }
 
 .leyenda-circulo {
-  width: 20px; /* Círculos más grandes */
+  width: 20px;
   height: 20px;
   border-radius: 50%;
   margin-right: 10px;
 }
 
-
 .organizador {
-  background-color: #ef6c00
-
-  ;
+  background-color: #ef6c00;
 }
 
 .asistente {
   background-color: #4285f4;
 }
 
+.leyenda-linea {
+  width: 20px;
+  height: 4px;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.leyenda-linea.estado-abierta {
+  background-color: #28a745;
+}
+
+.leyenda-linea.estado-cerrada {
+  background-color: #6c757d;
+}
+
+.leyenda-linea.estado-realizada {
+  background-color: #ebfe44;
+}
+
+.leyenda-linea.estado-cancelada {
+  background-color: #dc3545;
+}
+
+/* Línea de estado debajo de cada reunión */
+.estado-linea {
+  height: 6px;
+  width: 90%;
+  border-radius: 2px;
+  position: relative;
+  bottom: 0;
+  left: 5%;
+  z-index: 0;
+}
+
+.reunion-item .estado-linea {
+  height: 4px;
+  width: 100%;
+  border-radius: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
 .btn-crear-reunion {
-  background-color: #2e86de; /* Azul suave */
+  background-color: #2e86de;
   color: #ffffff;
-  border: none; /* Sin borde */
-  border-radius: 8px; /* Esquinas redondeadas */
-  padding: 12px 25px; /* Más grande para destacar */
-  font-size: 1.6vh; /* Texto proporcional */
-  font-weight: 600; /* Negrita ligera */
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1.6vh;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.2); /* Sombra más sutil */
-  transition: all 0.3s ease-in-out; /* Transiciones suaves */
+  box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
   margin-top: 20px;
 }
 
 .btn-crear-reunion:hover {
-  background-color: #1e5aa1; /* Azul más oscuro */
-  transform: scale(1.05); /* Pequeña expansión */
+  background-color: #1e5aa1;
+  transform: scale(1.05);
 }
 
 .btn-crear-reunion:active {
-  transform: scale(0.95); /* Contracción al clic */
-  box-shadow: 0 0.2vh 0.4vh rgba(0, 0, 0, 0.3); /* Sombra reducida */
+  transform: scale(0.95); 
+  box-shadow: 0 0.2vh 0.4vh rgba(0, 0, 0, 0.3);
 }
-
 
 .reunion-circulo {
   width: 15px;

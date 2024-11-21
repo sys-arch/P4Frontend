@@ -46,6 +46,10 @@
                 [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
                 (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
                 {{ obtenerClaseReunion(dia, hora)?.asunto }}
+              <div
+                class="estado-linea"
+                [ngStyle]="{'background-color': getEstadoColor(obtenerClaseReunion(dia, hora)?.estado)}">
+              </div>
               </div>
             </ng-container>
           </div>
@@ -69,7 +73,11 @@
                   class="reunion-item"
                   [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
                   (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
-                  <span>{{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}</span>
+                  {{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}
+                </div>
+                <div
+                  class="estado-linea"
+                  [ngStyle]="{'background-color': getEstadoColor(obtenerClaseReunion(dia, hora)?.estado)}">
                 </div>
               </div>
             </div>
@@ -90,7 +98,20 @@
         <div class="leyenda-item">
           <span class="leyenda-circulo asistente"></span> Asistente
         </div>
+        <div class="leyenda-item">
+          <span class="leyenda-linea estado-abierta"></span> Abierta
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-linea estado-cerrada"></span> Cerrada
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-linea estado-realizada"></span> Realizada
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-linea estado-cancelada"></span> Cancelada
+        </div>
       </div>
+      
     </div>
   </div>
 </div>
