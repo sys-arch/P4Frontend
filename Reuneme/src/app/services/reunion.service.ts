@@ -86,8 +86,9 @@ private reunionesMock = [
   },
 ];
 
-
-  private fechaSeleccionada: string = '';
+  obtenerReunionesMock() {
+  return this.reunionesMock;
+}
 
   constructor(private client: HttpClient) { }
 
@@ -106,7 +107,6 @@ private reunionesMock = [
     return headers;
   }
   
-
   getReunionById(reunionId: string): Observable<any> {
     const headers = this.getHeaders();
     return this.client.post(`${httpUrl}empleados/reunion/${reunionId}/ver`,{}, { headers });
@@ -145,58 +145,15 @@ private reunionesMock = [
     return this.client.put(`${httpUrl}empleados/reunion/${idReunion}/cancelar`, { },{ headers });
   }
 
-  addAsistente(idReunion: any, idUsuario: any): Observable<any> {
-    const headers = this.getHeaders();
-    return this.client.post(`${httpUrl}empleados/reunion/${idReunion}/asistente/${idUsuario}`, {},{ headers });
-  }
-
-  deleteAsistente(idReunion: any, idUsuario: any): Observable<any> {
-    const headers = this.getHeaders();
-    return this.client.delete(`${httpUrl}empleado/reunion/${idReunion}/asistente/${idUsuario}`, { headers });
-  }
-
-  getPosiblesAsistentes(): Observable<any[]> {
-    const headers = this.getHeaders();
-    return this.client.get<[]>(`${httpUrl}empleados/reunion/asistentes`, { headers });
-  }
-
-  setFechaSeleccionada(fecha: string): void {
-    this.fechaSeleccionada = fecha;
-  }
-
-  getFechaSeleccionada(): string | null {
-    return this.fechaSeleccionada;
-  }
-  //esto tambien se borra 
-
-  obtenerReunionesMock() {
-    return this.reunionesMock;
-  }
-
   getReunionesAsistidas(email: string): Observable<any[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-
+    const headers = this.getHeaders();
     const payload = { email: email }; // Crear el cuerpo de la petición
-
     return this.client.put<any[]>(`${httpUrl}empleados/reunion/asiste`, payload, { headers });
   }
+
   getReunionesOrganizadas(email: string): Observable<any[]> {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('Token no encontrado. Por favor, inicia sesión.');
-    }
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-
+    const headers = this.getHeaders();
     const payload = { email: email }; // Crear el cuerpo de la petición
-
     return this.client.put<any[]>(`${httpUrl}empleados/reunion/organizador`, payload, { headers });
   }
 

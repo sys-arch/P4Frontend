@@ -285,8 +285,9 @@
 
 .modal-content {
     background: #13151a;
+    border-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     text-align: center;
     width: 25%;
 }
@@ -322,8 +323,7 @@
     background-color: #c9302c;
 }
 
-
-.confirm-btn, .cancel-btn {
+.cancel-btn {
     background-color: #d9534f;
     color: white;
     padding: 0.88vh 1.98vh; 
@@ -333,12 +333,18 @@
     transition: background-color 0.3s ease;
     font-size: 1.54vh;
 }
-.confirm-btn:hover {
-    background-color: #c9302c;
+.confirm-btn {
+    background-color: #41e852de;
+    color: white;
+    padding: 0.88vh 1.98vh; 
+    border: none;
+    border-radius: 0.88vh;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.54vh;
 }
-
-.cancel-btn {
-    background-color: #6c757d;
+.confirm-btn:hover {
+    background-color: #2cc953e1;
 }
 
 .cancel-btn:hover {

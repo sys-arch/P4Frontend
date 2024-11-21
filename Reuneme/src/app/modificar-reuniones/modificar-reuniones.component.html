@@ -98,12 +98,12 @@
 				<div class="asistentes-container">
 					<div *ngFor="let usuario of filteredUsers">
 						<label>
-							<input
-								type="checkbox" 
-								[(ngModel)]="usuario.isAsistente" 
-								name="asistente{{usuario.nombre}}" 
-								(change)="toggleAsistente(usuario)" />
-							{{ usuario.nombre }} {{usuario.apellido1}} {{usuario.apellido2}} ({{ usuario.email }})
+						<input
+							type="checkbox"
+							[(ngModel)]="usuario.isAsistente"
+							name="asistente{{usuario.id}}" 
+							(change)="usuario.isAsistente ? openAddModal(usuario) : openDeleteModal(usuario)" />
+							{{ usuario.nombre }} {{ usuario.apellido1 }} {{ usuario.apellido2 }} ({{ usuario.email }})
 						</label>
 					</div>
 				</div>
@@ -138,12 +138,45 @@
 		</div>
 	</div>
 
+	<!-- Modal para mostrar errores error  -->
 	<div class="modal-overlay" *ngIf="showErrorModal">
 		<div class="modal-content">
 			<h3>Error</h3>
 			<p>{{ errorMessage }}</p>
 			<div class="modal-actions">
 				<button class="btn" (click)="closeErrorModal()">Cerrar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para confirmar añadir asistentes -->
+	<div class="modal-overlay" *ngIf="showAddModal">
+		<div class="modal-content">
+			<h3>Añadir Asistente</h3>
+			<p>¿Estás seguro de que deseas añadir a este asistente?</p>
+			<p>
+				<strong>{{ selectedUsuario?.nombre }} {{ selectedUsuario?.apellido1 }} {{ selectedUsuario?.apellido2 }}</strong>
+				(<i>{{ selectedUsuario?.email }}</i>)
+			</p>
+			<div class="modal-actions">
+				<button class="cancel-btn" (click)="closeAddModal()">Cancelar</button>
+				<button class="confirm-btn" (click)="confirmAddAsistente()">Añadir</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para confirmar eliminar asistentes -->
+  	<div class="modal-overlay" *ngIf="showDeleteModal">
+		<div class="modal-content">
+			<h3>Eliminar Asistente</h3>
+			<p>¿Estás seguro de que deseas eliminar a este asistente?</p>
+			<p>
+				<strong>{{ selectedUsuario?.nombre }} {{ selectedUsuario?.apellido1 }} {{ selectedUsuario?.apellido2 }}</strong>
+				(<i>{{ selectedUsuario?.email }}</i>)
+			</p>
+			<div class="modal-actions">
+				<button class="confirm-btn" (click)="closeDeleteModal()">Cancelar</button>
+				<button class="cancel-btn" (click)="confirmDeleteAsistente()">Eliminar</button>
 			</div>
 		</div>
 	</div>
