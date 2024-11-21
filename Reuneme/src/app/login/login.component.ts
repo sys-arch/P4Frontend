@@ -60,26 +60,25 @@ export class LoginComponent {
 
   // Método de inicio de sesión que llama al servicio `UserService`
   loginAttempt(): void {
-    this.resetValidationStates(); // Resetear todos los estados de error
-    this.onEmailChange(); // Validar el email actual
-    this.validatePassword(); // Validar la contraseña
-
+    this.resetValidationStates();
+    this.onEmailChange();
+    this.validatePassword();
+  
     if (!this.emailInvalid && !this.passwordInvalid && !this.domainInvalid) {
       const user = {
         email: this.username,
-        pwd: this.password
+        pwd: this.password,
       };
-
-      this.authservice.setEmail(user.email); // Guardar el email para posibles usos futuros
-      this.isLoading = true; // Mostrar el loader durante la solicitud
-
+  
+      this.authservice.setEmail(user.email);
+      this.isLoading = true;
+  
       this.userService.login(user).subscribe(
         (response) => {
           this.isLoading = false;
           if (response && response.token) {
-            console.log('Respuesta del servidor:', response);
-            localStorage.setItem('token', response.token); // Guardar el token
-            localStorage.setItem('email', user.email); // Guardar el email
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('email', user.email);
             this.router.navigate(['/doblefactor']);
           } else {
             this.loginFailed = true;
@@ -88,9 +87,18 @@ export class LoginComponent {
         },
         (error) => {
           this.isLoading = false;
-          console.error('Error en el inicio de sesión:', error);
+  
+          if (error.status === 403) {
+            // Muestra el mensaje enviado por el backend
+            this.errorMessage = error.error || 'Algo ha sucedido, contacte con un administrador.';
+          } else if (error.status === 401) {
+            this.errorMessage = 'Credenciales incorrectas. Intente nuevamente.';
+          } else {
+            this.errorMessage = 'Ocurrió un error inesperado. Intente nuevamente.';
+          }
+  
           this.loginFailed = true;
-          this.errorMessage = 'Las credenciales ingresadas no son correctas. Intente nuevamente.';
+          console.error('Error en el inicio de sesión:', error);
           this.cdr.detectChanges();
         }
       );
@@ -98,6 +106,7 @@ export class LoginComponent {
       this.loginFailed = true;
     }
   }
+  
   
   
   // Validar que el correo electrónico ingresado tenga un formato válido cada vez que cambie
