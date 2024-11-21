@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
 
-
-
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -47,17 +45,17 @@ export class CalendarioComponent implements OnInit {
 
   cargarReuniones() {
     const email = localStorage.getItem('email') || '';
-
     // Cargar reuniones organizadas
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
+        console.log('Reuniones organizadas:', this.reunionOrg);
 
         // Cargar reuniones asistidas
         this.reunionService.getReunionesAsistidas(email).subscribe(
           (reunionesAsistidas) => {
             this.reunionAsist = reunionesAsistidas;
-            console.log('Reuniones organizadas:', this.reunionOrg);
+            
             console.log('Reuniones asistidas:', this.reunionAsist);
           },
           (error) => {
@@ -70,10 +68,11 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
-  obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string } | null {
+  obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
     if(!dia || !hora){
       return null;
     }
+    
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -82,7 +81,12 @@ export class CalendarioComponent implements OnInit {
     );
   
     if (reunionOrg) {
-      return { id: reunionOrg.id, clase: 'reunion-organizador', asunto: reunionOrg.asunto };
+      return {
+        id: reunionOrg.id,
+        clase: 'reunion-organizador',
+        asunto: reunionOrg.asunto,
+        estado: reunionOrg.estado.toLowerCase() // Convertir estado a minúsculas
+      };
     }
   
     // Buscar en reuniones asistidas
@@ -93,8 +97,14 @@ export class CalendarioComponent implements OnInit {
     );
   
     if (reunionAsist) {
-      return { id: reunionAsist.id, clase: 'reunion-asistente', asunto: reunionAsist.asunto };
+      return {
+        id: reunionAsist.id,
+        clase: 'reunion-asistente',
+        asunto: reunionAsist.asunto,
+        estado: reunionAsist.estado.toLowerCase() 
+      };
     }
+  
   
     return null;
   }  
@@ -318,6 +328,21 @@ export class CalendarioComponent implements OnInit {
     };
     return colores[clase] || 'transparent';
   }
+
+  // Obtener color de la línea según el estado de la reunión
+  getEstadoColor(estado: string | undefined): string {
+    if (!estado) {
+      return 'transparent';
+    }
+    const coloresEstado: Record<string, string> = {
+      abierta: '#28a745', // Verde
+      cerrada: '#6c757d', // Gris
+      realizada: '#ebfe44', // Azul
+      cancelada: '#dc3545', // Rojo
+    };
+    return coloresEstado[estado] || 'transparent';
+  }
+  
   
   // Ajustar cuadro reunión a la franja horaria correspondiente en la vista semanal
   calcularPosicionReunion(horaInicio: string): number {
