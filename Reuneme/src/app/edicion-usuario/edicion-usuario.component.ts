@@ -191,30 +191,21 @@ export class EdicionUsuarioComponent implements OnInit {
 
           // Redirección según el contexto
           if (this.user === this.loggedUserEmail) {
-            // Si el usuario actualizado es el logueado
-            if (this.role === 'administrador') {
-              console.log('Redirigiendo al perfil del administrador...');
-              this.router.navigateByUrl('/perfil').then((success) => {
-                if (success) {
-                  console.log('Redirección a /perfil exitosa.');
-                } else {
-                  console.error('La redirección a /perfil falló.');
-                }
-              }).catch((err) => {
-                console.error('Error en la redirección al perfil del administrador:', err);
-              });
-            } else {
-              // Si es un empleado logueado, redirigir a `perfil-usuario`
-              console.log('Redirigiendo al perfil del empleado...');
-              this.router.navigate(['/perfil-usuario'], {
-                state: {
-                  email: this.loggedUserEmail,
-                  role: this.role
-                }
-              }).catch((err) => {
-                console.error('Error en la redirección al perfil del usuario:', err);
-              });
-            }
+            // Si el usuario actualizado es el usuario logueado
+            const route = this.role === 'administrador' ? '/perfil-admin' : '/perfil-usuario';
+
+            console.log(`Redirigiendo al perfil correspondiente: ${route}`);
+            this.router.navigate([route], {
+              queryParams: { email: this.loggedUserEmail }
+            }).then((success) => {
+              if (success) {
+                console.log(`Redirección exitosa a ${route} con email: ${this.loggedUserEmail}`);
+              } else {
+                console.error(`La redirección a ${route} falló.`);
+              }
+            }).catch((err) => {
+              console.error(`Error en la redirección a ${route}:`, err);
+            });
           } else {
             // Si un administrador actualizó a otro usuario, redirigir a la ventana principal
             this.router.navigate(['/ventana-principal']).catch((err) => {
