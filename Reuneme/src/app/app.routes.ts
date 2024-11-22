@@ -34,6 +34,7 @@ export const routes: Routes = [
     { path: 'ver-reuniones', component: VerReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
     { path: 'buzon', component: BuzonReunionesComponent, canActivate: [AuthGuard] }, // Ruta protegida
     { path: '**', redirectTo: '' }, // Redirige rutas desconocidas a la página principal
+
 ];
 
 
