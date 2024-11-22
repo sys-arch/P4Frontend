@@ -34,26 +34,27 @@
       <!-- Calendario Vista Mensual -->
       <div *ngIf="vista === 'mes'" class="calendario-grid calendario-dias" 
           [ngStyle]="{ '--semanas-del-mes': semanasDelMes }">
-        <div
-          *ngFor="let dia of diasFiltrados"
-          [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
-          <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
-          <div *ngIf="dia" class="calendario-reuniones">
-            <ng-container *ngFor="let hora of horas">
-              <div
-                *ngIf="obtenerClaseReunion(dia, hora)"
-                class="reunion-item"
-                [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
-                (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
-                {{ obtenerClaseReunion(dia, hora)?.asunto }}
-              <div
-                class="estado-linea"
-                [ngStyle]="{'background-color': getEstadoColor(obtenerClaseReunion(dia, hora)?.estado)}">
+          <div *ngFor="let dia of diasFiltrados" [ngClass]="{'calendario-dia': dia, 'calendario-dia-vacio': !dia}">
+            <div *ngIf="dia" class="calendario-dia-numero">{{ dia?.getDate() }}</div>
+            <div *ngIf="dia" class="calendario-reuniones">
+              <!-- Mostrar reuniones -->
+              <ng-container *ngFor="let hora of horas">
+                <div
+                  *ngIf="obtenerClaseReunion(dia, hora)"
+                  class="reunion-item"
+                  [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
+                  (click)="verReunion(obtenerClaseReunion(dia, hora)?.id)">
+                  {{ obtenerClaseReunion(dia, hora)?.asunto }}
+                </div>
+              </ng-container>
+              <!-- Mostrar ausencias -->
+              <div *ngIf="tieneAusencia(dia)" class="ausencia-item">
+                {{ tieneAusencia(dia)?.motivo }}
               </div>
-              </div>
-            </ng-container>
+            </div>
           </div>
-        </div>
+          
+        
       </div>
 
       <!-- Calendario Vista Semanal -->
@@ -97,6 +98,10 @@
         </div>
         <div class="leyenda-item">
           <span class="leyenda-circulo asistente"></span> Asistente
+        </div>
+        <div class="leyenda-item">
+          <span class="leyenda-circulo" style="background-color: #ff6b6b;"></span>
+          <span>Ausencia</span>
         </div>
         <div class="leyenda-item">
           <span class="leyenda-linea estado-abierta"></span> Abierta

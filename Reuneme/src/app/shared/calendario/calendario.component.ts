@@ -1,8 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import { AusenciaService } from '../../services/ausencia.service';
 import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
+
+interface Ausencia {
+  id?: number;
+  usuarioEmail: string;
+  usuarioNombreCompleto: string;
+  motivo: string;
+  fechaInicio: Date;
+  fechaFin: Date;
+}
 
 @Component({
   selector: 'app-calendario',
@@ -13,6 +23,7 @@ import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.comp
 })
 export class CalendarioComponent implements OnInit {
   diasDelAnio: Date[] = [];
+  ausencias: Ausencia[] = [];
   diasFiltrados: (Date | null)[] = [];
   vista: 'mes' | 'semana' = 'mes';
   nombreMes: string = '';
@@ -31,17 +42,63 @@ export class CalendarioComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly reunionService: ReunionService,
-    private readonly renderer: Renderer2
+    private readonly renderer: Renderer2,
+    private readonly ausenciaService: AusenciaService
   )  { }
 
   ngOnInit() {
     this.myemail = sessionStorage.getItem('email') || '';
-    this.vista = 'semana'; // Configura la vista inicial como semanal
+    this.vista = 'mes'; // Configura la vista inicial como semanal
     this.calcularSemanaActual(); // Calcula la semana actual
     this.generarDiasDelAnio();
     this.aplicarFiltro();
-    this.cargarReuniones(); // Llama al método para cargar los datos mock
+    this.cargarReuniones();
+    this.cargarAusencias();
   }
+  cargarAusencias() {
+    const emailUsuario = sessionStorage.getItem('email') || '';
+  
+    this.ausenciaService.getTodasLasAusencias().subscribe(
+      (data: any[]) => {
+        this.ausencias = data
+          .map(ausencia => ({
+            id: ausencia.id,
+            usuarioEmail: ausencia.empleado?.email || '', // Accede al email dentro de empleado
+            usuarioNombreCompleto: `${ausencia.empleado?.nombre || ''} ${ausencia.empleado?.apellido1 || ''}`, // Construye el nombre completo
+            motivo: ausencia.motivo,
+            fechaInicio: new Date(ausencia.fechaInicio), // Convierte a tipo Date
+            fechaFin: new Date(ausencia.fechaFin) // Convierte a tipo Date
+          }))
+          .filter(ausencia => ausencia.usuarioEmail === emailUsuario) // Filtra por email del usuario logueado
+          .sort((a, b) => a.fechaInicio.getTime() - b.fechaInicio.getTime()); // Ordena por fecha de inicio
+  
+        console.log('Ausencias procesadas:', this.ausencias);
+      },
+      (error) => console.error('Error al cargar ausencias:', error)
+    );
+  }
+  
+  
+  tieneAusencia(dia: Date): Ausencia | null {
+    const diaString = dia.toISOString().split('T')[0];
+  
+    const resultado = this.ausencias.find((ausencia) => {
+      const inicio = ausencia.fechaInicio.toISOString().split('T')[0];
+      const fin = ausencia.fechaFin.toISOString().split('T')[0];
+  
+      console.log(`Día: ${diaString}, Inicio: ${inicio}, Fin: ${fin}`);
+      return diaString >= inicio && diaString <= fin;
+    });
+  
+    console.log(`Ausencia para ${diaString}:`, resultado);
+    return resultado || null;
+  }
+  
+  
+  
+  
+  
+  
 
   cargarReuniones() {
     const email = sessionStorage.getItem('email') || '';
@@ -114,6 +171,9 @@ export class CalendarioComponent implements OnInit {
   verReunion(id: string | undefined): void{
     if(id){
       this.router.navigate(['/ver-reuniones', id]);
+    }
+    else{
+      console.error('No se ha encontrado la reunión');
     }
   }
   
