@@ -30,8 +30,8 @@ export const routes: Routes = [
     { path: 'reset-contrasena', component: ResetContrasenaComponent }, // Ruta pública
     { path: 'edicion-usuario', component: EdicionUsuarioComponent, canActivate: [AuthGuard] }, // Ruta protegida
     { path: 'crear-reuniones', component: CrearReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
-    { path: 'modificar-reuniones', component: ModificarReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
-    { path: 'ver-reuniones', component: VerReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
+    { path: 'modificar-reuniones/:id', component: ModificarReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
+    { path: 'ver-reuniones/:id', component: VerReunionesComponent, canActivate: [RoleGuard], data: { role: 'employee' } }, // Solo para empleados
     { path: 'buzon', component: BuzonReunionesComponent, canActivate: [AuthGuard] }, // Ruta protegida
     { path: '**', redirectTo: '' }, // Redirige rutas desconocidas a la página principal
 
