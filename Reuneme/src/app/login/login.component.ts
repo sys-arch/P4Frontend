@@ -78,8 +78,8 @@ export class LoginComponent {
           this.isLoading = false;
           if (response && response.token) {
             console.log('Respuesta del servidor:', response);
-            localStorage.setItem('token', response.token); // Guardar el token
-            localStorage.setItem('email', user.email); // Guardar el email
+            sessionStorage.setItem('token', response.token); // Guardar el token
+            sessionStorage.setItem('email', user.email); // Guardar el email
             this.router.navigate(['/doblefactor']);
           } else {
             this.loginFailed = true;

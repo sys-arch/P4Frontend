@@ -11,7 +11,7 @@ export class TurnoService {
 
     // Método para añadir un nuevo turno
     addTurnos(turnos: any[]): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -28,7 +28,7 @@ export class TurnoService {
 
     // Método para obtener todos los turnos
     getTodosLosTurnos(): Observable<any[]> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
