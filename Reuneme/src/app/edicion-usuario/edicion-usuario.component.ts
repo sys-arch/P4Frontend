@@ -34,7 +34,7 @@ export class EdicionUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = history.state['user'];
-    this.token = localStorage.getItem('token') || '';
+    this.token = sessionStorage.getItem('token') || '';
 
     // Determinar si el usuario es administrador o empleado basándose en el token
     if (this.token.startsWith('a-')) {

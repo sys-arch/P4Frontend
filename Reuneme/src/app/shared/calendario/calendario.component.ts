@@ -38,7 +38,7 @@ export class CalendarioComponent implements OnInit {
   )  { }
 
   ngOnInit() {
-    this.myemail = localStorage.getItem('email') || '';
+    this.myemail = sessionStorage.getItem('email') || '';
     this.vista = 'semana'; // Configura la vista inicial como semanal
     this.calcularSemanaActual(); // Calcula la semana actual
     this.generarDiasDelAnio();
@@ -47,7 +47,7 @@ export class CalendarioComponent implements OnInit {
   }
 
   cargarReuniones() {
-    const email = localStorage.getItem('email') || '';
+    const email = sessionStorage.getItem('email') || '';
 
     // Cargar reuniones organizadas
     this.reunionService.getReunionesOrganizadas(email).subscribe(

@@ -96,7 +96,7 @@ private reunionesMock = [
       'Content-Type': 'application/json'
     });
     if (withAuth) {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         headers = headers.set('Authorization', `Bearer ${token}`);
       } else {
@@ -174,7 +174,7 @@ private reunionesMock = [
   }
 
   getReunionesAsistidas(email: string): Observable<any[]> {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -185,7 +185,7 @@ private reunionesMock = [
     return this.client.put<any[]>(`${httpUrl}empleados/reunion/asiste`, payload, { headers });
   }
   getReunionesOrganizadas(email: string): Observable<any[]> {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) {
       throw new Error('Token no encontrado. Por favor, inicia sesión.');
     }
