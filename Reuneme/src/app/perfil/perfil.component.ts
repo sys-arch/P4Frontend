@@ -46,7 +46,7 @@ export class PerfilComponent implements OnInit {
     const routeEmail = this.route.snapshot.paramMap.get('email');
 
     // Usar el email de la URL si existe, de lo contrario usar el del localStorage
-    const emailToUse =localEmail;
+    const emailToUse = routeEmail || localEmail;
 
     if (token && emailToUse) {
       console.log('Cargando perfil para el email:', emailToUse);
