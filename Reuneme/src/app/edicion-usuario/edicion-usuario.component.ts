@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -31,6 +33,7 @@ export class EdicionUsuarioComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
+    private gravatarService: GravatarService
   ) { }
 
   ngOnInit(): void {
@@ -125,6 +128,7 @@ export class EdicionUsuarioComponent implements OnInit {
             apellido2: data.apellido2,
             correo: data.email,
             centroTrabajo: data.centro,
+
             ...(this.role === 'administrador' ? {
               interno: data.interno,
               password: data.password
@@ -136,7 +140,7 @@ export class EdicionUsuarioComponent implements OnInit {
             })
           });
 
-          this.profilePicture = data.profilePicture || '/assets/images/UsuarioSinFoto.png';
+          this.profilePicture = this.gravatarService.getGravatarUrl(data.email)
         } else {
           console.error('Datos del usuario no encontrados');
           this.router.navigate(['/ventana-principal']);
