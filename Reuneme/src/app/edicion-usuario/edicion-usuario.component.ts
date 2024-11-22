@@ -35,7 +35,7 @@ export class EdicionUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = history.state['user'];
-    this.token = localStorage.getItem('token') || '';
+    this.token = sessionStorage.getItem('token') || '';
 
     // Manejo para sacar el email del usuario logueado
     if (this.token) {

@@ -263,12 +263,9 @@ toggleValidation(user: any): void {
 
 
   ngOnInit(): void {
-    this.token = localStorage.getItem('token') || '';
-    const localEmail = localStorage.getItem('email') || '';
-  
-    // Obtener el parámetro 'email' de la URL o usar el email de localStorage
-    const routeEmail = this.route.snapshot.paramMap.get('email');
-    this.myemail = routeEmail || localEmail;
+    this.token = sessionStorage.getItem('token') || '';
+    const localEmail = sessionStorage.getItem('email') || '';
+    this.myemail = localEmail;
     this.isAdmin = this.isAdminUser();
   
     // Determina si el usuario es administrador o empleado basado en el prefijo del token

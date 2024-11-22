@@ -62,7 +62,7 @@ export class UserService {
         password2: string,
         interno: boolean
     ): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({ 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -132,7 +132,7 @@ export class UserService {
     }
 
     verDatosEmpleado(email: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -142,7 +142,7 @@ export class UserService {
     }
 
     verDatosAdmin(email: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -189,7 +189,7 @@ export class UserService {
         return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
     getAusencias(): Observable<any[]> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         console.log('Token en getAusencias:', token);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ export class UserService {
     }
 
     desactivar2FA(email: string, secretKey: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
