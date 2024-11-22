@@ -72,8 +72,13 @@
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
-          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " />
+          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " (blur)="validateFechaAlta()"
+            [class.is-invalid]="fechaInvalid" />
           <label for="alta">Fecha de Alta</label>
+          <!-- Mensaje de error en caso de fecha inválida -->
+          <div *ngIf="fechaInvalid" class="error-message">
+            <small>La fecha de alta no puede ser un día posterior al actual</small>
+        </div>
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
@@ -86,9 +91,21 @@
           Reestablecer Contraseña
         </button>
       </div>
-      
-      <button class="btn" type="submit">Guardar Cambios</button>
+
+      <button class="btn" type="button" (click)="showSaveModal()">Guardar Cambios</button>
       <!-- </form> --> <!-- Eliminar esta etiqueta de cierre -->
+    </div>
+
+    <!-- Modal de confirmación para guardar cambios -->
+    <div class="modal-overlay" *ngIf="showSaveConfirmationModal">
+      <div class="confirm-modal">
+        <h3>Confirmar cambios</h3>
+        <p class="warning-text">¿Estás seguro de que deseas guardar los cambios?</p>
+        <div class="modal-actions">
+          <button class="confirm-btn" (click)="confirmSaveChanges()">Sí, guardar</button>
+          <button class="cancel-btn" (click)="cancelSaveChanges()">Cancelar</button>
+        </div>
+      </div>
     </div>
 
     <div class="back-button-container">

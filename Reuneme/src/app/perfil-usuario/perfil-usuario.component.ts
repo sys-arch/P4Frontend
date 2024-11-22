@@ -43,8 +43,8 @@ export class PerfilUsuarioComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    const token = localStorage.getItem('token') || '';
-    const localEmail = localStorage.getItem('email') || '';
+    const token = sessionStorage.getItem('token') || '';
+    const localEmail = sessionStorage.getItem('email') || '';
 
     // Obtener el parámetro 'email' de la URL
     const routeEmail = this.route.snapshot.paramMap.get('email');
@@ -109,7 +109,7 @@ export class PerfilUsuarioComponent implements OnInit {
       console.log(this.user.correo);
   
       // Redirigir al formulario de edición con el estado del usuario
-      this.router.navigate(['/editar-perfil'], {
+      this.router.navigate(['/edicion-usuario'], {
         state: {
           user: this.user.correo, // Pasar el correo del usuario
           role: role // Pasar el rol (administrador o empleado)
