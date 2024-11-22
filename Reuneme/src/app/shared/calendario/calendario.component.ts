@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
 
-
-
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -25,7 +23,6 @@ export class CalendarioComponent implements OnInit {
     '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00',
     '15:00', '16:00', '17:00', '18:00'
   ];
-  diaSeleccionado: Date | null = null;
   reunionOrg: any[] = [];
   reunionAsist: any[] = []
   myemail: string = '';
@@ -53,12 +50,13 @@ export class CalendarioComponent implements OnInit {
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
+        console.log('Reuniones organizadas:', this.reunionOrg);
 
         // Cargar reuniones asistidas
         this.reunionService.getReunionesAsistidas(email).subscribe(
           (reunionesAsistidas) => {
             this.reunionAsist = reunionesAsistidas;
-            console.log('Reuniones organizadas:', this.reunionOrg);
+            
             console.log('Reuniones asistidas:', this.reunionAsist);
           },
           (error) => {
@@ -71,32 +69,53 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
-  obtenerClaseReunion(dia: Date, hora: string): { clase: string, asunto?: string } | null {
+  obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
+    if(!dia || !hora){
+      return null;
+    }
+    
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
         new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
         new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
     );
-
+  
     if (reunionOrg) {
-      return { clase: 'reunion-organizador', asunto: reunionOrg.asunto };
+      return {
+        id: reunionOrg.id,
+        clase: 'reunion-organizador',
+        asunto: reunionOrg.asunto,
+        estado: reunionOrg.estado.toLowerCase() // Convertir estado a minúsculas
+      };
     }
-
+  
     // Buscar en reuniones asistidas
     const reunionAsist = this.reunionAsist.find(
       (r) =>
         new Date(r.inicio).toLocaleDateString() === dia.toLocaleDateString() &&
         new Date(r.inicio).getHours() === parseInt(hora.split(':')[0], 10)
     );
-
-    if (reunionAsist) {
-      return { clase: 'reunion-asistente', asunto: reunionAsist.asunto };
-    }
-
-    return null;
-  }
   
+    if (reunionAsist) {
+      return {
+        id: reunionAsist.id,
+        clase: 'reunion-asistente',
+        asunto: reunionAsist.asunto,
+        estado: reunionAsist.estado.toLowerCase() 
+      };
+    }
+  
+  
+    return null;
+  }  
+
+  // Mostrar información de la reunión al pulsar sobre ella en el calendario
+  verReunion(id: string | undefined): void{
+    if(id){
+      this.router.navigate(['/ver-reuniones', id]);
+    }
+  }
   
   calcularSemanaActual() {
     const hoy = new Date();
@@ -135,27 +154,6 @@ export class CalendarioComponent implements OnInit {
     }
   }
   
-  obtenerReunionesDelDia(dia: Date): { clase: string, asunto: string }[] {
-    // Combinar ambas listas para facilitar el filtrado
-    const todasReuniones = [...this.reunionOrg, ...this.reunionAsist];
-  
-    // Filtrar reuniones del día y mapear a la estructura esperada
-    return todasReuniones
-      .filter(reunion => 
-        new Date(reunion.inicio).toLocaleDateString() === dia.toLocaleDateString()
-      )
-      .map(reunion => {
-        // Determinar la clase según la lista de origen
-        const clase = this.reunionOrg.includes(reunion)
-          ? 'reunion-organizador'
-          : 'reunion-asistente';
-  
-        return {
-          clase: clase,
-          asunto: reunion.asunto
-        };
-      });
-  }
   
   calcularSemanasDelMes(mes: number, año: number): number {
     const primerDia = new Date(año, mes, 1);
@@ -258,11 +256,6 @@ export class CalendarioComponent implements OnInit {
     return nombresMeses[mesIndex];
   }
 
-  obtenerNumeroSemana(): string {
-    const semanas = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta'];
-    return semanas[this.semanaActual] || '';
-  }
-
   mesAnterior() {
     if (this.mesActual === 0) {
       this.mesActual = 11;
@@ -310,10 +303,10 @@ export class CalendarioComponent implements OnInit {
     }
     this.filtrarPorSemana();
   }
-  crearReunion0(): void {
-    // Navegar directamente a la página de creación de reuniones
+  crearReunion(): void {
     this.router.navigate(['/crear-reuniones']);
   }
+
   cambiarPeriodo(direccion: 'anterior' | 'siguiente') {
     if (this.vista === 'mes') {
       // Cambiar por mes
@@ -336,15 +329,37 @@ export class CalendarioComponent implements OnInit {
     };
     return colores[clase] || 'transparent';
   }
-  
-  
-  
-  mostrarBtnCrearReunion(dia: Date) {
-    this.diaSeleccionado = dia;
+
+  // Obtener color de la línea según el estado de la reunión
+  getEstadoColor(estado: string | undefined): string {
+    if (!estado) {
+      return 'transparent';
+    }
+    const coloresEstado: Record<string, string> = {
+      abierta: '#28a745', // Verde
+      cerrada: '#6c757d', // Gris
+      realizada: '#ebfe44', // Azul
+      cancelada: '#dc3545', // Rojo
+    };
+    return coloresEstado[estado] || 'transparent';
   }
-  ocultarBtnCrearReunion() {
-    this.diaSeleccionado = null;
+  
+  
+  // Ajustar cuadro reunión a la franja horaria correspondiente en la vista semanal
+  calcularPosicionReunion(horaInicio: string): number {
+    const inicio = new Date(horaInicio);
+    const horas = inicio.getHours();
+    const minutos = inicio.getMinutes();
+    return horas * 60 + minutos; // Posición en minutos desde la medianoche
   }
+  
+  calcularAlturaReunion(horaInicio: string, horaFin: string): number {
+    const inicio = new Date(horaInicio);
+    const fin = new Date(horaFin);
+    const duracionMinutos = (fin.getTime() - inicio.getTime()) / 60000; // Duración en minutos
+    return duracionMinutos;
+  }
+
   navigateTo(route: string, dia: Date): void {
     setTimeout(() => {
       this.router.navigate([route], { queryParams: { fecha: dia.toISOString() } });

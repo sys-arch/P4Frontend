@@ -13,20 +13,17 @@
 
 				<!-- Fecha de la reunión -->
 				<div class="textbox">
-					<input
-						type="date"
-						id="fecha"
-						placeholder="Fecha de la reunión"
-						[(ngModel)]="fecha"
-						name="fecha"
-						required
-						(blur)="validateFecha()"/>
+					<input 
+						type="date" 
+						id="fecha" 
+						placeholder="Fecha de la reunión" 
+						[(ngModel)]="fecha" 
+						name="fecha" 
+						required 
+						(blur)="validateFecha()"
+						#fechaField="ngModel"
+					/>
 					<label for="fecha">Fecha*</label>
-				</div>
-				<div class="error-container">
-					<div *ngIf="fechaInvalid" class="error-message">
-						<small>La fecha de la reunión no puede ser anterior a la fecha actual.</small>
-					</div>
 				</div>
 
 				<!-- Opciones de horario -->
@@ -78,6 +75,12 @@
 					<input type="text" id="observaciones" placeholder="Observaciones" [(ngModel)]="observaciones" name="observaciones" />
 					<label for="observaciones">Observaciones</label>
 				</div>
+
+				<!-- Estado de la reunión -->
+				<div class="textbox">
+					<input type="text" id="estado" placeholder="Estado" [(ngModel)]="estado" name="estado" disabled/>
+					<label for="estado">Estado</label>
+				</div>
 				<p class="required-info">Los campos(*) son obligatorios.</p>
 				<!-- Campo de añadir participantes -->
 				<h3>Añadir Asistentes</h3>
@@ -95,12 +98,12 @@
 				<div class="asistentes-container">
 					<div *ngFor="let usuario of filteredUsers">
 						<label>
-							<input
-								type="checkbox" 
-								[(ngModel)]="usuario.isAsistente" 
-								name="asistente{{usuario.nombre}}" 
-								(change)="toggleAsistente(usuario)" />
-							{{ usuario.nombre }} {{usuario.apellido1}} {{usuario.apellido2}} ({{ usuario.email }})
+						<input
+							type="checkbox"
+							[(ngModel)]="usuario.isAsistente"
+							name="asistente{{usuario.id}}" 
+							(change)="usuario.isAsistente ? openAddModal(usuario) : openDeleteModal(usuario)" />
+							{{ usuario.nombre }} {{ usuario.apellido1 }} {{ usuario.apellido2 }} ({{ usuario.email }})
 						</label>
 					</div>
 				</div>
@@ -120,4 +123,61 @@
   	<app-loader *ngIf="isLoading"></app-loader>
 
 	<app-footer></app-footer>
+</div>
+
+<div>
+	<!-- Modal de confirmación en cancelación reunión-->
+	<div class="modal-overlay" *ngIf="showModal">
+		<div class="modal-content">
+			<h3>Confirmación</h3>
+			<p>¿Estás seguro de que deseas modificar esta reunión?</p>
+			<div class="modal-actions">
+				<button class="cancel-btn" (click)="onCancelModal()">No, Volver</button>
+				<button class="confirm-btn" (click)="onConfirmUpdate()">Sí, Modificar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para mostrar errores error  -->
+	<div class="modal-overlay" *ngIf="showErrorModal">
+		<div class="modal-content">
+			<h3>Error</h3>
+			<p>{{ errorMessage }}</p>
+			<div class="modal-actions">
+				<button class="btn" (click)="closeErrorModal()">Cerrar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para confirmar añadir asistentes -->
+	<div class="modal-overlay" *ngIf="showAddModal">
+		<div class="modal-content">
+			<h3>Añadir Asistente</h3>
+			<p>¿Estás seguro de que deseas añadir a este asistente?</p>
+			<p>
+				<strong>{{ selectedUsuario?.nombre }} {{ selectedUsuario?.apellido1 }} {{ selectedUsuario?.apellido2 }}</strong>
+				(<i>{{ selectedUsuario?.email }}</i>)
+			</p>
+			<div class="modal-actions">
+				<button class="cancel-btn" (click)="closeAddModal()">Cancelar</button>
+				<button class="confirm-btn" (click)="confirmAddAsistente()">Añadir</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para confirmar eliminar asistentes -->
+  	<div class="modal-overlay" *ngIf="showDeleteModal">
+		<div class="modal-content">
+			<h3>Eliminar Asistente</h3>
+			<p>¿Estás seguro de que deseas eliminar a este asistente?</p>
+			<p>
+				<strong>{{ selectedUsuario?.nombre }} {{ selectedUsuario?.apellido1 }} {{ selectedUsuario?.apellido2 }}</strong>
+				(<i>{{ selectedUsuario?.email }}</i>)
+			</p>
+			<div class="modal-actions">
+				<button class="confirm-btn" (click)="closeDeleteModal()">Cancelar</button>
+				<button class="cancel-btn" (click)="confirmDeleteAsistente()">Eliminar</button>
+			</div>
+		</div>
+	</div>
 </div>
