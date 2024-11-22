@@ -27,6 +27,7 @@ export const routes: Routes = [
     { path: 'contrasena-olvidada', component: ContrasenaOlvidadaComponent },
     { path: 'reset-contrasena', component: ResetContrasenaComponent },
     { path: 'edicion-usuario', component: EdicionUsuarioComponent },
+    { path: 'editar-perfil', component: EdicionUsuarioComponent },
     { path: 'crear-reuniones', component: CrearReunionesComponent },
     { path: 'buzon-reuniones', component: BuzonReunionesComponent},
     { path: 'modificar-reuniones/:id', component: ModificarReunionesComponent },
