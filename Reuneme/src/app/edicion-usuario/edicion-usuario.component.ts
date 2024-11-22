@@ -60,6 +60,7 @@ export class EdicionUsuarioComponent implements OnInit {
     // Obtener el rol antes de inicializar el formulario
     this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
       (response) => {
+        console.log('Método de getUserRole')
         this.role = response.role; // Asigna el rol basado en la respuesta del servicio
 
         // Inicializar el formulario después de obtener el rol

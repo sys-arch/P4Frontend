@@ -131,7 +131,6 @@ export class UserService {
         return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });
     }
 
-
     verDatosEmpleado(email: string): Observable<any> {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
@@ -222,7 +221,7 @@ export class UserService {
     getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
 
         return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
