@@ -97,7 +97,7 @@ private reunionesMock = [
       'Content-Type': 'application/json'
     });
     if (withAuth) {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         headers = headers.set('Authorization', `Bearer ${token}`);
       } else {
@@ -146,6 +146,7 @@ private reunionesMock = [
   }
 
   getReunionesAsistidas(email: string): Observable<any[]> {
+
     const headers = this.getHeaders();
     const payload = { email: email }; // Crear el cuerpo de la petición
     return this.client.put<any[]>(`${httpUrl}empleados/reunion/asiste`, payload, { headers });
