@@ -15,7 +15,7 @@ export class AsistentesService {
       'Content-Type': 'application/json'
     });
     if (withAuth) {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         headers = headers.set('Authorization', `Bearer ${token}`);
       } else {

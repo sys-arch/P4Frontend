@@ -85,12 +85,8 @@ export class CalendarioComponent implements OnInit {
     const resultado = this.ausencias.find((ausencia) => {
       const inicio = ausencia.fechaInicio.toISOString().split('T')[0];
       const fin = ausencia.fechaFin.toISOString().split('T')[0];
-  
-      console.log(`Día: ${diaString}, Inicio: ${inicio}, Fin: ${fin}`);
       return diaString >= inicio && diaString <= fin;
     });
-  
-    console.log(`Ausencia para ${diaString}:`, resultado);
     return resultado || null;
   }
   
@@ -102,19 +98,35 @@ export class CalendarioComponent implements OnInit {
 
   cargarReuniones() {
     const email = sessionStorage.getItem('email') || '';
-
+  
     // Cargar reuniones organizadas
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
         console.log('Reuniones organizadas:', this.reunionOrg);
-
+  
         // Cargar reuniones asistidas
         this.reunionService.getReunionesAsistidas(email).subscribe(
           (reunionesAsistidas) => {
-            this.reunionAsist = reunionesAsistidas;
-            
-            console.log('Reuniones asistidas:', this.reunionAsist);
+            const filteredReuniones: any[] = [];
+            const asistenteRequests = reunionesAsistidas.map((reunion) =>
+              this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
+                (asistente) => {
+                  if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
+                    filteredReuniones.push(reunion);
+                  }
+                },
+                (error) => {
+                  console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
+                }
+              )
+            );
+  
+            // Esperar a que se completen todas las promesas
+            Promise.all(asistenteRequests).then(() => {
+              this.reunionAsist = filteredReuniones;
+              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
+            });
           },
           (error) => {
             console.error('Error al cargar reuniones asistidas:', error);
@@ -126,11 +138,14 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
+  
   obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
-    if(!dia || !hora){
+    if (!dia || !hora) {
       return null;
     }
-    
+  
+    console.log(`Buscando reunión para el día ${dia} y la hora ${hora}`);
+  
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -143,7 +158,7 @@ export class CalendarioComponent implements OnInit {
         id: reunionOrg.id,
         clase: 'reunion-organizador',
         asunto: reunionOrg.asunto,
-        estado: reunionOrg.estado.toLowerCase() // Convertir estado a minúsculas
+        estado: reunionOrg.estado.toLowerCase(),
       };
     }
   
@@ -159,13 +174,14 @@ export class CalendarioComponent implements OnInit {
         id: reunionAsist.id,
         clase: 'reunion-asistente',
         asunto: reunionAsist.asunto,
-        estado: reunionAsist.estado.toLowerCase() 
+        estado: reunionAsist.estado.toLowerCase(),
       };
     }
   
-  
     return null;
-  }  
+  }
+  
+
 
   // Mostrar información de la reunión al pulsar sobre ella en el calendario
   verReunion(id: string | undefined): void{
@@ -393,16 +409,19 @@ export class CalendarioComponent implements OnInit {
   // Obtener color de la línea según el estado de la reunión
   getEstadoColor(estado: string | undefined): string {
     if (!estado) {
+      console.log('Estado no definido');
       return 'transparent';
     }
+    console.log(`Color para el estado ${estado}`);
     const coloresEstado: Record<string, string> = {
       abierta: '#28a745', // Verde
       cerrada: '#6c757d', // Gris
-      realizada: '#ebfe44', // Azul
+      realizada: '#007bff', // Azul
       cancelada: '#dc3545', // Rojo
     };
     return coloresEstado[estado] || 'transparent';
   }
+  
   
   
   // Ajustar cuadro reunión a la franja horaria correspondiente en la vista semanal

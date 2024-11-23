@@ -2,14 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
+import { jwtDecode } from 'jwt-decode';
 import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
-import { jwtDecode } from 'jwt-decode';
-import { NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
 
 @Component({
@@ -40,8 +38,8 @@ export class PerfilComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token') || '';
-    const localEmail = localStorage.getItem('email') || '';
+    const token = sessionStorage.getItem('token') || '';
+    const localEmail = sessionStorage.getItem('email') || '';
     console.log('Token:', token);
 
     // Verifica si hay un email como argumento en la URL
@@ -94,7 +92,7 @@ export class PerfilComponent implements OnInit {
 
   editUser(userEmail: string): void {
     if (userEmail) {
-      const token = localStorage.getItem('token') || '';
+      const token = sessionStorage.getItem('token') || '';
       const role = this.decodeRoleFromToken(token); // Decodificar el rol desde el token
       console.log(this.admin.correo);
   

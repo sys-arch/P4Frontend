@@ -27,6 +27,8 @@ export class EdicionUsuarioComponent implements OnInit {
   showNewPWModal: boolean = false;
   user: any;
   role: string = '';
+  fechaInvalid = false;
+  showSaveConfirmationModal: boolean = false; // Controla el modal de confirmación
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,11 +53,9 @@ export class EdicionUsuarioComponent implements OnInit {
         this.loggedUserEmail = ''; // Si ocurre un error, deja el email vacío
       }
     } else {
-      console.warn('No se encontró un token en localStorage.');
+      console.warn('No se encontró un token en SessionStorage.');
       this.loggedUserEmail = ''; // Manejo en caso de que no haya token
     }
-
-    console.log('Este es en ngOnit: ' + this.loggedUserEmail)
 
     // Decodificar el token y validar el rol
     const role = this.decodeRoleFromToken(this.token);
@@ -63,7 +63,6 @@ export class EdicionUsuarioComponent implements OnInit {
     // Obtener el rol antes de inicializar el formulario
     this.userService.getUserRoleByEmail(this.user, this.token).subscribe(
       (response) => {
-        console.log('Método de getUserRole')
         this.role = response.role; // Asigna el rol basado en la respuesta del servicio
 
         // Inicializar el formulario después de obtener el rol
@@ -154,7 +153,31 @@ export class EdicionUsuarioComponent implements OnInit {
     );
   }
 
+  // Mostrar modal de confirmación
+  showSaveModal(): void {
+    this.showSaveConfirmationModal = true;
+  }
+
+  // Confirmar guardado
+  confirmSaveChanges(): void {
+    this.showSaveConfirmationModal = false;
+    this.onSubmit();
+  }
+
+  // Cancelar guardado
+  cancelSaveChanges(): void {
+    this.showSaveConfirmationModal = false;
+  }
+
+
   onSubmit(): void {
+    this.validateFechaAlta(); // Validar fecha antes de continuar
+
+    if (this.fechaInvalid) {
+      console.error('La fecha de alta es inválida.');
+    return; // No continuar si la fecha no es válida
+    }
+
     if (this.userForm.valid) {
       this.isLoading = true;
 
@@ -279,6 +302,23 @@ export class EdicionUsuarioComponent implements OnInit {
     } catch (error) {
       console.error('Error al decodificar el token:', error);
       return null; // Retornar null si ocurre un error
+    }
+  }
+
+  // Validación de la fecha de alta debe ser menor o igual a la fecha actual
+  validateFechaAlta(): void {
+    const altaControl = this.userForm.get('fechaAlta');
+
+    if (altaControl) {
+      const alta = new Date(altaControl.value);
+      const fechaActual = new Date();
+  
+      if (alta > fechaActual) {
+        this.fechaInvalid = true;
+        altaControl.setErrors({ invalidFecha: true }); // Marca el control como inválido
+      } else {
+        altaControl.setErrors(null); // Elimina errores si es válida
+      }
     }
   }
 
