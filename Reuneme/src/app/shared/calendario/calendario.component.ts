@@ -85,12 +85,8 @@ export class CalendarioComponent implements OnInit {
     const resultado = this.ausencias.find((ausencia) => {
       const inicio = ausencia.fechaInicio.toISOString().split('T')[0];
       const fin = ausencia.fechaFin.toISOString().split('T')[0];
-  
-      console.log(`Día: ${diaString}, Inicio: ${inicio}, Fin: ${fin}`);
       return diaString >= inicio && diaString <= fin;
     });
-  
-    console.log(`Ausencia para ${diaString}:`, resultado);
     return resultado || null;
   }
   
