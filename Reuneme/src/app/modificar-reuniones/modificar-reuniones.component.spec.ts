@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Importa el módulo de pruebas para HttpClient
 import { ActivatedRoute } from '@angular/router';
-import { ModificarReunionesComponent } from './modificar-reuniones.component';
 import { of } from 'rxjs';
+
+import { ModificarReunionesComponent } from './modificar-reuniones.component';
+import { ReunionService } from '../services/reunion.service'; // Ajusta la ruta según sea necesario
 
 describe('ModificarReunionesComponent', () => {
   let component: ModificarReunionesComponent;
@@ -9,13 +12,15 @@ describe('ModificarReunionesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModificarReunionesComponent],
+      imports: [HttpClientTestingModule], // Importa HttpClientTestingModule para manejar dependencias de HTTP
+      declarations: [ModificarReunionesComponent], // Declara el componente bajo prueba
       providers: [
+        ReunionService, // Provee el servicio necesario
         {
-          provide: ActivatedRoute,
+          provide: ActivatedRoute, // Mockea ActivatedRoute
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
-            params: of({ id: 'mockId' }),  // Simula los parámetros de la ruta si es necesario
+            snapshot: { paramMap: { get: (key: string) => 'mockValue' } }, // Mock para snapshot y parámetros de ruta
+            params: of({ id: 'mockId' }), // Mock para parámetros observables
           },
         },
       ],
