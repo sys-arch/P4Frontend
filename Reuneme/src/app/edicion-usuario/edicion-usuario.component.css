@@ -1,7 +1,7 @@
 /* Contenedor principal de la edición */
 .perfil-container {
     position: relative;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,6 +11,7 @@
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
     text-align: center;
+    padding-top: 80px;
 }
 
 .perfil-container h2 {
