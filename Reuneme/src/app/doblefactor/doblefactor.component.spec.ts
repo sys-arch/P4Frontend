@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Para pruebas de HttpClient
 import { DoblefactorComponent } from './doblefactor.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TwoFactorService } from '../services/twoFactor.service';
 
 describe('DoblefactorComponent', () => {
@@ -10,8 +9,7 @@ describe('DoblefactorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule], // Módulo de pruebas para HttpClient
-      declarations: [DoblefactorComponent], // Declaramos el componente
+      imports: [HttpClientTestingModule, DoblefactorComponent], // Incluye el componente standalone en imports
       providers: [
         {
           provide: TwoFactorService,

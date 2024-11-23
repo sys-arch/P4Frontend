@@ -26,13 +26,13 @@ describe('EdicionUsuarioComponent', () => {
       imports: [
         ReactiveFormsModule,
         HttpClientTestingModule,
-        EdicionUsuarioComponent, // Ahora el componente standalone se incluye aquí
+        EdicionUsuarioComponent, // Incluye el componente standalone aquí
       ],
       providers: [
         {
           provide: UserService,
           useValue: {
-            getUser: jasmine.createSpy('getUser').and.returnValue(of(mockUser)), // Mock de getUser
+            getUser: jasmine.createSpy('getUser').and.returnValue(of(mockUser)), // Mock del método getUser
             updateAdmin: jasmine.createSpy('updateAdmin').and.returnValue(of({ message: 'Usuario actualizado' })),
           },
         },
@@ -53,7 +53,7 @@ describe('EdicionUsuarioComponent', () => {
     component = fixture.componentInstance;
     userService = TestBed.inject(UserService);
 
-    // Simula el usuario
+    // Inicializa el usuario simulado
     component.user = mockUser;
     fixture.detectChanges();
   });

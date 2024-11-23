@@ -9,9 +9,11 @@ describe('AusenciasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule], // Importa el módulo de pruebas para HttpClient
-      declarations: [AusenciasComponent],
-      providers: [AsistentesService], // Asegúrate de proporcionar el servicio
+      imports: [
+        HttpClientTestingModule, // Para pruebas con HttpClient
+        AusenciasComponent, // Importa el standalone component aquí
+      ],
+      providers: [AsistentesService], // Provee el servicio necesario
     }).compileComponents();
 
     fixture = TestBed.createComponent(AusenciasComponent);

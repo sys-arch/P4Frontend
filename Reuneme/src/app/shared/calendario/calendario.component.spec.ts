@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing'; // Importar el módulo de pruebas para HttpClient
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Para pruebas de HttpClient
 import { CalendarioComponent } from './calendario.component';
 import { ReunionService } from '../../services/reunion.service';
 
@@ -9,8 +9,10 @@ describe('CalendarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule], // Módulo para pruebas de HttpClient
-      declarations: [CalendarioComponent], // Declarar el componente bajo prueba
+      imports: [
+        HttpClientTestingModule, // Módulo para pruebas de HttpClient
+        CalendarioComponent, // Importar el standalone component
+      ],
       providers: [ReunionService], // Proveer el servicio necesario
     }).compileComponents();
 
