@@ -105,14 +105,14 @@ html {
 }
 
 .calendario-nombre-mes {
-  font-size: 3.5vh; /* Tamaño ligeramente aumentado para mayor legibilidad */
-  font-weight: 700; /* Peso del texto para que sea más destacable */
-  color: #f0f0f0; /* Color más claro para mejor contraste */
-  text-shadow: 0px 3px 5px rgba(0, 0, 0, 0.4), 0px -1px 3px rgba(255, 255, 255, 0.1); /* Sombra sutil más profesional */
+  font-size: 3.5vh;
+  font-weight: 700;
+  color: #f0f0f0;
+  text-shadow: 0px 3px 5px rgba(0, 0, 0, 0.4), 0px -1px 3px rgba(255, 255, 255, 0.1);
   text-align: center;
-  letter-spacing: 0.1em; /* Añadir un poco de espacio entre letras para claridad */
-  margin-bottom: 10px; /* Añadir separación con el contenido inferior */
-  padding: 10px 0px; /* Espaciado interno para darle un mejor aspecto */
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  padding: 10px 0px;
 
 }
 

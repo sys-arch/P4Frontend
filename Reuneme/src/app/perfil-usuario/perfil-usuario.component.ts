@@ -107,7 +107,7 @@ export class PerfilUsuarioComponent implements OnInit {
       console.log(this.user.correo);
   
       // Redirigir al formulario de edición con el estado del usuario
-      this.router.navigate(['/editar-perfil'], {
+      this.router.navigate(['/edicion-usuario'], {
         state: {
           user: this.user.correo, // Pasar el correo del usuario
           role: role // Pasar el rol (administrador o empleado)
