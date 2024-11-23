@@ -89,8 +89,9 @@ export class LoginComponent {
           this.isLoading = false;
   
           if (error.status === 403) {
-            // Muestra el mensaje enviado por el backend
-            this.errorMessage = error.error || 'Algo ha sucedido, contacte con un administrador.';
+            this.errorMessage = error?.error?.error || 'Algo ha pasado. Intente más tarde.';
+            console.log('Mensaje de error asignado:', this.errorMessage);
+        
           } else if (error.status === 401) {
             this.errorMessage = 'Credenciales incorrectas. Intente nuevamente.';
           } else {
@@ -105,10 +106,8 @@ export class LoginComponent {
     } else {
       this.loginFailed = true;
     }
-  }
-  
-  
-  
+}
+
   // Validar que el correo electrónico ingresado tenga un formato válido cada vez que cambie
   onEmailChange(): void {
     this.resetEmailValidationStates(); // Restablecer estados de validación de email al cambiar
