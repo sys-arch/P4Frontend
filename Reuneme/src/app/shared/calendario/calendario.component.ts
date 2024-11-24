@@ -100,17 +100,17 @@ export class CalendarioComponent implements OnInit {
   
 
   cargarReuniones() {
-    const email = sessionStorage.getItem('email') || '';
+    const email = sessionStorage.getItem('email') ?? '';
   
     // Cargar reuniones organizadas
-    this.reunionService.getReunionesOrganizadas(email).subscribe(
-      (reunionesOrganizadas) => {
+    this.reunionService.getReunionesOrganizadas(email).subscribe({
+      next: (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
         console.log('Reuniones organizadas:', this.reunionOrg);
   
         // Cargar reuniones asistidas
-        this.reunionService.getReunionesAsistidas(email).subscribe(
-          (reunionesAsistidas) => {
+        this.reunionService.getReunionesAsistidas(email).subscribe({
+          next: (reunionesAsistidas) => {
             const filteredReuniones: any[] = [];
             const asistenteRequests = reunionesAsistidas.map((reunion) =>
               this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
@@ -131,15 +131,15 @@ export class CalendarioComponent implements OnInit {
               console.log('Reuniones asistidas filtradas:', this.reunionAsist);
             });
           },
-          (error) => {
+          error: (error) => {
             console.error('Error al cargar reuniones asistidas:', error);
           }
-        );
+        });
       },
-      (error) => {
+      error: (error) => {
         console.error('Error al cargar reuniones organizadas:', error);
       }
-    );
+    });
   }
   
   obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
@@ -360,7 +360,6 @@ export class CalendarioComponent implements OnInit {
   }
 
   siguienteSemana() {
-    const primerDiaMes = new Date(this.añoActual, this.mesActual, 1);
     const diasDelMes = new Date(this.añoActual, this.mesActual + 1, 0).getDate();
     const totalSemanas = Math.ceil(diasDelMes / 7);
 
