@@ -22,6 +22,9 @@ interface Ausencia {
   styleUrls: ['./calendario.component.css']
 })
 export class CalendarioComponent implements OnInit {
+  reuniones(reuniones: any) {
+    throw new Error('Method not implemented.');
+  }
   diasDelAnio: Date[] = [];
   ausencias: Ausencia[] = [];
   diasFiltrados: (Date | null)[] = [];

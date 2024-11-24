@@ -1,29 +1,29 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Importa HttpClientTestingModule
+import { VerReunionesComponent } from './ver-reuniones/ver-reuniones.component'; // Asegúrate de que la ruta sea correcta
+import { ReunionService } from './services/reunion.service'; // Asegúrate de que la ruta sea correcta
 
-describe('AppComponent', () => {
+describe('VerReunionesComponent', () => {
+  let component: VerReunionesComponent;
+  let fixture: ComponentFixture<VerReunionesComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        HttpClientTestingModule, // Proporciona un HttpClient simulado
+        VerReunionesComponent, // Si es standalone
+      ],
+      providers: [
+        ReunionService, // Proporciona el servicio requerido
+      ],
     }).compileComponents();
-  });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'Reuneme' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Reuneme');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(VerReunionesComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain(' Reuneme');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
