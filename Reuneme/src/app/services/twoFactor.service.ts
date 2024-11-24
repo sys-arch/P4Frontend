@@ -35,7 +35,6 @@ constructor(private client: HttpClient) {}
         email: email,
         authCode: authCode
     };
-    console.log("Datos enviados:", body); // Para verificar el cuerpo antes de enviar
     return this.client.put(`${httpUrl}users/verify-2fa`, body, { headers });
 }
 

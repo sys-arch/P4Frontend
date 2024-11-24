@@ -96,7 +96,6 @@ loadAllUsers(): void {
 
   this.userService.getAllUsers(this.token).subscribe(
     (userList: any[]) => {
-      console.log('Lista de usuarios:', userList);
       this.users = userList.map(userInfo => {
         const isAdmin = userInfo.hasOwnProperty('interno') && userInfo.interno !== undefined;
         const isBlocked = !isAdmin && userInfo.bloqueado === true;

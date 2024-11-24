@@ -77,7 +77,6 @@ export class LoginComponent {
         (response) => {
           this.isLoading = false;
           if (response && response.token) {
-            console.log('Respuesta del servidor:', response);
             sessionStorage.setItem('token', response.token); // Guardar el token
             sessionStorage.setItem('email', user.email); // Guardar el email
             this.router.navigate(['/doblefactor']);

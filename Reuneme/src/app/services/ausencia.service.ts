@@ -16,8 +16,7 @@ export class AusenciaService {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         });
-        console.log(token);
-        console.log(ausencia);
+        
         const url = `${httpUrl}admins/anadirAusencia?email=${email}`;
     
         return this.client.put(url, ausencia, { headers });

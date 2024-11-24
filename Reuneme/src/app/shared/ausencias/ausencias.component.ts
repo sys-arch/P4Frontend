@@ -56,7 +56,6 @@ export class AusenciasComponent implements OnInit {
         // Inicializar la lista filtrada
         this.filteredAusencias = [...this.ausencias];
       },
-      error => console.error('Error al obtener ausencias:', error)
     );
   }
 

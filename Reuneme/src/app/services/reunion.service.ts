@@ -48,7 +48,6 @@ export class ReunionService {
         observaciones: observaciones,
         estado: estado
     };
-    console.log("Token enviado en Authorization:", headers.get('Authorization'));
     return this.client.post(`${httpUrl}empleados/reunion`, info, { headers });
 }
 

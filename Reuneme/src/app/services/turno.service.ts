@@ -16,9 +16,7 @@ export class TurnoService {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
         });
-        console.log('Token:', token);
-        console.log('Turnos a añadir:', turnos);
-        
+
         const url = `${httpUrl}admins/anadirTurnos`;
         
         // Enviar la lista de turnos en el cuerpo de la solicitud
@@ -34,8 +32,6 @@ export class TurnoService {
             Authorization: `Bearer ${token}`,
         });
         const url = `${httpUrl}admins/turnos`; // Asegúrate de que httpUrl sea tu URL base correcta
-        console.log(token);
-        console.log(url);
     
         // Cambia `post` por `get`
         return this.client.get<any[]>(url, { headers });

@@ -37,10 +37,8 @@ export class DoblefactorComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log("Token: ", this)
     this.email = sessionStorage.getItem('email') || '';
     this.token = sessionStorage.getItem('token') || '';
-    console.log("Token: ", this.token)
 
     if (this.loggedUser.isAdmin) {
       this.userService.verDatosAdmin(this.email).subscribe(
@@ -57,7 +55,6 @@ export class DoblefactorComponent {
     } else {
       this.userService.verDatosEmpleado(this.email).subscribe(
         (userInfo: any) => {
-          console.log(userInfo);
           this.loggedUser.set2fa = userInfo.twoFA;
           if (this.loggedUser.set2fa) {
             this.openModal();
