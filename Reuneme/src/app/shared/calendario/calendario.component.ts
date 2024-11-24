@@ -12,6 +12,9 @@ import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.comp
   styleUrls: ['./calendario.component.css']
 })
 export class CalendarioComponent implements OnInit {
+  reuniones(reuniones: any) {
+    throw new Error('Method not implemented.');
+  }
   diasDelAnio: Date[] = [];
   diasFiltrados: (Date | null)[] = [];
   vista: 'mes' | 'semana' = 'mes';

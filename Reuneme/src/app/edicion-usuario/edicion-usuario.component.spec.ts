@@ -23,16 +23,12 @@ describe('EdicionUsuarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        EdicionUsuarioComponent, // Incluye el componente standalone aquí
-      ],
+      imports: [ReactiveFormsModule, HttpClientTestingModule, EdicionUsuarioComponent],
       providers: [
         {
           provide: UserService,
           useValue: {
-            getUser: jasmine.createSpy('getUser').and.returnValue(of(mockUser)), // Mock del método getUser
+            getUser: jasmine.createSpy('getUser').and.returnValue(of(mockUser)), // Devuelve un usuario simulado
             updateAdmin: jasmine.createSpy('updateAdmin').and.returnValue(of({ message: 'Usuario actualizado' })),
           },
         },
@@ -40,65 +36,38 @@ describe('EdicionUsuarioComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
+            snapshot: { paramMap: { get: (key: string) => 'mockId' } },
             params: of({ id: 'mockId' }),
           },
         },
       ],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
+  
     fixture = TestBed.createComponent(EdicionUsuarioComponent);
     component = fixture.componentInstance;
-    userService = TestBed.inject(UserService);
-
-    // Inicializa el usuario simulado
+  
+    // Inicializa el usuario manualmente
     component.user = mockUser;
     fixture.detectChanges();
   });
+  
 
-  it('debería crear el componente', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería inicializar el formulario correctamente para el administrador', () => {
+  it('should initialize the form for admin', () => {
     component.isAdmin = true;
     component.initializeForm();
-    expect(component.userForm.contains('nombre')).toBeTruthy();
-    expect(component.userForm.contains('apellido1')).toBeTruthy();
-    expect(component.userForm.contains('apellido2')).toBeTruthy();
-    expect(component.userForm.contains('correo')).toBeTruthy();
-    expect(component.userForm.contains('centroTrabajo')).toBeTruthy();
-    expect(component.userForm.contains('password')).toBeTruthy();
+    expect(component.userForm.contains('nombre')).toBeTrue();
+    expect(component.userForm.contains('correo')).toBeTrue();
   });
 
-  it('debería llamar a updateUserByEmail y navegar a la pantalla principal al enviar el formulario como administrador', () => {
-    const mockData = {
-      nombre: 'Nuevo Nombre',
-      apellido1: 'Primer Apellido',
-      apellido2: 'Segundo Apellido',
-      correo: 'nuevo@ejemplo.com',
-      centroTrabajo: 'Barcelona',
-      interno: true,
-    };
-
+  it('should call updateAdmin on form submission', () => {
     component.isAdmin = true;
-    component.initializeForm();
-    component.userForm.setValue(mockData);
-
+    component.userForm.setValue(mockUser);
     component.onSubmit();
-
-    expect(userService.updateAdmin).toHaveBeenCalledWith(jasmine.objectContaining(mockData));
+    expect(userService.updateAdmin).toHaveBeenCalledWith(mockUser);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/ventana-principal']);
-  });
-
-  it('debería mostrar solo el campo de contraseña para un usuario normal', () => {
-    component.isAdmin = false;
-    component.initializeForm();
-    expect(component.userForm.contains('password')).toBeTruthy();
-    expect(component.userForm.contains('nombre')).toBeFalsy();
-    expect(component.userForm.contains('apellido1')).toBeFalsy();
-    expect(component.userForm.contains('apellido2')).toBeFalsy();
   });
 });

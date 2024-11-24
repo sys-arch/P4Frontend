@@ -4,20 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { PerfilComponent } from './perfil.component';
-
 describe('PerfilComponent', () => {
   let component: PerfilComponent;
   let fixture: ComponentFixture<PerfilComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, PerfilComponent],
+      imports: [HttpClientTestingModule, PerfilComponent], // Standalone
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
-            params: of({ id: 'mockId' }),
+            snapshot: { paramMap: { get: (key: string) => 'mockId' } }, // Simula `paramMap.get`
+            params: of({ id: 'mockId' }), // Simula el observable de `params`
           },
         },
       ],
