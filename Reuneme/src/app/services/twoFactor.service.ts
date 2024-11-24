@@ -28,11 +28,15 @@ constructor(private client: HttpClient) {}
 
     // Verificar código 2FA
     verificar2FA(email: string, authCode: number): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const body = {
+    const headers = new HttpHeaders({
+        'Content-Type': 'application/json' // Solo se envía el tipo de contenido
+    });
+    const body = {
         email: email,
         authCode: authCode
-        };
-        return this.client.put(`${httpUrl}users/verify-2fa`, body, { headers });
-    }
+    };
+    console.log("Datos enviados:", body); // Para verificar el cuerpo antes de enviar
+    return this.client.put(`${httpUrl}users/verify-2fa`, body, { headers });
+}
+
 }
