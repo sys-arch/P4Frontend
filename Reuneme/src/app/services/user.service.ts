@@ -103,7 +103,7 @@ export class UserService {
 
     // Método para actualizar un administrador existente
     updateAdmin(adminData: any): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -118,7 +118,7 @@ export class UserService {
 
     // Método para actualizar un empleado existente
     updateEmpleado(empleadoData: any): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

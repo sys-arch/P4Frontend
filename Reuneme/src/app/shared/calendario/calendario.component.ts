@@ -1,8 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import { AusenciaService } from '../../services/ausencia.service';
 import { ReunionService } from '../../services/reunion.service';
 import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.component";
+
+interface Ausencia {
+  id?: number;
+  usuarioEmail: string;
+  usuarioNombreCompleto: string;
+  motivo: string;
+  fechaInicio: Date;
+  fechaFin: Date;
+}
 
 @Component({
   selector: 'app-calendario',
@@ -13,6 +23,7 @@ import { BuzonReunionesComponent } from "../buzon-reuniones/buzon-reuniones.comp
 })
 export class CalendarioComponent implements OnInit {
   diasDelAnio: Date[] = [];
+  ausencias: Ausencia[] = [];
   diasFiltrados: (Date | null)[] = [];
   vista: 'mes' | 'semana' = 'mes';
   nombreMes: string = '';
@@ -31,33 +42,91 @@ export class CalendarioComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly reunionService: ReunionService,
-    private readonly renderer: Renderer2
+    private readonly renderer: Renderer2,
+    private readonly ausenciaService: AusenciaService
   )  { }
 
   ngOnInit() {
     this.myemail = sessionStorage.getItem('email') || '';
-    this.vista = 'semana'; // Configura la vista inicial como semanal
+    this.vista = 'mes'; // Configura la vista inicial como semanal
     this.calcularSemanaActual(); // Calcula la semana actual
     this.generarDiasDelAnio();
     this.aplicarFiltro();
-    this.cargarReuniones(); // Llama al método para cargar los datos mock
+    this.cargarReuniones();
+    this.cargarAusencias();
   }
+  cargarAusencias() {
+    const emailUsuario = sessionStorage.getItem('email') || '';
+  
+    this.ausenciaService.getTodasLasAusencias().subscribe(
+      (data: any[]) => {
+        this.ausencias = data
+          .map(ausencia => ({
+            id: ausencia.id,
+            usuarioEmail: ausencia.empleado?.email || '', // Accede al email dentro de empleado
+            usuarioNombreCompleto: `${ausencia.empleado?.nombre || ''} ${ausencia.empleado?.apellido1 || ''}`, // Construye el nombre completo
+            motivo: ausencia.motivo,
+            fechaInicio: new Date(ausencia.fechaInicio), // Convierte a tipo Date
+            fechaFin: new Date(ausencia.fechaFin) // Convierte a tipo Date
+          }))
+          .filter(ausencia => ausencia.usuarioEmail === emailUsuario) // Filtra por email del usuario logueado
+          .sort((a, b) => a.fechaInicio.getTime() - b.fechaInicio.getTime()); // Ordena por fecha de inicio
+  
+        console.log('Ausencias procesadas:', this.ausencias);
+      },
+      (error) => console.error('Error al cargar ausencias:', error)
+    );
+  }
+  
+  
+  tieneAusencia(dia: Date): Ausencia | null {
+    const diaString = dia.toISOString().split('T')[0];
+  
+    const resultado = this.ausencias.find((ausencia) => {
+      const inicio = ausencia.fechaInicio.toISOString().split('T')[0];
+      const fin = ausencia.fechaFin.toISOString().split('T')[0];
+      return diaString >= inicio && diaString <= fin;
+    });
+    return resultado || null;
+  }
+  
+  
+  
+  
+  
+  
 
   cargarReuniones() {
     const email = sessionStorage.getItem('email') || '';
-
+  
     // Cargar reuniones organizadas
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
         console.log('Reuniones organizadas:', this.reunionOrg);
-
+  
         // Cargar reuniones asistidas
         this.reunionService.getReunionesAsistidas(email).subscribe(
           (reunionesAsistidas) => {
-            this.reunionAsist = reunionesAsistidas;
-            
-            console.log('Reuniones asistidas:', this.reunionAsist);
+            const filteredReuniones: any[] = [];
+            const asistenteRequests = reunionesAsistidas.map((reunion) =>
+              this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
+                (asistente) => {
+                  if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
+                    filteredReuniones.push(reunion);
+                  }
+                },
+                (error) => {
+                  console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
+                }
+              )
+            );
+  
+            // Esperar a que se completen todas las promesas
+            Promise.all(asistenteRequests).then(() => {
+              this.reunionAsist = filteredReuniones;
+              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
+            });
           },
           (error) => {
             console.error('Error al cargar reuniones asistidas:', error);
@@ -69,11 +138,14 @@ export class CalendarioComponent implements OnInit {
       }
     );
   }
+  
   obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
-    if(!dia || !hora){
+    if (!dia || !hora) {
       return null;
     }
-    
+  
+    console.log(`Buscando reunión para el día ${dia} y la hora ${hora}`);
+  
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -86,7 +158,7 @@ export class CalendarioComponent implements OnInit {
         id: reunionOrg.id,
         clase: 'reunion-organizador',
         asunto: reunionOrg.asunto,
-        estado: reunionOrg.estado.toLowerCase() // Convertir estado a minúsculas
+        estado: reunionOrg.estado.toLowerCase(),
       };
     }
   
@@ -102,18 +174,22 @@ export class CalendarioComponent implements OnInit {
         id: reunionAsist.id,
         clase: 'reunion-asistente',
         asunto: reunionAsist.asunto,
-        estado: reunionAsist.estado.toLowerCase() 
+        estado: reunionAsist.estado.toLowerCase(),
       };
     }
   
-  
     return null;
-  }  
+  }
+  
+
 
   // Mostrar información de la reunión al pulsar sobre ella en el calendario
   verReunion(id: string | undefined): void{
     if(id){
       this.router.navigate(['/ver-reuniones', id]);
+    }
+    else{
+      console.error('No se ha encontrado la reunión');
     }
   }
   
@@ -333,16 +409,19 @@ export class CalendarioComponent implements OnInit {
   // Obtener color de la línea según el estado de la reunión
   getEstadoColor(estado: string | undefined): string {
     if (!estado) {
+      console.log('Estado no definido');
       return 'transparent';
     }
+    console.log(`Color para el estado ${estado}`);
     const coloresEstado: Record<string, string> = {
       abierta: '#28a745', // Verde
       cerrada: '#6c757d', // Gris
-      realizada: '#ebfe44', // Azul
+      realizada: '#007bff', // Azul
       cancelada: '#dc3545', // Rojo
     };
     return coloresEstado[estado] || 'transparent';
   }
+  
   
   
   // Ajustar cuadro reunión a la franja horaria correspondiente en la vista semanal

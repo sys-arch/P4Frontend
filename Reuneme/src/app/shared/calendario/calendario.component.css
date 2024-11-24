@@ -105,11 +105,15 @@ html {
 }
 
 .calendario-nombre-mes {
-  font-size: 3.2vh;
-  font-weight: bold;
-  color: #ffffff;
-  text-shadow: 0.2vh 0.2vh 0.5vh rgba(0, 0, 0, 0.5);
+  font-size: 3.5vh;
+  font-weight: 700;
+  color: #f0f0f0;
+  text-shadow: 0px 3px 5px rgba(0, 0, 0, 0.4), 0px -1px 3px rgba(255, 255, 255, 0.1);
   text-align: center;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  padding: 10px 0px;
+
 }
 
 
@@ -223,7 +227,8 @@ html {
 
 .calendario-dia {
   position: relative;
-  border: 1px solid #444;
+  border: 1px solid #555555;
+  border-radius: 5px;
   background-color: #3d3d3d;
   color: #f1f1f1;
   width: 100%;
@@ -366,6 +371,24 @@ html {
   opacity: 1;
   transition: none;
 }
+.ausencia-item {
+  background-color:  #f22f2f; /* Color distintivo para ausencias */
+  border: 2px solid #ffcccb;
+  border-radius: 5px;
+  text-align: center;
+  flex: none;
+  border-radius: 8px;
+  font-size: 1.6vh;
+  
+  margin-bottom: 0.3vh;
+  box-shadow: 0 0.3vh 0.6vh rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-height: 2em;
+  position: relative;
+  z-index: 1;
+}
 
 .leyenda {
   position: absolute;
@@ -437,7 +460,7 @@ html {
   position: relative;
   bottom: 0;
   left: 5%;
-  z-index: 0;
+  z-index: 100;
 }
 
 .reunion-item .estado-linea {
@@ -451,21 +474,18 @@ html {
 }
 
 .btn-crear-reunion {
-  background-color: #2e86de;
-  color: #ffffff;
+  background-color: #1976D2;
+  color: white;
+  padding: 10px 39px;
+  border-radius: 5px;
   border: none;
-  border-radius: 8px;
-  padding: 12px 25px;
-  font-size: 1.6vh;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 0.4vh 0.8vh rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease-in-out;
-  margin-top: 20px;
+  transition: background-color 0.2s;
 }
 
 .btn-crear-reunion:hover {
-  background-color: #1e5aa1;
+  background-color: #1565C0;
   transform: scale(1.05);
 }
 
