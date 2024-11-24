@@ -10,13 +10,12 @@ describe('ResetContrasenaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ResetContrasenaComponent],
+      imports: [HttpClientTestingModule, ResetContrasenaComponent], // Standalone
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => (key === 'token' ? 'mockToken' : null) } },
-            params: of({ token: 'mockToken' }),
+            snapshot: { paramMap: { get: (key: string) => (key === 'token' ? 'mockToken' : null) } }, // Mock de paramMap.get()
           },
         },
       ],
@@ -32,6 +31,6 @@ describe('ResetContrasenaComponent', () => {
   });
 
   it('should set the token from ActivatedRoute', () => {
-    expect(component.token).toBe('mockToken');
+    expect(component.token).toBe('mockToken'); // Verifica que el token se haya configurado correctamente
   });
 });
