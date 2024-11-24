@@ -38,7 +38,9 @@ export class CrearReunionesComponent implements OnInit {
 
   ) {}
   
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    //no puede estar vacio 
+   }
 
   // Validación de la fecha de la reunión debe ser mayor o igual a la fecha actual
   validateFecha(): void {
