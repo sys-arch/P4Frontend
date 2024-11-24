@@ -11,7 +11,7 @@ export class AusenciaService {
     constructor(private client: HttpClient) { }
     // Método para añadir una nueva ausencia
     addAusencia(email: string, ausencia: any): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -25,7 +25,7 @@ export class AusenciaService {
 
     // Método para obtener todas las ausencias
     getTodasLasAusencias(): Observable<any[]> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -35,7 +35,7 @@ export class AusenciaService {
 
     // Método para eliminar una ausencia por ID
     deleteAusencia(id: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

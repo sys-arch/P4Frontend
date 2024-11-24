@@ -67,7 +67,7 @@ export class UserService {
         password2: string,
         interno: boolean
     ): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({ 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -106,26 +106,38 @@ export class UserService {
         return this.client.post(`${httpUrl}pwd/reset`, body, { headers, responseType: 'text' });
     }
 
-        // Método para actualizar un administrador existente
+    // Método para actualizar un administrador existente
     updateAdmin(adminData: any): Observable<any> {
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         });
+    
+        // Enviar adminData directamente en el cuerpo de la solicitud
+        console.log('Datos enviados a modificarAdministrador userService:', JSON.stringify(adminData, null, 2));
+        console.log('Token userservice: ' + token)
+    
         return this.client.put(`${httpUrl}admins/modificarAdministrador`, adminData, { headers });
     }
 
     // Método para actualizar un empleado existente
     updateEmpleado(empleadoData: any): Observable<any> {
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-
+            'Authorization': `Bearer ${token}`
         });
+
+         // Enviar adminData directamente en el cuerpo de la solicitud
+         console.log('Datos enviados a modificarEmpleado userService:', JSON.stringify(empleadoData, null, 2));
+
+        // Usar el email como parámetro en la URL
         return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });
     }
 
-
     verDatosEmpleado(email: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -135,7 +147,7 @@ export class UserService {
     }
 
     verDatosAdmin(email: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -182,7 +194,7 @@ export class UserService {
         return this.client.put(`${httpUrl}admins/verificarEmpleado`, body, { headers });
     }
     getAusencias(): Observable<any[]> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         console.log('Token en getAusencias:', token);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -214,14 +226,14 @@ export class UserService {
     getUserRoleByEmail(email: string, token: string): Observable<{ role: string }> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         });
 
         return this.client.get<{ role: string }>(`${httpUrl}admins/getUserRoleByEmail?email=${email}`, { headers });
     }
 
     desactivar2FA(email: string, secretKey: string): Observable<any> {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
