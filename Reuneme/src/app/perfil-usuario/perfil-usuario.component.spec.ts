@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { PerfilUsuarioComponent } from './perfil-usuario.component';
 
@@ -8,9 +11,16 @@ describe('PerfilUsuarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PerfilUsuarioComponent]
-    })
-    .compileComponents();
+      imports: [HttpClientTestingModule, PerfilUsuarioComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
+          },
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PerfilUsuarioComponent);
     component = fixture.componentInstance;

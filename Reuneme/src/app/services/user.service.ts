@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté definido
 
 @Injectable({
@@ -8,13 +9,17 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
 })
 export class UserService {
     constructor(private client: HttpClient) { }
-
-    // Método login con headers y URL base
+    
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.put(`${httpUrl}users/login`, user, { headers });
-    }
-
+        return this.client.put(`${httpUrl}users/login`, user, { headers }).pipe(
+          catchError((error: HttpErrorResponse) => {
+            // Propagar el error para manejarlo en el componente
+            return throwError(() => error);
+          })
+        );
+      }
+      
 
     // Método register con headers
     register(

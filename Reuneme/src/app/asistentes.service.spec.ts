@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Importa el módulo de pruebas para HttpClient
 import { AsistentesService } from './services/asistentes.service';
 
 describe('AsistentesService', () => {
   let service: AsistentesService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule], // Agrega el módulo de pruebas para HttpClient
+    });
     service = TestBed.inject(AsistentesService);
   });
 
@@ -14,3 +16,4 @@ describe('AsistentesService', () => {
     expect(service).toBeTruthy();
   });
 });
+
