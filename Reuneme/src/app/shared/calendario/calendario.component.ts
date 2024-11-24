@@ -143,9 +143,6 @@ export class CalendarioComponent implements OnInit {
     if (!dia || !hora) {
       return null;
     }
-  
-    console.log(`Buscando reunión para el día ${dia} y la hora ${hora}`);
-  
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -409,18 +406,17 @@ export class CalendarioComponent implements OnInit {
   // Obtener color de la línea según el estado de la reunión
   getEstadoColor(estado: string | undefined): string {
     if (!estado) {
-      console.log('Estado no definido');
       return 'transparent';
     }
-    console.log(`Color para el estado ${estado}`);
     const coloresEstado: Record<string, string> = {
       abierta: '#28a745', // Verde
       cerrada: '#6c757d', // Gris
-      realizada: '#007bff', // Azul
+      realizada: '#ebfe44', // Azul
       cancelada: '#dc3545', // Rojo
     };
     return coloresEstado[estado] || 'transparent';
   }
+  
   
   
   
