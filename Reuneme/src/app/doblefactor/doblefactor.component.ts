@@ -37,7 +37,10 @@ export class DoblefactorComponent {
   ) {}
 
   ngOnInit(): void {
+    console.log("Token: ", this)
     this.email = sessionStorage.getItem('email') || '';
+    this.token = sessionStorage.getItem('token') || '';
+    console.log("Token: ", this.token)
 
     if (this.loggedUser.isAdmin) {
       this.userService.verDatosAdmin(this.email).subscribe(
