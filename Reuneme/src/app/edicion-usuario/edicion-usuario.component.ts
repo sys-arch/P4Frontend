@@ -47,7 +47,6 @@ export class EdicionUsuarioComponent implements OnInit {
       try {
         const decodedToken: any = jwtDecode(this.token); // Decodifica el token JWT
         this.loggedUserEmail = decodedToken.email || decodedToken.sub || ''; // Ajusta según el campo presente en tu token
-        console.log('Email del usuario logueado:', this.loggedUserEmail);
       } catch (error) {
         console.error('Error al decodificar el token:', error);
         this.loggedUserEmail = ''; // Si ocurre un error, deja el email vacío
@@ -72,7 +71,6 @@ export class EdicionUsuarioComponent implements OnInit {
         this.loadUserData();
       },
       (error) => {
-        console.error('Error al verificar el rol del usuario en el backend:', error);
         this.router.navigate(['/ventana-principal']);
       }
     );
@@ -116,9 +114,7 @@ export class EdicionUsuarioComponent implements OnInit {
         this.isLoading = false;
 
         if (data) {
-          console.log('Nombre recibido:', data.nombre);
-          console.log('Role getuserData: ' + this.role);
-          console.log('Email getuserdata: ' + this.user);
+          
 
           // Aplica los valores al formulario basado en el rol
           this.userForm.patchValue({
@@ -141,12 +137,10 @@ export class EdicionUsuarioComponent implements OnInit {
 
           this.profilePicture = this.gravatarService.getGravatarUrl(data.email)
         } else {
-          console.error('Datos del usuario no encontrados');
           this.router.navigate(['/ventana-principal']);
         }
       },
       (error) => {
-        console.error('Error al cargar los datos del usuario:', error);
         this.isLoading = false;
         this.router.navigate(['/ventana-principal']);
       }
@@ -199,8 +193,6 @@ export class EdicionUsuarioComponent implements OnInit {
         console.log('No hay cambios para actualizar.');
         return;
       }
-
-      console.log('Datos enviados:', JSON.stringify(updateData, null, 2));
 
       // Llamar al servicio de actualización
       const updateUser = this.role === 'administrador'

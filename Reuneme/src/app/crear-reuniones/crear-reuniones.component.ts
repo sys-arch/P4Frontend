@@ -110,7 +110,6 @@ export class CrearReunionesComponent implements OnInit {
       alert(this.errorMessage);
       return; 
     }
-    console.log("Organizador:", this.organizador);
     this.reunionService.crearReunion(this.organizador,this.asunto, inicio,
       fin, this.ubicacion, this.observaciones, this.estado)
       .subscribe({
