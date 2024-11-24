@@ -1,0 +1,34 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+# azure-pipelines.yml
+# Pipeline que se ejecuta al hacer un commit en cualquier rama
+
+trigger:
+ branches:
+  include:
+    - '*' # Ejecutar la pipeline cuando haya commits en cualquier rama1
+
+pool:
+ vmImage: 'ubuntu-latest' # Usar una VM con Ubuntu
+
+steps:
+ # 1. Linting del frontend
+ - script: |
+    echo "Ejecutando Linting del frontend
+    npm run lint
+    displayName: 'Linting del frontend'
+
+ # 2. Ejecutar pruebas del frontend
+ - script: |
+    echo "Ejecutando pruebas del frontend"
+    npm test
+    displayName: 'Pruebas unitarias del frontend'
+
+ # 3. Compilar el frontend
+ - script: |
+    echo "Compilando el frontend"
+    npm run build
+    displayName: 'Compilación del frontend'

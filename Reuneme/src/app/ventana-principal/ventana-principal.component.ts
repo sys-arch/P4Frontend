@@ -82,8 +82,8 @@ export class VentanaPrincipalComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.token = localStorage.getItem('token') || '';
-    const localEmail = localStorage.getItem('email') || '';
+    this.token = sessionStorage.getItem('token') || '';
+    const localEmail = sessionStorage.getItem('email') || '';
   
     // Obtener el parámetro 'email' de la URL o usar el email de localStorage
     const routeEmail = this.route.snapshot.paramMap.get('email');
@@ -142,7 +142,16 @@ export class VentanaPrincipalComponent implements OnInit {
       return false;
     }
   }
-  
+  logout(): void {
+    this.isLoading = true;
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('2f');
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/login']);
+    }, 1000);
+  }
   visitProfile(selectedUser: any): void {
     if (selectedUser) {
       const route = selectedUser.isAdmin ? '/perfil-admin' : '/perfil-usuario';

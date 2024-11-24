@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
+import { jwtDecode } from 'jwt-decode';
 import { GravatarService } from '../services/gravatar.service';
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
 
 @Component({
@@ -40,8 +41,8 @@ export class PerfilUsuarioComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    const token = localStorage.getItem('token') || '';
-    const localEmail = localStorage.getItem('email') || '';
+    const token = sessionStorage.getItem('token') || '';
+    const localEmail = sessionStorage.getItem('email') || '';
 
     // Obtener el parámetro 'email' de la URL
     const routeEmail = this.route.snapshot.paramMap.get('email');
@@ -97,14 +98,36 @@ export class PerfilUsuarioComponent implements OnInit {
   navigateToChangePassword(): void {
     this.router.navigate(['/edicion-usuario'], { state: { token: this.token } });
   }
+
+
   editUser(userEmail: string): void {
     if (userEmail) {
-      this.router.navigate(['/edicion-usuario', userEmail]);
+      const token = sessionStorage.getItem('token') || '';
+      const role = this.decodeRoleFromToken(token); // Decodificar el rol desde el token
+      console.log(this.user.correo);
+  
+      // Redirigir al formulario de edición con el estado del usuario
+      this.router.navigate(['/edicion-usuario'], {
+        state: {
+          user: this.user.correo, // Pasar el correo del usuario
+          role: role // Pasar el rol (administrador o empleado)
+        },
+      });
     } else {
       console.error('El correo electrónico del usuario no está definido');
     }
   }
 
+  // Método para decodificar el rol desde el token
+  private decodeRoleFromToken(token: string): string {
+    try {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.role; // Extraer el rol del token
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return ''; // Retornar un valor vacío si falla la decodificación
+    }
+  }
 
   // Método para redirigir a las diferentes páginas
   navigateTo(route: string): void {

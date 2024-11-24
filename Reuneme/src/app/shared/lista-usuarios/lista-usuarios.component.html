@@ -48,7 +48,7 @@
         <div *ngFor="let user of filteredUsers()" class="user-list-row" >
           <div class="user-photo" (click)="visitProfile(user)" (keypress)="visitProfile(user)">
             <img [src]="user.profilePicture" alt="Foto de perfil">
-            <small>{{ user.isAdmin ? 'Admin' : 'Usuario' }}</small>
+            <small>{{ user.isAdmin ? 'Admin' : 'Empleado' }}</small>
           </div>
 
           <div class="user-name-lastname" (click)="visitProfile(user)" (keypress)="visitProfile(user)">

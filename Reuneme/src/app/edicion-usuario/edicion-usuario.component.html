@@ -16,7 +16,7 @@
 
   <div class="perfil-container">
     <div class="profile-info">
-      <h2>{{ role === 'administrador' ? 'Editar Cuenta de Administrador' : 'Editar Cuenta de Empleado' }}</h2>
+      <h2>{{ role === 'administrador' ? 'Edición Administrador' : 'Edición Empleado' }}</h2>
 
       <div class="profile-picture">
         <img [src]="profilePicture || 'assets/UsuarioSinFoto.png'" alt="Profile Image" class="profile-img" />
@@ -29,13 +29,13 @@
       <div class="info-fields">
         <div class="textbox">
           <input type="text" id="nombre" formControlName="nombre" required placeholder=" " />
-          <label for="nombre">Nombre*</label>
+          <label for="nombre">Nombre</label>
         </div>
 
         <!-- Campo de apellido1 -->
         <div class="textbox">
           <input type="text" id="apellido1" formControlName="apellido1" required placeholder=" " />
-          <label for="apellido1">Primer Apellido*</label>
+          <label for="apellido1">Primer Apellido</label>
         </div>
 
         <!-- Campo de apellido2 -->
@@ -46,13 +46,13 @@
 
         <div class="textbox">
           <input type="email" id="correo" formControlName="correo" required placeholder=" " />
-          <label for="correo">Correo*</label>
+          <label for="correo">Correo</label>
         </div>
 
         <!-- Campos específicos para el administrador -->
         <div class="textbox" *ngIf="role === 'administrador'">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" " />
-          <label for="centroTrabajo">Centro de Trabajo*</label>
+          <label for="centroTrabajo">Centro de Trabajo</label>
         </div>
 
         <div class="textbox" *ngIf="role === 'administrador'">
@@ -63,7 +63,7 @@
         <!-- Campos específicos para el empleado -->
         <div class="textbox" *ngIf="role === 'empleado'">
           <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" " />
-          <label for="centroTrabajo">Centro de Trabajo*</label>
+          <label for="centroTrabajo">Centro de Trabajo</label>
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
@@ -72,8 +72,13 @@
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
-          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " />
-          <label for="alta">Fecha de Alta*</label>
+          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " (blur)="validateFechaAlta()"
+            [class.is-invalid]="fechaInvalid" />
+          <label for="alta">Fecha de Alta</label>
+          <!-- Mensaje de error en caso de fecha inválida -->
+          <div *ngIf="fechaInvalid" class="error-message">
+            <small>La fecha de alta no puede ser un día posterior al actual</small>
+        </div>
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
@@ -87,15 +92,23 @@
         </button>
       </div>
 
-      <p class="required-info">Los campos(*) son obligatorios.</p>
-      <button class="btn" type="submit">Guardar Cambios</button>
+      <button class="btn" type="button" (click)="showSaveModal()">Guardar Cambios</button>
       <!-- </form> --> <!-- Eliminar esta etiqueta de cierre -->
+    </div>
+
+    <!-- Modal de confirmación para guardar cambios -->
+    <div class="modal-overlay" *ngIf="showSaveConfirmationModal">
+      <div class="confirm-modal">
+        <h3>Confirmar cambios</h3>
+        <p class="warning-text">¿Estás seguro de que deseas guardar los cambios?</p>
+        <div class="modal-actions">
+          <button class="confirm-btn" (click)="confirmSaveChanges()">Sí, guardar</button>
+          <button class="cancel-btn" (click)="cancelSaveChanges()">Cancelar</button>
+        </div>
+      </div>
     </div>
 
     <div class="back-button-container">
       <button class="back-button" (click)="navigateToUserList()">Volver</button>
     </div>
   </div>
-
-  <app-footer></app-footer>
-</form>

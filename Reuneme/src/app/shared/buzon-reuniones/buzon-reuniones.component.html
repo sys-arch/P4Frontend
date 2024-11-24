@@ -1,0 +1,14 @@
+<button (click)="togglePendingMeetings()" class="btn-contestar-reunion">Invitaciones</button>
+<div *ngIf="showPendingMeetings" class="meetings-panel">
+  <div class="panel-header">
+    <h3>Reuniones pendientes</h3>
+    <button (click)="closeMeetingsPanel()" class="close-btn">&times;</button>
+  </div>
+  <div *ngFor="let meeting of pendingMeetings" class="meeting-card">
+    <p><strong>Nombre:</strong> {{ meeting.name }}</p>
+    <p><strong>Día:</strong> {{ meeting.date }}</p>
+    <p><strong>Hora:</strong> {{ meeting.time }}</p>
+    <button (click)="confirmarAsistencia(meeting)" class="btn btn-success">Aceptar</button>
+    <button (click)="rechazarAsistencia(meeting)" class="btn btn-danger">Rechazar</button>
+  </div>
+</div>

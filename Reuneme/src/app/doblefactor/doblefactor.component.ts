@@ -24,7 +24,7 @@ export class DoblefactorComponent {
   qrCodeUrl: string = '';
   secretKey: string = '';
   authCode: string = '';
-  token: string = localStorage.getItem('token') || '';
+  token: string = sessionStorage.getItem('token') || '';
   loggedUser: any = {
     set2fa: false,
     isAdmin: this.isAdminUser()
@@ -37,7 +37,10 @@ export class DoblefactorComponent {
   ) {}
 
   ngOnInit(): void {
-    this.email = localStorage.getItem('email') || '';
+    console.log("Token: ", this)
+    this.email = sessionStorage.getItem('email') || '';
+    this.token = sessionStorage.getItem('token') || '';
+    console.log("Token: ", this.token)
 
     if (this.loggedUser.isAdmin) {
       this.userService.verDatosAdmin(this.email).subscribe(
@@ -117,6 +120,7 @@ export class DoblefactorComponent {
                 this.userService.desactivar2FA(this.email, this.secretKey).subscribe(
                     () => {
                         console.log('2FA desactivado con éxito');
+                        sessionStorage.setItem('2f', 'true');
                         this.router.navigate(['/ventana-principal']);
                     },
                     (error) => console.error('Error al desactivar el 2FA:', error)

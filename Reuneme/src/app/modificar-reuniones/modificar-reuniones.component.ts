@@ -6,7 +6,8 @@ import { LoaderComponent } from "../shared/loader/loader.component";
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { ReunionService } from '../services/reunion.service';
-import { UserService } from '../services/user.service';
+import { AsistentesService } from '../services/asistentes.service';
+
 
 @Component({
   selector: 'app-modificar-reuniones',
@@ -16,9 +17,12 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./modificar-reuniones.component.css']
 })
 export class ModificarReunionesComponent implements OnInit {
+
   isLoading: boolean = false;
-  reunionId: string = '';  // ID de la reunión que se va a modificar
-  organizador: string = '';  // Correo del organizador
+  reunionData: any;
+
+  reunionId: string = '';
+  organizador: string = '';
   asunto: string = '';
   fecha: string = '';
   todoElDia: boolean = false;
@@ -28,112 +32,152 @@ export class ModificarReunionesComponent implements OnInit {
   observaciones: string = '';
   estado: string = '';
 
-  idUsuario: string = '';  // ID del asistente a añadir
+  showModal: boolean = false; // Modal de confirmación en modificacion
+  showErrorModal: boolean = false; // Modal de error
+
+  showAddModal: boolean = false; // Modal para añadir asistentes
+  showDeleteModal: boolean = false; // Modal para eliminar asistentes
+  selectedUsuario: any = null;
+
+  
 
   asistentes: string[] = [];  // Lista de IDs de los asistentes
   usuarios: any[] = [];  // Lista de usuarios
+  filteredUsers: any[] = [];  // Lista de usuarios filtrados
 
   fechaInvalid = false;
   horasInvalid = false;
   errorMessage: string = '';
 
   searchQuery: string = '';  // Búsqueda de usuarios
-  filteredUsers: any[] = [];  // Lista de usuarios filtrados
-
-  reunionData: any;
   
 
+
+  
   constructor(
     private readonly router: Router,
-    private readonly reunionService: ReunionService
-  ) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { 
-      reunionId: string ,
-      reunionData: any,
-      organizador: string,
-      fecha: string,
-      inicio: string,
-      fin: string,
-    };
+    private readonly route: ActivatedRoute,
+    private readonly reunionService: ReunionService,
+    private readonly asistentesService: AsistentesService
+  ) {  }
 
-    if(state){
-      const { reunionData, organizador, reunionId, fecha, inicio, fin } = state;
-      this.organizador = organizador || '';
-      this.reunionId = reunionId || '';
-      this.fecha = fecha || '';
-      this.inicio = inicio || '';
-      this.fin = fin || '';
-      if (reunionData) {
-        this.asunto = reunionData.asunto;
-        this.ubicacion = reunionData.ubicacion;
-        this.estado = reunionData.estado;
-        this.observaciones = reunionData.observaciones;
-        this.todoElDia = reunionData.todoElDia || false;
-      }
+  ngOnInit(): void {
+    const reunionId = this.route.snapshot.paramMap.get('id');
+    if (reunionId) {
+      this.cargarDatosReunion(reunionId);
+      this.cargarAsistentesPorReunion(reunionId);
+      this.cargarUsuarios(); // Carga todos los posibles asistentes
+    } else {
+      console.error('Reunion ID is null');
     }
   }
 
-  ngOnInit(): void {
-
-    this.getReunion("1"); // ID de reunión de prueba
-
+  validarFormulario(): { valido: boolean, mensaje: string } {
+    if (this.fechaInvalid) {
+      return { valido: false, mensaje: 'Fecha inválida. No puede ser una fecha pasada.' };
+    }
+  
+    if (this.horasInvalid) {
+      return { valido: false, mensaje: 'Horario inválido. La hora de inicio debe ser menor a la hora de fin y estar entre las 8:00 y 19:00.' };
+    }
+  
+    if (!this.asunto || !this.fecha || (!this.todoElDia && (!this.inicio || !this.fin)) || !this.ubicacion) {
+      return { valido: false, mensaje: 'Todos los campos obligatorios deben estar llenos.' };
+    }
+    return { valido: true, mensaje: '' };
   }
 
-  getReunion(reunionId: string): void {
-    this.reunionService.getReunionById(this.reunionId).subscribe({
-      next: (data) => {
-        this.reunionData = data;
-        console.log('Datos de la reunión:', this.reunionData);
-      },
-      error: (err) => {
-        console.error('Error al obtener la reunión:', err);
-      }
-    }); 
+  // Mostrar el modal con un mensaje de error para errores en el formulario
+  showError(message: string): void {
+    this.errorMessage = message;
+    this.showErrorModal = true;
+  }
+  closeErrorModal(): void {
+    this.showErrorModal = false;
+    this.errorMessage = '';
+    this.showModal = false;
   }
 
   onSubmit(): void {
-    if (this.fechaInvalid) {
-      this.errorMessage = 'Fecha inválida. No puede ser una fecha pasada.';
+    this.showModal = true; // Modal confirmación modificación
+  }
+  
+  onConfirmUpdate(): void { // Pulsar confirmar en el modal de actualización
+    const { valido, mensaje } = this.validarFormulario();
+    if (!valido) {
+      this.showError(mensaje);
       return;
     }
-
-    if (this.horasInvalid) {
-      this.errorMessage = 'Horario inválido. La hora de inicio debe ser menor a la hora de fin y estar entre las 8:00 y 19:00.';
-      return;
-    }
-
-    // Validar si los campos obligatorios están vacíos
-    if (!this.asunto || !this.fecha || (!this.todoElDia && (!this.inicio || !this.fin)) || !this.ubicacion) {
-      this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
-      return;
-    }
-
+    const { inicio, fin } = this.combinarFechasYHoras();
     const reunionData = {
       asunto: this.asunto,
-      fecha: this.fecha,
-      inicio: this.inicio,
-      fin: this.fin,
+      inicio: inicio,
+      fin: fin,
       ubicacion: this.ubicacion,
-      observaciones: this.observaciones
+      observaciones: this.observaciones,
+      estado: this.estado
     };
 
-    this.reunionService.updateReunion(this.reunionId, reunionData)
-      .subscribe({
-        next: (response) => {
-          console.log('Reunión actualizada con éxito:', response);
-          this.navigateTo('/calendario');
-        },
-        error: (error) => {
-          console.error('Error al actualizar la reunión:', error);
+    this.reunionService.updateReunion(this.reunionData.id, reunionData).subscribe({
+      next: () => {
+        this.router.navigate(['/ver-reuniones', this.reunionData.id]);
+      },
+      error: (error) => {
+        console.error('Error al actualizar la reunión:', error);
+        if (this.estado === 'Cancelada' || this.estado === 'Realizada' || this.estado === 'Cerrada') {
+          this.errorMessage = 'No se puede modificar una reunión cancelada, realizada o cerrada.';
         }
-      });
+    }
+    });
+    this.showModal = false;
+  }
+  onCancelModal() {
+    this.showModal = false;
   }
 
-  cargarUsuarios() {
-    this.reunionService.getPosiblesAsistentes().subscribe({
+
+  cargarDatosReunion(id: string): void {
+    this.reunionService.getReunionById(id).subscribe({
       next: (data) => {
-        this.asistentes = data;
+        this.reunionData = data;
+        this.asistentes = this.reunionData.asistentes || [];
+        this.mapearDatosReunion();
+        this.marcarAsistentes();
+      },
+      error: (err) => {
+        console.error('Error al cargar la reunión:', err);
+      }
+    });
+  }
+
+  mapearDatosReunion(): void {
+    // Asigna los valores recibidos a las propiedades del componente
+    this.asunto = this.reunionData.asunto;
+    this.fecha = this.formatDate(this.reunionData.inicio);
+    this.todoElDia = this.reunionData.todoElDia || false;
+    this.inicio = this.formatTime(this.reunionData.inicio);
+    this.fin = this.formatTime(this.reunionData.fin);
+    this.ubicacion = this.reunionData.ubicacion;
+    this.observaciones = this.reunionData.observaciones;
+    this.estado = this.reunionData.estado;
+  }
+
+  // Función para formatear la fecha en formato yyyy-MM-dd
+  formatDate(dateTime: string): string {
+    const date = new Date(dateTime);
+      return date.toISOString().split('T')[0]; // yyyy-MM-dd
+  }
+  // Función para formatear la hora en formato HH:mm
+  formatTime(dateTime: string): string {
+    const date = new Date(dateTime);
+    return date.toTimeString().slice(0, 5); // HH:mm
+  }
+
+  // Cargando lista de todos los asistentes 
+  cargarUsuarios() {
+    this.asistentesService.getPosiblesAsistentes().subscribe({
+      next: (data) => {
+        this.usuarios = data;
         this.filteredUsers = data;
         this.marcarAsistentes();
       },
@@ -143,104 +187,155 @@ export class ModificarReunionesComponent implements OnInit {
     });
   }
 
-  // Marcar a los usuarios que son asistentes de la reunión (compara por ID)
-  marcarAsistentes() {
-    this.filteredUsers.forEach(user => {
-      // Verificar si el usuario es un asistente de la reunión
-      user.isAsistente = this.asistentes.some(asistente => asistente === user.id);
+  // Cargar asistentes de la reunión
+  cargarAsistentesPorReunion(reunionId: string): void {
+    this.asistentesService.getAsistentesPorReunion(reunionId).subscribe({
+      next: (asistentes) => {
+        this.asistentes = asistentes.map(a => a.idUsuario); // Extraer IDs de los usuarios asistentes
+        this.marcarAsistentes();
+      },
+      error: (err) => {
+        console.error('Error al cargar asistentes de la reunión:', err);
+      }
     });
   }
 
-  filterUsuarios(): void {
-    // Si no hay texto en el campo de búsqueda, simplemente se muestra todos los usuarios
-    if (!this.searchQuery) {
-      this.filteredUsers = [...this.usuarios];  // Muestra todos los usuarios
-    } else {
-      
-      const normalizedSearchQuery = this.normalizeString(this.searchQuery.toLowerCase());
-
-      this.filteredUsers = this.usuarios.filter(usuario =>
-        this.normalizeString(usuario.nombre.toLowerCase()).startsWith(normalizedSearchQuery) ||
-        this.normalizeString(usuario.correo.toLowerCase()).startsWith(normalizedSearchQuery) ||
-        this.normalizeString(usuario.apellido.toLowerCase()).startsWith(normalizedSearchQuery)
-      );
-    }
+  // Marcar a los usuarios que son asistentes de la reunión (compara por ID)
+  marcarAsistentes() {
+    this.filteredUsers.forEach(user => {
+      user.isAsistente = this.asistentes.includes(user.id);
+    });
   }
+
+  // Filtrar usuarios por nombre, apellido o email en la barra de búsqueda
+  filterUsuarios(): void {
+    if(!this.searchQuery) {
+      this.filteredUsers = [...this.usuarios];
+      return;
+    }
+    const normalizedSearchQuery = this.normalizeString(this.searchQuery.toLowerCase());
+    this.filteredUsers = this.usuarios.filter(usuario =>
+      this.normalizeString(usuario.nombre.toLowerCase()).startsWith(normalizedSearchQuery) ||
+      this.normalizeString(usuario.email.toLowerCase()).startsWith(normalizedSearchQuery) ||
+      this.normalizeString(usuario.apellido1.toLowerCase()).startsWith(normalizedSearchQuery)
+    );
+  }
+  
   // Normalizar el texto para hacer coincidencias sin importar las tildes
   normalizeString(text: string): string {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
+  // Filtrar usuarios al presionar Enter
   onSearchEnter(event: Event): void {
-    const keyboardEvent = event as KeyboardEvent;  // Aseguramos que sea un KeyboardEvent
+    const keyboardEvent = event as KeyboardEvent;
     if (keyboardEvent.key === 'Enter') {
       this.filterUsuarios();  // Filtra los usuarios cuando se presiona Enter
     }
   }
-  
 
   // Validación de la fecha
   validateFecha(): void {
     this.fechaInvalid = false;
     const reunion = new Date(this.fecha);
     const fechaActual = new Date();
-    if (reunion < fechaActual) {
+
+    // Comparar fecha y hora si es el mismo día
+    if (reunion.toDateString() === fechaActual.toDateString() && this.inicio) {
+      const horaActual = fechaActual.getHours() * 60 + fechaActual.getMinutes();
+      const horaInicio = parseInt(this.inicio.split(':')[0]) * 60 + parseInt(this.inicio.split(':')[1]);
+      if (horaInicio < horaActual) {
+        this.fechaInvalid = true;
+      }
+    } else if (reunion < fechaActual) {
       this.fechaInvalid = true;
     }
   }
 
-  // Validación de horarios
+  // Validación de horarios. Hora de inicio < Hora de fin
   validarHorario(): void {
     this.horasInvalid = false;
     if (this.inicio && this.fin) {
       const horaDesde = parseInt(this.inicio.split(':')[0]);
       const horaHasta = parseInt(this.fin.split(':')[0]);
-      if (horaDesde >= horaHasta) {
+  
+      if (horaDesde >= horaHasta || horaDesde < 8 || horaHasta > 19) {
         this.horasInvalid = true;
       }
     }
   }
 
+  // Funciones que generan el formato (yyyy-MM-dd HH:mm)
+  combinarFechasYHoras(): { inicio: string, fin: string } {
+    const inicioFecha = this.combineFechaHora(this.fecha, this.inicio);
+    const finFecha = this.combineFechaHora(this.fecha, this.fin);
+    return { inicio: inicioFecha, fin: finFecha };
+  }
+  combineFechaHora(fecha: string, hora: string): string {
+    if (!fecha || !hora) {
+      throw new Error("La fecha o la hora no pueden estar vacías.");
+    }
+    return `${fecha}T${hora}:00`; // Formato ISO 8601
+  }
+
+  // Si se selecciona TodoElDia, establecer la hora de inicio y fin predeterminadas
   onToggleTodoElDia(): void {
     if (this.todoElDia) {
+      this.inicio = '08:00';
+      this.fin = '19:00';
+    } else {
       this.inicio = '';
       this.fin = '';
     }
   }
 
-  // Añadir o eliminar un asistente
-  toggleAsistente(usuario: any): void {
-    const action = usuario.isAsistente ? 'añadir' : 'eliminar';
-    const confirmMessage = `¿Quieres ${action} este participante?`;
+  // Añadir o eliminar asistentes
+  confirmAddAsistente(): void {
+    if (!this.selectedUsuario) return;
 
-    if (confirm(confirmMessage)) {
-      if (usuario.isAsistente) {
-        this.reunionService.addAsistente(this.reunionId, usuario.correo).subscribe({
-          next: (response) => {
-            console.log('Asistente añadido con éxito:', response);
-            this.asistentes.push(usuario.correo);
-          },
-          error: (error) => {
-            console.error('Error al añadir al asistente:', error);
-          }
-        });
-      } else {
-        this.reunionService.deleteAsistente(this.reunionId, usuario.correo).subscribe({
-          next: (response) => {
-            console.log('Asistente eliminado con éxito:', response);
-            this.asistentes = this.asistentes.filter(email => email !== usuario.correo);
-          },
-          error: (error) => {
-            console.error('Error al eliminar al asistente:', error);
-          }
-        });
+    this.asistentesService.addAsistente(this.reunionData.id, this.selectedUsuario.email).subscribe({
+      next: () => {
+        this.selectedUsuario.isAsistente = true; // Actualiza el estado en la interfaz
+        this.showAddModal = false; // Cierra el modal
+        console.log('Asistente añadido con éxito.');
+      },
+      error: (error) => {
+        console.error('Error al añadir asistente:', error);
       }
-    } else {
-      usuario.isAsistente = !usuario.isAsistente;
-    }
-  } 
+    });
+  }
+  confirmDeleteAsistente(): void {
+    if (!this.selectedUsuario) return;
 
-  // Navegar a otra ruta
+    this.asistentesService.deleteAsistente(this.reunionData.id, this.selectedUsuario.id).subscribe({
+      next: () => {
+        this.selectedUsuario.isAsistente = false;
+        this.showDeleteModal = false;
+      },
+      error: (error) => {
+        console.error('Error al eliminar asistente:', error);
+      }
+    });
+  }
+
+  // Modales de añadir y eliminar asistentes
+  openAddModal(usuario: any): void {
+    this.selectedUsuario = usuario;
+    this.showAddModal = true;
+  }
+  openDeleteModal(usuario: any): void {
+    this.selectedUsuario = usuario;
+    this.showDeleteModal = true;
+  }
+  closeAddModal(): void {
+    this.showAddModal = false;
+    this.selectedUsuario = null;
+  }
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.selectedUsuario = null;
+  }
+  
   navigateTo(route: string): void {
     this.isLoading = true;
     setTimeout(() => {

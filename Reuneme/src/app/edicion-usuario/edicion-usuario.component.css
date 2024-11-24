@@ -1,7 +1,7 @@
 /* Contenedor principal de la edición */
 .perfil-container {
     position: relative;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,6 +11,7 @@
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
     text-align: center;
+    padding-top: 80px;
 }
 
 .perfil-container h2 {
@@ -160,8 +161,6 @@
     position: relative;
     margin-bottom: 20px;
    
-    padding: 1px;
-
     
 }
 
@@ -310,3 +309,92 @@
     align-items: center;
     z-index: 9999;
 }
+
+/* Estilo para campo inválido FechaAlta*/
+.is-invalid {
+    border: 2px solid red;
+    box-shadow: 0 0 5px red;
+}
+
+/* Mensaje de error en rojo FechaAlta*/
+.text-danger {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    text-align: left;
+}
+
+/* Estilos para el modal de confirmación de guardar cambios */
+.confirm-modal {
+    background-color: #2a2a2a; /* Fondo oscuro similar al delete-modal */
+    padding: 40px;
+    border-radius: 20px;
+    width: 300px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    border: 3px solid #007bff; /* Borde azul para diferenciarlo del delete-modal */
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+  }
+  
+  .confirm-modal h3 {
+    color: #f1f1f1;
+    font-size: 24px;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .confirm-modal .warning-text {
+    font-size: 14px;
+    color: #00eeff; /* Azul claro para diferenciar el texto */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .confirm-btn {
+    background-color: #4caf50; /* Verde para confirmar */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .confirm-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .cancel-btn {
+    background-color: #f44336; /* Rojo para cancelar */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Overlay del modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
