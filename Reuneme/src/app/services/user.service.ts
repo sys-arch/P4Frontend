@@ -126,6 +126,7 @@ export class UserService {
         });
 
          // Enviar adminData directamente en el cuerpo de la solicitud
+         console.log('Datos enviados al backend:', empleadoData);
 
         // Usar el email como parámetro en la URL
         return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });

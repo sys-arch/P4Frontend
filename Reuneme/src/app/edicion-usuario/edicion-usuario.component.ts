@@ -178,6 +178,8 @@ export class EdicionUsuarioComponent implements OnInit {
         }
       });
 
+      console.log('Datos para actualizar:', updateData);
+
       // Si no hay cambios aparte del email, terminar el proceso
       if (Object.keys(updateData).length === 1) { // Solo tiene `email`
         this.isLoading = false;
@@ -192,6 +194,7 @@ export class EdicionUsuarioComponent implements OnInit {
       updateUser.subscribe({
         next: () => {
           this.isLoading = false;
+          console.log('Usuario actualizado correctamente:', updateData);
 
           // Redirección según el contexto
           if (this.user === this.loggedUserEmail) {

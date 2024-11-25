@@ -61,18 +61,18 @@
           <label for="alta">Fecha de Alta</label>
         </div>
 
-        <div class="error-container" *ngIf="fechaInvalid">
-          <div class="error-message">
-            <small>La fecha de alta no puede ser un día posterior al actual</small>
-          </div>
-        </div>
-
         <div class="textbox" *ngIf="role === 'empleado'">
           <input type="text" id="perfil" formControlName="perfil" placeholder=" " />
           <label for="perfil">Perfil</label>
         </div>
 
     </div>
+
+      <div class="error-container">
+          <div *ngIf="fechaInvalid" class="error-message">
+              <small>La fecha de alta no puede ser un día posterior al actual</small>
+          </div>
+      </div>
 
     <button class="btn" type="button" (click)="showSaveModal()">Guardar Cambios</button>
 
