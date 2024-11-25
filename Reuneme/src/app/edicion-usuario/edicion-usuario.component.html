@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()" (keydown.enter)="preventEnterKey($event)">
 
   <div class="perfil-container">
     <div class="profile-info">
@@ -35,8 +35,8 @@
 
         <!-- Campos específicos para el administrador -->
         <div class="textbox" *ngIf="role === 'administrador'">
-          <input type="text" id="centroTrabajo" formControlName="centroTrabajo" required placeholder=" " />
-          <label for="centroTrabajo">Centro de Trabajo</label>
+          <input type="text" id="centro" formControlName="centro" required placeholder=" " />
+          <label for="centro">Centro de Trabajo</label>
         </div>
 
         <div class="textbox" *ngIf="role === 'administrador'">
@@ -56,13 +56,9 @@
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
-          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " (blur)="validateFechaAlta()"
+          <input type="date" id="alta" formControlName="fechaalta" required placeholder=" " (input)="validateFechaAlta()"
             [class.is-invalid]="fechaInvalid" />
-          <label for="alta">Fecha de Alta</label>
-          <!-- Mensaje de error en caso de fecha inválida -->
-          <div *ngIf="fechaInvalid" class="text-danger">
-            <small>La fecha de alta no puede ser un día posterior al actual</small>
-        </div>
+          <label for="fechaalta">Fecha de Alta</label>
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
@@ -71,6 +67,12 @@
         </div>
 
     </div>
+
+      <div class="error-container">
+          <div *ngIf="fechaInvalid" class="error-message">
+              <small>La fecha de alta no puede ser un día posterior al actual</small>
+          </div>
+      </div>
 
     <button class="btn" type="button" (click)="showSaveModal()">Guardar Cambios</button>
 
