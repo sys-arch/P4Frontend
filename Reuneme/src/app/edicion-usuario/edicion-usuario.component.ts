@@ -88,7 +88,7 @@ export class EdicionUsuarioComponent implements OnInit {
         interno: [null], // Campo específico de administrador 
       } : {
         departamento: ['', Validators.required],
-        fechaAlta: ['', Validators.required],
+        fechaalta: ['', Validators.required],
         perfil: ['', Validators.required],
       })
     });
@@ -108,7 +108,6 @@ export class EdicionUsuarioComponent implements OnInit {
 
         if (data) {
           
-
           // Aplica los valores al formulario basado en el rol
           this.userForm.patchValue({
             nombre: data.nombre,
@@ -121,7 +120,7 @@ export class EdicionUsuarioComponent implements OnInit {
               interno: data.interno,
             } : {
               departamento: data.departamento,
-              fechaAlta: this.convertToDateString(data.fechaalta),
+              fechaalta: this.convertToDateString(data.fechaalta),
               perfil: data.perfil,
             })
           });
@@ -178,10 +177,8 @@ export class EdicionUsuarioComponent implements OnInit {
         }
       });
 
-      console.log('Datos para actualizar:', updateData);
-
-      // Si no hay cambios aparte del email, terminar el proceso
-      if (Object.keys(updateData).length === 1) { // Solo tiene `email`
+      // Si no hay cambios aparte del email termina
+      if (Object.keys(updateData).length === 1) {
         this.isLoading = false;
         return;
       }
@@ -194,7 +191,6 @@ export class EdicionUsuarioComponent implements OnInit {
       updateUser.subscribe({
         next: () => {
           this.isLoading = false;
-          console.log('Usuario actualizado correctamente:', updateData);
 
           // Redirección según el contexto
           if (this.user === this.loggedUserEmail) {
@@ -287,7 +283,7 @@ export class EdicionUsuarioComponent implements OnInit {
   // Validación de la fecha de alta debe ser menor o igual a la fecha actual
   validateFechaAlta(): void {
     this.fechaInvalid = false;
-    const alta = new Date(this.userForm.get('fechaAlta')?.value);
+    const alta = new Date(this.userForm.get('fechaalta')?.value);
     const fechaActual = new Date();
   
     if (alta > fechaActual) {

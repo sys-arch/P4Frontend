@@ -56,9 +56,9 @@
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
-          <input type="date" id="alta" formControlName="fechaAlta" required placeholder=" " (input)="validateFechaAlta()"
+          <input type="date" id="alta" formControlName="fechaalta" required placeholder=" " (input)="validateFechaAlta()"
             [class.is-invalid]="fechaInvalid" />
-          <label for="alta">Fecha de Alta</label>
+          <label for="fechaalta">Fecha de Alta</label>
         </div>
 
         <div class="textbox" *ngIf="role === 'empleado'">
