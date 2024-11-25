@@ -22,6 +22,9 @@ interface Ausencia {
   styleUrls: ['./calendario.component.css']
 })
 export class CalendarioComponent implements OnInit {
+  reuniones(reuniones: any) {
+    throw new Error('Method not implemented.');
+  }
   diasDelAnio: Date[] = [];
   ausencias: Ausencia[] = [];
   diasFiltrados: (Date | null)[] = [];
@@ -72,7 +75,6 @@ export class CalendarioComponent implements OnInit {
           .filter(ausencia => ausencia.usuarioEmail === emailUsuario) // Filtra por email del usuario logueado
           .sort((a, b) => a.fechaInicio.getTime() - b.fechaInicio.getTime()); // Ordena por fecha de inicio
   
-        console.log('Ausencias procesadas:', this.ausencias);
       },
       (error) => console.error('Error al cargar ausencias:', error)
     );
@@ -103,7 +105,6 @@ export class CalendarioComponent implements OnInit {
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
-        console.log('Reuniones organizadas:', this.reunionOrg);
   
         // Cargar reuniones asistidas
         this.reunionService.getReunionesAsistidas(email).subscribe(
@@ -125,7 +126,6 @@ export class CalendarioComponent implements OnInit {
             // Esperar a que se completen todas las promesas
             Promise.all(asistenteRequests).then(() => {
               this.reunionAsist = filteredReuniones;
-              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
             });
           },
           (error) => {
@@ -143,9 +143,6 @@ export class CalendarioComponent implements OnInit {
     if (!dia || !hora) {
       return null;
     }
-  
-    console.log(`Buscando reunión para el día ${dia} y la hora ${hora}`);
-  
     // Buscar en reuniones organizadas
     const reunionOrg = this.reunionOrg.find(
       (r) =>
@@ -321,7 +318,6 @@ export class CalendarioComponent implements OnInit {
       this.nombreMes = `${diaInicio} - ${diaFin} de ${mesInicio}`;
     }
   
-    console.log(`Título actualizado: ${this.nombreMes}`); // Verificar en la consola
   }
   
   obtenerNombreMes(mesIndex: number): string {
@@ -409,18 +405,17 @@ export class CalendarioComponent implements OnInit {
   // Obtener color de la línea según el estado de la reunión
   getEstadoColor(estado: string | undefined): string {
     if (!estado) {
-      console.log('Estado no definido');
       return 'transparent';
     }
-    console.log(`Color para el estado ${estado}`);
     const coloresEstado: Record<string, string> = {
       abierta: '#28a745', // Verde
       cerrada: '#6c757d', // Gris
-      realizada: '#007bff', // Azul
+      realizada: '#ebfe44', // Azul
       cancelada: '#dc3545', // Rojo
     };
     return coloresEstado[estado] || 'transparent';
   }
+  
   
   
   

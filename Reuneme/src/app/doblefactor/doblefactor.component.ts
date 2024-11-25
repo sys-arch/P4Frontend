@@ -38,6 +38,7 @@ export class DoblefactorComponent {
 
   ngOnInit(): void {
     this.email = sessionStorage.getItem('email') || '';
+    this.token = sessionStorage.getItem('token') || '';
 
     if (this.loggedUser.isAdmin) {
       this.userService.verDatosAdmin(this.email).subscribe(
@@ -54,7 +55,6 @@ export class DoblefactorComponent {
     } else {
       this.userService.verDatosEmpleado(this.email).subscribe(
         (userInfo: any) => {
-          console.log(userInfo);
           this.loggedUser.set2fa = userInfo.twoFA;
           if (this.loggedUser.set2fa) {
             this.openModal();
@@ -113,15 +113,8 @@ export class DoblefactorComponent {
     if (this.authCode) {
         this.twoFactorService.verificar2FA(this.email, +this.authCode).subscribe(response => {
             if (response) {
-                // Llamada a desactivar2FA después de verificar el código 2FA
-                this.userService.desactivar2FA(this.email, this.secretKey).subscribe(
-                    () => {
-                        console.log('2FA desactivado con éxito');
-                        sessionStorage.setItem('2f', 'true');
-                        this.router.navigate(['/ventana-principal']);
-                    },
-                    (error) => console.error('Error al desactivar el 2FA:', error)
-                );
+                sessionStorage.setItem('2f', 'true');
+                this.router.navigate(['/ventana-principal']);
             } else {
                 alert("Código incorrecto. Inténtelo de nuevo.");
             }
@@ -130,5 +123,6 @@ export class DoblefactorComponent {
         alert("Por favor, ingrese el código de autenticación.");
     }
 }
+
 
 }

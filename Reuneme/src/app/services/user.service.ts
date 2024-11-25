@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté definido
 
 @Injectable({
@@ -8,13 +9,17 @@ import { httpUrl } from '../commons'; // Asegúrate de que `httpUrl` esté defin
 })
 export class UserService {
     constructor(private client: HttpClient) { }
-
-    // Método login con headers y URL base
+    
     login(user: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.client.put(`${httpUrl}users/login`, user, { headers });
-    }
-
+        return this.client.put(`${httpUrl}users/login`, user, { headers }).pipe(
+          catchError((error: HttpErrorResponse) => {
+            // Propagar el error para manejarlo en el componente
+            return throwError(() => error);
+          })
+        );
+      }
+      
 
     // Método register con headers
     register(
@@ -46,7 +51,6 @@ export class UserService {
             bloqueado: bloqueado,
             verificado: verificado
         };
-        console.log(info);
 
         return this.client.post(`${httpUrl}users/register`, info, { headers });
     }
@@ -77,7 +81,6 @@ export class UserService {
             pwd2: password2,
             interno: interno
         };
-        console.log("Token enviado en Authorization:", headers.get('Authorization'));
         return this.client.post(`${httpUrl}admins/register`, info, { headers });
     }
     forgotPassword(email: string): Observable<any> {
@@ -110,8 +113,6 @@ export class UserService {
         });
     
         // Enviar adminData directamente en el cuerpo de la solicitud
-        console.log('Datos enviados a modificarAdministrador userService:', JSON.stringify(adminData, null, 2));
-        console.log('Token userservice: ' + token)
     
         return this.client.put(`${httpUrl}admins/modificarAdministrador`, adminData, { headers });
     }
@@ -125,7 +126,6 @@ export class UserService {
         });
 
          // Enviar adminData directamente en el cuerpo de la solicitud
-         console.log('Datos enviados a modificarEmpleado userService:', JSON.stringify(empleadoData, null, 2));
 
         // Usar el email como parámetro en la URL
         return this.client.put(`${httpUrl}admins/modificarEmpleado`, empleadoData, { headers });
@@ -190,7 +190,6 @@ export class UserService {
     }
     getAusencias(): Observable<any[]> {
         const token = sessionStorage.getItem('token');
-        console.log('Token en getAusencias:', token);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

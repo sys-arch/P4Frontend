@@ -51,7 +51,6 @@ export class ResetContrasenaComponent implements OnInit {
         next: (response) => {
           this.isValidToken = true;
           this.email = response.email;
-          console.log('Token válido. Email:', this.email);
         },
         error: () => {
           console.error('El token es inválido o ha caducado.');

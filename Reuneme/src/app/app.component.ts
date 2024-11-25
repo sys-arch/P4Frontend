@@ -12,5 +12,8 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  changeTitle() {
+    throw new Error('Method not implemented.');
+  }
   title = 'Reuneme';
 }

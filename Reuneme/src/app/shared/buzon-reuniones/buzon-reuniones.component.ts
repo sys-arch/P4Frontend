@@ -38,7 +38,6 @@ export class BuzonReunionesComponent implements OnInit {
           date: new Date(meeting.inicio).toLocaleDateString(),
           time: `${new Date(meeting.inicio).toLocaleTimeString()} - ${new Date(meeting.fin).toLocaleTimeString()}`,
         }));
-        console.log('Reuniones transformadas:', this.pendingMeetings);
       },
       (error: any) => {
         console.error('Error al obtener reuniones pendientes:', error);
@@ -55,12 +54,10 @@ export class BuzonReunionesComponent implements OnInit {
     // Obtener el asistente antes de confirmar la asistencia
     this.reunionService.getAsistenteByEmail(meeting.idReunion, email).subscribe(
       (asistente) => {
-        console.log('ID del asistente obtenido:', asistente.idUsuario);
         this.reunionService
           .actualizarEstadoAsistencia(meeting.idReunion, asistente.idUsuario, 'ACEPTADA')
           .subscribe(
             () => {
-              console.log('Asistencia confirmada:', meeting);
               this.removeMeeting(meeting);
             },
             (error: any) => {
@@ -84,7 +81,6 @@ export class BuzonReunionesComponent implements OnInit {
     // Obtener el asistente antes de rechazar la asistencia
     this.reunionService.getAsistenteByEmail(meeting.idReunion, email).subscribe(
       (asistente) => {
-        console.log('ID del asistente obtenido:', asistente.idUsuario);
         this.reunionService
           .actualizarEstadoAsistencia(meeting.idReunion, asistente.idUsuario, 'RECHAZADA')
           .subscribe(

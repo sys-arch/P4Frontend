@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing'; // Importa HttpClientTestingModule
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Para pruebas con HttpClient
 import { ActivatedRoute } from '@angular/router';
 import { ResetContrasenaComponent } from './reset-contrasena.component';
-import { UserService } from '../services/user.service'; // Asegúrate de importar UserService si es necesario
 import { of } from 'rxjs';
 
 describe('ResetContrasenaComponent', () => {
@@ -11,17 +10,12 @@ describe('ResetContrasenaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ResetContrasenaComponent,
-        HttpClientTestingModule // Agrega HttpClientTestingModule aquí para proporcionar HttpClient
-      ],
+      imports: [HttpClientTestingModule, ResetContrasenaComponent], // Standalone
       providers: [
-        UserService, // Asegúrate de proporcionar UserService si es necesario
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: (key: string) => 'mockValue' } },
-            params: of({ id: 'mockId' }),
+            snapshot: { paramMap: { get: (key: string) => (key === 'token' ? 'mockToken' : null) } }, // Mock de paramMap.get()
           },
         },
       ],
@@ -34,5 +28,9 @@ describe('ResetContrasenaComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set the token from ActivatedRoute', () => {
+    expect(component.token).toBe('mockToken'); // Verifica que el token se haya configurado correctamente
   });
 });

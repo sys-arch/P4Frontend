@@ -47,7 +47,6 @@ export class EdicionUsuarioComponent implements OnInit {
       try {
         const decodedToken: any = jwtDecode(this.token); // Decodifica el token JWT
         this.loggedUserEmail = decodedToken.email || decodedToken.sub || ''; // Ajusta según el campo presente en tu token
-        console.log('Email del usuario logueado:', this.loggedUserEmail);
       } catch (error) {
         console.error('Error al decodificar el token:', error);
         this.loggedUserEmail = ''; // Si ocurre un error, deja el email vacío
@@ -72,15 +71,9 @@ export class EdicionUsuarioComponent implements OnInit {
         this.loadUserData();
       },
       (error) => {
-        console.error('Error al verificar el rol del usuario en el backend:', error);
         this.router.navigate(['/ventana-principal']);
       }
     );
-
-  }
-
-  togglePasswordVisibility(): void {
-    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
 
   }
 
@@ -90,15 +83,13 @@ export class EdicionUsuarioComponent implements OnInit {
       apellido1: ['', Validators.required],
       apellido2: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
-      centroTrabajo: ['', Validators.required],
+      centro: ['', Validators.required],
       ...(this.role === 'administrador' ? {
         interno: [null], // Campo específico de administrador 
-        password: ['', [Validators.minLength(8)]]
       } : {
         departamento: ['', Validators.required],
         fechaAlta: ['', Validators.required],
         perfil: ['', Validators.required],
-        password: ['', [Validators.minLength(8)]]
       })
     });
   }
@@ -116,9 +107,7 @@ export class EdicionUsuarioComponent implements OnInit {
         this.isLoading = false;
 
         if (data) {
-          console.log('Nombre recibido:', data.nombre);
-          console.log('Role getuserData: ' + this.role);
-          console.log('Email getuserdata: ' + this.user);
+          
 
           // Aplica los valores al formulario basado en el rol
           this.userForm.patchValue({
@@ -126,27 +115,23 @@ export class EdicionUsuarioComponent implements OnInit {
             apellido1: data.apellido1,
             apellido2: data.apellido2,
             correo: data.email,
-            centroTrabajo: data.centro,
+            centro: data.centro,
 
             ...(this.role === 'administrador' ? {
               interno: data.interno,
-              password: data.password
             } : {
               departamento: data.departamento,
               fechaAlta: this.convertToDateString(data.fechaalta),
               perfil: data.perfil,
-              password: data.password
             })
           });
 
           this.profilePicture = this.gravatarService.getGravatarUrl(data.email)
         } else {
-          console.error('Datos del usuario no encontrados');
           this.router.navigate(['/ventana-principal']);
         }
       },
       (error) => {
-        console.error('Error al cargar los datos del usuario:', error);
         this.isLoading = false;
         this.router.navigate(['/ventana-principal']);
       }
@@ -196,11 +181,8 @@ export class EdicionUsuarioComponent implements OnInit {
       // Si no hay cambios aparte del email, terminar el proceso
       if (Object.keys(updateData).length === 1) { // Solo tiene `email`
         this.isLoading = false;
-        console.log('No hay cambios para actualizar.');
         return;
       }
-
-      console.log('Datos enviados:', JSON.stringify(updateData, null, 2));
 
       // Llamar al servicio de actualización
       const updateUser = this.role === 'administrador'
@@ -210,19 +192,16 @@ export class EdicionUsuarioComponent implements OnInit {
       updateUser.subscribe({
         next: () => {
           this.isLoading = false;
-          console.log('Usuario actualizado correctamente.');
 
           // Redirección según el contexto
           if (this.user === this.loggedUserEmail) {
             // Si el usuario actualizado es el usuario logueado
             const route = this.role === 'administrador' ? '/perfil-admin' : '/perfil-usuario';
 
-            console.log(`Redirigiendo al perfil correspondiente: ${route}`);
             this.router.navigate([route], {
               queryParams: { email: this.loggedUserEmail }
             }).then((success) => {
               if (success) {
-                console.log(`Redirección exitosa a ${route} con email: ${this.loggedUserEmail}`);
               } else {
                 console.error(`La redirección a ${route} falló.`);
               }
@@ -243,7 +222,6 @@ export class EdicionUsuarioComponent implements OnInit {
       });
     } else {
       console.error('Formulario no válido');
-      console.log('Errores en el formulario:', this.userForm.errors);
 
       // Mostrar errores de los controles individuales
       Object.keys(this.userForm.controls).forEach((controlName) => {
@@ -273,11 +251,9 @@ export class EdicionUsuarioComponent implements OnInit {
     this.userService.forgotPassword(this.user?.email || '').subscribe({
       next: (response: string) => {
         this.isLoading = false;
-        console.log('Respuesta recibida: ', response);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error generando el token: ', error);
       }
     });
   }
