@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AsistentesService } from '../services/asistentes.service';
 import { ReunionService } from '../services/reunion.service';
+import { AuthService } from '../services/auth.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { LoaderComponent } from "../shared/loader/loader.component";
@@ -42,7 +43,8 @@ export class VerReunionesComponent implements OnInit{
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly reunionService: ReunionService,
-    private readonly asistentesService: AsistentesService
+    private readonly asistentesService: AsistentesService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -107,8 +109,16 @@ export class VerReunionesComponent implements OnInit{
     });
   }
 
-  editReunion(): void {
 
+  esOrganizador(): boolean {
+    const emailUsuario = sessionStorage.getItem('email') || '';
+    return emailUsuario === this.organizador;
+  }
+  estadoEsEditable(): boolean {
+    return this.reunionData?.estado === 'ABIERTA';
+  }
+  
+  editReunion(): void {
     this.router.navigate(['/modificar-reuniones', this.reunionData.id]);
   }
 

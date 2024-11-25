@@ -66,12 +66,40 @@
 				</div>
 				
 				<p class="required-info">Los campos(*) son obligatorios.</p>
+
+				<h3>Añadir Asistentes</h3>
+				<div class="search-container">
+				<input
+					type="text"
+					id="searchUser"
+					placeholder="Buscar usuario..."
+					name="searchQuery"
+					[(ngModel)]="searchQuery"
+					(input)="filterUsuarios()"
+					class="search-input"
+				/>
+				</div>
+
+				<div class="asistentes-container">
+					<div *ngFor="let usuario of filteredUsers">
+						<label>
+							<input
+							type="checkbox"
+							[checked]="asistentes.includes(usuario.email)"
+							(change)="onToggleAsistente(usuario.email)"
+							/>
+							{{ usuario.nombre }} {{ usuario.apellido1 }} {{ usuario.apellido2 }} ({{ usuario.email }})
+						</label>
+					</div>
+				</div>
 			</div>
 		</form>
-		<div class="actions" [class.extra-margin]="!todoElDia">
+		<div class="actions">
 			<button class="btn" (click)="reunionForm.ngSubmit.emit()">Crear Reunión</button>
 		</div>
 	</div>
+
+	
 	<div class="back-button-container">
 		<button class="back-button" (click)="navigateTo('/ventana-principal')">Volver</button>
 	</div>

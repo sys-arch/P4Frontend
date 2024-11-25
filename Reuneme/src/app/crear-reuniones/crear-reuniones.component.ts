@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ReunionService } from '../services/reunion.service';
+import { AsistentesService } from '../services/asistentes.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { LoaderComponent } from "../shared/loader/loader.component";
@@ -31,14 +32,66 @@ export class CrearReunionesComponent implements OnInit {
   horasInvalid = false;
   errorMessage: string = '';
 
+  usuarios: any[] = [];
+  filteredUsers: any[] = [];
+  asistentes: string[] = [];
+  searchQuery: string = '';
+
   constructor(
     private readonly router: Router,
     private readonly reunionService: ReunionService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly asistentesService: AsistentesService
 
   ) {}
   
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios(): void {
+    this.asistentesService.getPosiblesAsistentes().subscribe({
+      next: (data) => {
+        this.usuarios = data;
+        this.filteredUsers = data;
+      },
+      error: (err) => {
+        console.error('Error al obtener usuarios:', err);
+      }
+    });
+  }
+
+  filterUsuarios(): void {
+    if (!this.searchQuery || this.searchQuery.trim().length === 0) {
+      this.filteredUsers = [...this.usuarios];
+      return;
+    }
+  
+    const normalizedQuery = this.normalizeString(this.searchQuery.toLowerCase());
+    this.filteredUsers = this.usuarios.filter(usuario =>
+      this.normalizeString(usuario.nombre.toLowerCase()).includes(normalizedQuery) ||
+      this.normalizeString(usuario.email.toLowerCase()).includes(normalizedQuery) ||
+      this.normalizeString(usuario.apellido1.toLowerCase()).includes(normalizedQuery)
+    );
+  }
+  
+  
+  // Normalizar texto (elimina tildes, mayúsculas, etc.)
+  normalizeString(text: string): string {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  onToggleAsistente(email: string): void {
+    const index = this.asistentes.indexOf(email);
+    if (index > -1) {
+      this.asistentes.splice(index, 1);
+    } else {
+      this.asistentes.push(email);
+    }
+  
+    console.log('Asistentes seleccionados:', this.asistentes);
+  }
+  
 
   // Validación de la fecha de la reunión debe ser mayor o igual a la fecha actual
   validateFecha(): void {
@@ -107,15 +160,28 @@ export class CrearReunionesComponent implements OnInit {
       (!this.todoElDia && (!this.horaDesde || !this.horaHasta)) ||
       !this.ubicacion) {
       this.errorMessage = 'Todos los campos obligatorios deben estar llenos.';
-      alert(this.errorMessage);
       return; 
     }
+    
     this.reunionService.crearReunion(this.organizador,this.asunto, inicio,
       fin, this.ubicacion, this.observaciones, this.estado)
       .subscribe({
         next: (response) => {
+          const reunionId = response.id;
           console.log('Reunión creada con éxito:', response);
-          this.router.navigate(['/ver-reuniones', response.id]);
+          if (this.asistentes.length > 0) {
+            this.asistentesService.agregarListaAsistentes(reunionId, this.asistentes).subscribe({
+                next: () => {
+                    console.log('Asistentes añadidos con éxito.', this.asistentes);
+                    this.router.navigate(['/ver-reuniones', reunionId]);
+                },
+                error: (error) => {
+                    console.error('Error al añadir asistentes:', error);
+                }
+            });
+        } else {
+            alert('Debes añadir mínimo un asistente.');
+        }
         },
         error: (error) => {
           console.error('Error al crear la reunión:', error);

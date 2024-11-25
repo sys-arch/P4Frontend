@@ -98,8 +98,6 @@ export class ReunionService {
     return this.client.get<any>(`${httpUrl}empleados/reunion/${idReunion}/asistente`, { headers, params });
   }
   
-  
-  
 
 }
 
