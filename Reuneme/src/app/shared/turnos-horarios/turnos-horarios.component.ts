@@ -77,25 +77,40 @@ export class TurnosHorariosComponent implements OnInit {
       alert('Por favor, selecciona tanto la hora de inicio como la de fin.');
       return;
     }
-
+  
     const inicio = this.convertirAHorasEnMinutos(this.horaInicioHora, this.horaInicioMinuto);
     const fin = this.convertirAHorasEnMinutos(this.horaFinHora, this.horaFinMinuto);
-
+  
     if (inicio >= fin) {
       alert('La hora de inicio debe ser anterior a la hora de fin.');
       return;
     }
-
+  
+    // Validar que el nuevo turno no se solape con los existentes
+    const solapado = this.turnosHorarios.some(turno => {
+      return (
+        (inicio >= turno.inicio && inicio < turno.fin) || // Inicio dentro del intervalo existente
+        (fin > turno.inicio && fin <= turno.fin) || // Fin dentro del intervalo existente
+        (inicio <= turno.inicio && fin >= turno.fin) // El nuevo turno cubre completamente al existente
+      );
+    });
+  
+    if (solapado) {
+      alert('El turno no puede solaparse con un turno existente.');
+      return;
+    }
+  
     const turno = {
       inicio,
       fin,
       texto: `${this.turnosHorarios.length + 1}º Turno: ${this.horaInicioHora}:${this.horaInicioMinuto} - ${this.horaFinHora}:${this.horaFinMinuto}`,
     };
-
+  
     this.turnosHorarios.push(turno); // Añadir turno a la lista local
     this.resetFormulario(); // Limpiar el formulario
     this.showAddTurnoModal = false; // Cerrar el modal
   }
+  
 
   // Enviar todos los turnos acumulados al backend
   guardarTurnos(): void {
