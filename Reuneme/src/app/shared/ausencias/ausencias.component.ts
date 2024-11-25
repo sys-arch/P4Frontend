@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AsistentesService } from '../../services/asistentes.service';
 import { AusenciaService } from '../../services/ausencia.service';
+import { ReunionService } from '../../services/reunion.service';
 import { UserService } from '../../services/user.service';
 
 interface Ausencia {
@@ -29,10 +31,21 @@ export class AusenciasComponent implements OnInit {
   token: string = ''; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
   searchBy: string = 'name';
   searchQuery: string = '';
+
   filteredEmails: string[] = [];
+  showConfirmAusenciaForm : boolean = false;
+  fechaInicioConflicto: Date | null = null;
 
+  reunionOrg: any[] = [];
+  reunionAsist: any[] = []
+  myemail: string = ''
+  constructor(
+    private ausenciaService: AusenciaService,
+    private reunionService: ReunionService,
+    private asistentesService: AsistentesService,
+    private userService: UserService
+  ) {}
 
-  constructor(private ausenciaService: AusenciaService, private userService: UserService) {}
 
   ngOnInit() {
     this.token = sessionStorage.getItem('token') || ''; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
@@ -111,24 +124,172 @@ export class AusenciasComponent implements OnInit {
       // Crear el objeto ausencia con fechas convertidas a formato ISO compatible
       const ausencia = {
         ...this.nuevaAusencia,
-        fechaInicio: this.formatDate(this.nuevaAusencia.fechaInicio as Date),
-        fechaFin: this.formatDate(this.nuevaAusencia.fechaFin as Date)
+        fechaInicio: new Date(this.nuevaAusencia.fechaInicio as Date).toISOString(),
+        fechaFin: new Date(this.nuevaAusencia.fechaFin as Date).toISOString(),
       };
-  
-      if (ausencia.usuarioEmail) { // Verificación explícita
-        this.ausenciaService.addAusencia(ausencia.usuarioEmail, ausencia).subscribe(
-          response => {
-            this.getTodasLasAusencias(); // Refresca la lista tras añadir la nueva ausencia
-            this.resetNuevaAusencia();
-            this.showAddAusenciaForm = false;
-          },
-          error => console.error('Error al añadir la ausencia:', error)
-        );
-      } else {
-        console.error("El email del usuario es undefined.");
-      }
+      
+      // Comprueba si hay reuniones en conflicto
+      this.ausenciaService.verificarReunion(ausencia.usuarioEmail!, ausencia.fechaInicio, ausencia.fechaFin).subscribe( 
+        (vaBien) => {
+          if (!vaBien) {
+            // Si hay conflicto, muestra el modal
+            this.fechaInicioConflicto = this.nuevaAusencia.fechaInicio ?? null;
+            this.showConfirmAusenciaForm = true;
+            
+          } else {
+            // Si no hay conflicto, añade la ausencia directamente
+            this.crearAusencia(ausencia);
+          }
+        },
+      //error => console.error('Error al verificar reuniones:', error)
+      );
     }
+}
+
+  // Método para crear una ausencia, cuando se comprueba que no hay conflictos se envía la información a este método que crea la ausencia
+  
+  crearAusencia(ausencia: any) {
+    if (ausencia.usuarioEmail) { // Verificación explícita
+      this.ausenciaService.addAusencia(ausencia.usuarioEmail!, ausencia).subscribe(
+        () => {
+          console.log('Ausencia creada correctamente');
+          this.getTodasLasAusencias();
+          this.resetNuevaAusencia();
+          this.showConfirmAusenciaForm = false;
+        },
+        error => console.error('Error al añadir la ausencia:', error)
+      );
+    }
+  } 
+  
+  
+cerrarModal() {
+  this.showConfirmAusenciaForm = false;
+}
+
+confirmarAusencia(dia: Date | string | null, motivo: string | null, emailUsuario: string): void {
+    this.showConfirmAusenciaForm = false;
+
+    if(!dia){
+      console.error('Dia no especificado');
+      return;
+    }
+    if (!emailUsuario || emailUsuario.trim() === '') {
+      console.error('Email del usuario no especificado o inválido');
+      return;
+    }
+    if(!motivo){
+      console.error('Motivo no especificado');
+      return;
+    }
+
+    // Convierte `dia` a un objeto `Date` si no lo es
+    const fechaDia: Date = typeof dia === 'string' ? new Date(dia) : dia as Date;
+
+    // Usar el email del usuario a verificar en lugar del email en sesión
+    const email = emailUsuario.trim();
+
+    // Cargar reuniones organizadas
+    this.reunionService.getReunionesOrganizadas(email).subscribe((reunionesOrganizadas) => {
+      this.reunionOrg = reunionesOrganizadas;
+
+      // Buscar reuniones organizadas que coincidan con el día de la ausencia
+      const reunionesOrganizadasEnElDia = this.reunionOrg.filter(
+        (r) => new Date(r.inicio).toLocaleDateString() === fechaDia.toLocaleDateString()
+      );
+
+      // Eliminar cada reunión organizada encontrada
+      reunionesOrganizadasEnElDia.forEach((reunion) => {
+        const ausencia = {
+          usuarioEmail: email,
+          motivo: motivo,
+          fechaInicio: fechaDia.toISOString(),
+          fechaFin: fechaDia.toISOString(),
+        };
+        this.deletOrgReunion(reunion, email, ausencia);
+      });
+    });
+
+    // Cargar reuniones asistidas
+    this.reunionService.getReunionesAsistidas(email).subscribe((reunionesAsistidas) => {
+      this.reunionAsist = reunionesAsistidas;
+
+      // Buscar reuniones asistidas que coincidan con el día de la ausencia
+      const reunionesAsistidasEnElDia = this.reunionAsist.filter(
+        (r) => new Date(r.inicio).toLocaleDateString() === fechaDia.toLocaleDateString()
+      );
+
+      // Eliminar cada reunión asistida encontrada
+      reunionesAsistidasEnElDia.forEach((reunion) => {
+        const ausencia = {
+          usuarioEmail: email,
+          motivo: motivo,
+          fechaInicio: fechaDia.toISOString(),
+          fechaFin: fechaDia.toISOString(),
+        };
+        this.deletAsistenReunion(reunion, email, ausencia);
+      });
+    });
+}
+
+  //metodo que cancela la reunion
+  deletOrgReunion(reunion: any, email: string, ausencia: any): void {
+    const idReunion = reunion.id; // Asegúrate de que 'reunion' contiene el ID de la reunión.
+  
+    if (!idReunion) {
+      console.error('Falta el ID de la reunión para cancelarla.');
+      return;
+    }
+
+    this.reunionService.cancelarReunion(idReunion).subscribe(
+      (response) => {
+        console.log('Reunión cancelada correctamente', response);
+        // Aquí puedes actualizar el listado de reuniones o realizar alguna acción adicional.
+      this.crearAusencia(ausencia);
+      },
+      (error) => {
+        console.error('Error al cancelar la reunión', error);
+      }
+    );
   }
+
+  //metodo que elimina la reunion solo para el asistente
+  deletAsistenReunion(reunion: any, email: string, ausencia: any): void {
+    const idReunion = reunion.id; // Asegúrate de que 'reunion' contiene el ID de la reunión.
+  
+    if (!idReunion || !email) {
+      console.error('Faltan datos necesarios para eliminar al asistente de la reunión');
+      return;
+    }
+  
+    // Obtener el usuario a partir del email
+    this.userService.verDatosEmpleado(email).subscribe(
+    (empleado) => {
+      const idUsuario = empleado.id; // ID del usuario obtenido del backend
+
+      if (!idUsuario) {
+        console.error('No se pudo obtener el ID del usuario asistente.');
+        return;
+      }
+
+      this.asistentesService.deleteAsistente(idReunion, idUsuario).subscribe(
+        (response) => {
+          console.log('Asistente eliminado correctamente', response);
+
+          // Crear la ausencia después de eliminar la asistencia
+          this.crearAusencia(ausencia);
+        },
+        (error) => {
+          console.error('Error al eliminar al asistente', error);
+        }
+      );
+    },
+    (error) => {
+      console.error('Error al obtener el usuario por email:', error);
+    }
+  );
+  }
+
   
   
   // Método para formatear la fecha en `yyyy-MM-ddTHH:mm:ss`
