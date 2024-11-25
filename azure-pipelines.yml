@@ -32,3 +32,34 @@ steps:
     echo "Compilando el frontend"
     npm run build
     displayName: 'Compilación del frontend'
+
+- stage: Code_Analysis
+  displayName: 'Análisis de calidad del código'
+  dependsOn: Build_and_Test
+  condition: succeeded()
+  jobs:
+  - job: CodeQuality
+    displayName: 'Análisis de SonarQube'
+    steps:
+      # 1. Preparar el análisis de SonarQube
+      - task: SonarQubePrepare@5
+        inputs:
+          SonarQube: 'SonarQubeConnection'
+          scannerMode: 'CLI'
+          configMode: 'manual'
+          cliProjectKey: '$(QUBE-KEY)'
+          cliProjectName: 'Java Backend Project'
+          cliSources: '.'
+        displayName: 'Preparar el análisis de SonarQube'
+
+      # 2. Compilar el proyecto con Maven y realizar análisis de SonarQube
+      - script: |
+          mvn clean verify sonar:sonar
+        displayName: 'Compilar el proyecto y ejecutar SonarQube'
+
+      # 3. Publicar el resultado del análisis en SonarQube
+      - task: SonarQubePublish@6
+        inputs:
+          pollingTimeoutSec: '300'
+        displayName: 'Publicar resultados de SonarQube'
+
