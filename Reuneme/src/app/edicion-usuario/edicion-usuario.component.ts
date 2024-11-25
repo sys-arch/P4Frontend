@@ -159,8 +159,8 @@ export class EdicionUsuarioComponent implements OnInit {
     this.validateFechaAlta(); // Validar fecha antes de continuar
 
     if (this.fechaInvalid) {
-      console.error('La fecha de alta es inválida.');
-    return; // No continuar si la fecha no es válida
+      alert('La fecha de alta no puede ser mayor a la fecha actual. Por favor, corrige la fecha antes de guardar.'); // Mostrar alerta
+      return; // Bloquear el guardado si la fecha es inválida
     }
 
     if (this.userForm.valid) {
@@ -283,19 +283,21 @@ export class EdicionUsuarioComponent implements OnInit {
 
   // Validación de la fecha de alta debe ser menor o igual a la fecha actual
   validateFechaAlta(): void {
-    const altaControl = this.userForm.get('fechaAlta');
-
-    if (altaControl) {
-      const alta = new Date(altaControl.value);
-      const fechaActual = new Date();
+    this.fechaInvalid = false;
+    const alta = new Date(this.userForm.get('fechaAlta')?.value);
+    const fechaActual = new Date();
   
-      if (alta > fechaActual) {
-        this.fechaInvalid = true;
-        altaControl.setErrors({ invalidFecha: true }); // Marca el control como inválido
-      } else {
-        altaControl.setErrors(null); // Elimina errores si es válida
-      }
+    if (alta > fechaActual) {
+      this.fechaInvalid = true;
     }
   }
+
+  // Prevenir darle enter en los campos
+  preventEnterKey(event: Event): void {
+    if (event instanceof KeyboardEvent && event.key === 'Enter') {
+      event.preventDefault(); 
+    }
+  }
+  
 
 }
