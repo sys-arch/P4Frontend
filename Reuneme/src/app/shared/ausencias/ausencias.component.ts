@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AusenciaService } from '../../services/ausencia.service';
+import { UserService } from '../../services/user.service';
 
 interface Ausencia {
   id?: number;
@@ -18,22 +19,58 @@ interface Ausencia {
   templateUrl: './ausencias.component.html',
   styleUrls: ['./ausencias.component.css'],
   imports: [FormsModule, CommonModule],
-  providers: [AusenciaService]
+  providers: [AusenciaService, UserService]
 })
 export class AusenciasComponent implements OnInit {
   ausencias: Ausencia[] = [];
   filteredAusencias: Ausencia[] = [];
   showAddAusenciaForm: boolean = false;
   nuevaAusencia: Partial<Ausencia> = { usuarioEmail: '', motivo: '', fechaInicio: new Date(), fechaFin: new Date() };
-  token: string = 'your-auth-token-here'; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
+  token: string = ''; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
   searchBy: string = 'name';
   searchQuery: string = '';
+  filteredEmails: string[] = [];
 
-  constructor(private ausenciaService: AusenciaService) {}
+
+  constructor(private ausenciaService: AusenciaService, private userService: UserService) {}
 
   ngOnInit() {
+    this.token = sessionStorage.getItem('token') || ''; // Reemplaza con el token real o ajusta para obtenerlo dinámicamente
     this.getTodasLasAusencias();
   }
+  getEmployeeEmails(query: string): void {
+    if (!query.trim()) {
+      this.filteredEmails = [];
+      return;
+    }
+  
+    this.userService.getAllUsers(this.token).subscribe(
+      (userList: any[]) => {
+        // Procesa y filtra los usuarios
+        this.filteredEmails = userList
+          .filter(user => {
+            // Determina si es un empleado (no admin y no bloqueado, ajusta según tus datos)
+            const isAdmin = user.hasOwnProperty('interno') && user.interno !== undefined;
+            return !isAdmin && user.email.toLowerCase().includes(query.toLowerCase());
+          })
+          .map(user => user.email); // Solo extrae los correos electrónicos
+  
+        console.log('Emails filtrados:', this.filteredEmails);
+      },
+      (error) => {
+        console.error('Error al obtener los usuarios:', error);
+      }
+    );
+  }
+  
+  onEmailInputChange() {
+    console.log('Input cambiado:', this.nuevaAusencia.usuarioEmail);
+    this.getEmployeeEmails(this.nuevaAusencia.usuarioEmail || '');
+  }
+  
+  
+  
+  
 
   // Método para obtener todas las ausencias
   getTodasLasAusencias() {

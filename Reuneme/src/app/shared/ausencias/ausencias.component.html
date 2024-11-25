@@ -44,8 +44,20 @@
                 <div class="form-row">
                     <label>
                         Email de Usuario:
-                        <input type="text" [(ngModel)]="nuevaAusencia.usuarioEmail" name="usuarioEmail" required>
-                    </label>
+                        <input
+                            type="text"
+                            [(ngModel)]="nuevaAusencia.usuarioEmail"
+                            name="usuarioEmail"
+                            (input)="onEmailInputChange()"
+                            required
+                            list="emailSuggestions"
+                            />
+                        </label>
+                        
+                        <datalist id="emailSuggestions">
+                            <option *ngFor="let email of filteredEmails" [value]="email"></option>
+                        </datalist>
+                      
                     <label>
                         Motivo:
                         <input type="text" [(ngModel)]="nuevaAusencia.motivo" name="motivo" required>
