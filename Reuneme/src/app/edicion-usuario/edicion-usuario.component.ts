@@ -77,26 +77,19 @@ export class EdicionUsuarioComponent implements OnInit {
 
   }
 
-  togglePasswordVisibility(): void {
-    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-
-  }
-
   initializeForm(): void {
     this.userForm = this.formBuilder.group({
       nombre: ['', Validators.required],
       apellido1: ['', Validators.required],
       apellido2: ['', Validators.required],
       correo: [{ value: this.user.email, disabled: true }, [Validators.required, Validators.email]], // Valor inicial del correo
-      centroTrabajo: ['', Validators.required],
+      centro: ['', Validators.required],
       ...(this.role === 'administrador' ? {
         interno: [null], // Campo específico de administrador 
-        password: ['', [Validators.minLength(8)]]
       } : {
         departamento: ['', Validators.required],
         fechaAlta: ['', Validators.required],
         perfil: ['', Validators.required],
-        password: ['', [Validators.minLength(8)]]
       })
     });
   }
@@ -122,16 +115,14 @@ export class EdicionUsuarioComponent implements OnInit {
             apellido1: data.apellido1,
             apellido2: data.apellido2,
             correo: data.email,
-            centroTrabajo: data.centro,
+            centro: data.centro,
 
             ...(this.role === 'administrador' ? {
               interno: data.interno,
-              password: data.password
             } : {
               departamento: data.departamento,
               fechaAlta: this.convertToDateString(data.fechaalta),
               perfil: data.perfil,
-              password: data.password
             })
           });
 
@@ -190,7 +181,6 @@ export class EdicionUsuarioComponent implements OnInit {
       // Si no hay cambios aparte del email, terminar el proceso
       if (Object.keys(updateData).length === 1) { // Solo tiene `email`
         this.isLoading = false;
-        console.log('No hay cambios para actualizar.');
         return;
       }
 
@@ -202,19 +192,16 @@ export class EdicionUsuarioComponent implements OnInit {
       updateUser.subscribe({
         next: () => {
           this.isLoading = false;
-          console.log('Usuario actualizado correctamente.');
 
           // Redirección según el contexto
           if (this.user === this.loggedUserEmail) {
             // Si el usuario actualizado es el usuario logueado
             const route = this.role === 'administrador' ? '/perfil-admin' : '/perfil-usuario';
 
-            console.log(`Redirigiendo al perfil correspondiente: ${route}`);
             this.router.navigate([route], {
               queryParams: { email: this.loggedUserEmail }
             }).then((success) => {
               if (success) {
-                console.log(`Redirección exitosa a ${route} con email: ${this.loggedUserEmail}`);
               } else {
                 console.error(`La redirección a ${route} falló.`);
               }
@@ -235,7 +222,6 @@ export class EdicionUsuarioComponent implements OnInit {
       });
     } else {
       console.error('Formulario no válido');
-      console.log('Errores en el formulario:', this.userForm.errors);
 
       // Mostrar errores de los controles individuales
       Object.keys(this.userForm.controls).forEach((controlName) => {
@@ -265,11 +251,9 @@ export class EdicionUsuarioComponent implements OnInit {
     this.userService.forgotPassword(this.user?.email || '').subscribe({
       next: (response: string) => {
         this.isLoading = false;
-        console.log('Respuesta recibida: ', response);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error generando el token: ', error);
       }
     });
   }
