@@ -208,7 +208,6 @@ confirmarAusencia(dia: Date | string | null, motivo: string | null, emailUsuario
 
     this.reunionService.cancelarReunion(idReunion).subscribe(
       (response) => {
-        console.log('Reunión cancelada correctamente', response);
         // Aquí puedes actualizar el listado de reuniones o realizar alguna acción adicional.
       this.crearAusencia(ausencia);
       },
