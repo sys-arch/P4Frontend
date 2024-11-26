@@ -47,7 +47,7 @@ export class AusenciaService {
         const token = sessionStorage.getItem('token');
         const headers = new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`
         });
 
         // Formatear las fechas al formato esperado por LocalDateTime

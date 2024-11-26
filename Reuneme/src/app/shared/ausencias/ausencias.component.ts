@@ -5,6 +5,7 @@ import { AusenciaService } from '../../services/ausencia.service';
 import { ReunionService } from '../../services/reunion.service';
 import { AsistentesService } from '../../services/asistentes.service';
 import { UserService } from '../../services/user.service';
+import { response } from 'express';
 
 interface Ausencia {
   id?: number;
@@ -91,7 +92,7 @@ export class AusenciasComponent implements OnInit {
         fechaInicio: new Date(this.nuevaAusencia.fechaInicio as Date).toISOString(),
         fechaFin: new Date(this.nuevaAusencia.fechaFin as Date).toISOString(),
       };
-      
+      console.log('Ausencia a añadir:', ausencia);
       // Comprueba si hay reuniones en conflicto
       this.ausenciaService.verificarReunion(ausencia.usuarioEmail!, ausencia.fechaInicio, ausencia.fechaFin).subscribe( 
         (vaBien) => {
@@ -116,7 +117,7 @@ export class AusenciasComponent implements OnInit {
     if (ausencia.usuarioEmail) { // Verificación explícita
       this.ausenciaService.addAusencia(ausencia.usuarioEmail!, ausencia).subscribe(
         () => {
-          console.log('Ausencia creada correctamente');
+          console.log('Ausencia creada correctamente', response);
           this.getTodasLasAusencias();
           this.resetNuevaAusencia();
           this.showConfirmAusenciaForm = false;
