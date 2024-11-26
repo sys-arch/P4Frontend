@@ -106,8 +106,8 @@ export class RegistroAdminComponent {
       .subscribe({
         next: (response: any) => {
           console.log('Administrador registrado con éxito:', response);
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('email', this.email);
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('email', this.email);
           this.navigateTo('/ventana-principal');
         },
         error: (error: any) => {

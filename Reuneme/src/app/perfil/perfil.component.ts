@@ -40,7 +40,6 @@ export class PerfilComponent implements OnInit {
   ngOnInit(): void {
     const token = sessionStorage.getItem('token') || '';
     const localEmail = sessionStorage.getItem('email') || '';
-    console.log('Token:', token);
 
     // Verifica si hay un email como argumento en la URL
     const routeEmail = this.route.snapshot.paramMap.get('email');
