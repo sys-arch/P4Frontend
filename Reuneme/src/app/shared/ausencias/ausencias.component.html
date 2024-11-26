@@ -70,14 +70,15 @@
 
 <div class="modal-overlay" tabindex="-1" [class.show]="showConfirmAusenciaForm" *ngIf="showConfirmAusenciaForm">
     <div class="modalT">
-          <h5 class="modal-title">Conflicto con Reunión</h5>
-          <p>El usuario tiene una reunión en este intervalo de tiempo.</p>
-          <p>¿Desea añadir la ausencia de todos modos? Si continúa, se eliminará la reunión</p>
+        <h5 class="modal-title">Conflicto con Reunión</h5>
+        <p>El usuario tiene una reunión en este intervalo de tiempo.</p>
+        <p>¿Desea añadir la ausencia de todos modos? Si continúa, se eliminará la reunión</p>
         <div class="modal-actionsT">
             <button type="button" class="btn confirmar-btn" (click)="confirmarAusencia(fechaInicioConflicto,
-              nuevaAusencia.motivo || '', nuevaAusencia.usuarioEmail || '')">Añadir Ausencia</button>
-          <button type="button" class="btn cancel-btn" (click)="cerrarModal()">Cancelar</button>
+                nuevaAusencia.motivo || '', nuevaAusencia.usuarioEmail || '')">Añadir Ausencia
+            </button>
+            <button type="button" class="btn cancel-btn" (click)="cerrarModal()">Cancelar</button>
         
         </div>
     </div>
-  </div>
+</div>
