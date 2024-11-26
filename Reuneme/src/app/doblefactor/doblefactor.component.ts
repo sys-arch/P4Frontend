@@ -66,6 +66,7 @@ export class DoblefactorComponent {
       );
     }
   }
+  
 
   // Método para verificar si el usuario es administrador basado en el token
   private isAdminUser(): boolean {
@@ -123,6 +124,4 @@ export class DoblefactorComponent {
         alert("Por favor, ingrese el código de autenticación.");
     }
 }
-
-
 }
