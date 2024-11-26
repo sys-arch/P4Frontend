@@ -88,8 +88,6 @@ export class CrearReunionesComponent implements OnInit {
     } else {
       this.asistentes.push(email);
     }
-  
-    console.log('Asistentes seleccionados:', this.asistentes);
   }
   
 
@@ -172,7 +170,6 @@ export class CrearReunionesComponent implements OnInit {
           if (this.asistentes.length > 0) {
             this.asistentesService.agregarListaAsistentes(reunionId, this.asistentes).subscribe({
                 next: () => {
-                    console.log('Asistentes añadidos con éxito.', this.asistentes);
                     this.router.navigate(['/ver-reuniones', reunionId]);
                 },
                 error: (error) => {
