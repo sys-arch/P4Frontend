@@ -30,6 +30,11 @@ export class AsistentesService {
     return this.client.post(`${httpUrl}empleados/reunion/${idReunion}/asistente/${EmailUsuario}`, {},{ headers });
   }
 
+  agregarListaAsistentes(reunionId: string, asistentes: string[]): Observable<any> {
+    const headers = this.getHeaders();
+    return this.client.post(`${httpUrl}empleados/reunion/${reunionId}/asistentes`, asistentes, { headers });
+}
+
   deleteAsistente(idReunion: any, idUsuario: any): Observable<any> {
     const headers = this.getHeaders();
     return this.client.delete(`${httpUrl}empleados/reunion/${idReunion}/asistente/${idUsuario}`, { headers });

@@ -61,8 +61,20 @@
 				</ul>
 			</div>
 			<div class="actions">
-				<button class="btn" (click)="editReunion()">Editar la reunión</button>
-				<button class="btn" (click)="cancelarReunion()">Cancelar la reunión</button>
+				<!-- Botón de modificar: Solo visible si el usuario es el organizador y el estado es "Abierta" -->
+				<button 
+					class="btn" 
+					(click)="editReunion()" 
+					*ngIf="esOrganizador() && estadoEsEditable()">
+					Editar la reunión
+				</button>
+				<!-- Botón de cancelar: Solo visible si el usuario es el organizador y el estado es "Abierta" -->
+				<button 
+					class="btn" 
+					(click)="cancelarReunion()" 
+					*ngIf="esOrganizador() && estadoEsEditable()">
+					Cancelar la reunión
+				</button>
 			</div>
     </div>
     
