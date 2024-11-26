@@ -166,7 +166,6 @@ export class CrearReunionesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           const reunionId = response.id;
-          console.log('Reunión creada con éxito:', response);
           if (this.asistentes.length > 0) {
             this.asistentesService.agregarListaAsistentes(reunionId, this.asistentes).subscribe({
                 next: () => {
