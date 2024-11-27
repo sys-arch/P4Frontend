@@ -31,10 +31,6 @@ export class LoginComponent {
   errorMessage: string = '';
   @ViewChild('loginForm') loginForm!: NgForm;
   
-  submitForm(): void {
-    this.loginForm
-  }
-
   private readonly emailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private readonly injectionPattern: RegExp = /(\r|\n|%0a|%0d|%0A|%0D)/;
   private readonly minPasswordLength: number = 8;
