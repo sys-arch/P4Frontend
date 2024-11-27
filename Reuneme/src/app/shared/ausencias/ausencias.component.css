@@ -135,13 +135,7 @@
   margin-bottom: 0.25rem;
 }
 
-/* Estilos para cada campo de entrada */
-.form-ausencia label {
-  display: block;
-  font-size: 0.9rem;
-  color: #b3b3b3;
-  margin-bottom: 0.25rem;
-}
+
 
 .form-ausencia input[type="text"],
 .form-ausencia input[type="date"] {
@@ -161,25 +155,6 @@
     border-color: #007bff;
 }
 
-/* Botón de añadir ausencia */
-.add-button {
-    background-color: #007bff;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-align: center;
-}
-
-/* Efecto hover en el botón */
-.add-button:hover {
-  background-color: #0056b3;
-}
-/* Contenedor para filtro y búsqueda */
 .search-filter-container {
   background-color: rgba(30, 30, 30, 0.9);
   color: white;
@@ -225,140 +200,5 @@
 /* Placeholder en el campo de búsqueda */
 .filter-options input::placeholder {
   color: #ccc;
-}
-
-
-/* Contenedor para filtro y búsqueda */
-.search-filter-container {
-  background-color: rgba(30, 30, 30, 0.9);
-  color: white;
-  padding: 0.3rem;
-  border-radius: 0.5rem;
-  width: 70%;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-  margin: 2rem auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Opciones de filtro a la izquierda */
-.filter-options {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Estilo del selector de filtro */
-.filter-options select {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  background-color: #525252;
-  color: white;
-  border: none;
-}
-
-/* Input de búsqueda centrado */
-.filter-options input[type="text"] {
-  flex-grow: 1;
-  max-width: 20rem; /* Ajusta según el ancho máximo deseado */
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: none;
-  background-color: #676363;
-  color: white;
-  text-align: center;
-  margin-left: 15rem;
-}
-
-/* Placeholder en el campo de búsqueda */
-.filter-options input::placeholder {
-  color: #ccc;
-}
-
-/* Contenedor principal de la lista */
-.user-list-container {
-  width: 70%;
-  background-color: #1e1e1e;
-  color: white;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-/* Encabezado de la lista */
-.user-list-header {
-  display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 1fr;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
-  background-color: #333;
-  font-weight: bold;
-  font-size: 0.9rem;
-  color: #b3b3b3;
-  text-align: left;
-}
-
-/* Contenido de la lista */
-.user-list-content {
-  max-height: 54vh;
-  overflow-y: auto;
-}
-
-/* Fila de cada ausencia */
-.user-list-row {
-  display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 1fr;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: #2e2e2e;
-  margin-bottom: 1rem;
-  align-items: center;
-  text-align: left;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-}
-
-.user-list-row:hover {
-  background-color: rgba(56, 56, 56, 0.9);
-}
-
-/* Botón de eliminación */
-.action-btn.delete-btn {
-  background: #d9534f;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  height: 2.5rem;
-  transition: background-color 0.3s ease;
-}
-
-.action-btn.delete-btn:hover {
-  background-color: #c9302c;
-}
-
-/* Botón de añadir ausencia */
-.add-button {
-  background-color: #007bff;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.add-button:hover {
-  background-color: #0056b3;
 }
 

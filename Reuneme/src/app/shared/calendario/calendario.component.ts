@@ -100,47 +100,72 @@ export class CalendarioComponent implements OnInit {
   
 
   cargarReuniones() {
-    const email = sessionStorage.getItem('email') ?? '';
+    const email = sessionStorage.getItem('email') || '';
+    
+    this.cargarReunionesOrganizadas(email)
+      .then(() => this.cargarReunionesAsistidas(email))
+      .catch((error) => {
+        console.error('Error al cargar reuniones:', error);
+      });
+  }
   
-    // Cargar reuniones organizadas
-    this.reunionService.getReunionesOrganizadas(email).subscribe({
-      next: (reunionesOrganizadas) => {
-        this.reunionOrg = reunionesOrganizadas;
-        console.log('Reuniones organizadas:', this.reunionOrg);
-  
-        // Cargar reuniones asistidas
-        this.reunionService.getReunionesAsistidas(email).subscribe({
-          next: (reunionesAsistidas) => {
-            const filteredReuniones: any[] = [];
-            const asistenteRequests = reunionesAsistidas.map((reunion) =>
-              this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
-                (asistente) => {
-                  if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
-                    filteredReuniones.push(reunion);
-                  }
-                },
-                (error) => {
-                  console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
-                }
-              )
-            );
-  
-            // Esperar a que se completen todas las promesas
-            Promise.all(asistenteRequests).then(() => {
-              this.reunionAsist = filteredReuniones;
-              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
-            });
-          },
-          error: (error) => {
-            console.error('Error al cargar reuniones asistidas:', error);
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error al cargar reuniones organizadas:', error);
-      }
+  private cargarReunionesOrganizadas(email: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.reunionService.getReunionesOrganizadas(email).subscribe(
+        (reunionesOrganizadas) => {
+          this.reunionOrg = reunionesOrganizadas;
+          console.log('Reuniones organizadas:', this.reunionOrg);
+          resolve();
+        },
+        (error) => {
+          console.error('Error al cargar reuniones organizadas:', error);
+          reject(error);
+        }
+      );
     });
   }
+  
+  private cargarReunionesAsistidas(email: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.reunionService.getReunionesAsistidas(email).subscribe(
+        (reunionesAsistidas) => {
+          this.filtrarReunionesAsistidas(email, reunionesAsistidas)
+            .then((filteredReuniones) => {
+              this.reunionAsist = filteredReuniones;
+              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
+              resolve();
+            })
+            .catch((error) => {
+              console.error('Error al filtrar reuniones asistidas:', error);
+              reject(error);
+            });
+        },
+        (error) => {
+          console.error('Error al cargar reuniones asistidas:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+  
+  private filtrarReunionesAsistidas(email: string, reunionesAsistidas: any[]): Promise<any[]> {
+    const filteredReuniones: any[] = [];
+    const asistenteRequests = reunionesAsistidas.map((reunion) =>
+      this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
+        (asistente) => {
+          if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
+            filteredReuniones.push(reunion);
+          }
+        },
+        (error) => {
+          console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
+        }
+      )
+    );
+  
+    return Promise.all(asistenteRequests).then(() => filteredReuniones);
+  }
+  
   
   obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
     if (!dia || !hora) {
