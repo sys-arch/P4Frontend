@@ -2,10 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../shared/loader/loader.component";
 import { UserService } from '../services/user.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LoaderComponent } from "../shared/loader/loader.component";
+
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+\-_ç<>])[A-Za-z\d@$!%*?&#+\-_ç<>]{8,}$/;
+const PASSWORD_ERROR_MESSAGE =
+  'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.';
 
 
 @Component({
@@ -63,13 +67,11 @@ export class RegistroComponent {
   
   // Validación de la contraseña
   validarPassword(): boolean {
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+\-_ç<>])[A-Za-z\d@$!%*?&#+\-_ç<>]{8,}$/;
-
-    if (RegExp(passwordRegEx).exec(this.password1)) {
+    if (RegExp(PASSWORD_REGEX).exec(this.password1)) {
       this.passwordError = '';
       return true;
     } else {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.';
+      this.passwordError = PASSWORD_ERROR_MESSAGE;
       return false;
     }
   }

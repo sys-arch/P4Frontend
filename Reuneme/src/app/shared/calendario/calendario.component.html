@@ -78,9 +78,14 @@
                   *ngIf="dia && obtenerClaseReunion(dia, hora)"
                   class="reunion-item"
                   [ngStyle]="{'background-color': getColor(obtenerClaseReunion(dia, hora)?.clase)}"
-                  (click)="verReunion(obtenerClaseReunion(dia,hora)?.id)">
+                  (click)="verReunion(obtenerClaseReunion(dia, hora)?.id)"
+                  (keydown)="($event.key === 'Enter' || $event.key === ' ') && verReunion(obtenerClaseReunion(dia, hora)?.id)"
+                  tabindex="0"
+                  role="button"
+                >
                   {{ obtenerClaseReunion(dia, hora)?.asunto || 'Sin asunto' }}
                 </div>
+
                 <div
                   class="estado-linea"
                   [ngStyle]="{'background-color': getEstadoColor(obtenerClaseReunion(dia, hora)?.estado)}">
