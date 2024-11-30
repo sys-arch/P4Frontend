@@ -40,7 +40,6 @@ export class PerfilComponent implements OnInit {
   ngOnInit(): void {
     const token = sessionStorage.getItem('token') || '';
     const localEmail = sessionStorage.getItem('email') || '';
-    console.log('Token:', token);
 
     // Verifica si hay un email como argumento en la URL
     const routeEmail = this.route.snapshot.paramMap.get('email');
@@ -49,7 +48,6 @@ export class PerfilComponent implements OnInit {
     const emailToUse = routeEmail || localEmail;
 
     if (token && emailToUse) {
-      console.log('Cargando perfil para el email:', emailToUse);
       this.getUserInfo(emailToUse, token);
     } else {
       console.error('No se encontró un email válido para cargar el perfil');
@@ -94,7 +92,6 @@ export class PerfilComponent implements OnInit {
     if (userEmail) {
       const token = sessionStorage.getItem('token') || '';
       const role = this.decodeRoleFromToken(token); // Decodificar el rol desde el token
-      console.log(this.admin.correo);
   
       // Redirigir al formulario de edición con el estado del usuario
       this.router.navigate(['/edicion-usuario'], {

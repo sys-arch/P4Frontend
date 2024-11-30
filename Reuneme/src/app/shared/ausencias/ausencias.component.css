@@ -7,6 +7,7 @@
   color: white;
 }
 
+
 /* Título del panel de ausencias */
 .ausencias-panel-title {
   font-size: 1.8rem;
@@ -360,5 +361,82 @@
 
 .add-button:hover {
   background-color: #0056b3;
+}
+
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalT {
+  position: relative; /* Para posicionar correctamente el botón de cerrar */
+  background-color: #333333;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #ffffff;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  font-family: Arial, sans-serif;
+}
+
+.modalT p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.modal-actionsT {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.confirmar-btn {
+  background-color: #5fc67d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.confirmar-btn:hover {
+  background-color: #4aae65;
+}
+
+.cancel-btn {
+  background-color: #d9534f;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.cancel-btn:hover {
+  background-color: #c12f2b;
 }
 

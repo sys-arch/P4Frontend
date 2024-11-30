@@ -37,10 +37,10 @@ html {
 
 .login-failed-message {
     text-align: center;
-    font-size: 0.875rem;
+    font-size: 1.2;
     color: #ff4d4f;
     font-weight: bold;
-    margin-top: 0.3125rem;
+    margin-top: 0.125rem;
 }
 
 .email-error-container {
@@ -160,7 +160,7 @@ html {
 }
 
 .forgot-password {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: #b3b3b3;
     text-decoration: none;
 }

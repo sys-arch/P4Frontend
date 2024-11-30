@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReunionService } from '../services/reunion.service';
 import { AsistentesService } from '../services/asistentes.service';
+import { ReunionService } from '../services/reunion.service';
+import { AuthService } from '../services/auth.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { LoaderComponent } from "../shared/loader/loader.component";
@@ -42,7 +43,8 @@ export class VerReunionesComponent implements OnInit{
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly reunionService: ReunionService,
-    private readonly asistentesService: AsistentesService
+    private readonly asistentesService: AsistentesService,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +77,6 @@ export class VerReunionesComponent implements OnInit{
     this.asistentesService.getAsistentesPorReunion(reunionId).subscribe({
       next: (response) => {
         this.asistentes = response; // Asigna la lista de asistentes obtenida
-        console.log('Asistentes cargados:', this.asistentes);
       },
       error: (error) => {
         console.error('Error al cargar asistentes de la reunión:', error);
@@ -96,7 +97,6 @@ export class VerReunionesComponent implements OnInit{
             this.asistentes = this.usuarios.filter((usuario) =>
               this.idsAsistentes.includes(usuario.id)
             );
-            console.log('Asistentes finales:', this.asistentes);
           },
           error: (err) => {
             console.error('Error al obtener usuarios posibles:', err);
@@ -109,8 +109,16 @@ export class VerReunionesComponent implements OnInit{
     });
   }
 
+
+  esOrganizador(): boolean {
+    const emailUsuario = sessionStorage.getItem('email') || '';
+    return emailUsuario === this.organizador;
+  }
+  estadoEsEditable(): boolean {
+    return this.reunionData?.estado === 'ABIERTA';
+  }
+  
   editReunion(): void {
-    console.log('Reunión a modificar:', this.reunionData);
     this.router.navigate(['/modificar-reuniones', this.reunionData.id]);
   }
 

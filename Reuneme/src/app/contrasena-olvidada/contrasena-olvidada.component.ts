@@ -71,7 +71,6 @@ export class ContrasenaOlvidadaComponent {
     const domain = this.email.split('@')[1];
     if (domain && this.blacklistDomains.includes(domain)) {
       this.emailInvalid = true;
-      console.error(`El dominio ${domain} está en la lista negra.`);
       return false;
     }
 
@@ -98,7 +97,6 @@ export class ContrasenaOlvidadaComponent {
       next: (response: string) => {
         this.isLoading = false;
         this.emailSent = true;  // Mostrar que el email se ha enviado
-        console.log('Respuesta recibida: ', response);
         
       },
       error: (error) => {

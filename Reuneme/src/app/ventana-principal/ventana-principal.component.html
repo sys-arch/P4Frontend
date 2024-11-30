@@ -10,9 +10,6 @@
     <span class="user-fullname">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</span>
     <span class="user-edit-button" (click)="navigateTo('/perfil-admin')" (keydown)="navigateTo('/perfil-admin')">Visitar perfil</span>
   </div>
-  <div class="back-button-container">
-    <button class="back-button" (click)="navigateTo('/doblefactor')">Volver</button>
-  </div>
 
   <div class="admin-controls2">
     <button class="Btn2"(click)= "logout()">

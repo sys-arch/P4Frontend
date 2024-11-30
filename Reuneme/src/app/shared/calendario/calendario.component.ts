@@ -75,7 +75,6 @@ export class CalendarioComponent implements OnInit {
           .filter(ausencia => ausencia.usuarioEmail === emailUsuario) // Filtra por email del usuario logueado
           .sort((a, b) => a.fechaInicio.getTime() - b.fechaInicio.getTime()); // Ordena por fecha de inicio
   
-        console.log('Ausencias procesadas:', this.ausencias);
       },
       (error) => console.error('Error al cargar ausencias:', error)
     );
@@ -106,41 +105,48 @@ export class CalendarioComponent implements OnInit {
     this.reunionService.getReunionesOrganizadas(email).subscribe(
       (reunionesOrganizadas) => {
         this.reunionOrg = reunionesOrganizadas;
-        console.log('Reuniones organizadas:', this.reunionOrg);
   
-        // Cargar reuniones asistidas
-        this.reunionService.getReunionesAsistidas(email).subscribe(
-          (reunionesAsistidas) => {
-            const filteredReuniones: any[] = [];
-            const asistenteRequests = reunionesAsistidas.map((reunion) =>
-              this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
-                (asistente) => {
-                  if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
-                    filteredReuniones.push(reunion);
-                  }
-                },
-                (error) => {
-                  console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
-                }
-              )
-            );
-  
-            // Esperar a que se completen todas las promesas
-            Promise.all(asistenteRequests).then(() => {
-              this.reunionAsist = filteredReuniones;
-              console.log('Reuniones asistidas filtradas:', this.reunionAsist);
-            });
-          },
-          (error) => {
-            console.error('Error al cargar reuniones asistidas:', error);
-          }
-        );
+        // Llamar a cargar reuniones asistidas
+        this.cargarReunionesAsistidas(email);
       },
       (error) => {
         console.error('Error al cargar reuniones organizadas:', error);
       }
     );
   }
+  
+  private cargarReunionesAsistidas(email: string) {
+    this.reunionService.getReunionesAsistidas(email).subscribe(
+      (reunionesAsistidas) => {
+        const filteredReuniones: any[] = [];
+        const asistenteRequests = this.crearAsistenteRequests(reunionesAsistidas, email, filteredReuniones);
+  
+        // Esperar a que se completen todas las promesas
+        Promise.all(asistenteRequests).then(() => {
+          this.reunionAsist = filteredReuniones;
+        });
+      },
+      (error) => {
+        console.error('Error al cargar reuniones asistidas:', error);
+      }
+    );
+  }
+  
+  private crearAsistenteRequests(reunionesAsistidas: any[], email: string, filteredReuniones: any[]): Promise<void>[] {
+    return reunionesAsistidas.map((reunion) =>
+      this.reunionService.getAsistenteByEmail(reunion.id, email).toPromise().then(
+        (asistente) => {
+          if (asistente.estado !== 'PENDIENTE' && asistente.estado !== 'RECHAZADA') {
+            filteredReuniones.push(reunion);
+          }
+        },
+        (error) => {
+          console.error(`Error obteniendo estado del asistente para la reunión ${reunion.id}:`, error);
+        }
+      )
+    );
+  }
+  
   
   obtenerClaseReunion(dia: Date | null, hora: string | null): { id: string, clase: string, asunto?: string, estado?: string } | null {
     if (!dia || !hora) {
@@ -321,7 +327,6 @@ export class CalendarioComponent implements OnInit {
       this.nombreMes = `${diaInicio} - ${diaFin} de ${mesInicio}`;
     }
   
-    console.log(`Título actualizado: ${this.nombreMes}`); // Verificar en la consola
   }
   
   obtenerNombreMes(mesIndex: number): string {

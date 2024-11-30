@@ -51,7 +51,6 @@ export class PerfilUsuarioComponent implements OnInit {
     const emailToUse = routeEmail || localEmail;
 
     if (token && emailToUse) {
-      console.log('Cargando perfil para el email:', emailToUse);
       this.getUserInfo(emailToUse, token);
     } else {
       console.error('No se encontró un email válido para cargar el perfil');
@@ -104,7 +103,6 @@ export class PerfilUsuarioComponent implements OnInit {
     if (userEmail) {
       const token = sessionStorage.getItem('token') || '';
       const role = this.decodeRoleFromToken(token); // Decodificar el rol desde el token
-      console.log(this.user.correo);
   
       // Redirigir al formulario de edición con el estado del usuario
       this.router.navigate(['/edicion-usuario'], {

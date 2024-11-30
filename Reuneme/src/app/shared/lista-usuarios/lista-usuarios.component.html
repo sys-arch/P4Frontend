@@ -71,15 +71,22 @@
           </div>
 
           <!-- Columna de Validado o No Validado -->
-          <div class="user-status"
+          <div
+            class="user-status"
             [ngClass]="{
               'status-validado': user.estado === 'Validado',
               'status-no-validado': user.estado === 'No validado'
             }"
-            (click)="toggleValidation(user)">
+            (click)="toggleValidation(user)"
+            (keydown)="($event.key === 'Enter' || $event.key === ' ') && toggleValidation(user)"
+            tabindex="0"
+            role="button"
+            aria-label="Cambiar estado de validación de usuario"
+          >
             <i class="material-icons">{{ user.estado === 'Validado' ? 'check_circle' : 'cancel' }}</i>
             <span>{{ user.estado }}</span>
           </div>
+
 
           <!-- Acciones: Editar, Eliminar -->
           <div class="user-actions">
